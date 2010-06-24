@@ -1,0 +1,461 @@
+/*******************************************************************************
+ * Gaggle is Copyright 2010 by Geeksville Industries LLC, a California limited liability corporation. 
+ * 
+ * Gaggle is distributed under a dual license.  We've chosen this approach because within Gaggle we've used a number
+ * of components that Geeksville Industries LLC might reuse for commercial products.  Gaggle can be distributed under
+ * either of the two licenses listed below.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details. 
+ * 
+ * Commercial Distribution License
+ * If you would like to distribute Gaggle (or portions thereof) under a license other than 
+ * the "GNU General Public License, version 2", contact Geeksville Industries.  Geeksville Industries reserves
+ * the right to release Gaggle source code under a commercial license of its choice.
+ * 
+ * GNU Public License, version 2
+ * All other distribution of Gaggle must conform to the terms of the GNU Public License, version 2.  The full
+ * text of this license is included in the Gaggle source, see assets/manual/gpl-2.0.txt.
+ ******************************************************************************/
+package com.geeksville.gaggle;
+
+import java.io.InputStream;
+import java.util.Observable;
+import java.util.Observer;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
+import android.database.Cursor;
+import android.location.Location;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.webkit.WebView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.flurry.android.FlurryAgent;
+import com.geeksville.android.AndroidUtil;
+import com.geeksville.android.DBListActivity;
+import com.geeksville.info.Units;
+import com.geeksville.location.ExtendedWaypoint;
+import com.geeksville.location.GPSClientStub;
+import com.geeksville.location.LocationLogDbAdapter;
+import com.geeksville.location.WPTImporter;
+import com.geeksville.location.Waypoint;
+import com.geeksville.location.WaypointCursor;
+import com.geeksville.location.WaypointDB;
+import com.geeksville.view.AsyncProgressDialog;
+
+public class ListWaypointsActivity extends DBListActivity implements Observer {
+
+	private WaypointDB db;
+	private GPSClientStub gps;
+
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		setContentView(R.layout.waypoint_main);
+
+		db = ((GaggleApplication) getApplication()).getWaypoints();
+
+		super.onCreate(savedInstanceState);
+
+		WebView view = (WebView) findViewById(android.R.id.empty);
+		// view.getSettings().setJavaScriptEnabled(true);
+		view.loadUrl("file:///android_asset/no_waypoints.html");
+
+		perhapsAddFromUri();
+	}
+
+	/**
+	 * @see android.app.Activity#onPause()
+	 */
+	@Override
+	protected void onPause() {
+		if (db != null)
+			db.deleteObserver(this);
+
+		gps.close();
+
+		super.onPause();
+	}
+
+	/**
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		Units.instance.setFromPrefs(this);
+
+		gps = new GPSClientStub(this);
+
+		// FIXME, close the backing DB when the waypoint cache is done with it
+		db.addObserver(this);
+	}
+
+	/**
+	 * Create our options menu
+	 * 
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+
+		getMenuInflater().inflate(R.menu.waypoint_optionmenu, menu);
+
+		return true;
+	}
+
+	/**
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case R.id.add_menu:
+			handleAddWaypoint();
+			return true;
+
+		case R.id.delete_menu:
+			handleDeleteMenu();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * 
+	 * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu,
+	 *      android.view.View, android.view.ContextMenu.ContextMenuInfo)
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+
+		getMenuInflater().inflate(R.menu.waypoint_context, menu);
+	}
+
+	/**
+	 * Handle our context menu
+	 * 
+	 * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case R.id.goto_menu:
+			handleGotoWaypoint(item);
+			return true;
+
+		default:
+			break;
+		}
+
+		return super.onContextItemSelected(item);
+	}
+
+	/**
+	 * Handle clicks on an individual waypoint
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+
+		handleViewItem(position);
+	}
+
+	/**
+	 * See if the user wants us to open an IGC file FIXME - confirm with user
+	 */
+	private void perhapsAddFromUri() {
+		Intent intent = getIntent();
+		String typ = intent.getType();
+		final Uri uri = intent.getData();
+		String action = intent.getAction();
+
+		if (uri != null && action != null && action.equals(Intent.ACTION_VIEW)) {
+			Log.d("ListWaypointsActivity", "Considering " + typ);
+
+			AsyncProgressDialog progress = new AsyncProgressDialog(this, "Importing waypoints",
+					"Please wait...") {
+				@Override
+				protected void doInBackground() {
+
+					FlurryAgent.onEvent("WPT import start");
+
+					// See if we can read the file
+					try {
+						InputStream s = AndroidUtil.getFromURI(ListWaypointsActivity.this, uri);
+
+						WPTImporter imp = new WPTImporter(db);
+						int numadded = imp.addFromStream(s);
+
+						String msg = String.format("Imported %d waypoints", numadded);
+						showCompletionToast(msg);
+
+						FlurryAgent.onEvent("WPT import success");
+					} catch (Exception ex) {
+						FlurryAgent.onEvent("WPT import failed");
+
+						showCompletionDialog("Import failed", ex.getLocalizedMessage());
+					}
+				}
+
+				/*
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * com.geeksville.view.AsyncProgressDialog#onPostExecute(java
+				 * .lang.Void)
+				 */
+				@Override
+				protected void onPostExecute(Void unused) {
+					super.onPostExecute(unused);
+
+					if (isShowingDialog())
+						finish(); // Exit our activity - go back to the
+					// webserver because we failed
+					else
+						myCursor.requery();
+				}
+			};
+
+			progress.execute();
+		}
+	}
+
+	/**
+	 * @see com.geeksville.android.DBListActivity#createCursor()
+	 */
+	@Override
+	protected Cursor createCursor() {
+		Cursor c = db.fetchWaypointsByDistance();
+
+		if (c.getCount() > 0)
+			// If we have any points, encourage the user to turn on the GPS so
+			// we can show distance
+			((GaggleApplication) getApplication()).enableGPS(this);
+
+		return c;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.geeksville.android.DBListActivity#createListAdapter()
+	 */
+	@Override
+	protected BaseAdapter createListAdapter() {
+		// Create an array to specify the fields we want to display in the
+		// list
+		String[] from = new String[] { LocationLogDbAdapter.KEY_NAME,
+				LocationLogDbAdapter.KEY_DESCRIPTION,
+				WaypointCursor.KEY_DIST_PILOTX,
+				LocationLogDbAdapter.KEY_WAYPOINT_TYPE };
+
+		// and an array of the fields we want to bind those fields to
+		int[] to = new int[] { R.id.name, R.id.description, R.id.distance, R.id.image };
+
+		// Now create a simple cursor adapter and set it to display
+		SimpleCursorAdapter a = new SimpleCursorAdapter(this, R.layout.waypoint_row, myCursor,
+				from, to);
+
+		final int distcol = myCursor.getColumnIndex(WaypointCursor.KEY_DIST_PILOTX);
+		final int typecol = myCursor.getColumnIndex(LocationLogDbAdapter.KEY_WAYPOINT_TYPE);
+
+		a.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+			public boolean setViewValue(View _view, Cursor cursor, int columnIndex) {
+
+				try {
+					// Show the distance with correct units
+					if (columnIndex == distcol) {
+						TextView view = (TextView) _view;
+
+						int dist = cursor.getInt(distcol);
+
+						// view.setVisibility(dist == -1 ? View.INVISIBLE :
+						// View.VISIBLE);
+						String distStr = (dist == -1) ? "---" : Units.instance
+								.metersToDistance(dist);
+						view.setText(distStr);
+
+						return true;
+					}
+
+					// Show the distance with correct units
+					if (columnIndex == typecol) {
+						ImageView view = (ImageView) _view;
+
+						ExtendedWaypoint w = ((WaypointCursor) cursor).getWaypoint();
+
+						view.setImageDrawable(w.getIcon());
+						return true;
+					}
+
+				}
+				catch (RuntimeException ex) {
+					Log.d("ListWaypoint", "Caught exception building waypoint list: "
+							+ ex.getMessage());
+				}
+
+				return false;
+			}
+		});
+
+		return a;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.geeksville.android.DBListActivity#handleDeleteItem(android.view.MenuItem
+	 * )
+	 */
+	@Override
+	protected boolean handleDeleteItem(MenuItem item) {
+		db.deleteWaypoint(itemToRowId(item));
+
+		return true;
+	}
+
+	/**
+	 * Delete all waypoints
+	 */
+	private void handleDeleteMenu() {
+		// Is the user sure?
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Delete waypoints");
+		builder.setMessage("Are you sure?");
+		builder.setNegativeButton("Cancel", null);
+		builder.setPositiveButton("Delete", new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				db.deleteAllWaypoints();
+
+				myCursor.requery();
+			}
+		});
+
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
+	private void handleAddWaypoint() {
+
+		GaggleApplication app = ((GaggleApplication) getApplication());
+		Location myloc = null;
+
+		if (gps != null && gps.get() != null)
+			myloc = gps.get().getLastKnownLocation();
+
+		if (myloc == null)
+			Toast.makeText(ListWaypointsActivity.this,
+					"Can not add waypoint\nStill waiting for GPS fix", Toast.LENGTH_LONG)
+					.show();
+		else {
+			java.util.Date now = new java.util.Date();
+			String name = DateFormat.format("yy/MM/dd kk:mm:ss", now).toString();
+
+			ExtendedWaypoint w = new ExtendedWaypoint(name, myloc.getLatitude(), myloc
+					.getLongitude(), (int) myloc
+					.getAltitude(), 0, Waypoint.Type.Unknown.ordinal());
+			app.getWaypoints().add(w);
+
+			myCursor.requery();
+
+			// FIXME - then select it in the cursor/GUI
+			Toast.makeText(ListWaypointsActivity.this, "Waypoint created", Toast.LENGTH_SHORT)
+					.show();
+		}
+	}
+
+	private void handleGotoWaypoint(MenuItem item) {
+		gotoWaypoint(itemToRowNum(item));
+	}
+
+	private void gotoWaypoint(int rownum) {
+		myCursor.moveToPosition(rownum);
+
+		final ExtendedWaypoint w = ((WaypointCursor) myCursor).getWaypoint();
+
+		((GaggleApplication) getApplication()).currentDestination = w;
+
+		Toast
+				.makeText(ListWaypointsActivity.this, "New destination: " + w.name,
+				Toast.LENGTH_SHORT).show();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.geeksville.android.DBListActivity#handleViewItem(android.view.MenuItem
+	 * )
+	 */
+	@Override
+	protected void handleViewItem(MenuItem item) {
+		handleViewItem(itemToRowNum(item));
+	}
+
+	private void handleViewItem(final int rownum) {
+		myCursor.moveToPosition(rownum);
+
+		final ExtendedWaypoint w = ((WaypointCursor) myCursor).getWaypoint();
+
+		Runnable onOkay = new Runnable() {
+
+			@Override
+			public void run() {
+				w.commit();
+				myCursor.requery();
+
+				Toast.makeText(ListWaypointsActivity.this, "Updated waypoint", Toast.LENGTH_SHORT)
+						.show();
+			}
+		};
+
+		Runnable onGoto = new Runnable() {
+
+			@Override
+			public void run() {
+				// Just in case the user changed the waypoint
+				w.commit();
+				myCursor.requery();
+
+				gotoWaypoint(rownum);
+			}
+		};
+
+		WaypointDialog d = new WaypointDialog(this, w, onOkay, onGoto);
+		d.show();
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		// myCursor.requery(); // FIXME - don't do this if the user is moving
+		// around?
+	}
+
+}
