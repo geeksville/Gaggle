@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.geeksville.gaggle" android:versionCode="71"
+	android:versionName="0.71" android:installLocation="auto">
+
+	<supports-screens android:smallScreens="true"
+		android:normalScreens="true" android:largeScreens="true"
+		android:anyDensity="true" />  
+
+	<application android:icon="@drawable/icon" android:label="@string/app_name"
+		android:description="@string/app_description" android:name="com.geeksville.gaggle.GaggleApplication"
+		android:theme="@android:style/Theme.NoTitleBar" android:debuggable="false"> <!-- "@android:style/Theme.Light.NoTitleBar" -->
+
+		<activity android:name=".TopActivity" android:label="@string/app_name"
+			android:launchMode="singleTask" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".LoggingControl"
+			android:screenOrientation="portrait">
+		</activity>
+
+		<activity android:name=".ListFlightsActivity"></activity>
+		<activity android:name="com.geeksville.info.SelectInfoFieldsActivity"
+			android:label="Select fields">
+		</activity>
+		<activity android:name=".AboutActivity"></activity>
+		<activity android:name=".ListWaypointsActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<!--
+					Frequently gmail attachments have this as the only known mime type
+				-->
+				<data android:scheme="content" android:mimeType="application/octet-stream" />
+
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<!--
+					We understand wpt format waypoint files, see
+					http://www.santacruzparagliding.com/NCXC/NCXC_2010_waypoints.wpt
+					for example <data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.wpt" /> <data android:scheme="content"
+					android:host="*" android:pathPattern=".*\\.WPT" />
+				-->
+
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.wpt" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.wpt" />
+
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.wpt" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.wpt" />
+
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.WPT" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.WPT" />
+
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.WPT" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.WPT" />
+
+				<!--
+					<data android:scheme="http" android:host="*"
+					android:pathPattern=".*" android:mimeType="application/download" />
+					<data android:scheme="http" />
+				-->
+
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".MyPreferences">
+			<intent-filter>
+				<category android:name="android.intent.category.PREFERENCE" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".BetaSplashActivity"></activity>
+
+		<activity android:name="com.geeksville.gaggle.FlyMapActivity"
+			android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.igc" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.igc" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.igc" />
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.igc" />
+
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.IGC" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.IGC" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.IGC" />
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.IGC" />
+			</intent-filter>
+		</activity>
+		<uses-library android:name="com.google.android.maps" />
+
+		<service android:name="com.geeksville.location.GPSClient">
+			<intent-filter>
+				<action android:name="com.geeksville.gaggle.location.LOG_SERVICE"></action>
+			</intent-filter>
+		</service>
+
+	</application>
+
+	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
+
+	<!-- Needed for leonardo uploads and maps -->
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+	<!-- Needed to get location -->
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+
+	<!-- Needed for sim tracklog usage -->
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+
+	<!--
+		Not needed, because we always need a GPS <uses-permission
+		android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	-->
+
+	<!--
+		Needed to turn wifi on/off <uses-permission
+		android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+		<uses-permission
+		android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+
+		FIXME - move these to other apps <uses-permission
+		android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+		<uses-permission
+		android:name="android.permission.READ_OWNER_DATA"></uses-permission>
+		<uses-permission
+		android:name="android.permission.BLUETOOTH"></uses-permission>
+	-->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+</manifest> 
