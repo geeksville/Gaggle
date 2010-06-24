@@ -1,0 +1,189 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="http://www.livetrack24.com/wiki/index.php?title=Leonardo%20Live%20Tracking%20API&amp;mode=print&amp;lang=en"><div style="margin:-1px -1px 0;padding:0;border:1px solid #999;background:#fff"><div style="margin:12px;padding:8px;border:1px solid #999;background:#ddd;font:13px arial,sans-serif;color:#000;font-weight:normal;text-align:left">This is Google&#39;s cache of <a href="http://www.livetrack24.com/wiki/index.php?title=Leonardo%20Live%20Tracking%20API&mode=print&lang=en" style="text-decoration:underline;color:#00c">http://www.livetrack24.com/wiki/index.php?title=Leonardo%20Live%20Tracking%20API&amp;mode=print&amp;lang=en</a>. It is a snapshot of the page as it appeared on May 2, 2010 10:31:36 GMT. The <a href="http://www.livetrack24.com/wiki/index.php?title=Leonardo%20Live%20Tracking%20API&mode=print&lang=en" style="text-decoration:underline;color:#00c">current page</a> could have changed in the meantime. <a href="http://www.google.com/intl/en/help/features_list.html#cached" style="text-decoration:underline;color:#00c">Learn more</a><br><br><div style="float:right"><a href="http://webcache.googleusercontent.com/search?q=cache:Bdxlp_1ztqEJ:www.livetrack24.com/wiki/index.php%3Ftitle%3DLeonardo%2520Live%2520Tracking%2520API%26mode%3Dprint%26lang%3Den+/search%3Fhl%3Den%26safe%3Doff%26q%3D%2Bsite:www.livetrack24.com%2Bleonardo%2Blive%2Btracking%2Bapi&amp;hl=en&amp;gl=us&strip=1" style="text-decoration:underline;color:#00c">Text-only version</a></div>
+<div>These terms only appear in links pointing to this page: <span style="font-weight:bold">search</span>&nbsp;<span style="font-weight:bold">hl</span>&nbsp;<span style="font-weight:bold">en&safe</span>&nbsp;<span style="font-weight:bold">off&q</span>&nbsp;&nbsp;</div></div></div><div style="position:relative">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Leonardo Live - Leonardo Live Tracking API[en]</title>
+    <link rel="stylesheet" type="text/css" href="http://www.livetrack24.com/wiki/themes/dokuwiki/print.css" media="screen,print"/>
+  </head>
+  <body>
+  <div id="logobar"><h1 class="title">Leonardo Live</h1></div>
+  <a href="#content" accesskey="2"></a><div class="content_meta"><h1>Leonardo Live Tracking API</h1><p>Saturday, 16. January 2010 10:32:40, by <a href="mailto:andread%20__at__%20thenet%20__dot__%20gr">Manolis Andreadakis</a></p></div>&nbsp;<p>
+There are 2 ways to add live tracking support to your application.
+You cant mix the 2 ways, stick to and use only one of them in your application.
+</p>
+<p>
+Both are using HTTP GET requests to www.livetrack24.com/track.php with specific parameters
+By using test.livetrack24.com/track.php instead the tracks go to the test server. Use this while developing/testing.
+</p>
+
+<h2>Generic - Sessionless protocol </h2>
+
+<p>
+Example URL
+</p>
+<blockquote><p>
+/track.php?leolive=1&amp;client=<a href="http://www.livetrack24.com/wiki/YourProgramName">YourProgramName</a>&amp;v=1&amp;lat=22.3&amp;lon=40.2&amp;alt=23&amp;sog=40&amp;cog=160&amp;tm=1241422845&amp;user=yourusername&amp;pass=yourpass
+</p></blockquote>
+
+<h2>Native - Session aware protocol</h2>
+
+
+<h3>START OF TRACK PACKET</h3>
+
+<blockquote><p>
+/track.php?leolive=2&amp;sid=42664778&amp;pid=1&amp;client=<a href="http://www.livetrack24.com/wiki/YourProgramName">YourProgramName</a>&amp;v=1&amp;user=yourusername&amp;pass=yourpass&amp;phone=Nokia 2600c&amp;gps=BT GPS&amp;trk1=4&amp;vtype=16388&amp;vname=vehicle name and model
+</p></blockquote>
+
+<h4>PARAMETERS          </h4>
+
+<ul>
+
+<li>leolive=2  // 2 means this is the start of track packet
+</li><li>sid=42664778 // the session ID , see below on sessionID section for more information
+</li><li>pid=1 // the packet numner of this packet, we start with 1 and increase with each packet send either start/end or with GPS data.
+</li><li>client=<a href="http://www.livetrack24.com/wiki/YourClientName">YourClientName</a>// fixed value use only alphanumerics no spaces, first Letter of words in capitals
+</li><li>user=yourusername // there is no need to have a registred user, the user can input his prefered username on the fly, he will be displayed in black instead of blue if not registered.
+</li><li>pass=yourpass 
+</li><li>v=1 // version of your program you can use free text like 1.4.5
+</li><li>trk1=4 // the interval in secs that we will be sending gps points
+</li><li>phone=Nokia 2600c // the phone model as it is acquired from a system  call
+</li><li>&amp;gps=BT GPS // the GPS name , use the string Internal GPS for phones with integrated GPS
+</li><li>vname // the brand + name of the vehicle/glider ie Gradient Golden 2 26
+</li></ul>
+
+<p>
+Values for vtype
+</p>
+<pre>1=&gt;&quot;Paraglider&quot;
+2=&gt;&quot;Flex wing FAI1&quot;
+4=&gt;&quot;Rigid wing FAI5&quot;
+8=&gt;&quot;Glider&quot;
+16=&gt;&quot;Paramotor&quot;
+32=&gt;&quot;Trike&quot;
+64=&gt;&quot;Powered flight&quot;
+128=&gt;&quot;Hot Air Balloon&quot;
+</pre>
+<p>
+		
+</p>
+<pre>16385=&gt;&quot;Walk&quot;
+16386=&gt;&quot;Run&quot; 
+16388=&gt;&quot;Bike&quot;
+</pre>
+<p>
+				
+</p>
+<pre>16400=&gt;&quot;Hike&quot;
+16401=&gt;&quot;Cycle&quot;
+16402=&gt;&quot;Mountain Bike&quot;
+16403=&gt;&quot;Motorcycle&quot;
+</pre>
+<p>
+				
+</p>
+<pre>16500=&gt;&quot;Windsurf&quot;
+16501=&gt;&quot;Kitesurf&quot;				
+16502=&gt;&quot;Sailing&quot;
+</pre>
+<p>
+				
+</p>
+<pre>16600=&gt;&quot;Snowboard&quot;
+16601=&gt;&quot;Ski&quot;
+16602=&gt;&quot;Snowkite&quot;
+</pre>
+<p>
+							
+</p>
+<pre>17100=&gt;&quot;Car&quot;
+17101=&gt;&quot;4x4 Car&quot;
+</pre>
+
+<h3>END OF TRACK PACKET</h3>
+
+<blockquote><p>
+/track.php?leolive=3&amp;sid=42664778&amp;pid=453&amp;prid=0
+</p></blockquote>
+
+<h4>PARAMETERS</h4>
+
+<ul>
+
+<li> leolive=3  // 3 means this is the end of track packet
+</li><li> prid=0 // the  status of the user
+</li></ul>
+
+<pre>0-&gt; &quot;Everything OK&quot;
+1-&gt; &quot;Need retrieve&quot;
+2-&gt; &quot;Need some help, nothing broken&quot;
+3-&gt; &quot;Need help, maybe something broken&quot;
+4-&gt; &quot;HELP, SERIOUS INJURY&quot;
+</pre>
+
+<h3>GPS POINT PACKET</h3>
+
+<blockquote><p>
+/track.php?leolive=4&amp;sid=42664778&amp;pid=321&amp;lat=22.3&amp;lon=40.2&amp;alt=23&amp;sog=40&amp;cog=160&amp;tm=1241422845
+</p></blockquote>
+
+<h4>PARAMETERS</h4>
+
+<ul>
+
+<li>leolive=4  // 4 means this is a gps point
+</li><li>lat=22.3 // the latitude in decimal notation, use negative numbers for west
+</li><li>lon=40.2 // lon in decimal, use negative numbers for south
+</li><li>alt=23 // altitude in meters above the MSL (not the geoid if it is possible) , no decimals
+</li><li>sog=40 // speed over ground in km/h  no decimals
+</li><li>cog=160 // course over ground in degrees 0-360, no deciamals
+</li><li>tm=1241422845 // the unixt timestamp in GMT of the GPS time, not the phone's time.
+</li></ul>
+
+
+<h3>Info on sessionID </h3>
+
+<p>
+The &quot;sid&quot; (sessionID) parameter uniqcly identifies a single track , it must be the same in all packets 
+</p>
+
+<h4>Random <a href="http://www.livetrack24.com/wiki/SessionID">SessionID</a></h4>
+
+<p>
+Use a 4 byte unsigned random int, the  leftmost bit ( 0x80000000 ) MUST be set to 0 so you must do a  sessionID &amp; 0x7fffffff
+</p>
+
+<h4>Setting the userID inside sessionID</h4>
+
+<p>
+If the user has an account on the server then the sessionID must be constructed in the following way to contain the userID
+</p>
+<p>
+First of all your application must get the userID based on the username and password of the user. The url to verify user accounts and get back the userID is
+</p>
+<p>
+http://www.livetrack24.com/client.php?op=login&amp;user=username&amp;pass=pass
+</p>
+<p>
+The username and password are case INSENSITIVE, because on mobile devices it is not easy for all users to enter the correct case.
+</p>
+<p>
+The result of the page is an integer, 0 if userdata are incorrect, or else the userID of the user
+</p>
+<p>
+Here is a sample code in Java to construct a sessionID from a userID
+</p>
+<pre>Random a= new Random( System.currentTimeMillis() );
+int rnd=Math.abs( a.nextInt() );
+// we make an int with leftmost bit=1 ,
+// the next 7 bits random 
+// (so that the same userID can have multiple active sessions)
+// and the next 3 bytes the userID
+rnd=( rnd &amp;  0xFF000000 ) | ( userID &amp; 0x00ffffff) | 0x80000000;                    
+</pre>
+<pre>
+</pre>  </body>
+</html>

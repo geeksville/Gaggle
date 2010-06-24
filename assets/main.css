@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+
+a:link {
+COLOR: #0080FF;
+}
+a:visited {
+COLOR: #800080;
+}
+a:hover {
+COLOR: #FF0000;
+}
+a:active {
+COLOR: #00FF00;
+}
+
+body {
+    font-family: Verdana, Helvetica, sans-serif;
+    background-color: #111111;
+    color: #eeeeee;
+}
