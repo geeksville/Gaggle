@@ -130,12 +130,12 @@ public class Units {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 
 		String defval = Distance.Feet.toString();
-		vdistance = Distance.valueOf(prefs.getString("altunits_pref", defval));
-		hdistance = Distance.valueOf(prefs.getString("distunits_pref",
+		vdistance = Distance.valueOf(prefs.getString("altunits1_pref", defval));
+		hdistance = Distance.valueOf(prefs.getString("distunits1_pref",
 				Distance.Miles.toString()));
-		hspeed = Speed.valueOf(prefs.getString("speedunits_pref",
+		hspeed = Speed.valueOf(prefs.getString("speedunits1_pref",
 				Speed.MilePerHr.toString()));
-		vspeed = Speed.valueOf(prefs.getString("vspdunits_pref",
+		vspeed = Speed.valueOf(prefs.getString("vspdunits1_pref",
 				Speed.FeetPerMin.toString()));
 	}
 

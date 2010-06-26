@@ -166,8 +166,11 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 	 */
 	@Override
 	public void onResume() {
-		if (contents != null)
+		if (contents != null) {
 			contents.onShown();
+
+			updateLabels();
+		}
 	}
 
 	/*
@@ -208,7 +211,7 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 				// context is not Activity)
 				Activity activity = (getContext() == null) ? null
 						: Activity.class.isInstance(getContext()) ? (Activity) getContext()
-						: null;
+								: null;
 				f.onCreate(activity);
 
 				// This cache doesn't work yet?
@@ -232,6 +235,21 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 	}
 
 	/**
+	 * Update our units and short label
+	 */
+	private void updateLabels() {
+		if (label != null)
+			label.setText(contents.getLabel());
+
+		if (shortLabel != null)
+			shortLabel.setText(contents.getShortLabel());
+
+		// We might not be displaying the units field
+		if (units != null)
+			units.setText(contents.getUnits());
+	}
+
+	/**
 	 * Install a new info field into this dock
 	 * 
 	 * @param f
@@ -251,15 +269,7 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 		if (contents != null) {
 			contents.onShown();
 
-			if (label != null)
-				label.setText(contents.getLabel());
-
-			if (shortLabel != null)
-				shortLabel.setText(contents.getShortLabel());
-
-			// We might not be displaying the units field
-			if (units != null)
-				units.setText(contents.getUnits());
+			updateLabels();
 
 			// Subscribe to this info field
 			contents.setOnChanged(this);
