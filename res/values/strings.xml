@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="beta_text">Gaggle is a tool for glider pilots of all types; with features such as logging, 
+    mapping and glide calculations.  If you you would like to be part of the closed beta-test of this application, 
+    please email kevinh@geeksville.com.</string>
+    <string name="app_name">Gaggle</string>
+<string name="LiveLoggingPrompt">Live Logging</string>
+<string name="app_description">A tool for glider pilots</string>
+</resources>
+ 

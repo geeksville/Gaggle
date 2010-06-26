@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+     <declare-styleable name="InfoDock">
+
+        <!-- the name of the class for getting this docks contents  -->
+        <attr name="info_field" format="string" />
+
+        <!-- the id of the layout we are using for this dock -->
+        <attr name="layout_id" format="integer" />
+    </declare-styleable>
+
+     <declare-styleable name="InfoListView">
+
+        <!-- the id of the layout we are using for the list rows-->
+        <attr name="row_layout_id" format="integer" />
+    </declare-styleable>
+    
+     <declare-styleable name="AccountView">
+        <attr name="prefs_name" format="string" />
+        
+        <!-- the id of a string array resource - a list of human readable names -->
+        <attr name="server_names" format="integer" />
+        
+        <!-- the id of a string array resource - a of URLs one per server_name -->
+        <attr name="server_urls" format="integer" />
+    </declare-styleable>
+     
+</resources>

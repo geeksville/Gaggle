@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" android:layout_width="fill_parent"
+	android:layout_height="wrap_content" android:layout_marginBottom="2dip">
+
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Label"
+		android:textAppearance="?android:attr/textAppearanceSmall" android:textSize="8pt" 
+		android:id="@+id/infodock_label"
+		android:layout_weight="20" android:layout_gravity="left|center_vertical"></TextView>
+
+	<ImageView android:id="@+id/infodock_image"
+		android:src="@drawable/plane_red" android:scaleType="fitXY" android:layout_width="30dip" 
+
+		android:layout_height="30dip" android:adjustViewBounds="true" android:layout_weight="1"></ImageView>
+
+	<TextView android:text="1234.1" android:id="@+id/infodock_text"
+		android:layout_gravity="right" android:gravity="right"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:layout_weight="15" android:textColor="@color/info_field_text" android:textSize="12pt"></TextView>
+
+	<TextView android:text="kts" android:id="@+id/infodock_units"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_gravity="right"  android:layout_height="wrap_content" android:layout_weight="1"
+		android:layout_width="wrap_content"></TextView>
+</LinearLayout>
+

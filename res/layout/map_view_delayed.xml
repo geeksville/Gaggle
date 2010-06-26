@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	xmlns:app="http://schemas.android.com/apk/res/com.geeksville.gaggle"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	<com.geeksville.maps.GeeksvilleMapView
+		android:id="@+id/mapview_delayed" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:clickable="true"
+		android:apiKey="034AOEQKPlRx88Up3Heg6_Y2BWGCslPcB21wA2A" />
+
+	<com.geeksville.gaggle.AltitudeView
+		android:id="@+id/altitude_view" android:clickable="true" android:layout_centerHorizontal="true" 
+		android:layout_width="fill_parent" android:layout_marginLeft="50dip" 
+		android:layout_alignParentBottom="true" android:layout_height="100dip" 
+		android:layout_marginBottom="50dip"/>
+	  
+</RelativeLayout>
+
+	<!--
+ 
+		FIXME use @ expressions in the :text lines above to make for easier
+		localization FIXME - add the following to allow debugging of my
+		MapView objects. per the following instructions.
+		http://code.google.com/android/add-ons/google-apis/mapkey.html I also
+		need to add refs to the app in the manifest FIXME, eventually change
+		to my geeksville based key:
+		android:apiKey="034AOEQKPlRx88Up3Heg6_Y2BWGCslPcB21wA2A"
+
+		Alternatively, for my debug license use the following:
+
+		android:apiKey="034AOEQKPlRyRLVj5d6s01t2tk7_VSieMKoYxZg" 
+		
+		For my windows debug license:
+		
+		034AOEQKPlRzKWX20hnwGJd0YhEZHwt8NVbnEOA				
+	-->

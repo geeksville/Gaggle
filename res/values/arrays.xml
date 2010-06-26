@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="live_server_names">
+		<item>Leonardo Live</item>
+		<item>Leonardo Live (Test Server)</item>
+	</string-array>
+
+	<string-array name="live_server_urls">
+		<item>http://www.livetrack24.com</item>
+		<item>http://test.livetrack24.com</item>
+	</string-array>
+	
+	<string-array name="delayed_server_names">
+		<item>Paragliding Forum</item>
+		<item>DHV</item> 
+	</string-array>
+ 
+	<string-array name="delayed_server_urls">
+		<item>http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</item>
+		<item>http://xc.dhv.de/xc/modules/leonardo/flight_submit.php</item>
+	</string-array>
+	
+	<string-array name="log_interval_names">
+		<item>1 second</item>
+		<item>3 seconds</item>
+		<item>5 seconds</item>
+		<item>10 seconds</item>
+		<item>15 seconds</item>
+		<item>20 seconds</item>			
+		<item>1 minute</item>
+		<item>2 minute</item>
+		<item>5 minute</item>									
+	</string-array>
+	
+	<string-array name="log_interval_vals">
+		<item>1</item>
+		<item>3</item>
+		<item>5</item>
+		<item>10</item>
+		<item>15</item>
+		<item>20</item>			
+		<item>60</item>		
+		<item>120</item>	
+		<item>300</item>								
+	</string-array>
+				
+	<string-array name="waypoint_type_names">
+		<item>Unknown</item>
+		<item>Landing Zone</item>
+		<item>Launch</item>	
+		<item>Turn point</item>							
+	</string-array>
+	
+	<string-array name="waypoint_type_vals">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>								
+	</string-array>
+
+	<string-array name="altunits_enum_names">
+		<item>Feet</item>
+		<item>Meters</item>					
+	</string-array>
+	
+	<string-array name="altunits_enum_vals">
+		<item>Feet</item>
+		<item>Meters</item>							
+	</string-array>
+			
+	<string-array name="speedunits_enum_names">
+		<item>kph</item>
+		<item>mph</item>					
+	</string-array>
+	
+	<string-array name="speedunits_enum_vals">
+		<item>KmPerHr</item>
+		<item>MilePerHr</item>							
+	</string-array>
+						
+	<string-array name="distunits_enum_names">
+		<item>Km</item>
+		<item>Miles</item>				
+	</string-array>
+	
+	<string-array name="distunits_enum_vals">
+		<item>KM</item>
+		<item>Miles</item>							
+	</string-array>
+			
+	<string-array name="vspdunits_enum_names">
+		<item>M/s</item>
+		<item>FPM</item>				
+	</string-array>
+	
+	<string-array name="vspdunits_enum_vals">
+		<item>MPerSec</item>
+		<item>FeetPerMin</item>							
+	</string-array>											
+</resources>

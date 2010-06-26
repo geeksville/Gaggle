@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<TabHost android:id="@android:id/tabhost" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+<!-- kevinh: use wrap_content to not fill each button to full width -->
+		<TabWidget android:id="@android:id/tabs" 
+			android:layout_width="fill_parent"
+			android:layout_height="65px" />
+
+<!-- use layout_height="200px" to hardwire for a certain height for contents -->
+		<FrameLayout android:id="@android:id/tabcontent"
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent"
+			android:paddingTop="65px"
+			>
+
+			<LinearLayout android:id="@+id/content1" android:orientation="vertical"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:background="#ff99ccff">
+
+				<TextView android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:text="tab item uno :) " />
+
+			</LinearLayout>
+
+			<LinearLayout android:id="@+id/content2" android:orientation="vertical"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:background="#ffffcc99" >
+
+				<TextView android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:text="tab item dos :/" />
+ 
+				<Button android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:text="tabhost needs" />
+
+				<Button android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:text="to be upgraded ;) " />
+
+			</LinearLayout>
+
+		</FrameLayout>
+
+	</TabHost>
+
+</LinearLayout>

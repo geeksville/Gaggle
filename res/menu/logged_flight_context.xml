@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/view_menu" android:title="View on map" android:icon="@android:drawable/ic_menu_view" />
+	<item android:id="@+id/logged_upload_menu" android:title="Upload to Leonardo" android:icon="@android:drawable/ic_menu_upload" />
+	<item android:id="@+id/send_igc" android:title="Send IGC file" android:icon="@android:drawable/ic_menu_send" />
+	<item android:id="@+id/send_kml" android:title="Send KML file" android:icon="@android:drawable/ic_menu_send" />
+	<!-- <item android:id="@+id/view_kml" android:title="View KML file" android:icon="@android:drawable/ic_menu_view" />
+	  --></menu>

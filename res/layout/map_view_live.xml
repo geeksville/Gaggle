@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	xmlns:app="http://schemas.android.com/apk/res/com.geeksville.gaggle"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+
+		
+	<com.geeksville.maps.GeeksvilleMapView
+		android:id="@+id/mapview_live" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:clickable="true"
+		android:apiKey="034AOEQKPlRx88Up3Heg6_Y2BWGCslPcB21wA2A" />
+
+	<com.geeksville.gaggle.LiveAltitudeView
+		android:id="@+id/altitude_view" android:clickable="true" android:layout_centerHorizontal="true" 
+		android:layout_width="fill_parent" android:layout_marginLeft="50dip" 
+		android:layout_alignParentBottom="true" android:layout_height="100dip" 
+		android:layout_marginBottom="50dip"/>
+
+	<LinearLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:orientation="vertical"
+		android:layout_weight="1" android:layout_marginTop="20dip"
+		android:layout_alignParentRight="true" android:layout_marginRight="10dip">
+
+		<com.geeksville.info.InfoDock
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			app:layout_id="@layout/info_dock_mapbox" app:info_field="com.geeksville.info.InfoAltitude" />
+		<com.geeksville.info.InfoDock
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			app:layout_id="@layout/info_dock_mapbox" app:info_field="com.geeksville.info.InfoGroundSpeed" />
+		<com.geeksville.info.InfoDock
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			app:layout_id="@layout/info_dock_mapbox" app:info_field="com.geeksville.info.InfoGlideRatio" />
+	</LinearLayout>
+
+</RelativeLayout>
+
+	<!--
+
+		we used to include the following in the settings:
+		android:id="@+id/mainlayout" FIXME use @ expressions in the :text
+		lines above to make for easier localization FIXME - add the following
+		to allow debugging of my MapView objects. per the following
+		instructions.
+		http://code.google.com/android/add-ons/google-apis/mapkey.html I also
+		need to add refs to the app in the manifest FIXME, eventually change
+		to my geeksville based key:
+		android:apiKey="034AOEQKPlRx88Up3Heg6_Y2BWGCslPcB21wA2A"
+
+		Alternatively, for my debug license use the following:
+
+		android:apiKey="034AOEQKPlRyRLVj5d6s01t2tk7_VSieMKoYxZg" For my
+		windows debug license: 034AOEQKPlRzKWX20hnwGJd0YhEZHwt8NVbnEOA
+	-->

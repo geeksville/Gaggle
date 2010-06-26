@@ -1,0 +1,97 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/com.geeksville.gaggle"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	<LinearLayout android:orientation="vertical"
+		android:id="@+id/waypoint_edit_root" android:layout_gravity="center_horizontal"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:padding="10dp">
+
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Name"></TextView>
+
+		<EditText android:id="@+id/name" android:layout_margin="1dip"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:hint="degs" />
+
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Latitude"></TextView>
+
+		<LinearLayout android:orientation="horizontal"
+			android:id="@+id/latitude" android:layout_gravity="center_horizontal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+			<com.geeksville.view.NumberEdit
+				android:id="@+id/degree" android:layout_margin="1dip"
+				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:hint="degs" android:maxLength="3" android:lines="1" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="°"></TextView>
+			<com.geeksville.view.NumberEdit
+				android:id="@+id/minute" android:layout_margin="1dip"
+				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:hint="min" android:maxLength="2" android:lines="1" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="'"></TextView>
+			<com.geeksville.view.NumberEdit
+				android:id="@+id/second" android:layout_margin="1dip"
+				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:hint="frac" android:maxLength="3" android:lines="1" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text='"'></TextView>
+
+		</LinearLayout>
+
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Longitude"></TextView>
+
+		<LinearLayout android:orientation="horizontal"
+			android:id="@+id/longitude" android:layout_gravity="center_horizontal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+			<com.geeksville.view.NumberEdit
+				android:id="@+id/degree" android:layout_margin="1dip"
+				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:hint="degs" android:maxLength="3" android:lines="1" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="°"></TextView>
+			<com.geeksville.view.NumberEdit
+				android:id="@+id/minute" android:layout_margin="1dip"
+				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:hint="min" android:maxLength="2" android:lines="1" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="'"></TextView>
+			<com.geeksville.view.NumberEdit
+				android:id="@+id/second" android:layout_margin="1dip"
+				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:hint="frac" android:maxLength="3" android:lines="1" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text='"'></TextView>
+
+		</LinearLayout>
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Altitude"></TextView>
+
+		<LinearLayout android:orientation="horizontal"
+			android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<com.geeksville.view.NumberEdit
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:id="@+id/altitude"
+				android:layout_gravity="center" android:text="altitude" android:maxLength="8"/>
+
+			<TextView android:id="@+id/altitude_units"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="'" android:layout_marginLeft="3dip"></TextView>
+
+		</LinearLayout>
+
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Type"></TextView>
+		<com.geeksville.view.EnhancedSpinner
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:id="@+id/type" android:layout_gravity="center"
+			android:entries="@array/waypoint_type_names" android:entryValues="@array/waypoint_type_vals" />
+	</LinearLayout>
+
+</ScrollView>

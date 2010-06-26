@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory android:title="General settings">
+
+		<com.geeksville.view.EditTextPreferenceWithValue
+			android:key="pilot_name_pref" android:title="Pilot name"
+			android:summary="Used in flight reports" android:capitalize="words"
+			android:singleLine="true" />
+
+		<com.geeksville.view.EditTextPreferenceWithValue
+			android:key="pilot_id_pref" android:title="Pilot Identifier"
+			android:summary="A short ID stored in IGC files (used for competition)"
+			android:singleLine="true" />
+
+
+
+		<EditTextPreference android:key="default_flight_desc_pref"
+			android:title="Flight Description" android:summary="Default description for new flights"
+			android:hint="Default description for new flights"
+			android:capitalize="sentences" android:minLines="1" />
+
+		<PreferenceScreen android:key="glider_prefs"
+			android:title="Glider information" android:summary="Performance and model information">
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="wing_model_pref" android:title="Wing model"
+				android:summary="e.g. Sport 4 or N72KH" android:capitalize="words"
+				android:singleLine="true" />
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="glideratio_pref" android:title="Glide Ratio"
+				android:summary="A starting point for glide calculations"
+				android:defaultValue="7.0" android:inputType="numberDecimal" />
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="altmargin_min_pref" android:title="Minimum altitude margin"
+				android:summary="The bare minimum altitude needed at an LZ (in meters)"
+				android:defaultValue="0" android:inputType="number" />
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="altmargin_extra_pref" android:title="Extra altitude margin"
+				android:summary="Extra altitude needed beyond the minimum at an LZ (in meters)"
+				android:defaultValue="100" android:inputType="number" />
+		</PreferenceScreen>
+
+		<PreferenceScreen android:key="units_prefs"
+			android:title="Units" android:summary="Feet, Meters, etc..."> 
+
+			<ListPreference android:key="altunits1_pref"
+				android:title="Altitude units" android:defaultValue="Feet"
+				android:entries="@array/altunits_enum_names" android:entryValues="@array/altunits_enum_vals" />
+
+			<ListPreference android:key="speedunits1_pref"
+				android:title="Speed units" android:defaultValue="MilePerHr"
+				android:entries="@array/speedunits_enum_names" android:entryValues="@array/speedunits_enum_vals" />
+
+			<ListPreference android:key="distunits1_pref"
+				android:title="Distance units" android:defaultValue="Miles"
+				android:entries="@array/distunits_enum_names" android:entryValues="@array/distunits_enum_vals" />
+
+			<ListPreference android:key="vspdunits1_pref"
+				android:title="Vertical speed units" android:defaultValue="FeetPerMin"
+				android:entries="@array/vspdunits_enum_names" android:entryValues="@array/vspdunits_enum_vals" />
+		</PreferenceScreen>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="Logging settings">
+
+		<CheckBoxPreference android:key="live_logging_pref"
+			android:title="Live logging" android:summary="Using a Leonardo Live server" />
+
+		<CheckBoxPreference android:key="delayed_logging_pref"
+			android:title="Automatic upload" android:summary="Using a Leonardo server" />
+
+		<ListPreference android:key="log_interval_pref"
+			android:title="Interval" android:summary="Time between each log record"
+			android:defaultValue="3" android:entries="@array/log_interval_names"
+			android:entryValues="@array/log_interval_vals" />
+
+		<CheckBoxPreference android:key="disable_wifi_pref"
+			android:title="Disable Wi-Fi" android:defaultValue="false"
+			android:summary="Saves power... Not yet implemented..." />
+
+		<CheckBoxPreference android:key="force_screen_on"
+			android:title="Screen on in flight" android:defaultValue="false"
+			android:summary="Keeps the display from going to sleep" />
+
+		<PreferenceScreen android:key="advanced"
+			android:title="Advanced" android:summary="Options for advanced users">
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="launch_dist_x" android:title="Launch distance (horizontal)"
+				android:summary="Once you travel this far a launch is declared (in meters)"
+				android:defaultValue="40" android:inputType="number" />
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="launch_dist_y" android:title="Launch distance (vertical)"
+				android:summary="Once you travel this far a launch is declared (in meters)"
+				android:defaultValue="7" android:inputType="number" />
+		</PreferenceScreen>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="Server settings">
+
+		<PreferenceScreen android:key="live_prefs"
+			android:title="Leonardo Live server" android:summary="Server and account information">
+
+			<EditTextPreference
+				android:key="live2_servername_pref" android:title="Submission URL"
+				android:summary="See www.livetrack24.com for more information"
+				android:inputType="textUri"
+				android:defaultValue="http://www.livetrack24.com" />
+
+			<!--
+				<ListPreference android:key="live_servername_pref"
+				android:title="Server name"
+				android:defaultValue="http://www.livetrack24.com/track.php"
+				android:summary="See www.livetrack24.com for more information"
+				android:entries="@array/live_server_names"
+				android:entryValues="@array/live_server_urls" />
+			-->
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="live2_username_pref" android:singleLine="true"
+				android:title="Username" android:hint="Username" />
+
+			<EditTextPreference android:key="live2_password_pref"
+				android:singleLine="true" android:title="Password"
+				android:inputType="textPassword" android:hint="Password" />
+
+		</PreferenceScreen>
+
+		<PreferenceScreen android:key="delayed_prefs"
+			android:title="Leonardo server" android:summary="Server and account information">
+
+			<EditTextPreference
+				android:key="delayed_servername_pref" android:title="Submission URL"
+				android:summary="For servers other than paraglidingforum.com"
+				android:inputType="textUri"
+				android:defaultValue="http://www.paraglidingforum.com/modules/leonardo/flight_submit.php" />
+			<!--
+				<ListPreference android:key="delayed_servername_pref"
+				android:title="Server name"
+				android:defaultValue="http://www.paraglidingforum.com/modules/leonardo/flight_submit.php"
+				android:summary="See www.paraglidingforum.com for more information"
+				android:entries="@array/delayed_server_names"
+				android:entryValues="@array/delayed_server_urls" />
+			-->
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="delayed_username_pref" android:singleLine="true"
+				android:title="Username" android:hint="Username" />
+
+			<EditTextPreference android:key="delayed_password_pref"
+				android:singleLine="true" android:title="Password"
+				android:inputType="textPassword" android:hint="Password" />
+
+		</PreferenceScreen>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="Testing tools">
+		<CheckBoxPreference android:key="fake_gps_pref"
+			android:title="Simulate GPS Data" android:summary="Allows testing Gaggle at home" />
+
+	</PreferenceCategory>
+</PreferenceScreen>

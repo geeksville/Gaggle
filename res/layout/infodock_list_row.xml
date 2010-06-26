@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/com.geeksville.gaggle"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+	<CheckBox android:id="@+id/checkbox"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+	<com.geeksville.info.InfoDock android:id="@+id/info" app:layout_id="@layout/info_dock_wide"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</LinearLayout>
+
+	
