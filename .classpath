@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/geeksville/test/|com/livetrack24/net/*" kind="src" path="src"/>
-	<classpathentry excluding="**/.svn/*" kind="src" path="AndroidShared"/>
+	<classpathentry excluding="com/geeksville/test/" kind="src" path="src"/>
+	<classpathentry kind="src" path="shared"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libs/FlurryAgent.jar"/>
