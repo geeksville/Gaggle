@@ -81,8 +81,4 @@ public class GagglePrefs {
 		return prefs.getString("pilot_name_pref", "").trim();
 	}
 
-	public String getDefaultFlightDescription() {
-		return prefs.getString("default_flight_desc_pref", "").trim();
-	}
-
 }

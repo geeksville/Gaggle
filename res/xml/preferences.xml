@@ -13,13 +13,6 @@
 			android:summary="A short ID stored in IGC files (used for competition)"
 			android:singleLine="true" />
 
-
-
-		<EditTextPreference android:key="default_flight_desc_pref"
-			android:title="Flight Description" android:summary="Default description for new flights"
-			android:hint="Default description for new flights"
-			android:capitalize="sentences" android:minLines="1" />
-
 		<PreferenceScreen android:key="glider_prefs"
 			android:title="Glider information" android:summary="Performance and model information">
 

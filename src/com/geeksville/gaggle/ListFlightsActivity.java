@@ -24,8 +24,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.flurry.android.FlurryAgent;
@@ -43,9 +45,13 @@ import com.geeksville.view.AsyncProgressDialog;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.format.DateFormat;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +60,7 @@ import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -69,11 +76,19 @@ public class ListFlightsActivity extends DBListActivity {
 	 */
 	private static final String TAG = "ListFlightsActivity";
 
-	LocationLogDbAdapter db;
+	private LocationLogDbAdapter db;
+
+	private java.text.DateFormat datefmt;
+	private java.text.DateFormat timefmt;
+	private Geocoder coder;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		coder = new Geocoder(this);
+		datefmt = DateFormat.getDateFormat(this);
+		timefmt = DateFormat.getTimeFormat(this);
+
 		// Fill our table
 		db = new LocationLogDbAdapter(this);
 
@@ -142,20 +157,155 @@ public class ListFlightsActivity extends DBListActivity {
 		return db.fetchAllFlights();
 	}
 
+	/**
+	 * Get a long human readable description for a time
+	 * 
+	 * @param timeMsec
+	 * @return
+	 */
+	private String timeToString(long timeMsec) {
+		Date startdate = new Date(timeMsec);
+
+		String title = datefmt.format(startdate) + " " + timefmt.format(startdate);
+
+		return title;
+
+	}
+
+	private class FindGeocodeTask extends AsyncTask<Long, Void, String> {
+		TextView dest;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param dest
+		 *            the view to update when we get a response
+		 */
+		public FindGeocodeTask(TextView dest) {
+			this.dest = dest;
+		}
+
+		@Override
+		protected String doInBackground(Long... params) {
+			try {
+				synchronized (coder) { // only one lookup at a time
+					long id = params[0];
+					Cursor locs = db.fetchLocations(id);
+					if (locs.getCount() < 1)
+						return null; // No lat longs avail
+
+					double latitude = locs.getDouble(locs
+							.getColumnIndex(LocationLogDbAdapter.KEY_LATITUDE));
+					double longitude = locs.getDouble(locs
+							.getColumnIndex(LocationLogDbAdapter.KEY_LONGITUDE));
+					List<Address> addrs = coder.getFromLocation(latitude, longitude, 1);
+
+					if (addrs.size() < 1)
+						return null; // Failed to find on google
+
+					Address addr = addrs.get(0);
+					StringBuilder builder = new StringBuilder();
+					int maxLine = Math.min(addr.getMaxAddressLineIndex(), 1);
+					for (int line = 0; line <= maxLine; line++)
+						builder.append(addr.getAddressLine(line) + " ");
+
+					String result = builder.toString();
+
+					// Store this as the new description for the flight
+					db.updateFlight(id, null, result, null, null);
+
+					return result;
+				}
+			} catch (Exception ex) {
+				// FIXME - log failures
+				return null;
+			}
+		}
+
+		protected void onPostExecute(String result) {
+			if (result != null)
+				dest.setText(result);
+		}
+	}
+
 	@Override
 	protected BaseAdapter createListAdapter() {
 
 		// Create an array to specify the fields we want to display in the
 		// list
-		String[] from = new String[] { LocationLogDbAdapter.KEY_NAME };
+		String[] from = new String[] { LocationLogDbAdapter.KEY_DESCRIPTION,
+				LocationLogDbAdapter.KEY_FLT_STARTTIME,
+				LocationLogDbAdapter.KEY_FLT_ENDTIME };
 
 		// and an array of the fields we want to bind those fields to
-		int[] to = new int[] { R.id.flightTitle };
+		int[] to = new int[] { R.id.flightTitle, R.id.date, R.id.duration };
 
 		// Now create a simple cursor adapter and set it to display
 		SimpleCursorAdapter a = new SimpleCursorAdapter(this, R.layout.flights_row,
 				myCursor,
 				from, to);
+
+		final int idcol = myCursor.getColumnIndex(LocationLogDbAdapter.KEY_ROWID);
+		final int desccol = myCursor.getColumnIndex(LocationLogDbAdapter.KEY_DESCRIPTION);
+		final int startcol = myCursor.getColumnIndex(LocationLogDbAdapter.KEY_FLT_STARTTIME);
+		final int endcol = myCursor.getColumnIndex(LocationLogDbAdapter.KEY_FLT_ENDTIME);
+
+		a.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+			public boolean setViewValue(View _view, Cursor cursor, int columnIndex) {
+				if (columnIndex == desccol) {
+					TextView view = (TextView) _view;
+
+					String desc = cursor.getString(desccol);
+					boolean needGeocode = desc == null || desc.length() == 0;
+					if (needGeocode) {
+						// No user provided description, so we show the date of
+						// flight instead
+						long startTime = cursor.getLong(startcol);
+						desc = timeToString(startTime);
+
+					}
+					view.setText(desc);
+
+					if (needGeocode) {
+						// Try to find something better next time
+						FindGeocodeTask task = new FindGeocodeTask(view);
+						task.execute(cursor.getLong(idcol));
+					}
+
+					return true;
+				}
+
+				if (columnIndex == startcol) {
+					TextView view = (TextView) _view;
+
+					long startTime = cursor.getLong(startcol);
+					view.setText(timeToString(startTime));
+					return true;
+				}
+
+				if (columnIndex == endcol) {
+					TextView view = (TextView) _view;
+
+					long startTime = cursor.getLong(startcol);
+					long endTime = cursor.getLong(endcol);
+
+					// If this flight is still active we won't know the end time
+					String str = "";
+					if (endTime >= startTime) {
+						int numSec = (int) ((endTime - startTime) / 1000);
+						int numHr = numSec / (60 * 60);
+						int numMin = (numSec / 60) % 60;
+
+						str = String.format("%d:%02d", numHr, numMin);
+					}
+
+					view.setText(str);
+					return true;
+				}
+
+				return false;
+			}
+		});
 
 		return a;
 	}
@@ -219,7 +369,7 @@ public class ListFlightsActivity extends DBListActivity {
 
 		writer = new IGCWriter(s,
 				prefs.getPilotName(),
-				prefs.getDefaultFlightDescription(), // FIXME - not quite
+				null, // FIXME - not quite
 				// right, we should
 				// get this from DB
 				prefs.getWingModel(),
@@ -275,17 +425,13 @@ public class ListFlightsActivity extends DBListActivity {
 		if (filetype.equals("igc"))
 			writer = new IGCWriter(s,
 					prefs.getPilotName(),
-					prefs.getDefaultFlightDescription(), // FIXME - not quite
-					// right, we should
-					// get this from DB
+					null,
 					prefs.getWingModel(),
 					prefs.getPilotId());
 		else
 			writer = new KMLWriter(s,
 					prefs.getPilotName(),
-					prefs.getDefaultFlightDescription(), // FIXME - not quite
-					// right, we should
-					// get this from DB
+					null,
 					prefs.getWingModel(),
 					prefs.getPilotId());
 

@@ -351,8 +351,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 
 		// We always log to the DB
 		PositionWriter dbwriter = new LocationDBWriter(this, prefs
-				.isDelayedUpload(), prefs.getPilotName(), prefs
-				.getDefaultFlightDescription());
+				.isDelayedUpload(), prefs.getPilotName(), null);
 
 		// Also always keep the the current live track
 		// FIXME - skanky way we pass live tracks to the map

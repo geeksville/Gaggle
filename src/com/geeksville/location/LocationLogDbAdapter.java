@@ -66,7 +66,8 @@ public class LocationLogDbAdapter {
 			KEY_FLT_WANTUP = "wantupload", KEY_FLT_UPLOADED = "uploaded";
 
 	private static final String FLTINFO_CREATE = "create table fltinfo ("
-			+ "_id integer primary key autoincrement, " + "name text, " // Defaults
+			+ "_id integer primary key autoincrement, "
+			+ "name text, " // Defaults
 			// to
 			// the
 			// start
@@ -199,14 +200,13 @@ public class LocationLogDbAdapter {
 	public long createFlight(String pilotname, String notes, long startTime) {
 		ContentValues vals = new ContentValues();
 
-		Date startdate = new Date(startTime);
-		java.text.DateFormat datefmt = DateFormat.getDateFormat(context);
-		java.text.DateFormat timefmt = DateFormat.getTimeFormat(context);
-		String title = datefmt.format(startdate) + " " + timefmt.format(startdate);
+		// We are no longer using this field in the DB, instead, we generate it
+		// when browsing in the GUI (more flexible)
 
-		vals.put(KEY_NAME, title);
+		// vals.put(KEY_NAME, title);
 		vals.put(KEY_FLT_PILOTNAME, pilotname);
-		vals.put(KEY_DESCRIPTION, notes);
+		if (notes != null)
+			vals.put(KEY_DESCRIPTION, notes);
 		vals.put(KEY_FLT_STARTTIME, startTime);
 		vals.put(KEY_FLT_UPLOADED, 0);
 
