@@ -25,6 +25,9 @@ import java.io.InputStream;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.andnav.osm.views.OpenStreetMapViewController;
+import org.andnav.osm.views.overlay.MyLocationOverlay;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -39,8 +42,6 @@ import com.geeksville.location.LocationList;
 import com.geeksville.maps.GeeksvilleMapActivity;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
-import com.google.android.maps.MapController;
-import com.google.android.maps.MyLocationOverlay;
 
 public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 
@@ -222,9 +223,6 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		}
 	}
 
-	/**
-	 * @see com.google.android.maps.MapActivity#onPause()
-	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -246,9 +244,6 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	 */
 	private TracklogOverlay liveTracklogOverlay;
 
-	/**
-	 * @see com.google.android.maps.MapActivity#onResume()
-	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -264,7 +259,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 			liveList.addObserver(this);
 
 			altitudeView.setLocs(locs);
-			liveTracklogOverlay = new TracklogOverlay(locs);
+			liveTracklogOverlay = new TracklogOverlay(this, locs);
 			mapView.getOverlays().add(liveTracklogOverlay);
 		}
 	}
@@ -277,11 +272,11 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	private TracklogOverlay createTracklogOverlay(LocationList locs) {
 
 		// Show a tracklog
-		TracklogOverlay tlog = new TracklogOverlay(locs);
+		TracklogOverlay tlog = new TracklogOverlay(this, locs);
 
 		// Center on the tracklog
 		if (locs.numPoints() > 0) {
-			MapController control = mapView.getController();
+			OpenStreetMapViewController control = mapView.getController();
 
 			control.setCenter(locs.getGeoPoint(0));
 

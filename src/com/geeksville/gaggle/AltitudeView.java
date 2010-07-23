@@ -20,7 +20,6 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
-import com.geeksville.android.AndroidUtil;
 import com.geeksville.location.LocationList;
 import com.geeksville.util.MathUtil;
 import com.geeksville.view.ViewUtil;
@@ -105,10 +104,13 @@ public class AltitudeView extends View {
 	 * @return
 	 */
 	protected int getMinX() {
-		int[] times = locs.timeMsec.toUnsafeArray();
-		int numpoints = locs.numPoints();
+		// int[] times = locs.timeMsec.toUnsafeArray();
+		// int numpoints = locs.numPoints();
 
-		return times[0]; // Plot everything
+		if (ViewUtil.isDesignTime(getContext()))
+			return 0;
+
+		return locs.timeMsec.get(0); // Plot everything
 	}
 
 	private void generatePoints() {

@@ -23,10 +23,11 @@ package com.geeksville.location;
 import java.util.Iterator;
 import java.util.Observable;
 
+import org.andnav.osm.util.GeoPoint;
+
 import android.os.Bundle;
 
 import com.geeksville.util.IntArray;
-import com.google.android.maps.GeoPoint;
 
 /**
  * Provides a compact in memory list of a series of locations

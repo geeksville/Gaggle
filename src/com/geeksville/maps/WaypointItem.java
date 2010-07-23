@@ -20,6 +20,8 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
+import org.andnav.osm.views.overlay.OpenStreetMapViewOverlayItem;
+
 import android.app.Activity;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -29,12 +31,11 @@ import android.widget.Toast;
 import com.geeksville.info.Units;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.view.CaptionedDrawable;
-import com.google.android.maps.OverlayItem;
 
-public class WaypointItem extends OverlayItem {
+public class WaypointItem extends OpenStreetMapViewOverlayItem {
 
-	ExtendedWaypoint w;
-	CaptionedDrawable marker;
+	private ExtendedWaypoint w;
+	public CaptionedDrawable marker;
 
 	/**
 	 * The actual wrapped icon we are currently displaying
@@ -42,13 +43,13 @@ public class WaypointItem extends OverlayItem {
 	Drawable curIcon;
 
 	public WaypointItem(ExtendedWaypoint w, Paint captionPaint) {
-		super(w.geoPoint, w.name, "snippet");
+		super(w.name, "snippet", w.geoPoint);
 
 		this.w = w;
 		curIcon = w.getIcon();
 		marker = new CaptionedDrawable(WaypointOverlay.boundCenterBottom(curIcon), captionPaint,
 				w.name);
-		setMarker(marker);
+		// setMarker(marker);
 	}
 
 	/**

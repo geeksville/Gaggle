@@ -20,6 +20,12 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
+import org.andnav.osm.util.GeoPoint;
+import org.andnav.osm.views.OpenStreetMapView;
+import org.andnav.osm.views.OpenStreetMapViewController;
+import org.andnav.osm.views.overlay.MyLocationOverlay;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,16 +35,11 @@ import com.geeksville.android.LifeCycleHandler;
 import com.geeksville.android.LifeCyclePublisher;
 import com.geeksville.android.LifeCyclePublisherImpl;
 import com.geeksville.gaggle.R;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
-import com.google.android.maps.MyLocationOverlay;
 
-public class GeeksvilleMapActivity extends MapActivity implements LifeCyclePublisher {
+public class GeeksvilleMapActivity extends Activity implements LifeCyclePublisher {
 
 	// private LinearLayout linearLayout;
-	protected MapView mapView;
+	protected OpenStreetMapView mapView;
 
 	private MyLocationOverlay myLocationOverlay;
 
@@ -95,10 +96,10 @@ public class GeeksvilleMapActivity extends MapActivity implements LifeCyclePubli
 			zoomToLocation();
 			return true;
 		case R.id.satellite_menu:
-			mapView.setSatellite(true);
+			// mapView.setSatellite(true);
 			return true;
 		case R.id.street_menu:
-			mapView.setSatellite(false);
+			// mapView.setSatellite(false);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -112,12 +113,12 @@ public class GeeksvilleMapActivity extends MapActivity implements LifeCyclePubli
 		// should be identical
 		setContentView(layoutId);
 
-		mapView = (MapView) findViewById(mapViewId);
+		mapView = (OpenStreetMapView) findViewById(mapViewId);
 
 		mapView.setBuiltInZoomControls(true);
 
 		// Default to sat view
-		mapView.setSatellite(true);
+		// mapView.setSatellite(true);
 	}
 
 	/**
@@ -154,31 +155,25 @@ public class GeeksvilleMapActivity extends MapActivity implements LifeCyclePubli
 
 	private void zoomToLocation() {
 		// Center on where the user is
-		MapController control = mapView.getController();
+		OpenStreetMapViewController control = mapView.getController();
 
 		GeoPoint loc;
 		if (myLocationOverlay != null && (loc = myLocationOverlay.getMyLocation()) != null)
 			control.animateTo(loc);
 	}
 
-	/**
-	 * @see com.google.android.maps.MapActivity#onPause()
-	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
 
 		if (myLocationOverlay != null) {
 			myLocationOverlay.disableMyLocation();
-			myLocationOverlay.disableCompass();
+			// myLocationOverlay.disableCompass();
 		}
 
 		lifePublish.onPause();
 	}
 
-	/**
-	 * @see com.google.android.maps.MapActivity#onResume()
-	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -186,16 +181,10 @@ public class GeeksvilleMapActivity extends MapActivity implements LifeCyclePubli
 		// Show our cur location
 		if (myLocationOverlay != null) {
 			myLocationOverlay.enableMyLocation();
-			myLocationOverlay.enableCompass();
+			// myLocationOverlay.enableCompass();
 		}
 
 		lifePublish.onResume();
-	}
-
-	@Override
-	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

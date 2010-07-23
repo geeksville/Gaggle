@@ -24,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.andnav.osm.views.OpenStreetMapView;
+import org.andnav.osm.views.overlay.OpenStreetMapViewItemizedOverlay;
+
 import android.app.Activity;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
@@ -33,28 +35,25 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
 import com.geeksville.gaggle.GaggleApplication;
-import com.geeksville.gaggle.R;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.WaypointCursor;
 import com.geeksville.location.WaypointDB;
-import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
 
-public class WaypointOverlay extends ItemizedOverlay<WaypointItem> implements Observer {
+public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointItem> implements
+		Observer {
 
 	private final Paint captionPaint = new TextPaint();
 
 	private WaypointDB db;
 	private WaypointCursor cursor;
-	private MapView view;
+	private OpenStreetMapView view;
 	private Activity context;
 
-	private ArrayList<WaypointItem> items = new ArrayList<WaypointItem>();
-
-	public WaypointOverlay(Activity context, MapView view) {
+	public WaypointOverlay(Activity context, OpenStreetMapView view) {
 		// per example, we want the bounds to be centered just below this
 		// drawable. We use a alpha channel to not obscure terrain too much...
-		super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
+		// super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
+		super(context, new ArrayList<WaypointItem>(), null);
 
 		this.context = context;
 		this.view = view;
@@ -77,11 +76,14 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem> implements Ob
 	}
 
 	public static Drawable boundCenterBottom(Drawable d) {
-		return ItemizedOverlay.boundCenterBottom(d);
+		return d;
+		// busted on OSM FIXME
+		// return ItemizedOverlay.boundCenterBottom(d);
 	}
 
 	public static Drawable boundCenter(Drawable d) {
-		return ItemizedOverlay.boundCenter(d);
+		return d;
+		// return ItemizedOverlay.boundCenter(d);
 	}
 
 	public void onPause() {
@@ -99,37 +101,28 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem> implements Ob
 
 		cursor = db.fetchWaypointsByDistance();
 
-		items.clear();
+		mItemList.clear();
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToPosition(i);
 			ExtendedWaypoint w = cursor.getWaypoint();
 			WaypointItem item = new WaypointItem(w, captionPaint);
-			items.add(item);
+			mItemList.add(item);
 		}
 
 		// FIXME, handle the addition of waypoints after the map is already up
-		populate();
+		// populate();
 	}
 
-	@Override
-	protected WaypointItem createItem(int i) {
-		return items.get(i);
-	}
-
-	@Override
-	public int size() {
-		return items.size();
-	}
-
-	@Override
-	public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
-		// We skip the shadow draws, because they make our waypoint captions
-		// look goofy
-		if (!shadow)
-			return super.draw(canvas, mapView, shadow, when);
-		else
-			return false;
-	}
+	// @Override
+	// public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long
+	// when) {
+	// // We skip the shadow draws, because they make our waypoint captions
+	// // look goofy
+	// if (!shadow)
+	// return super.draw(canvas, mapView, shadow, when);
+	// else
+	// return false;
+	// }
 
 	@Override
 	public void update(Observable observable, Object data) {
@@ -139,8 +132,8 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem> implements Ob
 		// and then invalidate only if needed
 
 		boolean needRedraw = false;
-		for (int i = 0; i < items.size(); i++) {
-			WaypointItem item = items.get(i);
+		for (int i = 0; i < mItemList.size(); i++) {
+			WaypointItem item = mItemList.get(i);
 
 			needRedraw |= item.updateIcon();
 		}
@@ -151,12 +144,12 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem> implements Ob
 
 	@Override
 	protected boolean onTap(int i) {
-		WaypointItem item = items.get(i);
+		WaypointItem item = mItemList.get(i);
 
 		// first click - just highlight and show basic info
 		// if (!item.equals(getFocus())) {
-		view.getController().setCenter(item.getPoint());
-		setFocus(item);
+		view.getController().setCenter(item.mGeoPoint);
+		// setFocus(item);
 		item.handleTap(context);
 		// }
 

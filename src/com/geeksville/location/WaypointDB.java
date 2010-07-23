@@ -26,6 +26,8 @@ import java.util.Observer;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.andnav.osm.util.GeoPoint;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
@@ -37,7 +39,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import com.geeksville.android.PreferenceUtil;
 import com.geeksville.gaggle.R;
-import com.google.android.maps.GeoPoint;
 
 /**
  * Provide high level API to find nearby waypoints

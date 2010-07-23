@@ -20,10 +20,10 @@
  ******************************************************************************/
 package com.geeksville.location;
 
+import org.andnav.osm.util.GeoPoint;
+
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
-
-import com.google.android.maps.GeoPoint;
 
 public class ExtendedWaypoint extends Waypoint implements Comparable<ExtendedWaypoint> {
 
@@ -63,7 +63,8 @@ public class ExtendedWaypoint extends Waypoint implements Comparable<ExtendedWay
 		this(name, latitude, longitude, altitude, 0, type);
 	}
 
-	public ExtendedWaypoint(String name, double latitude, double longitude, int altitude, int diameter, int type) {
+	public ExtendedWaypoint(String name, double latitude, double longitude, int altitude,
+			int diameter, int type) {
 		super(name, latitude, longitude, altitude, type);
 
 		this.diameter = diameter;
@@ -101,7 +102,8 @@ public class ExtendedWaypoint extends Waypoint implements Comparable<ExtendedWay
 			float destlat = (float) latitude;
 			float destlong = (float) longitude;
 
-			distanceFromPilotX = (int) LocationUtils.LatLongToMeter(mylat, mylong, destlat, destlong);
+			distanceFromPilotX = (int) LocationUtils.LatLongToMeter(mylat, mylong, destlat,
+					destlong);
 			distanceFromPilotY = altitude - db.pilotAlt;
 
 			color = calcColor();
@@ -115,7 +117,8 @@ public class ExtendedWaypoint extends Waypoint implements Comparable<ExtendedWay
 	@Override
 	public int compareTo(ExtendedWaypoint another) {
 
-		if ((another.distanceFromPilotX == -1 || distanceFromPilotX == -1) && name != null && another.name != null)
+		if ((another.distanceFromPilotX == -1 || distanceFromPilotX == -1) && name != null
+				&& another.name != null)
 			return name.compareTo(another.name);
 
 		return distanceFromPilotX - another.distanceFromPilotX;
@@ -170,10 +173,12 @@ public class ExtendedWaypoint extends Waypoint implements Comparable<ExtendedWay
 			int distanceBelowMinAlt = (int) (distanceFromPilotY + db.minAltMargin);
 			int distanceBelowSafeAlt = (int) (distanceFromPilotY + db.minAltMargin + db.extraAltMargin);
 
-			float minGlideRatio = (distanceBelowMinAlt >= 0) ? Float.POSITIVE_INFINITY : distanceFromPilotX
-					/ -distanceBelowMinAlt;
-			float safeGlideRatio = (distanceBelowSafeAlt >= 0) ? Float.POSITIVE_INFINITY : distanceFromPilotX
-					/ -distanceBelowSafeAlt;
+			float minGlideRatio = (distanceBelowMinAlt >= 0) ? Float.POSITIVE_INFINITY
+					: distanceFromPilotX
+							/ -distanceBelowMinAlt;
+			float safeGlideRatio = (distanceBelowSafeAlt >= 0) ? Float.POSITIVE_INFINITY
+					: distanceFromPilotX
+							/ -distanceBelowSafeAlt;
 
 			if (db.typicalGlideRatio >= safeGlideRatio)
 				color = Color.SAFE;

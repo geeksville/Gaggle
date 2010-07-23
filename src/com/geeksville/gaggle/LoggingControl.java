@@ -35,8 +35,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.android.ChangeHandler;
@@ -45,9 +43,7 @@ import com.geeksville.android.LifeCyclePublisher;
 import com.geeksville.android.LifeCyclePublisherImpl;
 import com.geeksville.info.InfoListView;
 import com.geeksville.info.SelectInfoFieldsActivity;
-import com.geeksville.location.GPSClientStub;
 import com.geeksville.location.GPSToPositionWriter;
-import com.geeksville.location.IGPSClient;
 import com.geeksville.location.LeonardoLiveWriter;
 import com.geeksville.location.LocationDBWriter;
 import com.geeksville.location.LocationList;

@@ -22,8 +22,6 @@ package com.geeksville.location;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;

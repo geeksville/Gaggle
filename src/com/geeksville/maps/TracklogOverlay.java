@@ -3,18 +3,19 @@
  */
 package com.geeksville.maps;
 
+import org.andnav.osm.util.GeoPoint;
+import org.andnav.osm.views.OpenStreetMapView;
+import org.andnav.osm.views.OpenStreetMapView.OpenStreetMapViewProjection;
+import org.andnav.osm.views.overlay.OpenStreetMapViewPathOverlay;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Paint.Style;
 
-import com.geeksville.location.ILocationList;
 import com.geeksville.location.LocationList;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.Projection;
 
 /**
  * Overlay a tracklog plot over a map
@@ -22,7 +23,7 @@ import com.google.android.maps.Projection;
  * @author kevinh
  * 
  */
-public class TracklogOverlay extends Overlay {
+public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 
 	LocationList tracklog;
 
@@ -41,7 +42,9 @@ public class TracklogOverlay extends Overlay {
 	 */
 	int[] hsvMap = new int[256];
 
-	public TracklogOverlay(LocationList locs) {
+	public TracklogOverlay(Context ctx, LocationList locs) {
+		super(Color.RED, ctx);
+
 		tracklog = locs;
 
 		trackPaint.setStyle(Style.STROKE);
@@ -63,17 +66,11 @@ public class TracklogOverlay extends Overlay {
 	/**
 	 * Draw a red line for our tracklog
 	 * 
-	 * @see com.google.android.maps.Overlay#draw(android.graphics.Canvas,
-	 *      com.google.android.maps.MapView, boolean)
+	 * @see Overlay#draw(android.graphics.Canvas, boolean)
 	 */
-	@Override
-	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-		super.draw(canvas, mapView, shadow);
+	public void fixmeBustedOnOSM(Canvas canvas, OpenStreetMapView mapView) {
 
-		if (shadow)
-			return; // no shadow layer for us
-
-		Projection proj = mapView.getProjection();
+		OpenStreetMapViewProjection proj = mapView.getProjection();
 
 		Point p = new Point();
 		int prevZ = 0, prevTime = 0;
@@ -94,7 +91,8 @@ public class TracklogOverlay extends Overlay {
 			GeoPoint gp = tracklog.getGeoPoint(i);
 			int curTime = times[i];
 			// for time
-			proj.toPixels(gp, p);
+			// FIXME - busted on OSM
+			// proj.toPixels(gp, p);
 
 			if (hasPrev) {
 				int deltaMsec = curTime - prevTime;

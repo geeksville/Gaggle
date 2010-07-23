@@ -20,15 +20,13 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
+import org.andnav.osm.views.OpenStreetMapView;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-
 import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.WaypointOverlay;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
 
 /**
  * Shows the users heading instead of the standard blue dot
@@ -42,7 +40,7 @@ public class ShowHeadingOverlay extends CenteredMyLocationOverlay {
 
 	private Drawable icon;
 
-	public ShowHeadingOverlay(Context context, MapView mapView) {
+	public ShowHeadingOverlay(Context context, OpenStreetMapView mapView) {
 		super(context, mapView);
 
 		icon = WaypointOverlay.boundCenter(context.getResources()
@@ -61,15 +59,16 @@ public class ShowHeadingOverlay extends CenteredMyLocationOverlay {
 	 * 
 	 * @see
 	 * com.geeksville.maps.CenteredMyLocationOverlay#drawMyLocation(android.
-	 * graphics.Canvas, com.google.android.maps.MapView,
-	 * android.location.Location, com.google.android.maps.GeoPoint, long)
+	 * graphics.Canvas, android.location.Location, long)
 	 */
-	@Override
-	protected void drawMyLocation(Canvas canvas, MapView mapView, Location lastFix,
-			GeoPoint myLocation, long when) {
+	// @Override
+	public void fixmeBustedOnOSM(final Canvas canvas, final OpenStreetMapView mapView) {
+		// protected void drawMyLocation(Canvas canvas, OpenStreetMapView
+		// mapView, Location lastFix,
+		// GeoPoint myLocation, long when) {
 
 		// super.drawMyLocation(canvas, mapView, lastFix, myLocation, when);
-		super.keepCentered(mapView, myLocation);
+		super.keepCentered(mapView, getMyLocation());
 
 		int saveCount = canvas.save();
 		canvas.translate(curPixelPos.x, curPixelPos.y);
@@ -82,10 +81,9 @@ public class ShowHeadingOverlay extends CenteredMyLocationOverlay {
 	/**
 	 * FIXME - cache the bearing someplace earlier
 	 * 
-	 * @see com.google.android.maps.MyLocationOverlay#drawCompass(android.graphics.Canvas,
-	 *      float)
+	 * 
 	 */
-	@Override
+	// @Override
 	protected void drawCompass(Canvas canvas, float bearing) {
 		this.bearing = bearing;
 
