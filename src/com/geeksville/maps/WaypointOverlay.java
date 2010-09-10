@@ -28,8 +28,10 @@ import org.andnav.osm.views.OpenStreetMapView;
 import org.andnav.osm.views.overlay.OpenStreetMapViewItemizedOverlay;
 
 import android.app.Activity;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
@@ -92,6 +94,15 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 
 	public void onResume() {
 		db.addObserver(this);
+	}
+
+	/**
+	 * The standard OSMmap doesn't support custom icons for each marker, so we
+	 * add that here
+	 */
+	@Override
+	protected void onDrawItem(final Canvas c, final int index, final Point curScreenCoords) {
+		mItemList.get(index).onDrawItem(c, curScreenCoords);
 	}
 
 	/**

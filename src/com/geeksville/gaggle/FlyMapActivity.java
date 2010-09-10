@@ -150,6 +150,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		addWaypoints();
 		perhapsAddFromUri();
 		perhapsAddExtraTracklog();
+
 		if (isLive)
 			showCurrentPosition(true);
 	}
@@ -269,27 +270,38 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	 * 
 	 * @param locBundle
 	 */
-	private TracklogOverlay createTracklogOverlay(LocationList locs) {
+	private TracklogOverlay createTracklogOverlay(final LocationList locs) {
 
 		// Show a tracklog
 		TracklogOverlay tlog = new TracklogOverlay(this, locs);
 
-		// Center on the tracklog
+		// Center on the tracklog (we do this in a callback, because OSM only
+		// works after the view has been layed out
 		if (locs.numPoints() > 0) {
-			OpenStreetMapViewController control = mapView.getController();
+			mapView.setPostLayout(new Runnable() {
 
-			control.setCenter(locs.getGeoPoint(0));
+				@Override
+				public void run() {
+					OpenStreetMapViewController control = mapView.getController();
 
-			// it is about 80 feet to one second of a degree. So if we want to
-			// limit the max default zoom to about 500 feet
-			double maxZoomFeet = 2500;
-			double feetPerSecond = 80;
-			double minDegrees = (maxZoomFeet / feetPerSecond) / 60 / 60;
-			int minDegreesE6 = (int) (minDegrees * 1e6);
+					control.setCenter(locs.getGeoPoint(0));
 
-			control.zoomToSpan(Math.max(locs.latitudeSpanE6(), minDegreesE6), Math.max(locs
-					.longitudeSpanE6(),
-					minDegreesE6));
+					// it is about 80 feet to one second of a degree. So if we
+					// want to
+					// limit the max default zoom to about 500 feet
+					double maxZoomFeet = 2500;
+					double feetPerSecond = 80;
+					double minDegrees = (maxZoomFeet / feetPerSecond) / 60 / 60;
+					int minDegreesE6 = (int) (minDegrees * 1e6);
+
+					// FIXME - the following is busted on OSM, it must be called
+					// later -
+					// after the view has been sized and fully created
+					control.zoomToSpan(Math.max(locs.latitudeSpanE6(), minDegreesE6), Math.max(locs
+							.longitudeSpanE6(), minDegreesE6));
+					// control.setZoom(11); // hack till fixed for OSM
+				}
+			});
 		}
 
 		return tlog;

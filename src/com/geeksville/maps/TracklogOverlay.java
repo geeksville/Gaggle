@@ -148,4 +148,34 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 		}
 	}
 
+	/**
+	 * Until I can customize the OSM code, convert to their format
+	 */
+	private void convertToOSM() {
+		int mycount = tracklog.numPoints();
+		int osmCount = getNumberOfPoints();
+
+		if (mycount < osmCount) {
+			clearPath();
+			osmCount = 0;
+		}
+
+		for (int i = osmCount; i < mycount; i++)
+			addPoint(tracklog.getGeoPoint(i));
+	}
+
+	/**
+	 * Convert our points into OSM format then call their drawer
+	 * 
+	 * @see org.andnav.osm.views.overlay.OpenStreetMapViewPathOverlay#onDraw(android.graphics.Canvas,
+	 *      org.andnav.osm.views.OpenStreetMapView)
+	 */
+	@Override
+	protected void onDraw(Canvas canvas, OpenStreetMapView mapView) {
+
+		convertToOSM();
+
+		super.onDraw(canvas, mapView);
+	}
+
 }

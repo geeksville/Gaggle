@@ -6,7 +6,7 @@
 
 	<com.geeksville.maps.GeeksvilleMapView
 		android:id="@+id/mapview_delayed" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:clickable="true" />
+		android:layout_height="fill_parent" android:clickable="true" renderer="MAPNIK" />
 
 	<com.geeksville.gaggle.AltitudeView
 		android:id="@+id/altitude_view" android:clickable="true" android:layout_centerHorizontal="true" 

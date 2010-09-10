@@ -8,9 +8,9 @@
 		
 	<com.geeksville.maps.GeeksvilleMapView
 		android:id="@+id/mapview_live" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:clickable="true" renderer="TOPO"
+		android:layout_height="fill_parent" android:clickable="true"  renderer="MAPNIK"
 		/>
-		<!--  renderer="CLOUDMADESTANDARDTILES" -->
+		<!-- Note: renderer is _required_ due to a bug in their library  renderer="TOPO" renderer="CLOUDMADESTANDARDTILES" -->
 
 	<com.geeksville.gaggle.LiveAltitudeView
 		android:id="@+id/altitude_view" android:clickable="true" android:layout_centerHorizontal="true" 

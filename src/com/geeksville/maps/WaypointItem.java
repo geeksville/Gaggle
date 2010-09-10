@@ -23,7 +23,9 @@ package com.geeksville.maps;
 import org.andnav.osm.views.overlay.OpenStreetMapViewOverlayItem;
 
 import android.app.Activity;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +37,8 @@ import com.geeksville.view.CaptionedDrawable;
 public class WaypointItem extends OpenStreetMapViewOverlayItem {
 
 	private ExtendedWaypoint w;
-	public CaptionedDrawable marker;
+	private CaptionedDrawable marker;
+	private int width, height;
 
 	/**
 	 * The actual wrapped icon we are currently displaying
@@ -50,6 +53,24 @@ public class WaypointItem extends OpenStreetMapViewOverlayItem {
 		marker = new CaptionedDrawable(WaypointOverlay.boundCenterBottom(curIcon), captionPaint,
 				w.name);
 		// setMarker(marker);
+
+		width = marker.getIntrinsicWidth();
+		height = marker.getIntrinsicHeight();
+	}
+
+	/**
+	 * The standard OSMmap doesn't support custom icons for each marker, so we
+	 * add that here
+	 */
+	protected void onDrawItem(final Canvas c, final Point curScreenCoords) {
+		final int left = curScreenCoords.x;
+		final int right = left + width;
+		final int top = curScreenCoords.y; // FIXME - offset for center?
+		final int bottom = top + height;
+
+		marker.setBounds(left, top, right, bottom);
+
+		marker.draw(c);
 	}
 
 	/**

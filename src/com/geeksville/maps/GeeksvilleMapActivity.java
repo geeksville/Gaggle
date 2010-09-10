@@ -36,10 +36,16 @@ import com.geeksville.android.LifeCyclePublisher;
 import com.geeksville.android.LifeCyclePublisherImpl;
 import com.geeksville.gaggle.R;
 
+/**
+ * 
+ * @author kevinh FIXME, add the following sources: http://toposm.com/usw/ Great
+ *         topos here: http://openpistemap.org/?lat=41&lon=-100&zoom=12
+ * 
+ */
 public class GeeksvilleMapActivity extends Activity implements LifeCyclePublisher {
 
 	// private LinearLayout linearLayout;
-	protected OpenStreetMapView mapView;
+	protected GeeksvilleMapView mapView;
 
 	private MyLocationOverlay myLocationOverlay;
 
@@ -113,7 +119,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		// should be identical
 		setContentView(layoutId);
 
-		mapView = (OpenStreetMapView) findViewById(mapViewId);
+		mapView = (GeeksvilleMapView) findViewById(mapViewId);
 
 		mapView.setBuiltInZoomControls(true);
 
