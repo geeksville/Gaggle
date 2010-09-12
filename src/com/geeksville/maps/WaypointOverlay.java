@@ -37,6 +37,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
 import com.geeksville.gaggle.GaggleApplication;
+import com.geeksville.gaggle.R;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.WaypointCursor;
 import com.geeksville.location.WaypointDB;
@@ -55,7 +56,8 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 		// per example, we want the bounds to be centered just below this
 		// drawable. We use a alpha channel to not obscure terrain too much...
 		// super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
-		super(context, new ArrayList<WaypointItem>(), null);
+		super(context, new ArrayList<WaypointItem>(), context.getResources().getDrawable(
+				R.drawable.flag), null, null, null);
 
 		this.context = context;
 		this.view = view;

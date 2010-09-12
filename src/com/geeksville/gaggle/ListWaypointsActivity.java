@@ -271,16 +271,18 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 		String[] from = new String[] { LocationLogDbAdapter.KEY_NAME,
 				LocationLogDbAdapter.KEY_DESCRIPTION,
 				WaypointCursor.KEY_DIST_PILOTX,
-				LocationLogDbAdapter.KEY_WAYPOINT_TYPE };
+				LocationLogDbAdapter.KEY_WAYPOINT_TYPE,
+				WaypointCursor.KEY_DIST_PILOTY };
 
 		// and an array of the fields we want to bind those fields to
-		int[] to = new int[] { R.id.name, R.id.description, R.id.distance, R.id.image };
+		int[] to = new int[] { R.id.name, R.id.description, R.id.distance, R.id.image, R.id.units };
 
 		// Now create a simple cursor adapter and set it to display
 		SimpleCursorAdapter a = new SimpleCursorAdapter(this, R.layout.waypoint_row, myCursor,
 				from, to);
 
 		final int distcol = myCursor.getColumnIndex(WaypointCursor.KEY_DIST_PILOTX);
+		final int distycol = myCursor.getColumnIndex(WaypointCursor.KEY_DIST_PILOTY);
 		final int typecol = myCursor.getColumnIndex(LocationLogDbAdapter.KEY_WAYPOINT_TYPE);
 
 		a.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -299,6 +301,14 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 								.metersToDistance(dist);
 						view.setText(distStr);
 
+						return true;
+					}
+
+					// We don't care about pilot y, but this is a skanky hack to
+					// set the units view string
+					if (columnIndex == distycol) {
+						TextView view = (TextView) _view;
+						view.setText(Units.instance.getDistanceUnits());
 						return true;
 					}
 
@@ -404,7 +414,7 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 
 		Toast
 				.makeText(ListWaypointsActivity.this, "New destination: " + w.name,
-				Toast.LENGTH_SHORT).show();
+						Toast.LENGTH_SHORT).show();
 	}
 
 	/*

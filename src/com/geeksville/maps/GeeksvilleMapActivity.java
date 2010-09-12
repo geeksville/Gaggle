@@ -20,15 +20,21 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
+import org.andnav.osm.ResourceProxy;
 import org.andnav.osm.util.GeoPoint;
 import org.andnav.osm.views.OpenStreetMapView;
 import org.andnav.osm.views.OpenStreetMapViewController;
 import org.andnav.osm.views.overlay.MyLocationOverlay;
+import org.andnav.osm.views.util.IOpenStreetMapRendererInfo;
+import org.andnav.osm.views.util.OpenStreetMapRendererFactory;
+import org.andnav.osm.views.util.XYRenderer;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.MenuItem.OnMenuItemClickListener;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.LifeCycleHandler;
@@ -50,6 +56,40 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 	private MyLocationOverlay myLocationOverlay;
 
 	private LifeCyclePublisherImpl lifePublish = new LifeCyclePublisherImpl();
+
+	// There is also TopOSM features, but we don't bother to show that
+	private static final IOpenStreetMapRendererInfo TopOSMRelief =
+			new XYRenderer("Topo Relief (USA)", ResourceProxy.string.unknown, 4, 15, 8, ".jpg",
+					"http://tile1.toposm.com/us/color-relief/",
+					"http://tile2.toposm.com/us/color-relief/",
+					"http://tile3.toposm.com/us/color-relief/");
+
+	private static final IOpenStreetMapRendererInfo TopOSMContours =
+			new XYRenderer("Topo Contours (USA)", ResourceProxy.string.unknown, 12, 15, 8, ".png",
+					"http://tile1.toposm.com/us/contours/",
+					"http://tile2.toposm.com/us/contours/",
+					"http://tile3.toposm.com/us/contours/");
+
+	private static IOpenStreetMapRendererInfo supportedRenderers[] = {
+			// OpenStreetMapRendererFactory.MAPNIK,
+			OpenStreetMapRendererFactory.OSMARENDER,
+			OpenStreetMapRendererFactory.TOPO,
+			TopOSMContours,
+			TopOSMRelief
+	};
+
+	private static String supportedRendererNames[] = {
+			"Street Map",
+			"Topo (Europe)",
+			"Topo (US contour)",
+			"Topo (US relief)"
+	};
+
+	public GeeksvilleMapActivity() {
+		// FIXME - do this someplace better
+		OpenStreetMapRendererFactory.addRenderer(TopOSMContours);
+		OpenStreetMapRendererFactory.addRenderer(TopOSMRelief);
+	}
 
 	/**
 	 * Collect app metrics on Flurry
@@ -88,6 +128,40 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		getMenuInflater().inflate(R.menu.map_optionmenu, menu);
 
+		// Set action for map prefetch
+		menu.findItem(R.id.prefetch_map).setIntent(
+				PrefetchMapActivity.createIntent(this, mapView.getMapCenter(), mapView
+						.getZoomLevel(), mapView.getRenderer().name()));
+
+		// Dynamically populate the list of renderers we support (FIXME - only
+		// list known good renderers)
+		MenuItem mapoptions = menu.findItem(R.id.mapmode_menu);
+		SubMenu children = mapoptions.getSubMenu();
+		children.clear();
+
+		MenuItem toCheck = null;
+		for (int i = 0; i < supportedRenderers.length; i++) {
+			final IOpenStreetMapRendererInfo info = supportedRenderers[i];
+			String name = supportedRendererNames[i];
+
+			MenuItem item = children.add(1, i, Menu.NONE, name);
+
+			if (mapView.getRenderer().name().equals(info.name()))
+				toCheck = item;
+
+			item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+				@Override
+				public boolean onMenuItemClick(MenuItem item) {
+					mapView.setRenderer(info);
+					item.setChecked(true);
+					return true;
+				}
+			});
+		}
+		children.setGroupCheckable(1, true, true);
+		toCheck.setChecked(true);
+
 		return true;
 	}
 
@@ -100,12 +174,6 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		case R.id.myloc_menu:
 			zoomToLocation();
-			return true;
-		case R.id.satellite_menu:
-			// mapView.setSatellite(true);
-			return true;
-		case R.id.street_menu:
-			// mapView.setSatellite(false);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

@@ -42,8 +42,31 @@ public final class LocationUtils {
 		int minwhole = (int) minutes;
 		int seconds = (int) ((minutes - minwhole) * 60);
 
-		return new String[] { Integer.toString(degFloor), Integer.toString(minwhole), Integer.toString(seconds),
+		return new String[] { Integer.toString(degFloor), Integer.toString(minwhole),
+				Integer.toString(seconds),
 				Character.toString(dirLetter) };
+	}
+
+	/**
+	 * A not super efficent mapping from a starting lat/long + a distance at a
+	 * certain direction
+	 * 
+	 * @param lat
+	 * @param longitude
+	 * @param distMeters
+	 * @param theta
+	 *            in radians, 0 == north
+	 * @return an array with lat and long
+	 */
+	public static double[] addDistance(double lat, double longitude, double distMeters, double theta) {
+		double dx = distMeters * Math.sin(theta); // theta measured clockwise
+		// from due north
+		double dy = distMeters * Math.cos(theta); // dx, dy same units as R
+
+		double dLong = dx / (111320 * Math.cos(lat)); // dx, dy in meters
+		double dLat = dy / 110540; // result in degrees long/lat
+
+		return new double[] { lat + dLat, longitude + dLong };
 	}
 
 	/**
