@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<TextView android:id="@+id/TextView01" android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Gaggle can download all needed map tiles to the local SD card storage.  This (beta test) feature will allow you to have working maps even in areas of no cell service.  Note: This feature can consume lots of SD card space, so you'll either need a large SD card (8 GB?) or only download tiles in your expected flight area.  Tiles will be downloaded from the current map source and zoom level, so make sure the map looks how you want before clicking Download."></TextView>
+
+	<LinearLayout android:id="@+id/editoptions"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_height="wrap_content" android:orientation="horizontal"
+			android:layout_width="fill_parent">
+			<TextView android:id="@+id/TextView03" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="Distance from center"></TextView>
+			<EditText android:id="@+id/EditText01" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="10"></EditText>
+			<TextView android:id="@+id/TextView04" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="mi"></TextView>
+		</LinearLayout>
+
+		<TextView android:id="@+id/TextView02" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Estimated: 20MB SD-Card space required"></TextView>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Clear Cache"
+			android:id="@+id/clear"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/start"
+			android:text="Start Download"></Button>
+
+	</LinearLayout>
+
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Cancel"
+			android:id="@+id/cancel"></Button>
+			
+	<ProgressBar android:layout_height="wrap_content"
+		style="?android:attr/progressBarStyleHorizontal" android:id="@+id/progress"
+		android:layout_width="fill_parent" android:layout_marginRight="20dip"
+		android:layout_marginLeft="20dip" android:max="100" android:progress="20" android:indeterminate="true"></ProgressBar>
+
+
+
+
+
+
+
+</LinearLayout>
