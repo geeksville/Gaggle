@@ -155,7 +155,8 @@ public class WPTImporter {
 						float longsecs = Float.parseFloat(splitter.nextToken());
 						longitude = LocationUtils.DMSToDegrees(longdeg, longmin, longsecs, longpos);
 
-						altitude = Float.parseFloat(splitter.nextToken());
+						altitude = Float.parseFloat(splitter.nextToken()); // In
+																			// meters
 
 						desc = splitter.nextToken("").trim();
 						break;
@@ -172,7 +173,11 @@ public class WPTImporter {
 
 							latitude = Double.parseDouble(latStr) * (latNS.equals("N") ? 1 : -1);
 							longitude = Double.parseDouble(longStr) * (longEW.equals("E") ? 1 : -1);
-							altitude = Double.parseDouble(altStr);
+							altitude = 0.3048 * Double.parseDouble(altStr); // in
+																			// feet
+																			// according
+																			// to
+																			// spec
 						}
 						break;
 					case OziExplorer:
@@ -194,7 +199,11 @@ public class WPTImporter {
 						// FIXME, scan from tail of string and remove them
 						// for example of this see
 						// http://parapente.ffvl.fr/compet/1398/balises
-						altitude = Double.parseDouble(splitted[14].trim());
+						altitude = 0.3048 * Double.parseDouble(splitted[14].trim()); // in
+																						// feet
+																						// according
+																						// to
+																						// spec
 						break;
 					}
 
@@ -240,7 +249,7 @@ public class WPTImporter {
 						} else {
 							ExtendedWaypoint w = new ExtendedWaypoint(name, latitude, longitude,
 									(int) altitude, type
-									.ordinal());
+											.ordinal());
 							if (!desc.equals(name) && desc.length() != 0)
 								w.description = desc; // Optional
 							db.add(w);

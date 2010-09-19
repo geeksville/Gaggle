@@ -152,7 +152,9 @@ public class LocationList extends Observable implements ILocationList {
 	 * @see com.geeksville.location.ILocationList#numPoints()
 	 */
 	public int numPoints() {
-		return latitudeE6.length();
+		return timeMsec.length(); // Read the last incremented field, so we will
+									// always underestimate the number of points
+									// if we have a race condition
 	}
 
 	/*

@@ -23,7 +23,14 @@ package com.geeksville.location;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
+
+import com.geeksville.info.Units;
 
 /*
  "
@@ -90,6 +97,10 @@ public class KMLWriter implements PositionWriter {
 	String gliderType;
 	String pilotId;
 
+	float minHeight = Float.MAX_VALUE, maxHeight = Float.MIN_VALUE;
+	long firstTimeMs, lastTimeMs;
+	boolean isFirst = true;
+
 	public KMLWriter(OutputStream dest, String pilotName, String flightDesc, String gliderType,
 			String pilotId) throws IOException {
 		out = new PrintStream(dest);
@@ -108,7 +119,10 @@ public class KMLWriter implements PositionWriter {
 	public void emitEpilog() {
 
 		out.println("</coordinates>" +
-				"</LineString>" + "</Placemark>" +
+				"</LineString>" +
+				createDescription() + // gen our description after reading all
+				// our points
+				"</Placemark>" +
 				"</Document>" +
 				"</kml>");
 
@@ -137,47 +151,103 @@ public class KMLWriter implements PositionWriter {
 		// GSP is 000 here (ground speed in km/hr)
 		// B1851353728534N12151678WA0069700705000
 
+		if (isFirst) {
+			firstTimeMs = time;
+			isFirst = false;
+		}
+
+		lastTimeMs = time;
+
 		boolean is3D = !Double.isNaN(altitude);
 		if (!is3D)
 			altitude = 0f;
+		else {
+			minHeight = Math.min(altitude, minHeight);
+			maxHeight = Math.max(altitude, maxHeight);
+		}
 
 		// Use US format to ensure floats have dots not commas ;-)
 		out.format(Locale.US, "%f,%f,%d\n", longitude, latitude, (int) altitude);
+	}
+
+	private String getTimespan(long numMs) {
+		Date d = new Date(numMs);
+
+		String res = String.format("%02d:%02d:%02d", d.getHours(), d.getMinutes(), d.getSeconds());
+
+		return res;
+	}
+
+	/**
+	 * Generate a verbose description of the flight
+	 * 
+	 * @return
+	 */
+	private String createDescription() {
+		DateFormat dformat = DateFormat.getDateInstance();
+		DateFormat tformat = DateFormat.getTimeInstance();
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("<description>");
+		// builder.append("Gaggle Tracklog");
+		builder.append("<![CDATA[");
+		builder.append("Gaggle Tracklog\n");
+		builder.append("<pre>\n");
+		builder.append("Flight statistics\n");
+		builder.append(String.format("Pilot name      %s\n", pilotName));
+		builder.append(String.format("Pilot ID        %s\n", pilotId));
+		builder.append(String.format("Glider type     %s\n", gliderType));
+		builder
+				.append(String
+						.format("Date            %s\n", dformat.format(new Date(firstTimeMs))));
+		builder.append(String.format("Start/finish    %s - %s\n", tformat.format(new Date(
+				firstTimeMs)), tformat.format(new Date(lastTimeMs))));
+		builder.append(String.format("Duration        %s\n", getTimespan(lastTimeMs
+				- firstTimeMs)));
+
+		builder.append(String.format("Max/min height  %s%s / %s%s\n", Units.instance
+				.metersToAltitude(maxHeight), Units.instance.getAltitudeUnits(),
+				Units.instance.metersToAltitude(minHeight),
+				Units.instance.getAltitudeUnits()));
+		builder.append("</pre>\n");
+		builder.append("]]>");
+		builder.append("</description>");
+		return builder.toString();
 	}
 
 	@Override
 	public void emitProlog() {
 		out
 				.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+
-				"<kml xmlns=\"http://www.opengis.net/kml/2.2\">"
-				+
-				"<Document>"
-				+
-				"<name>Gaggle KML</name>"
-				+
-				"<open>1</open>"
-				+
-				"<description>Gaggle KML file</description>"
-				+
-				"<Style id=\"yellowLineGreenPoly\">" +
-				"<LineStyle>" +
-				"<color>7f00ffff</color>" +
-				"<width>4</width>" +
-				"</LineStyle>" +
-				"<PolyStyle>" +
-				"<color>7f00ff00</color>" +
-				"</PolyStyle>" +
-				"</Style>" +
-				"<Placemark>" +
-				"<name>Flight</name>" +
-				"<visibility>1</visibility>" +
-				"<description>Gaggle Tracklog</description>" +
-				"<styleUrl>#yellowLineGreenPoly</styleUrl>" +
-				"<LineString>" +
-				"<extrude>1</extrude>" +
-				"<tessellate>1</tessellate>" +
-				"<altitudeMode>absolute</altitudeMode>" +
-				"<coordinates>");
+						+
+						"<kml xmlns=\"http://www.opengis.net/kml/2.2\">"
+						+
+						"<Document>"
+						+
+						"<name>Gaggle KML</name>"
+						+
+						"<open>1</open>"
+						+
+						"<description>Gaggle KML file</description>"
+						+
+						"<Style id=\"yellowLineGreenPoly\">" +
+						"<LineStyle>" +
+						"<color>7f00ffff</color>" +
+						"<width>4</width>" +
+						"</LineStyle>" +
+						"<PolyStyle>" +
+						"<color>7f00ff00</color>" +
+						"</PolyStyle>" +
+						"</Style>" +
+						"<Placemark>" +
+						"<name>Flight</name>" +
+						"<visibility>1</visibility>" +
+						// createDescription() +
+						"<styleUrl>#yellowLineGreenPoly</styleUrl>" +
+						"<LineString>" +
+						"<extrude>1</extrude>" +
+						"<tessellate>1</tessellate>" +
+						"<altitudeMode>absolute</altitudeMode>" +
+						"<coordinates>");
 	}
 }

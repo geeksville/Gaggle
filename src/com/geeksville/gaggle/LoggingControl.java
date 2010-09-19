@@ -50,6 +50,7 @@ import com.geeksville.location.LocationList;
 import com.geeksville.location.LocationListWriter;
 import com.geeksville.location.PositionWriter;
 import com.geeksville.location.PositionWriterSet;
+import com.geeksville.view.AsyncProgressDialog;
 
 public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 		ChangeHandler {
@@ -343,10 +344,10 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 
 	private void startLogging() {
 
-		Account acct = new Account(this, "live2");
+		final Account acct = new Account(this, "live2");
 
 		// We always log to the DB
-		PositionWriter dbwriter = new LocationDBWriter(this, prefs
+		final PositionWriter dbwriter = new LocationDBWriter(this, prefs
 				.isDelayedUpload(), prefs.getPilotName(), null);
 
 		// Also always keep the the current live track
@@ -354,46 +355,68 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 		LocationList loclist = new LocationList();
 		FlyMapActivity.liveList = loclist;
 
-		PositionWriter ramwriter = new LocationListWriter(loclist);
+		final PositionWriter ramwriter = new LocationListWriter(loclist);
 
-		PositionWriter[] selected = null;
+		loggingButton.setEnabled(false); // Turn off the button until our
+		// background thread finishes
 
-		// Possibly also leonardo live
-		if (prefs.isLiveUpload()) {
-			try {
-				if (!acct.isValid())
-					throw new Exception(getString(R.string.username_or_password_is_unset));
+		AsyncProgressDialog progress =
+				new AsyncProgressDialog(this, getString(R.string.starting_logging),
+						getString(R.string.please_wait)) {
 
-				// FIXME - do this in an async dialog helper
-				PositionWriter liveWriter = new LeonardoLiveWriter(this, acct.serverURL,
-						acct.username, acct.password, prefs.getWingModel(), prefs
-								.getLogInterval());
+					@Override
+					protected void doInBackground() {
+						PositionWriter[] selected = null;
 
-				selected = new PositionWriter[] { dbwriter, ramwriter, liveWriter };
-			} catch (Exception ex) {
-				// Bad password or connection problems
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(R.string.leonardolive_problem);
-				builder.setMessage(ex.getMessage());
-				builder.setPositiveButton(R.string.ignore, null);
+						// Possibly also leonardo live
+						if (prefs.isLiveUpload()) {
+							try {
+								if (!acct.isValid())
+									throw new Exception(
+											getString(R.string.username_or_password_is_unset));
 
-				AlertDialog alert = builder.create();
-				alert.show();
-			}
-		}
+								// FIXME - do this in an async dialog helper
+								PositionWriter liveWriter = new LeonardoLiveWriter(
+										LoggingControl.this, acct.serverURL,
+										acct.username, acct.password, prefs.getWingModel(), prefs
+												.getLogInterval());
 
-		// If we haven't already connected to the live server
-		if (selected == null)
-			selected = new PositionWriter[] { dbwriter, ramwriter };
+								selected = new PositionWriter[] { dbwriter, ramwriter, liveWriter };
+							} catch (Exception ex) {
+								// Bad password or connection problems
+								showCompletionDialog(context
+										.getString(R.string.leonardolive_problem), ex.getMessage());
+							}
+						}
 
-		PositionWriter writer = new PositionWriterSet(selected);
+						// If we haven't already connected to the live server
+						if (selected == null)
+							selected = new PositionWriter[] { dbwriter, ramwriter };
 
-		// Start up our logger service
-		GPSToPositionWriter gpsToPos = ((GaggleApplication) getApplication())
-				.getGpsLogger();
+						PositionWriter writer = new PositionWriterSet(selected);
 
-		gpsToPos.startLogging(getApplication(), writer, prefs.getLogInterval(),
-				prefs.getLaunchDistX(), prefs.getLaunchDistY());
+						// Start up our logger service
+						GPSToPositionWriter gpsToPos = ((GaggleApplication) getApplication())
+								.getGpsLogger();
+
+						gpsToPos.startLogging(getApplication(), writer, prefs.getLogInterval(),
+								prefs.getLaunchDistX(), prefs.getLaunchDistY());
+					}
+
+					/**
+					 * @see com.geeksville.view.AsyncProgressDialog#onPostExecute
+					 *      (java.lang.Void)
+					 */
+					@Override
+					protected void onPostExecute(Void unused) {
+						loggingButton.setEnabled(true);
+
+						super.onPostExecute(unused);
+					}
+
+				};
+
+		progress.execute();
 	}
 
 	@Override
