@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geeksville.gaggle.R;
 import com.geeksville.info.Units;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.view.CaptionedDrawable;
@@ -91,7 +92,7 @@ public class WaypointItem extends OpenStreetMapViewOverlayItem {
 	}
 
 	public void handleTap(Activity context) {
-		String msg = String.format("Distance: %s %s\nGlide: %s:1", Units.instance
+		String msg = String.format(context.getString(R.string.distance_s_s_glide_s), Units.instance
 				.metersToDistance(w.distanceFromPilotX), Units.instance.getDistanceUnits(), w
 				.glideRatioString());
 

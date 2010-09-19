@@ -397,13 +397,13 @@ public class ListFlightsActivity extends DBListActivity {
 
 		File sdcard = Environment.getExternalStorageDirectory();
 		if (!sdcard.exists())
-			throw new IOException("SD card not found");
+			throw new IOException(getString(R.string.sd_card_not_found));
 
-		File tracklog = new File(sdcard, "Tracklogs");
+		File tracklog = new File(sdcard, getString(R.string.tracklogs));
 		if (!tracklog.exists())
 			tracklog.mkdir();
 
-		String basename = "flight_" + flightid + "." + filetype; // FIXME, use a
+		String basename = getString(R.string.flight_) + flightid + "." + filetype; // FIXME, use a
 		// better
 		// filename
 		// File fname = new File(cacheDir, basename);
@@ -446,7 +446,7 @@ public class ListFlightsActivity extends DBListActivity {
 
 		if (acct.isValid()) {
 			AsyncProgressDialog progress =
-					new AsyncProgressDialog(this, "Uploading", "Please wait...") {
+					new AsyncProgressDialog(this, getString(R.string.uploading), getString(R.string.please_wait)) {
 						@Override
 						protected void doInBackground() {
 
@@ -456,26 +456,29 @@ public class ListFlightsActivity extends DBListActivity {
 								fileLoc = flightToIGC(flightid);
 							}
 					catch (IOException ex) {
-						showCompletionDialog("IGC stream write failed", ex.getLocalizedMessage());
+						showCompletionDialog(getString(R.string.igc_stream_write_failed), ex
+								.getLocalizedMessage());
 						return;
 					}
 
 					try {
-						String basename = "flight_" + flightid;
+						String basename = getString(R.string.flight_) + flightid;
 
 						showCompletionToast(LeonardoUpload.upload(acct.username, acct.password,
 								acct.serverURL, basename,
 								fileLoc));
 
 					} catch (IOException ex) {
-						showCompletionDialog("Upload failed", ex.getLocalizedMessage());
+						showCompletionDialog(getString(R.string.upload_failed), ex
+								.getLocalizedMessage());
 					}
 				}
 					};
 
 			progress.execute();
 		} else {
-			Toast.makeText(this, "Please set your Leonardo account information", Toast.LENGTH_LONG)
+			Toast.makeText(this, R.string.please_set_your_leonardo_account_information,
+					Toast.LENGTH_LONG)
 					.show();
 			startActivity(new Intent(this, MyPreferences.class));
 		}
@@ -487,7 +490,8 @@ public class ListFlightsActivity extends DBListActivity {
 		String filetype;
 
 		public AsyncFileWriter(final long flightid, final String filetype) {
-			super(ListFlightsActivity.this, "Writing file", "Please wait...");
+			super(ListFlightsActivity.this, getString(R.string.writing_file),
+					getString(R.string.please_wait));
 
 			this.flightid = flightid;
 			this.filetype = filetype;
@@ -499,7 +503,8 @@ public class ListFlightsActivity extends DBListActivity {
 			try {
 				fileLoc = flightToFile(flightid, filetype);
 			} catch (IOException ex) {
-				showCompletionDialog("File write failed", ex.getLocalizedMessage());
+				showCompletionDialog(getString(R.string.file_write_failed), ex
+						.getLocalizedMessage());
 			}
 		}
 	}
@@ -609,7 +614,7 @@ public class ListFlightsActivity extends DBListActivity {
 								// FIXME, support kmz
 								sendIntent.setType("application/vnd.google-earth.kml+xml");
 
-							startActivity(Intent.createChooser(sendIntent, "View flight"));
+							startActivity(Intent.createChooser(sendIntent, getString(R.string.view_flight)));
 
 							// Keep stats on # of emails sent
 							Map<String, String> map = new HashMap<String, String>();

@@ -8,14 +8,14 @@
 		android:padding="10dp">
 
 		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="Name"></TextView>
+			android:layout_height="wrap_content" android:text="@string/name"></TextView>
 
 		<EditText android:id="@+id/name" android:layout_margin="1dip"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:hint="degs" />
+			android:hint="@string/degrees_short" />
 
 		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="Latitude"></TextView>
+			android:layout_height="wrap_content" android:text="@string/latitude"></TextView>
 
 		<LinearLayout android:orientation="horizontal"
 			android:id="@+id/latitude" android:layout_gravity="center_horizontal"
@@ -24,26 +24,26 @@
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/degree" android:layout_margin="1dip"
 				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="degs" android:maxLength="3" android:lines="1" />
+				android:hint="@string/degrees_short" android:maxLength="3" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="°"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/minute" android:layout_margin="1dip"
 				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="min" android:maxLength="2" android:lines="1" />
+				android:hint="@string/minutes_short" android:maxLength="2" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="'"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/second" android:layout_margin="1dip"
 				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="frac" android:maxLength="3" android:lines="1" />
+				android:hint="@string/fractions_of_mins_short" android:maxLength="3" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text='"'></TextView>
 
 		</LinearLayout>
 
 		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="Longitude"></TextView>
+			android:layout_height="wrap_content" android:text="@string/longitude"></TextView>
 
 		<LinearLayout android:orientation="horizontal"
 			android:id="@+id/longitude" android:layout_gravity="center_horizontal"
@@ -52,25 +52,25 @@
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/degree" android:layout_margin="1dip"
 				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="degs" android:maxLength="3" android:lines="1" />
+				android:hint="@string/degrees_short" android:maxLength="3" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="°"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/minute" android:layout_margin="1dip"
 				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="min" android:maxLength="2" android:lines="1" />
+				android:hint="@string/minutes_short" android:maxLength="2" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="'"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/second" android:layout_margin="1dip"
 				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="frac" android:maxLength="3" android:lines="1" />
+				android:hint="@string/fractions_of_mins_short" android:maxLength="3" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text='"'></TextView>
 
 		</LinearLayout>
 		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="Altitude"></TextView>
+			android:layout_height="wrap_content" android:text="@string/altitude"></TextView>
 
 		<LinearLayout android:orientation="horizontal"
 			android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
 		</LinearLayout>
 
 		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="Type"></TextView>
+			android:layout_height="wrap_content" android:text="@string/type"></TextView>
 		<com.geeksville.view.EnhancedSpinner
 			android:layout_height="wrap_content" android:layout_width="wrap_content"
 			android:id="@+id/type" android:layout_gravity="center"

@@ -26,6 +26,7 @@ import java.util.Observer;
 import android.app.Activity;
 
 import com.geeksville.gaggle.GaggleApplication;
+import com.geeksville.gaggle.R;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.Waypoint;
 
@@ -54,14 +55,16 @@ public class InfoGRWaypoint extends InfoField implements Observer {
 	/**
 	 * Stop listening to the GPS
 	 */
-	@Override void onHidden() {
+	@Override
+	void onHidden() {
 		GaggleApplication app = (GaggleApplication) context.getApplication();
 		app.getWaypoints().deleteObserver(this);
 
 		super.onHidden();
 	}
 
-	@Override void onShown() {
+	@Override
+	void onShown() {
 		super.onShown();
 
 		// We now care about waypoints moving around
@@ -71,7 +74,7 @@ public class InfoGRWaypoint extends InfoField implements Observer {
 
 	@Override
 	public String getLabel() {
-		return "GR needed for Wpt";
+		return context.getString(R.string.gr_needed_for_wpt);
 	}
 
 	/**
@@ -80,7 +83,7 @@ public class InfoGRWaypoint extends InfoField implements Observer {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "GR req Wpt";
+		return context.getString(R.string.gr_needed_for_wpt_short);
 	}
 
 	/**

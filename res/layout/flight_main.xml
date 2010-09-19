@@ -5,8 +5,6 @@
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent" android:orientation="vertical">
 
-
-
 	<com.geeksville.info.InfoListView android:id="@id/android:list" app:row_layout_id="@layout/infodock_bigfont_row"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="10"/>
 
@@ -15,11 +13,11 @@
 
 		<Button android:id="@+id/LoggingOnOffButton"
 			android:layout_height="wrap_content" android:layout_width="wrap_content"
-			android:text="Start Flight" />
+			android:text="@string/start_flight" />
 
 		<TextView android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:id="@+id/LabelLiveFlight"
-			android:text="(status)" />
+			android:text="@string/_status_" />
 	</LinearLayout>
 	
 </LinearLayout>

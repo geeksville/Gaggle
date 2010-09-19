@@ -183,9 +183,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 
 				// FIXME - move this alert goo into a standard localized utility
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("Unable to open IGC file");
+				builder.setTitle(R.string.unable_to_open_igc_file);
 				builder.setMessage(ex.toString());
-				builder.setPositiveButton("Okay", null);
+				builder.setPositiveButton(R.string.okay, null);
 
 				AlertDialog alert = builder.create();
 				alert.show();

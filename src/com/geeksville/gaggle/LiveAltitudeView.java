@@ -33,21 +33,34 @@ import android.util.AttributeSet;
 public class LiveAltitudeView extends AltitudeView {
 	public LiveAltitudeView(Context context) {
 		super(context);
+
+		init();
 	}
 
 	public LiveAltitudeView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+		init();
 	}
 
 	public LiveAltitudeView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+
+		init();
 	}
 
-	private static final String[] timescaleLabels = { "Plot: All", "Plot: 5 min",
-			"Plot: 20 min", "Plot: 1 hour" };
+	private String[] timescaleLabels;
 	private static final int[] timescaleSecs = { -1, 5 * 60, 20 * 60, 60 * 60 };
 
 	private int curTimescale = 0;
+
+	private void init() {
+		timescaleLabels = new String[] {
+				getContext().getString(R.string.plot_all),
+				getContext().getString(R.string.plot_5_min),
+				getContext().getString(R.string.plot_20_min),
+				getContext().getString(R.string.plot_1_hour) };
+	}
 
 	/**
 	 * Get the lowest time we are willing to plot

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/view_menu" android:title="Edit" android:icon="@android:drawable/ic_menu_edit" />
-	<item android:id="@+id/goto_menu" android:title="Go to" android:icon="@android:drawable/ic_menu_directions" />
+	<item android:id="@+id/view_menu" android:title="@string/edit" android:icon="@android:drawable/ic_menu_edit" />
+	<item android:id="@+id/goto_menu" android:title="@string/go_to" android:icon="@android:drawable/ic_menu_directions" />
 </menu>

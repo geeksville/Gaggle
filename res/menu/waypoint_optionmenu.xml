@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/add_menu" android:title="Add waypoint"
+	<item android:id="@+id/add_menu" android:title="@string/add_waypoint"
 		android:icon="@android:drawable/ic_menu_add" />
 
-	<item android:id="@+id/delete_menu" android:title="Delete all"
+	<item android:id="@+id/delete_menu" android:title="@string/delete_all"
 		android:icon="@android:drawable/ic_menu_delete" />
 		
-	<item android:id="@+id/order_menu" android:title="Order"
+	<item android:id="@+id/order_menu" android:title="@string/order"
 		android:enabled="false">
 		<menu>
-			<item android:id="@+id/by_name_menu" android:title="By distance" />
-			<item android:id="@+id/by_distance_menu" android:title="By name" />
+			<item android:id="@+id/by_name_menu" android:title="@string/by_distance" />
+			<item android:id="@+id/by_distance_menu" android:title="@string/by_name" />
 		</menu>
 	</item>
 </menu>

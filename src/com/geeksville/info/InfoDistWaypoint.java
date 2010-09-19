@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 
 import com.geeksville.gaggle.GaggleApplication;
+import com.geeksville.gaggle.R;
 import com.geeksville.location.CompassClient;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.LocationUtils;
@@ -108,7 +109,7 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 
 	@Override
 	public String getLabel() {
-		return "Distance to Wpt";
+		return context.getString(R.string.distance_to_wpt);
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "To Wpt";
+		return context.getString(R.string.to_wpt);
 	}
 
 	/**

@@ -98,7 +98,7 @@ public abstract class DBListActivity extends ListActivity {
 				myCursor.requery(); // We just deleted a row, it seems we need
 				// to manually refetch the cursor
 
-				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.deleted, Toast.LENGTH_SHORT).show();
 			}
 
 			// adapter.notifyDataSetChanged(); // this doesn't seem to do

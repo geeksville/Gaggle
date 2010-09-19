@@ -32,6 +32,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.geeksville.gaggle.R;
 import com.geeksville.gaggle.TopActivity;
 
 /**
@@ -171,7 +172,7 @@ public class GPSClient extends Service implements IGPSClient {
 		public synchronized void add(ServiceConnection conn) {
 			if (clients.contains(conn)) {
 				Log.e(TAG, "redundant GPSClient.bindTo"); // FIXME - why does
-															// this happen?
+				// this happen?
 				return;
 			}
 
@@ -292,9 +293,7 @@ public class GPSClient extends Service implements IGPSClient {
 					Toast t = Toast
 							.makeText(
 									this,
-									"Gaggle 'Simulate GPS Data' requires that 'Application Settings / Development / Allow Mock Locations'"
-											+ " be checked in the system preferences.  Since that setting is currently off "
-											+ " Gaggle has switched back to the real GPS.",
+									R.string.mock_location_required,
 									Toast.LENGTH_LONG);
 					t.show();
 

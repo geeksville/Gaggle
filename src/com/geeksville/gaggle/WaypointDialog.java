@@ -77,12 +77,12 @@ public class WaypointDialog implements DialogInterface.OnClickListener {
 		altUnits.setText(Units.instance.getAltitudeUnits());
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(c);
-		builder.setTitle("Edit Waypoint");
+		builder.setTitle(R.string.edit_waypoint);
 		builder.setView(layout);
 		builder.setCancelable(true);
-		builder.setPositiveButton("Okay", this);
-		builder.setNeutralButton("Go to", this);
-		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.okay, this);
+		builder.setNeutralButton(R.string.go_to, this);
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 			}

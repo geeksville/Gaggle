@@ -196,8 +196,8 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 		if (uri != null && action != null && action.equals(Intent.ACTION_VIEW)) {
 			Log.d("ListWaypointsActivity", "Considering " + typ);
 
-			AsyncProgressDialog progress = new AsyncProgressDialog(this, "Importing waypoints",
-					"Please wait...") {
+			AsyncProgressDialog progress = new AsyncProgressDialog(this, getString(R.string.importing_waypoints),
+					getString(R.string.please_wait)) {
 				@Override
 				protected void doInBackground() {
 
@@ -210,14 +210,14 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 						WPTImporter imp = new WPTImporter(db);
 						int numadded = imp.addFromStream(s);
 
-						String msg = String.format("Imported %d waypoints", numadded);
+						String msg = String.format(getString(R.string.imported_d_waypoints), numadded);
 						showCompletionToast(msg);
 
 						FlurryAgent.onEvent("WPT import success");
 					} catch (Exception ex) {
 						FlurryAgent.onEvent("WPT import failed");
 
-						showCompletionDialog("Import failed", ex.getLocalizedMessage());
+						showCompletionDialog(getString(R.string.import_failed), ex.getLocalizedMessage());
 					}
 				}
 
@@ -355,10 +355,10 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 	private void handleDeleteMenu() {
 		// Is the user sure?
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Delete waypoints");
-		builder.setMessage("Are you sure?");
-		builder.setNegativeButton("Cancel", null);
-		builder.setPositiveButton("Delete", new OnClickListener() {
+		builder.setTitle(R.string.delete_waypoints);
+		builder.setMessage(R.string.are_you_sure);
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.setPositiveButton(R.string.delete, new OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -382,7 +382,7 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 
 		if (myloc == null)
 			Toast.makeText(ListWaypointsActivity.this,
-					"Can not add waypoint\nStill waiting for GPS fix", Toast.LENGTH_LONG)
+					R.string.can_not_add_waypoint_still_waiting_for_gps_fix, Toast.LENGTH_LONG)
 					.show();
 		else {
 			java.util.Date now = new java.util.Date();
@@ -396,7 +396,7 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 			myCursor.requery();
 
 			// FIXME - then select it in the cursor/GUI
-			Toast.makeText(ListWaypointsActivity.this, "Waypoint created", Toast.LENGTH_SHORT)
+			Toast.makeText(ListWaypointsActivity.this, R.string.waypoint_created, Toast.LENGTH_SHORT)
 					.show();
 		}
 	}
@@ -413,7 +413,7 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 		((GaggleApplication) getApplication()).currentDestination = w;
 
 		Toast
-				.makeText(ListWaypointsActivity.this, "New destination: " + w.name,
+				.makeText(ListWaypointsActivity.this, R.string.new_destination + w.name,
 						Toast.LENGTH_SHORT).show();
 	}
 
@@ -441,7 +441,7 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 				w.commit();
 				myCursor.requery();
 
-				Toast.makeText(ListWaypointsActivity.this, "Updated waypoint", Toast.LENGTH_SHORT)
+				Toast.makeText(ListWaypointsActivity.this, R.string.updated_waypoint, Toast.LENGTH_SHORT)
 						.show();
 			}
 		};

@@ -21,6 +21,7 @@
 package com.geeksville.info;
 
 import android.location.Location;
+import com.geeksville.gaggle.R;
 
 public class InfoLatitude extends GPSField {
 	/**
@@ -29,7 +30,7 @@ public class InfoLatitude extends GPSField {
 	 */
 	@Override
 	public String getLabel() {
-		return "Latitude";
+		return context.getString(R.string.latitude);
 	}
 
 	/**
@@ -38,7 +39,7 @@ public class InfoLatitude extends GPSField {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "Lat";
+		return context.getString(R.string.latitude_short);
 	}
 
 	double degs = Double.NaN;

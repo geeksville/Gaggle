@@ -22,13 +22,14 @@ package com.geeksville.info;
 
 import android.location.Location;
 
+import com.geeksville.gaggle.R;
 import com.geeksville.location.LocationUtils;
 
 public class InfoGlideRatio extends GPSField {
 
 	@Override
 	public String getLabel() {
-		return "Glide Ratio";
+		return context.getString(R.string.glide_ratio);
 	}
 
 	/**
@@ -37,7 +38,7 @@ public class InfoGlideRatio extends GPSField {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "GR";
+		return context.getString(R.string.glide_ratio_short);
 	}
 
 	/**

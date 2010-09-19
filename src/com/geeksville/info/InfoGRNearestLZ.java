@@ -21,13 +21,14 @@
 package com.geeksville.info;
 
 import com.geeksville.gaggle.GaggleApplication;
+import com.geeksville.gaggle.R;
 import com.geeksville.location.ExtendedWaypoint;
 
 public class InfoGRNearestLZ extends InfoGRWaypoint {
 
 	@Override
 	public String getLabel() {
-		return "GR needed for LZ";
+		return context.getString(R.string.gr_needed);
 	}
 
 	/**
@@ -36,7 +37,7 @@ public class InfoGRNearestLZ extends InfoGRWaypoint {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "GR req LZ";
+		return context.getString(R.string.gr_needed_short);
 	}
 
 	@Override

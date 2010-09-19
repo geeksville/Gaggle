@@ -28,6 +28,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.geeksville.android.ChangeHandler;
+import com.geeksville.gaggle.R;
 
 /**
  * Reads positions from the GPS and writes them to a PositionWriter (probably a
@@ -85,7 +86,8 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 
 	private Status curStatus = Status.OFF;
 
-	public GPSToPositionWriter() {
+	public GPSToPositionWriter(Context _context) {
+		context = _context;
 	}
 
 	public Status getStatus() {
@@ -104,15 +106,15 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 	public String getStatusString() {
 		switch (curStatus) {
 		case OFF:
-			return "Off";
+			return context.getString(R.string.off);
 		case WAIT_FOR_LOCK:
-			return "Acquiring GPS fix";
+			return context.getString(R.string.acquiring_gps_fix);
 		case WAIT_FOR_LAUNCH:
-			return String.format("Waiting for launch (%d pts)", numPoints);
+			return String.format(context.getString(R.string.waiting_for_launch_d_pts), numPoints);
 		case IN_FLIGHT:
-			return String.format("In flight (%d pts)", numPoints);
+			return String.format(context.getString(R.string.in_flight_d_pts), numPoints);
 		case LANDED:
-			return "Landed";
+			return context.getString(R.string.landed);
 		}
 
 		throw new IllegalStateException("Unknown GPS logging state");
@@ -162,7 +164,8 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 		gps = (IGPSClient) service;
 
 		// FIXME - move to correct place
-		gps.startForeground("Tracklog started", "Capturing tracklog");
+		gps.startForeground(context.getString(R.string.tracklog_started), context
+				.getString(R.string.capturing_tracklog));
 
 		setStatus(Status.WAIT_FOR_LOCK);
 

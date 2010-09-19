@@ -25,6 +25,7 @@ import java.util.Observer;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import com.geeksville.gaggle.R;
 import com.geeksville.location.CompassClient;
 
 /**
@@ -43,7 +44,7 @@ public class InfoCompass extends InfoField implements Observer {
 
 	@Override
 	public String getLabel() {
-		return "Heading";
+		return context.getString(R.string.heading);
 	}
 
 	/**

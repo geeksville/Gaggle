@@ -51,7 +51,7 @@ public class GaggleApplication extends Application {
 	 */
 	private WaypointDB waypoints = null;
 
-	private GPSToPositionWriter gpsToPos = new GPSToPositionWriter();
+	private GPSToPositionWriter gpsToPos;
 
 	public synchronized WaypointDB getWaypoints() {
 		// FIXME, close the backing DB when the waypoint cache is done with it
@@ -66,6 +66,10 @@ public class GaggleApplication extends Application {
 
 	public GPSToPositionWriter getGpsLogger() {
 		return gpsToPos;
+	}
+
+	public GaggleApplication() {
+		gpsToPos = new GPSToPositionWriter(this);
 	}
 
 	/*

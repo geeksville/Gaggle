@@ -21,12 +21,13 @@
 package com.geeksville.info;
 
 import android.location.Location;
+import com.geeksville.gaggle.R;
 
 public class InfoGroundSpeed extends GPSField {
 
 	@Override
 	public String getLabel() {
-		return "Speed";
+		return context.getString(R.string.speed);
 	}
 
 	/**
@@ -35,7 +36,7 @@ public class InfoGroundSpeed extends GPSField {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "GSpd";
+		return context.getString(R.string.ground_speed_short);
 	}
 
 	/**

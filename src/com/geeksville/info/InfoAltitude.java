@@ -21,6 +21,7 @@
 package com.geeksville.info;
 
 import android.location.Location;
+import com.geeksville.gaggle.R;
 
 public class InfoAltitude extends GPSField {
 
@@ -35,7 +36,7 @@ public class InfoAltitude extends GPSField {
 	 */
 	@Override
 	public String getLabel() {
-		return "Altitude";
+		return context.getString(R.string.altitude);
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class InfoAltitude extends GPSField {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "Alt";
+		return context.getString(R.string.altitude_short);
 	}
 
 	/**

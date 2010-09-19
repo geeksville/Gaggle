@@ -21,13 +21,14 @@
 package com.geeksville.info;
 
 import com.geeksville.gaggle.GaggleApplication;
+import com.geeksville.gaggle.R;
 import com.geeksville.location.ExtendedWaypoint;
 
 public class InfoNearestLZ extends InfoDistWaypoint {
 
 	@Override
 	public String getLabel() {
-		return "Distance to LZ";
+		return context.getString(R.string.distance_to_lz);
 	}
 
 	/**
@@ -36,7 +37,7 @@ public class InfoNearestLZ extends InfoDistWaypoint {
 	 */
 	@Override
 	public String getShortLabel() {
-		return "To LZ";
+		return context.getString(R.string.distance_to_lz_short);
 	}
 
 	@Override

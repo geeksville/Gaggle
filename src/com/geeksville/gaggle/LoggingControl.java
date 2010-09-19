@@ -221,8 +221,8 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 				.getGpsLogger();
 
 		loggingLabel.setText(gpsToPos.getStatusString());
-		loggingButton.setText(gpsToPos.isLogging() ? "Stop Logging"
-				: "Start Logging");
+		loggingButton.setText(gpsToPos.isLogging() ? R.string.stop_logging
+				: R.string.start_logging);
 	}
 
 	/**
@@ -362,7 +362,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 		if (prefs.isLiveUpload()) {
 			try {
 				if (!acct.isValid())
-					throw new Exception("Username or password is unset");
+					throw new Exception(getString(R.string.username_or_password_is_unset));
 
 				// FIXME - do this in an async dialog helper
 				PositionWriter liveWriter = new LeonardoLiveWriter(this, acct.serverURL,
@@ -373,9 +373,9 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 			} catch (Exception ex) {
 				// Bad password or connection problems
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("LeonardoLive problem");
+				builder.setTitle(R.string.leonardolive_problem);
 				builder.setMessage(ex.getMessage());
-				builder.setPositiveButton("Ignore", null);
+				builder.setPositiveButton(R.string.ignore, null);
 
 				AlertDialog alert = builder.create();
 				alert.show();

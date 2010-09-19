@@ -78,17 +78,35 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 			TopOSMRelief
 	};
 
-	private static String supportedRendererNames[] = {
-			"Street Map",
-			"Topo (Europe)",
-			"Topo (US contour)",
-			"Topo (US relief)"
-	};
+	private String supportedRendererNames[];
 
 	public GeeksvilleMapActivity() {
 		// FIXME - do this someplace better
 		OpenStreetMapRendererFactory.addRenderer(TopOSMContours);
 		OpenStreetMapRendererFactory.addRenderer(TopOSMRelief);
+	}
+
+	/** Called when the activity is first created. */
+	public void onCreate(Bundle savedInstanceState, int layoutId, int mapViewId) {
+		super.onCreate(savedInstanceState);
+
+		supportedRendererNames = new String[] {
+				getString(R.string.street_map),
+				getString(R.string.topo_europe),
+				getString(R.string.topo_us_contour),
+				getString(R.string.topo_us_relief)
+		};
+
+		// Our license key is different for the emulator, otherwise these files
+		// should be identical
+		setContentView(layoutId);
+
+		mapView = (GeeksvilleMapView) findViewById(mapViewId);
+
+		mapView.setBuiltInZoomControls(true);
+
+		// Default to sat view
+		// mapView.setSatellite(true);
 	}
 
 	/**
@@ -179,22 +197,6 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		return super.onOptionsItemSelected(item);
 	}
 
-	/** Called when the activity is first created. */
-	public void onCreate(Bundle savedInstanceState, int layoutId, int mapViewId) {
-		super.onCreate(savedInstanceState);
-
-		// Our license key is different for the emulator, otherwise these files
-		// should be identical
-		setContentView(layoutId);
-
-		mapView = (GeeksvilleMapView) findViewById(mapViewId);
-
-		mapView.setBuiltInZoomControls(true);
-
-		// Default to sat view
-		// mapView.setSatellite(true);
-	}
-
 	/**
 	 * Override if you want a different my location view
 	 * 
@@ -270,4 +272,5 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 	public void removeLifeCycleHandler(LifeCycleHandler h) {
 		lifePublish.removeLifeCycleHandler(h);
 	}
+
 }
