@@ -39,6 +39,7 @@ import com.geeksville.android.AndroidUtil;
 import com.geeksville.info.Units;
 import com.geeksville.location.IGCReader;
 import com.geeksville.location.LocationList;
+import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.GeeksvilleMapActivity;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
@@ -314,7 +315,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	 */
 	@Override
 	protected MyLocationOverlay createLocationOverlay() {
-		return new ShowHeadingOverlay(this, mapView);
+		return new CenteredMyLocationOverlay(this, mapView);
 	}
 
 	/**

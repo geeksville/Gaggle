@@ -53,6 +53,21 @@ public class PrefetchMapActivity extends Activity {
 
 	private AsyncTask<Void, Integer, Void> background;
 
+	private IOpenStreetMapRendererInfo renderer;
+
+	/*
+	 * The various tile counts generated from our current zoom level by
+	 * prepareTileCounts()
+	 */
+	private int tileStartX;
+	private int tileStopX;
+	private int tileStartY;
+	private int tileStopY;
+	private int numTilesX;
+	private int numTilesY;
+	private int numTiles;
+	private int numTilesFullWidth;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +78,7 @@ public class PrefetchMapActivity extends Activity {
 		center = new GeoPoint(extras.getInt(EXTRA_LATITUDE), extras.getInt(EXTRA_LONGITUDE));
 		zoomLevel = extras.getInt(EXTRA_ZOOMLEVEL);
 		source = extras.getString(EXTRA_TILESOURCE);
+		renderer = OpenStreetMapRendererFactory.getRenderer(source);
 
 		startButton = (Button) findViewById(R.id.start);
 		startButton.setOnClickListener(new OnClickListener() {
@@ -108,6 +124,32 @@ public class PrefetchMapActivity extends Activity {
 		i.putExtra(EXTRA_TILESOURCE, tilesource);
 
 		return i;
+	}
+
+	private void prepareTileCounts(int zoom) {
+		numTilesFullWidth = 1 << zoom; // The total # of tiles in X
+		// & Y for the world
+
+		double[] nwPoint = LocationUtils.addDistance(center.getLatitudeE6() * 1e-6, center
+				.getLongitudeE6() * 1e-6, distMeters, Math.toRadians(45));
+		double[] sePoint = LocationUtils.addDistance(center.getLatitudeE6() * 1e-6, center
+				.getLongitudeE6() * 1e-6, distMeters, Math.toRadians(180 + 45));
+
+		OpenStreetMapTile start = getMapTileFromCoordinates(renderer, zoom, nwPoint[0],
+				nwPoint[1]);
+		OpenStreetMapTile stop = getMapTileFromCoordinates(renderer, zoom, sePoint[0],
+				sePoint[1]);
+
+		tileStartX = start.getX();
+		tileStopX = (stop.getX() + 1) % numTilesFullWidth;
+		tileStartY = start.getY();
+		tileStopY = (stop.getY() + 1) % numTilesFullWidth;
+
+		numTilesX = (tileStopX - tileStartX)
+				+ ((tileStopX <= tileStartX) ? numTilesFullWidth : 0);
+		numTilesY = (tileStopY - tileStartY)
+				+ ((tileStopY <= tileStartY) ? numTilesFullWidth : 0);
+		numTiles = numTilesX * numTilesY;
 	}
 
 	/**
@@ -247,8 +289,6 @@ public class PrefetchMapActivity extends Activity {
 		int numReceived = 0;
 
 		public DownloadTilesTask() {
-			renderer = OpenStreetMapRendererFactory.getRenderer(source);
-
 			tilesource = new OpenStreetMapTileFilesystemProvider(this);
 			// tilesource = new OpenStreetMapTileProviderDirect(arrivalHandler,
 			// CloudmadeUtil.getCloudmadeKey(PrefetchMapActivity.this));
@@ -273,34 +313,12 @@ public class PrefetchMapActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
 
-			double[] nwPoint = LocationUtils.addDistance(center.getLatitudeE6() * 1e-6, center
-					.getLongitudeE6() * 1e-6, distMeters, Math.toRadians(45));
-			double[] sePoint = LocationUtils.addDistance(center.getLatitudeE6() * 1e-6, center
-					.getLongitudeE6() * 1e-6, distMeters, Math.toRadians(180 + 45));
-
 			// Request a zillion tiles
 			int numRequested = 0;
 			int minZoom = zoomLevel, maxZoom = zoomLevel;
 
 			for (int zoom = minZoom; zoom <= maxZoom && !isCancelled(); zoom++) {
-				int numTilesFullWidth = 1 << zoom; // The total # of tiles in X
-				// & Y for the world
-
-				OpenStreetMapTile start = getMapTileFromCoordinates(renderer, zoom, nwPoint[0],
-						nwPoint[1]);
-				OpenStreetMapTile stop = getMapTileFromCoordinates(renderer, zoom, sePoint[0],
-						sePoint[1]);
-
-				int tileStartX = start.getX();
-				int tileStopX = (stop.getX() + 1) % numTilesFullWidth;
-				int tileStartY = start.getY();
-				int tileStopY = (stop.getY() + 1) % numTilesFullWidth;
-
-				int numTilesX = (tileStopX - tileStartX)
-						+ ((tileStopX <= tileStartX) ? numTilesFullWidth : 0);
-				int numTilesY = (tileStopY - tileStartY)
-						+ ((tileStopY <= tileStartY) ? numTilesFullWidth : 0);
-				int numTiles = numTilesX * numTilesY;
+				prepareTileCounts(zoom);
 
 				for (int tileY = tileStartY; tileY != tileStopY && !isCancelled(); tileY = (tileY + 1)
 						% numTilesFullWidth)
