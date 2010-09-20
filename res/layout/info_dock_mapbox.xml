@@ -13,7 +13,7 @@
 	<TextView android:text="1234.1" android:id="@+id/infodock_text"
 		android:layout_gravity="right" android:gravity="right"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:layout_weight="10" android:textSize="10pt" android:textColor="@color/info_field_text"></TextView>
+		android:layout_weight="10" android:textSize="30dip" android:textColor="@color/info_field_text"></TextView>
 
 </LinearLayout>
 

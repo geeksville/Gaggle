@@ -2,9 +2,9 @@
 <resources>
    <color name="translucent_black">#60000000</color>
    <color name="translucent_red">#80ff0000</color>
-   <color name="glide_danger">#77ff0000</color>
-   <color name="glide_warn">#77ffff00</color>
-   <color name="glide_safe">#7700ff00</color>    
+   <color name="glide_danger">#88ff0000</color>
+   <color name="glide_warn">#88ffff00</color>
+   <color name="glide_safe">#8800ff00</color>    
    <color name="info_field_text">#ffffff</color>  <!-- same as white -->
    <!--  <color name="info_field_text">#55ffffff</color>  same as text_color_offwhite -->
  

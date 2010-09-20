@@ -5,7 +5,7 @@
 
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="Label"
-		android:textAppearance="?android:attr/textAppearanceSmall" android:textSize="8pt" 
+		android:textAppearance="?android:attr/textAppearanceSmall" android:textSize="16dip" 
 		android:id="@+id/infodock_label"
 		android:layout_weight="20" android:layout_gravity="left|center_vertical"></TextView>
 
@@ -17,7 +17,7 @@
 	<TextView android:text="1234.1" android:id="@+id/infodock_text"
 		android:layout_gravity="right" android:gravity="right"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:layout_weight="15" android:textColor="@color/info_field_text" android:textSize="12pt"></TextView>
+		android:layout_weight="15" android:textColor="@color/info_field_text" android:textSize="26dip"></TextView>
 
 	<TextView android:text="kts" android:id="@+id/infodock_units"
 		android:textAppearance="?android:attr/textAppearanceSmall"

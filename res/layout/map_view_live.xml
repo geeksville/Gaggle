@@ -36,20 +36,3 @@
 
 </RelativeLayout>
 
-	<!--
-
-		we used to include the following in the settings:
-		android:id="@+id/mainlayout" FIXME use @ expressions in the :text
-		lines above to make for easier localization FIXME - add the following
-		to allow debugging of my MapView objects. per the following
-		instructions.
-		http://code.google.com/android/add-ons/google-apis/mapkey.html I also
-		need to add refs to the app in the manifest FIXME, eventually change
-		to my geeksville based key:
-		android:apiKey="034AOEQKPlRx88Up3Heg6_Y2BWGCslPcB21wA2A"
-
-		Alternatively, for my debug license use the following:
-
-		android:apiKey="034AOEQKPlRyRLVj5d6s01t2tk7_VSieMKoYxZg" For my
-		windows debug license: 034AOEQKPlRzKWX20hnwGJd0YhEZHwt8NVbnEOA
-	-->

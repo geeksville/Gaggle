@@ -176,7 +176,13 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 			return super.getTextColor();
 
 		ExtendedWaypoint w = getWaypoint();
-		return w.getColorRGBA();
+		int color = w.getColorRGBA();
+
+		// Regardless of what the color specified, for this application we don't
+		// want any alpha blending on our black background
+		color |= 0xff000000;
+
+		return color;
 	}
 
 	@Override

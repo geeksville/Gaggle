@@ -120,7 +120,6 @@ public class InfoGRWaypoint extends InfoField implements Observer {
 		if (w == null)
 			return "---"; // No waypoint set
 
-		// FIXME - draw in yellow for warning or red for below glideslope
 		return w.glideRatioString();
 	}
 
@@ -130,7 +129,14 @@ public class InfoGRWaypoint extends InfoField implements Observer {
 		if (w == null)
 			return super.getTextColor();
 
-		return w.getColorRGBA();
+		int color = w.getColorRGBA();
+
+		// Regardless of what the color specified, for this application we don't
+		// want any alpha blending on our black background
+		color |= 0xff000000;
+
+		return color;
+
 	}
 
 	@Override
