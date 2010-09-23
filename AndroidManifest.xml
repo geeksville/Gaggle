@@ -139,11 +139,10 @@
 	<!-- Needed for sim tracklog usage -->
 	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 
-	<!--
-		Not needed, because we always need a GPS <uses-permission
-		android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	-->
-
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	
 	<!--
 		Needed to turn wifi on/off <uses-permission
 		android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>

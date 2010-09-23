@@ -27,6 +27,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.view.CaptionedDrawable;
 
 public class WaypointItem extends OpenStreetMapViewOverlayItem {
+
+	private static final String TAG = "WaypointItem";
 
 	private ExtendedWaypoint w;
 	private CaptionedDrawable marker;
@@ -71,7 +74,15 @@ public class WaypointItem extends OpenStreetMapViewOverlayItem {
 
 		marker.setBounds(left, top, right, bottom);
 
-		marker.draw(c);
+		Log.d(TAG, "Drawing " + w);
+		boolean interesting = false;
+
+		// if (w.name.equals("POTLAU"))
+		interesting = true;
+
+		// if (c.clipRect(marker.getBounds()))
+		if (interesting)
+			marker.draw(c);
 	}
 
 	/**

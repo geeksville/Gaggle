@@ -165,7 +165,7 @@ public class AltitudeView extends View {
 					// Flip Y so that higher values are towards the top
 					int ypos = border + contentY - contentY * (alt - minY) / (maxY - minY);
 
-					int xpos = border + contentX * (time - minX) / (maxX - minX);
+					int xpos = (int) (border + contentX * ((long) time - minX) / (maxX - minX));
 
 					if (prevX != -1) {
 						points[numLinesPoints++] = prevX;

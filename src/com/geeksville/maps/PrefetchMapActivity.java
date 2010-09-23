@@ -1,9 +1,11 @@
 package com.geeksville.maps;
 
 import java.io.File;
+import java.io.InputStream;
 
 import org.andnav.osm.tileprovider.CloudmadeException;
 import org.andnav.osm.tileprovider.IOpenStreetMapTileProviderCallback;
+import org.andnav.osm.tileprovider.IRegisterReceiver;
 import org.andnav.osm.tileprovider.OpenStreetMapTile;
 import org.andnav.osm.tileprovider.OpenStreetMapTileFilesystemProvider;
 import org.andnav.osm.tileprovider.constants.OpenStreetMapTileProviderConstants;
@@ -18,7 +20,9 @@ import com.geeksville.gaggle.R;
 import com.geeksville.location.LocationUtils;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -286,10 +290,18 @@ public class PrefetchMapActivity extends Activity {
 		// OpenStreetMapTileProvider tilesource;
 		OpenStreetMapTileFilesystemProvider tilesource;
 
-		int numReceived = 0;
+		int numReceived = 0, numFailed = 0;
 
 		public DownloadTilesTask() {
-			tilesource = new OpenStreetMapTileFilesystemProvider(this);
+			final IRegisterReceiver registerReceiver = new IRegisterReceiver() {
+				@Override
+				public Intent registerReceiver(final BroadcastReceiver aReceiver,
+						final IntentFilter aFilter) {
+					return PrefetchMapActivity.this.registerReceiver(aReceiver, aFilter);
+				}
+			};
+
+			tilesource = new OpenStreetMapTileFilesystemProvider(this, registerReceiver);
 			// tilesource = new OpenStreetMapTileProviderDirect(arrivalHandler,
 			// CloudmadeUtil.getCloudmadeKey(PrefetchMapActivity.this));
 		}
@@ -344,6 +356,20 @@ public class PrefetchMapActivity extends Activity {
 		@Override
 		public void mapTileRequestCompleted(OpenStreetMapTile pTile, String aTilePath) {
 			numReceived++;
+		}
+
+		@Override
+		public void mapTileRequestCompleted(OpenStreetMapTile aTile) {
+			numFailed++;
+		}
+
+		@Override
+		public void mapTileRequestCompleted(OpenStreetMapTile aTile, InputStream aTileInputStream) {
+		}
+
+		@Override
+		public boolean useDataConnection() {
+			return true;
 		}
 	}
 }

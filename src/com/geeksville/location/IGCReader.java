@@ -135,14 +135,17 @@ public class IGCReader {
 	public LocationList toLocationList() {
 		LocationList l = new LocationList();
 
-		long prevTime = 0;
+		long firstTime = -1;
 		Location p;
 		try {
 			while ((p = readLocation()) != null) {
 				long newTime = p.getTime();
-				l.add(p.getLatitude(), p.getLongitude(), (int) (p.getAltitude() / 1000.0),
-						(int) (newTime - prevTime));
-				prevTime = newTime;
+
+				if (firstTime == -1)
+					firstTime = newTime;
+
+				l.add(p.getLatitude(), p.getLongitude(), (int) (p.getAltitude() * 1000.0),
+						(int) (newTime - firstTime));
 			}
 		} catch (Exception ex) {
 			Log.w(TAG, "Malformed IGC file - ignoring error");
