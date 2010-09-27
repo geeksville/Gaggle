@@ -227,7 +227,7 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	 */
 	public long add(ExtendedWaypoint w) {
 
-		w.id = db.addWaypoint(w.name, "", w.latitude, w.longitude, w.altitude, w.type
+		w.id = db.addWaypoint(w.name, w.description, w.latitude, w.longitude, w.altitude, w.type
 				.ordinal());
 		addToCache(w);
 
@@ -346,7 +346,7 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	 * @param w
 	 */
 	void updateWaypoint(ExtendedWaypoint w) {
-		db.updateWaypoint(w.id, w.name, w.latitude, w.longitude, w.altitude, w.type.ordinal());
+		db.updateWaypoint(w.id, w.name, w.description, w.latitude, w.longitude, w.altitude, w.type.ordinal());
 
 		wptsByName = null;
 	}

@@ -72,6 +72,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="testing_tools">Testing tools</string>
     <string name="type">Type</string>
     <string name="name">Name</string>
+    <string name="description">Description</string>
     <string name="fractions_of_mins_short">frac</string>
     <string name="minutes_short">min</string>
     <string name="degrees_short">degs</string>

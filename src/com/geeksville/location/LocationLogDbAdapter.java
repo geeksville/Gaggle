@@ -412,11 +412,12 @@ public class LocationLogDbAdapter {
 		db.endTransaction();
 	}
 
-	public void updateWaypoint(long id, String name, double latitude, double longitude,
+	public void updateWaypoint(long id, String name, String description, double latitude, double longitude,
 			float altitude, int waypointType) {
 		ContentValues vals = new ContentValues();
 
 		vals.put(KEY_NAME, name);
+		vals.put(KEY_DESCRIPTION, description);
 		vals.put(KEY_LATITUDE, latitude);
 		vals.put(KEY_LONGITUDE, longitude);
 		vals.put(KEY_ALTITUDE, Float.isNaN(altitude) ? null : (int) altitude);

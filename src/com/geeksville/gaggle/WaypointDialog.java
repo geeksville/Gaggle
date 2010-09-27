@@ -45,7 +45,8 @@ public class WaypointDialog implements DialogInterface.OnClickListener {
 
 	private Waypoint waypoint;
 	private View layout;
-	private EditText text;
+	private EditText name;
+	private EditText description;
 	private AlertDialog alertDialog;
 	private NumberEdit altitudeView;
 	private Runnable onOkay, onGoto;
@@ -60,12 +61,15 @@ public class WaypointDialog implements DialogInterface.OnClickListener {
 		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		layout = inflater.inflate(R.layout.waypoint_edit, null);
 
-		text = (EditText) layout.findViewById(R.id.name);
+		name = (EditText) layout.findViewById(R.id.name);
+		description = (EditText) layout.findViewById(R.id.description);
+		
 		typeSpinner = (EnhancedSpinner) layout.findViewById(R.id.type);
 		typeSpinner.setSelection(w.type.ordinal());
 
-		text.setText(w.name);
-
+		name.setText(w.name);
+		description.setText(w.description);
+		
 		fillPosition(R.id.latitude, w.latitude, true);
 		fillPosition(R.id.longitude, w.longitude, false);
 
@@ -152,7 +156,8 @@ public class WaypointDialog implements DialogInterface.OnClickListener {
 		int alt = (int) altitudeView.getDouble();
 
 		// FIXME, validate names for uniqueness
-		waypoint.name = text.getText().toString().trim();
+		waypoint.name = name.getText().toString().trim();
+		waypoint.description = description.getText().toString().trim();
 		waypoint.altitude = (int) Units.instance.altitudeToMeters(alt);
 		waypoint.latitude = latitude;
 		waypoint.longitude = longitude;
