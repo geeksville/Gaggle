@@ -81,21 +81,25 @@
 						
 	<string-array name="distunits_enum_names">
 		<item>Km</item>
-		<item>Miles</item>				
+		<item>Miles</item>
+		<item>Nm</item>				
 	</string-array>
 	
 	<string-array name="distunits_enum_vals">
 		<item>KM</item>
-		<item>Miles</item>							
+		<item>Miles</item>	
+		<item>NauticalMiles</item>						
 	</string-array>
 			
 	<string-array name="vspdunits_enum_names">
 		<item>M/s</item>
-		<item>FPM</item>				
+		<item>FPM</item>	
+		<item>Knots</item>			
 	</string-array>
 	
 	<string-array name="vspdunits_enum_vals">
 		<item>MPerSec</item>
-		<item>FeetPerMin</item>							
+		<item>FeetPerMin</item>	
+		<item>KtsPerHr</item>						
 	</string-array>											
 </resources>

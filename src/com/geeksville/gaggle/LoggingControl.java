@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.android.ChangeHandler;
@@ -384,7 +384,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 								selected = new PositionWriter[] { dbwriter, ramwriter, liveWriter };
 							} catch (Exception ex) {
 								// Bad password or connection problems
-								showCompletionDialog(context
+						showCompletionDialog(LoggingControl.this
 										.getString(R.string.leonardolive_problem), ex.getMessage());
 							}
 						}
