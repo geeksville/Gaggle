@@ -5,6 +5,6 @@
     <menu>
     </menu> 
 	</item>
-	<item android:id="@+id/prefetch_map" android:title="@string/download_map"
-	android:icon="@android:drawable/ic_menu_mapmode" />
+	<!--  <item android:id="@+id/prefetch_map" android:title="@string/download_map"
+	android:icon="@android:drawable/ic_menu_mapmode" /> -->
 </menu>
