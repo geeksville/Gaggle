@@ -104,6 +104,8 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		mapView = (GeeksvilleMapView) findViewById(mapViewId);
 
 		mapView.setBuiltInZoomControls(true);
+		// Set default map view
+		mapView.setRenderer(OpenStreetMapRendererFactory.OSMARENDER);
 
 		// Default to sat view
 		// mapView.setSatellite(true);
@@ -147,9 +149,10 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		getMenuInflater().inflate(R.menu.map_optionmenu, menu);
 
 		// Set action for map prefetch
-		menu.findItem(R.id.prefetch_map).setIntent(
-				PrefetchMapActivity.createIntent(this, mapView.getMapCenter(), mapView
-						.getZoomLevel(), mapView.getRenderer().name()));
+		// menu.findItem(R.id.prefetch_map).setIntent(
+		// PrefetchMapActivity.createIntent(this, mapView.getMapCenter(),
+		// mapView
+		// .getZoomLevel(), mapView.getRenderer().name()));
 
 		// Dynamically populate the list of renderers we support (FIXME - only
 		// list known good renderers)
