@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.geeksville.gaggle" android:versionCode="84"
-	android:versionName="0.84 (second OSM beta)" android:installLocation="auto">
+	package="com.geeksville.gaggle" android:versionCode="85"
+	android:versionName="0.85 (bug fixes and translations)" android:installLocation="auto">
 
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"
@@ -9,7 +9,7 @@
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:description="@string/app_description" android:name="com.geeksville.gaggle.GaggleApplication"
-		android:theme="@android:style/Theme.NoTitleBar" android:debuggable="true"> <!-- "@android:style/Theme.Light.NoTitleBar" -->
+		android:theme="@android:style/Theme.NoTitleBar" android:debuggable="false"> <!-- "@android:style/Theme.Light.NoTitleBar" -->
 
 		<meta-data android:name="CLOUDMADE_KEY" android:value="683f9355fa964a70bcde43fe4a420de2" />
 

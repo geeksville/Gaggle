@@ -54,35 +54,17 @@ public class WaypointItem extends OpenStreetMapViewOverlayItem {
 
 		this.w = w;
 		curIcon = w.getIcon();
-		marker = new CaptionedDrawable(WaypointOverlay.boundCenterBottom(curIcon), captionPaint,
+		// Note: be careful to call mutate here, because we'll be moving each
+		// drawable independently
+		marker = new CaptionedDrawable(curIcon,
+				captionPaint,
 				w.name);
-		// setMarker(marker);
+
+		setMarker(marker);
+		setMarkerHotspotPlace(HotspotPlace.BOTTOM_CENTER);
 
 		width = marker.getIntrinsicWidth();
 		height = marker.getIntrinsicHeight();
-	}
-
-	/**
-	 * The standard OSMmap doesn't support custom icons for each marker, so we
-	 * add that here
-	 */
-	protected void onDrawItem(final Canvas c, final Point curScreenCoords) {
-		final int left = curScreenCoords.x;
-		final int right = left + width;
-		final int top = curScreenCoords.y; // FIXME - offset for center?
-		final int bottom = top + height;
-
-		marker.setBounds(left, top, right, bottom);
-
-		Log.d(TAG, "Drawing " + w);
-		boolean interesting = false;
-
-		// if (w.name.equals("POTLAU"))
-		interesting = true;
-
-		// if (c.clipRect(marker.getBounds()))
-		if (interesting)
-			marker.draw(c);
 	}
 
 	/**
@@ -95,7 +77,7 @@ public class WaypointItem extends OpenStreetMapViewOverlayItem {
 
 		if (curIcon != newIcon) {
 			curIcon = newIcon;
-			marker.setDrawable(WaypointOverlay.boundCenterBottom(newIcon));
+			marker.setDrawable(newIcon);
 			return true;
 		}
 
@@ -111,5 +93,14 @@ public class WaypointItem extends OpenStreetMapViewOverlayItem {
 		TextView v = (TextView) t.getView().findViewById(android.R.id.message);
 		v.setGravity(0x11); // gravity=center
 		t.show();
+	}
+
+	/**
+	 * Show human readable for debugging
+	 */
+	@Override
+	public String toString() {
+		return String.format("WP:%s(lat %d, long %d)", getTitle(), mGeoPoint.getLatitudeE6(),
+				mGeoPoint.getLongitudeE6());
 	}
 }
