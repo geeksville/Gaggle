@@ -24,17 +24,21 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.andnav.osm.DefaultResourceProxyImpl;
 import org.andnav.osm.views.OpenStreetMapView;
 import org.andnav.osm.views.overlay.OpenStreetMapViewItemizedOverlay;
+import org.andnav.osm.views.overlay.OpenStreetMapViewItemizedOverlayWithFocus;
 
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
+import android.util.Log;
 
 import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.R;
@@ -42,7 +46,8 @@ import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.WaypointCursor;
 import com.geeksville.location.WaypointDB;
 
-public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointItem> implements
+public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointItem>
+		implements
 		Observer {
 
 	private final Paint captionPaint = new TextPaint();
@@ -57,7 +62,7 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 		// drawable. We use a alpha channel to not obscure terrain too much...
 		// super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
 		super(context, new ArrayList<WaypointItem>(), context.getResources().getDrawable(
-				R.drawable.flag), null, null, null);
+				R.drawable.flag), null, null, new DefaultResourceProxyImpl(context));
 
 		this.context = context;
 		this.view = view;
@@ -79,7 +84,25 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 		fillFromDB(context);
 	}
 
+	/**
+	 * Reset the bounds so the center of the drawable is at zero
+	 * 
+	 * @param d
+	 * @return
+	 */
 	public static Drawable boundCenterBottom(Drawable d) {
+		// d = d.mutate();
+
+		int width = d.getIntrinsicWidth();
+		int height = d.getIntrinsicHeight();
+
+		Rect r = new Rect();
+		r.left = -width / 2;
+		r.top = -height;
+		r.right = r.left + width;
+		r.bottom = 0;
+		d.setBounds(r);
+
 		return d;
 		// busted on OSM FIXME
 		// return ItemizedOverlay.boundCenterBottom(d);
@@ -96,15 +119,6 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 
 	public void onResume() {
 		db.addObserver(this);
-	}
-
-	/**
-	 * The standard OSMmap doesn't support custom icons for each marker, so we
-	 * add that here
-	 */
-	@Override
-	protected void onDrawItem(final Canvas c, final int index, final Point curScreenCoords) {
-		mItemList.get(index).onDrawItem(c, curScreenCoords);
 	}
 
 	/**
@@ -125,17 +139,6 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 		// FIXME, handle the addition of waypoints after the map is already up
 		// populate();
 	}
-
-	// @Override
-	// public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long
-	// when) {
-	// // We skip the shadow draws, because they make our waypoint captions
-	// // look goofy
-	// if (!shadow)
-	// return super.draw(canvas, mapView, shadow, when);
-	// else
-	// return false;
-	// }
 
 	@Override
 	public void update(Observable observable, Object data) {
@@ -161,12 +164,24 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 
 		// first click - just highlight and show basic info
 		// if (!item.equals(getFocus())) {
-		view.getController().setCenter(item.mGeoPoint);
+		view.getController().animateTo(item.mGeoPoint);
 		// setFocus(item);
 		item.handleTap(context);
 		// }
 
 		return true;
+	}
+
+	/**
+	 * Overriden for debugging
+	 */
+	@Override
+	protected void onDrawItem(Canvas c, int index, Point curScreenCoords) {
+		super.onDrawItem(c, index, curScreenCoords);
+
+		WaypointItem wp = mItemList.get(index);
+		Log.d("WaypointOverlay", String.format("%s screen=%d,%d", wp, curScreenCoords.x,
+				curScreenCoords.y));
 	}
 
 }

@@ -7,10 +7,10 @@ point de navigation = waypoint, and may be left in the french version. Your deci
  -->
 <resources>
     <string name="launch_distance_vertical">Distance verticale de lancement</string>
-    <string name="launch_distance_horiz_summary">Une fois cette distance parcourue le lancement est déclenché(en mètres)</string>
+    <string name="launch_distance_horiz_summary">Distance à parcourir avant lancement effectif (en mètres)</string>
     <string name="launch_distance_horizontal">Distance horizontale de lancement</string>
     <string name="extra_altitude_summary">Surplus d\'altitude nécessaire au delà du minimum dans une LZ (en mètres)</string>
-    <string name="extra_altitude_margin">Extra altitude margin</string>
+    <string name="extra_altitude_margin">Marge d\'altidute supplémentaire</string>
     <string name="min_alt_at_lz">Altitude strictement minimum nécessaire pour une LZ (en mètres)</string>
     <string name="minimum_altitude_margin">Marge minimum d\'altitude</string>
     <string name="glide_ratio_summary">Point de départ pour les calculs de finesse et de vol</string>
@@ -41,7 +41,7 @@ point de navigation = waypoint, and may be left in the french version. Your deci
     <string name="using_a_leonardo_live_server">Utilisation d\'un serveur live Leonardo</string>
     <string name="live_logging">Connection live</string>
     <string name="logging_settings">Paramètres de connexion</string>
-    <string name="vertical_speed_units">Unités de la vitesse verticale</string>
+    <string name="vertical_speed_units">Unités de vitesse verticale</string>
     <string name="distance_units">Unités de distance</string>
     <string name="speed_units">Unités de vitesse</string>
     <string name="altitude_units">Unités d\'altitude</string>
@@ -69,8 +69,8 @@ point de navigation = waypoint, and may be left in the french version. Your deci
     <string name="by_distance">Par distance</string>
     <string name="order">Ordre</string>
     <string name="delete_all">Tout supprimer</string>
-    <string name="add_waypoint">Ajouter un point de navigation</string>
-    <string name="edit">Éditer</string>
+    <string name="add_waypoint">Ajouter un Wpt</string><!--- point de navigation = waypoint, and may be left in the french version. Your decision -->
+     <string name="edit">Éditer</string>
     <string name="preferences">Préférences</string>
     <string name="about">A propos</string>
     <string name="download_map">Télécharger la carte</string>
@@ -104,7 +104,7 @@ point de navigation = waypoint, and may be left in the french version. Your deci
     <string name="glide_ratio">Finesse (GR)</string>
     <string name="to_wpt">Vers Wpt</string>
     <string name="distance_to_wpt">Distance du Wpt</string>
-    <string name="heading">Entête</string>
+    <string name="heading">Direction</string>
     <string name="altitude_short">Alt</string>
     <string name="altitude">Altitude</string>
     <string name="go_to">Aller à</string>
@@ -156,6 +156,7 @@ Glide: %s:1</string>
     <string name="importing_waypoints">Importation des points de navigation</string>
     <string name="imported_d_waypoints">%d points de navigation importés</string>
     <string name="beta_text">Gaggle est un outil pour vélivoles; avec des fonctionnalités telles que l\'enregistrement, la consultation de cartes ou de calculs tels que la finesse. Si vous souhaitez faire partie des beta-testeurs écrivez à  kevinh@geeksville.com.</string>
+    <string name="app_name">Gaggle</string>
     <string name="LiveLoggingPrompt">Live Logging</string> 
     <string name="app_description">Outil pour vélivoles</string>
 </resources>
