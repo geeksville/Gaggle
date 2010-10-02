@@ -79,17 +79,17 @@ public class Units {
 	final double[] speedScaling = { 2.2369, 3.6, 1, 196.8503, 1.94384 };
 
 	public enum Distance {
-		Meters, Feet, KM, Miles
+		Meters, Feet, KM, Miles, NauticalMiles
 	}
 
 	private String getDistanceUnits(Distance d) {
-		final String[] distanceUnits = { "m", "'", "km", "mi" };
+		final String[] distanceUnits = { "m", "'", "km", "mi", "Nm" };
 
 		return distanceUnits[d.ordinal()];
 	}
 
-	// FIXME - convert to miles
-	final double[] distanceScaling = { 1.0, 3.2808399, 0.001, 0.000621371192 };
+	final double[] distanceScaling = { 1.0, 3.2808399, 0.001, 0.000621371192,
+			0.000539956803 };
 
 	/**
 	 * Convert mks units to whatever the selected units are

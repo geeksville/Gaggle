@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+This german translation file was contributed by Horst Naujoks.
+
+This is a brief summary of the steps needed to localize Gaggle for a new language:
+
+1) Thank you for volunteering to do a translation!  How would you like your name to read in the credits?  What email address
+	do you want to publish (if any)?
+2) Use a simple text editor to edit this file (Notepad on Windows or gedit on Linux)
+3) The strings in the table below are the english language version, if for your language you do not think it is appropriate
+	to translate that line at all (i.e. we should show the english version), just delete the full XML string element from
+	your file.
+4) If you are not sure about a translation and would like to use english for a particular line until you know a bit more
+	about how it is used in the program, just comment the line out using the XML comment delimeters.
+5) Please try to keep the translated strings approximately the same length as their english versions.  That said, don't 
+	worry about this too much - if you can't get a clear translation in the given length, feel free to use a longer phrase
+	(I might need to fix some layout files in the app though).
+6) If the name of a particular string has _short at the end, it is _is_ important to use the shortest possible translation.
+	It is likely I'm using it in a very small summary field and appreviations are okay.
+7) After you make your translation, email the file to me and I'll add it to a test version of Gaggle.  After tweaking it
+	a little, I'll send you a test version to see if you are also happy with our work.  Then it will be released in the
+	regular distribution.
+8) If a string spans multiple lines in this file, please try to keep the line breaks approximately the same in your 
+	translation.  
+ -->
+ 
+<resources>
+    <string name="launch_distance_vertical">Vertikaler Startschwellwert</string>
+    <string name="launch_distance_horiz_summary">Nach dieser Distanz wird ein Start ausgelöst (in Meter)</string>
+    <string name="launch_distance_horizontal">Horizonaler Startschwellwert</string>
+    <string name="extra_altitude_summary">Extra Höhenabstand über dem Minimum über einem LP (in Meter)</string>
+    <string name="extra_altitude_margin">Extra Höhenabstand</string>
+    <string name="min_alt_at_lz">Benötigte Minimumhöhe über einem LP (in Meter)</string>
+    <string name="minimum_altitude_margin">Minimum Höhenabstand</string>
+    <string name="glide_ratio_summary">Statpunkt für Flugberechnungen</string>
+    <string name="model_summary">z.B. Sport 4 or N72KH</string>
+    <string name="wing_model">Fluggerät</string>
+    <string name="id_string">ID für IGC Dateien (Für Wettkämpfe)</string>
+    <string name="pilot_identifier">IGC ID</string>
+    <string name="used_in_flight_reports">Für Online Flugeingabe</string>
+    <string name="pilot_name">Pilotenname</string>
+    <string name="allows_testing_gaggle_at_home">Gaggle zuhause testen</string>
+    <string name="simulate_gps_data">GPS Daten Simulation</string>
+    <string name="for_servers_other_than_paraglidingforum_com">Für andere Server als paraglidingforum.com</string>
+    <string name="leonardo_server">Leonardo Server</string>
+    <string name="see_www_livetrack24_com_for_more_information">Siehe www.livetrack24.com für weitere Informationen</string>
+    <string name="submission_url">Eingabe URL</string>
+    <string name="server_and_account_information">Server und Kontoinformationen</string>
+    <string name="leonardo_live_server">Leonardo Live Server</string>
+    <string name="server_settings">Server Einstellungen</string>
+    <string name="options_for_advanced_users">Erweiterte Einstellungen</string>
+    <string name="keeps_the_display_from_going_to_sleep">Verhindert die Displayabschaltung</string>
+    <string name="screen_on_in_flight">Fluganzeige</string>
+    <string name="saves_power_not_yet_implemented">Batteriesparmodus... noch nicht implementiert...</string>
+    <string name="disable_wi_fi">Wi-Fi Abschalten</string>
+    <string name="time_between_each_log_record">Zeit zwischen zwei Aufzeichnungen</string>
+    <string name="interval">Aufzeichnungsinterval</string>
+    <string name="using_a_leonardo_server">Leonardo Server verwenden</string>
+    <string name="automatic_upload">Automatisches Hochladen</string>
+    <string name="using_a_leonardo_live_server">Ein Leonardo Live Server verwenden</string>
+    <string name="live_logging">Live Aufzeichnung</string>
+    <string name="logging_settings">Aufzeichnungeinstellungen</string>
+    <string name="vertical_speed_units">Vertikale Geschwindigkeitseinheit</string>
+    <string name="distance_units">Distanzeinheit</string>
+    <string name="speed_units">Geschwindigkeitseinheit</string>
+    <string name="altitude_units">Höheneinheit</string>
+    <string name="feet_meters_etc">Fuss, Meter, etc...</string>
+    <string name="units">Einheiten</string>
+    <string name="performance_and_model_information">Leistungs- und Geräteinformation</string>
+    <string name="glider_information">Geräteinformation</string>
+    <string name="testing_tools">Testwerkzeuge</string>
+    <string name="type">Typ</string>
+    <string name="name">Name</string>
+    <string name="fractions_of_mins_short">Sek</string>
+    <string name="minutes_short">Min</string>
+    <string name="degrees_short">Grad</string>
+    <string name="distance_from_center">Distanz vom Zentrum</string>
+    <string name="start_download">Start Download</string>
+    <string name="estimated_required">Geschätzt: 20MB auf der SD Karte benötigt</string>
+    <string name="map_download_hint">Gaggle kann alle benötigten Kartenteile runterladen und auf der SD Karte speichern.  Dieses (Betatest) Feature erlaubt die Kartenverwendung auch ohne Netzempfang.  Bemerkung: Dieses Feature kann sehr viel Kartenplatz einnehmen, so brauchst Du entweder eine sehr grosse SD Karte(8 GB?) oder Du lädst nur die Kartenteil aus einem bestimmten Fluggebiet.  Kartenteile werden von der momentanen Kartenquelle im eingestellten Zoom heruntergeladen, deshalb ist es wichtig die Ansicht vor dem Runterladen richtig einzustellen.</string>
+    <string name="_status_">(Status)</string>
+    <string name="start_flight">Flug Starten</string>
+    <string name="code">Code</string>
+    <string name="login_name">Login Name</string>
+    <string name="password">Passwort</string>
+    <string name="username">Benutzername</string>
+    <string name="by_name">Nach Name</string>
+    <string name="by_distance">Nach Distanz</string>
+    <string name="order">Reihenfolge</string>
+    <string name="delete_all">Alle löschen</string>
+    <string name="add_waypoint">Wegpunkt hinzufügen</string>
+    <string name="edit">Editieren</string>
+    <string name="preferences">Einstellungen</string>
+    <string name="about">Über</string>
+    <string name="download_map">Karte downloaden</string>
+    <string name="select_map">Karte auswählen</string>
+    <string name="my_location">Mein Standort</string>
+    <string name="send_selected">Auswahl senden</string>
+    <string name="delete_selected">Auswahl löschen</string>
+    <string name="select_all">Alles auswählen</string>
+    <string name="upload_selected">Auswahl hochladen</string>
+    <string name="send_kml_file">KML Datei senden</string>
+    <string name="send_igc_file">IGC Datei senden</string>
+    <string name="upload_to_leonardo">Zu Leonardo hochladen</string>
+    <string name="view_on_map">Auf Karte ansehen</string>
+    <string name="customize_fields">Anzeigefelder</string>
+    <string name="mock_location_required">Gaggle \'GPS Daten Simulation\' benötigt dass \'Anwendungen / Entwicklung / Falsche Standort zulassen\' in den System Einstellungen eingeschaltet ist. Da diese Einstellung zur Zeit ausgeschaltet ist wird das echte GPS verwendet.</string>
+    <string name="capturing_tracklog">Trackaufzeichung läuft</string>
+    <string name="tracklog_started">Trackaufzeichung gestartet</string>
+    <string name="distance_to_lz_short">Zu LP</string>
+    <string name="distance_to_lz">Distanz zum Landplatz</string>
+    <string name="longitude_short">Länge</string>
+    <string name="longitude">Längegrad</string>
+    <string name="latitude_short">Breite</string>
+    <string name="latitude">Breitengrad</string>
+    <string name="gr_needed_for_wpt_short">GZ zum Wpt</string>
+    <string name="gr_needed_for_wpt">GZ zum Wegpunkt</string>
+    <string name="ground_speed_short">GüG</string>
+    <string name="speed">Geschwindigkeit</string>
+    <string name="gr_needed_short">GR req LZ</string>
+    <string name="gr_needed">GR needed for LZ</string>
+    <string name="glide_ratio_short">GZ</string>
+    <string name="glide_ratio">Gleitzahl</string>
+    <string name="to_wpt">Zum Wpt</string>
+    <string name="distance_to_wpt">Distanz zum Wegpunkt</string>
+    <string name="heading">Kurs</string>
+    <string name="altitude_short">Höhe</string>
+    <string name="altitude">Höhe</string>
+    <string name="go_to">Go to</string>
+    <string name="edit_waypoint">Wegpunkt editieren</string>
+    <string name="ignore">Ignorieren</string>
+    <string name="leonardolive_problem">Leonardo Live Problem</string>
+    <string name="username_or_password_is_unset">Benutzername oder Passwort fehlt</string>
+    <string name="start_logging">Aufzeichnung starten</string>
+    <string name="stop_logging">Aufzeichnung stoppen</string>
+    <string name="plot_1_hour">Zeichnen: 1 std</string>
+    <string name="plot_20_min">Zeichnen: 20 min</string>
+    <string name="plot_5_min">Zeichnen: 5 min</string>
+    <string name="plot_all">Zeichnen: Alles</string>
+    <string name="view_flight">Flug ansehen</string>
+    <string name="okay">Ok</string>
+    <string name="unable_to_open_igc_file">IGC Datei kann nicht geöffnet werden</string>
+    <string name="deleted">Gelöscht</string>
+	<string name="sorry">Entschuldigung, diese Geeksville Applikation ist abgestürzt. Sende bitte diese E-Mail damit wir das Problem beheben können. Es werden keine persönlichen Daten übertragen (Du kannst das überprüfen in dem du den Rest diese Mail liest).</string>
+    <string name="updated_waypoint">Aktualisierter Wegpunkt</string>
+    <string name="new_destination">Neues Ziel: </string>
+    <string name="waypoint_created">Wegpunkt angelegt</string>
+    <string name="can_not_add_waypoint_still_waiting_for_gps_fix">Kann keinen Wegpunkt hinzufügen
+Warte immer noch auf den GPS fix</string>
+    <string name="delete">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="are_you_sure">Sicher?</string>
+    <string name="delete_waypoints">Lösche Wegpunkte</string>
+    <string name="import_failed">Import misslungen</string>
+    <string name="uploading">Hochladen</string>
+    <string name="flight_">Flug_</string>
+    <string name="tracklogs">Flugaufzeichnungen</string>
+    <string name="sd_card_not_found">SD Karte nicht gefunden</string>
+    <string name="file_write_failed">Datei kann nicht geschrieben werden</string>
+    <string name="please_set_your_leonardo_account_information">Bitte gib Deine Leonardo Kontoinformation ein</string>
+    <string name="upload_failed">Hochladen misslungen</string>
+    <string name="igc_stream_write_failed">IGC schreiben misslungen</string>
+    <string name="writing_file">Schreibe Datei</string>
+    <string name="topo_us_relief">Topo (US relief)</string>
+    <string name="topo_us_contour">Topo (US contour)</string>
+    <string name="topo_europe">Topo (Europe)</string>
+    <string name="street_map">Street Map</string>
+    <string name="distance_s_s_glide_s">Distanz: %s %s
+Flug: %s:1</string>
+    <string name="off">Aus</string>
+    <string name="acquiring_gps_fix">Suche GPS fix</string>
+    <string name="landed">Gelandet</string>
+    <string name="in_flight_d_pts">Im Flug (%d pts)</string>
+    <string name="waiting_for_launch_d_pts">Warte auf Start (%d pts)</string>
+    <string name="please_wait">Bitte warten...</string>
+    <string name="importing_waypoints">Importiere Wegpunkte</string>
+    <string name="imported_d_waypoints">%d Wegpunkte importiert</string>
+    <string name="beta_text">Gaggle ist eine Applikation für Hängegleiterpiloten aller Arten. Mit Featuren wie Flugaufzeichnung, 
+Kartenansicht und Flugbahnberechnungen.  Willst Du beim Betatest dieser App mithelfen, 
+schicke ein Email an kevinh@geeksville.com.</string>
+	<string name="LiveLoggingPrompt">Live Aufzeichung</string>
+	<string name="app_description">Anwendung für Hängegleiterpiloten</string>
+</resources>
+  
