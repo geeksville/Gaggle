@@ -413,10 +413,10 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 		((GaggleApplication) getApplication()).currentDestination = w;
 
 		Toast
-				.makeText(ListWaypointsActivity.this, R.string.new_destination + w.name,
+				.makeText(ListWaypointsActivity.this, getString(R.string.new_destination) + w.name,
 						Toast.LENGTH_SHORT).show();
 	}
-
+ 
 	/*
 	 * (non-Javadoc)
 	 * 
