@@ -251,9 +251,8 @@ public class PrefetchMapActivity extends Activity {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			String dirName = OpenStreetMapTileProviderConstants.TILE_PATH_BASE;
+			File dir = OpenStreetMapTileProviderConstants.TILE_PATH_BASE;
 
-			File dir = new File(dirName);
 			deleteAll(dir);
 
 			return null;
@@ -298,6 +297,11 @@ public class PrefetchMapActivity extends Activity {
 				public Intent registerReceiver(final BroadcastReceiver aReceiver,
 						final IntentFilter aFilter) {
 					return PrefetchMapActivity.this.registerReceiver(aReceiver, aFilter);
+				}
+
+				@Override
+				public void unregisterReceiver(BroadcastReceiver receiver) {
+					PrefetchMapActivity.this.unregisterReceiver(receiver);
 				}
 			};
 

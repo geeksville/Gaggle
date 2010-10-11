@@ -172,16 +172,16 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 		return true;
 	}
 
-	/**
-	 * Overriden for debugging
-	 */
-	@Override
-	protected void onDrawItem(Canvas c, int index, Point curScreenCoords) {
-		super.onDrawItem(c, index, curScreenCoords);
-
-		WaypointItem wp = mItemList.get(index);
-		Log.d("WaypointOverlay", String.format("%s screen=%d,%d", wp, curScreenCoords.x,
-				curScreenCoords.y));
-	}
+	// /**
+	// * Overriden for debugging
+	// */
+	// @Override
+	// protected void onDrawItem(Canvas c, int index, Point curScreenCoords) {
+	// super.onDrawItem(c, index, curScreenCoords);
+	//
+	// // WaypointItem wp = mItemList.get(index);
+	// // Log.d("WaypointOverlay", String.format("%s screen=%d,%d", wp,
+	// // curScreenCoords.x, curScreenCoords.y));
+	// }
 
 }
