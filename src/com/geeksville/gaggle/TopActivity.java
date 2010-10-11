@@ -3,8 +3,13 @@
  */
 package com.geeksville.gaggle;
 
+import java.io.File;
+
+import org.andnav.osm.tileprovider.constants.OpenStreetMapTileProviderConstants;
+
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +22,7 @@ import com.geeksville.android.GeeksvilleExceptionHandler;
 import com.geeksville.android.PostMortemReportExceptionHandler;
 import com.geeksville.info.Units;
 import com.geeksville.location.LocationLogDbAdapter;
+import com.geeksville.view.AsyncProgressDialog;
 
 /**
  * @author kevinh
@@ -95,8 +101,68 @@ public class TopActivity extends TabActivity {
 
 		BetaSplashActivity.perhapsSplash(this);
 
+		updateFromOld();
+
 		if (!isFlightsLogged()) {
 			getTabHost().setCurrentTabByTag("Logs");
+		}
+	}
+
+	private static final int MIN_GOOD_VERSION = 1;
+
+	/**
+	 * Check to see if the app has all the updates needed to the filesystem
+	 * (using a build #)
+	 */
+	private void updateFromOld() {
+		final SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+		int oldVer = prefs.getInt("prefsVer", 0);
+
+		if (oldVer < MIN_GOOD_VERSION) {
+			AsyncProgressDialog progress = new AsyncProgressDialog(this,
+					getString(R.string.updating_from_a_prior_release),
+					getString(R.string.please_wait)) {
+
+				@Override
+				protected void doInBackground() {
+					wipeBadOSMTiles();
+					prefs.edit().putInt("prefsVer", MIN_GOOD_VERSION).commit();
+				}
+
+			};
+			progress.execute();
+		}
+	}
+
+	/**
+	 * There was a bad OSM load that used suffixes that confused the image
+	 * library
+	 */
+	private void wipeBadOSMTiles() {
+		File dir = OpenStreetMapTileProviderConstants.TILE_PATH_BASE;
+
+		deleteAllImages(dir);
+	}
+
+	/**
+	 * Recursively delete all image files in a directory
+	 * 
+	 * @param dir
+	 */
+	private void deleteAllImages(File dir) {
+
+		if (dir.isDirectory()) {
+			File[] children = dir.listFiles();
+
+			for (File f : children)
+				deleteAllImages(f);
+		} else {
+			String filename = dir.getName().toLowerCase();
+
+			if (filename.endsWith(".jpg") || filename.endsWith(".png")) {
+				Log.d(TAG, "Deleting " + dir);
+				dir.delete();
+			}
 		}
 	}
 
@@ -140,8 +206,8 @@ public class TopActivity extends TabActivity {
 		super.onResume();
 
 		Units.instance.setFromPrefs(this); // This should take care of making
-											// units changes work for all our
-											// subviews, I
+		// units changes work for all our
+		// subviews, I
 		// can probably remove the other calls (FIXME)
 
 		// Figure out if the user wants to force the screen on (FIXME, only
