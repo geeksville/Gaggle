@@ -262,9 +262,9 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 				 * (float) location.getLatitude(), (float) location
 				 * .getLongitude());
 				 */
-
-				if (metersLat >= launchDistanceX || metersLong >= launchDistanceX
-						|| deltay >= launchDistanceY) {
+				
+				if (launchDistanceY == 0 || launchDistanceX == 0 || metersLat >= launchDistanceX 
+						|| metersLong >= launchDistanceX || deltay >= launchDistanceY) {
 					Log.i(TAG, String.format("Launch detected dx=%f, dy=%f, dz=%d", metersLong,
 							metersLat, deltay));
 					newStateFlight(new Location[] { initialPos, location });

@@ -61,12 +61,18 @@ public class GagglePrefs {
 
 	public int getLaunchDistX() {
 		String val = prefs.getString("launch_dist_x", "40");
-		return Integer.parseInt(val);
+		if (val.length() == 0)
+			return 0;
+		else
+			return Integer.parseInt(val);
 	}
 
 	public int getLaunchDistY() {
 		String val = prefs.getString("launch_dist_y", "7");
-		return Integer.parseInt(val);
+		if (val.length() == 0)
+			return 0;
+		else
+			return Integer.parseInt(val);
 	}
 
 	public boolean isDelayedUpload() {
