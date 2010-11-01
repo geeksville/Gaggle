@@ -51,7 +51,7 @@ public class PositionWriterSet implements PositionWriter {
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
 			int bearing, float groundSpeed, float[] accel) {
 		for (PositionWriter w : writers) {
-			w.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed, null);
+			w.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed, accel);
 		}
 	}
 
