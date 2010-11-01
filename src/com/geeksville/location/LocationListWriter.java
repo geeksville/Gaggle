@@ -49,7 +49,7 @@ public class LocationListWriter implements PositionWriter {
 
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed) {
+			int bearing, float groundSpeed, float[] accel) {
 		if (startTime == -1)
 			startTime = time; // Generate 0 for the first point
 

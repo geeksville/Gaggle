@@ -20,46 +20,75 @@
  ******************************************************************************/
 package com.geeksville.location;
 
-/**
- * Given a list of position writers, broadcast all updates to all of the
- * writers.
- * 
- * @author kevinh
- * 
- */
-public class PositionWriterSet implements PositionWriter {
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Locale;
 
-	PositionWriter[] writers;
+public class CSVWriter implements PositionWriter {
+	PrintStream out;
+	boolean didProlog = false;
+
+	String pilotName;
+	String flightDesc;
+	String gliderType;
+	String pilotId;
+
+	public CSVWriter(OutputStream dest, String pilotName, String flightDesc, String gliderType,
+			String pilotId) throws IOException {
+		out = new PrintStream(dest);
+
+		this.gliderType = gliderType;
+		this.pilotId = pilotId;
+		this.pilotName = pilotName;
+		this.flightDesc = flightDesc;
+	}
 
 	/**
-	 * Constructor
-	 * 
-	 * @param writers
+	 * We close the output stream in the epilog
 	 */
-	public PositionWriterSet(PositionWriter[] writers) {
-		this.writers = writers;
-	}
-
 	@Override
 	public void emitEpilog() {
-		for (PositionWriter w : writers) {
-			w.emitEpilog();
-		}
+
+		out.close();
 	}
 
+	private static final int NUM_FAKE = 6;
+
+	private float[] fakeAccel = new float[3];
+
+	/**
+	 * 
+	 * @param time
+	 *            UTC time of this fix, in milliseconds since January 1, 1970.
+	 * @param latitude
+	 * @param longitude
+	 * 
+	 *            sect 4.1, B=fix plus extension data mentioned in I
+	 */
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
 			int bearing, float groundSpeed, float[] accel) {
-		for (PositionWriter w : writers) {
-			w.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed, null);
-		}
+
+		// Use US format to ensure floats have dots not commas ;-)
+		out.format(Locale.US, "%d,%f,%f,%f,%f", time, latitude, longitude, altitude, groundSpeed);
+
+		if (accel == null)
+			accel = fakeAccel;
+
+		out.format(Locale.US, ",%f,%f,%f", accel[0], accel[1], accel[2]);
+
+		for (int i = 0; i < NUM_FAKE; i++)
+			out.format(",%f", 0.80 + 0.20 * Math.random());
+
+		out.println();
 	}
 
 	@Override
 	public void emitProlog() {
-		for (PositionWriter w : writers) {
-			w.emitProlog();
-		}
+		out.print("mSec,Latitude,Longitude,Altitude,Speed");
+		out.print(",AccelX,AccelY,AccelZ");
+		out.print(",Soc1,Soc2,Soc3,BDat1,BDat2,BDat3");
+		out.println();
 	}
-
 }

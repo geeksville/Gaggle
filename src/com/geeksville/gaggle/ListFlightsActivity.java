@@ -32,6 +32,7 @@ import java.util.Map;
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.DBListActivity;
 import com.geeksville.gaggle.R;
+import com.geeksville.location.CSVWriter;
 import com.geeksville.location.IGCWriter;
 import com.geeksville.location.KMLWriter;
 import com.geeksville.location.LeonardoUpload;
@@ -117,6 +118,9 @@ public class ListFlightsActivity extends DBListActivity {
 		case R.id.send_kml:
 			emailFlight(itemToRowId(item), "kml");
 			return true;
+		case R.id.send_csv:
+			emailFlight(itemToRowId(item), "csv");
+			return true;
 			// case R.id.view_kml:
 			// externalViewFlight(itemToRowId(item), "kml");
 			// return true;
@@ -171,6 +175,12 @@ public class ListFlightsActivity extends DBListActivity {
 
 	}
 
+	/**
+	 * Use google to find a human style name for a lat/long (i.e. town name)
+	 * 
+	 * @author kevinh
+	 * 
+	 */
 	private class FindGeocodeTask extends AsyncTask<Long, Void, String> {
 		TextView dest;
 
@@ -403,7 +413,9 @@ public class ListFlightsActivity extends DBListActivity {
 		if (!tracklog.exists())
 			tracklog.mkdir();
 
-		String basename = getString(R.string.flight_) + flightid + "." + filetype; // FIXME, use a
+		String basename = getString(R.string.flight_) + flightid + "." + filetype; // FIXME,
+		// use
+		// a
 		// better
 		// filename
 		// File fname = new File(cacheDir, basename);
@@ -427,6 +439,12 @@ public class ListFlightsActivity extends DBListActivity {
 					null,
 					prefs.getWingModel(),
 					prefs.getPilotId());
+		else if (filetype.equals("csv"))
+			writer = new CSVWriter(s,
+					prefs.getPilotName(),
+					null,
+					prefs.getWingModel(),
+					prefs.getPilotId());
 		else
 			writer = new KMLWriter(s,
 					prefs.getPilotName(),
@@ -446,7 +464,8 @@ public class ListFlightsActivity extends DBListActivity {
 
 		if (acct.isValid()) {
 			AsyncProgressDialog progress =
-					new AsyncProgressDialog(this, getString(R.string.uploading), getString(R.string.please_wait)) {
+					new AsyncProgressDialog(this, getString(R.string.uploading),
+							getString(R.string.please_wait)) {
 						@Override
 						protected void doInBackground() {
 
@@ -544,6 +563,8 @@ public class ListFlightsActivity extends DBListActivity {
 							// sendIntent.setType("*/*")
 							if (filetype.equals("igc"))
 								sendIntent.setType("application/x-igc");
+							else if (filetype.equals("csv"))
+								sendIntent.setType("text/csv; header");
 							else
 								// FIXME, support kmz
 								sendIntent.setType("application/vnd.google-earth.kml+xml");
@@ -614,7 +635,8 @@ public class ListFlightsActivity extends DBListActivity {
 								// FIXME, support kmz
 								sendIntent.setType("application/vnd.google-earth.kml+xml");
 
-							startActivity(Intent.createChooser(sendIntent, getString(R.string.view_flight)));
+							startActivity(Intent.createChooser(sendIntent,
+									getString(R.string.view_flight)));
 
 							// Keep stats on # of emails sent
 							Map<String, String> map = new HashMap<String, String>();

@@ -41,11 +41,19 @@ abstract class SensorClient extends Observable implements SensorListener {
 		this.sensorType = sensorType;
 	}
 
-	private void stopListening() {
+	/**
+	 * If you are just using observers, you do not need to call this method. It
+	 * is here folks who want to poll instead
+	 */
+	public void stopListening() {
 		sensorMan.unregisterListener(this);
 	}
 
-	private void startListening() {
+	/**
+	 * If you are just using observers, you do not need to call this method. It
+	 * is here folks who want to poll instead
+	 */
+	public void startListening() {
 		sensorMan.registerListener(
 				this,
 				sensorType,
@@ -83,6 +91,16 @@ abstract class SensorClient extends Observable implements SensorListener {
 		// Do nothing
 	}
 
+	float[] values;
+
+	/**
+	 * 
+	 * @return the last set of values we received from this sensor
+	 */
+	public float[] getValues() {
+		return values;
+	}
+
 	/**
 	 * Crufty - we will break if the clock is changed while we are running FIXME
 	 */
@@ -90,6 +108,8 @@ abstract class SensorClient extends Observable implements SensorListener {
 
 	@Override
 	public void onSensorChanged(int sensor, float[] values) {
+		this.values = values; // No need for a deep copy
+
 		// We limit updates to a slowish rate to avoid burning cycles elsewhere
 		long nowMs = System.currentTimeMillis();
 

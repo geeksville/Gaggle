@@ -70,6 +70,8 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 	 */
 	ChangeHandler myObserver;
 
+	AccelerometerClient accel = null;
+
 	public void setObserver(ChangeHandler obs) {
 		myObserver = obs;
 	}
@@ -139,6 +141,11 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 			setStatus(curStatus == Status.IN_FLIGHT ? Status.LANDED : Status.OFF);
 
 			GPSClient.unbindFrom(context, this);
+
+			if (accel != null) {
+				accel.stopListening();
+				accel = null;
+			}
 		}
 	}
 
@@ -147,6 +154,10 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 		this.context = context;
 
 		if (!isLogging()) {
+			accel = new AccelerometerClient(context); // FIXME - make this
+														// optional
+			accel.startListening();
+
 			this.numPoints = 0;
 			this.pollInterval = pollIntervalSecs;
 			this.dest = dest;
@@ -216,14 +227,15 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 		float kmPerHr = location.hasSpeed() ? (float) (location.getSpeed() * 3.6) : Float.NaN;
 		// convert m/sec to km/hr
 
-		// FIXME - check for launch before starting log?
+		float[] accelVals = (accel != null) ? accel.getValues() : null;
 
 		// The emulator will falsely claim 0 for the first point reported -
 		// skip it
 		if (lat != 0.0)
 			dest.emitPosition(location.getTime(), lat, longitude,
 					location.hasAltitude() ? (float) location
-							.getAltitude() : Float.NaN, (int) location.getBearing(), kmPerHr);
+							.getAltitude() : Float.NaN, (int) location.getBearing(), kmPerHr,
+					accelVals);
 	}
 
 	@Override
@@ -262,8 +274,8 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 				 * (float) location.getLatitude(), (float) location
 				 * .getLongitude());
 				 */
-				
-				if (launchDistanceY == 0 || launchDistanceX == 0 || metersLat >= launchDistanceX 
+
+				if (launchDistanceY == 0 || launchDistanceX == 0 || metersLat >= launchDistanceX
 						|| metersLong >= launchDistanceX || deltay >= launchDistanceY) {
 					Log.i(TAG, String.format("Launch detected dx=%f, dy=%f, dz=%d", metersLong,
 							metersLat, deltay));

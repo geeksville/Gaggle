@@ -87,7 +87,10 @@ public class LocationLogDbAdapter {
 			KEY_LATITUDE = "latitude", KEY_LONGITUDE = "longitude",
 			KEY_ALTITUDE = "altitude", KEY_LOC_HEADING = "heading",
 			KEY_LOC_GNDSPEED = "gndspeed", KEY_LOC_GNDTRACK = "gndtrack",
-			KEY_LOC_AIRSPEED = "airspeed";
+			KEY_LOC_AIRSPEED = "airspeed",
+			KEY_LOC_ACCX = "accx",
+			KEY_LOC_ACCY = "accy",
+			KEY_LOC_ACCZ = "accz";
 
 	/**
 	 * It might have made more sense to have a schema where the flight has start
@@ -101,6 +104,9 @@ public class LocationLogDbAdapter {
 			+ "time datetime, " + "latitude double, " + "longitude double, " + "altitude integer, "
 			+ "heading integer, " + "gndtrack integer, " + "gndspeed integer, "
 			+ "airspeed integer, "
+			+ "accx double, "
+			+ "accy double, "
+			+ "accz double, "
 			+ "FOREIGN KEY(fltid) REFERENCES fltinfo(_id)"
 			+ ");";
 
@@ -148,8 +154,6 @@ public class LocationLogDbAdapter {
 	private static final String RCONTENTS_TABLE = "rcontent";
 
 	private static final String DATABASE_NAME = "data";
-
-	private static final int DATABASE_VERSION = 5;
 
 	/**
 	 * Debugging tag
@@ -243,7 +247,7 @@ public class LocationLogDbAdapter {
 	}
 
 	public long addLocation(long fltid, long time, double latitude, double longitude,
-			float altitude, int heading, float groundspeed) {
+			float altitude, int heading, float groundspeed, float[] accel) {
 		ContentValues vals = new ContentValues();
 
 		vals.put(KEY_LOC_FLTID, fltid);
@@ -253,6 +257,12 @@ public class LocationLogDbAdapter {
 		vals.put(KEY_ALTITUDE, Float.isNaN(altitude) ? null : (int) altitude);
 		vals.put(KEY_LOC_HEADING, heading);
 		vals.put(KEY_LOC_GNDSPEED, Float.isNaN(groundspeed) ? null : (int) groundspeed);
+
+		if (accel != null) {
+			vals.put(KEY_LOC_ACCX, accel[0]);
+			vals.put(KEY_LOC_ACCY, accel[1]);
+			vals.put(KEY_LOC_ACCZ, accel[2]);
+		}
 
 		return db.insert(LOCINFO_TABLE, null, vals);
 	}
@@ -326,7 +336,8 @@ public class LocationLogDbAdapter {
 
 		Cursor cursor = db.query(LOCINFO_TABLE, new String[] { KEY_LOC_TIME, KEY_LATITUDE,
 				KEY_LONGITUDE, KEY_ALTITUDE, KEY_LOC_HEADING, KEY_LOC_GNDSPEED,
-				KEY_LOC_GNDTRACK, KEY_LOC_AIRSPEED }, whereClause, whereArgs, null, null, orderBy);
+				KEY_LOC_GNDTRACK, KEY_LOC_AIRSPEED, KEY_LOC_ACCX, KEY_LOC_ACCY, KEY_LOC_ACCZ },
+				whereClause, whereArgs, null, null, orderBy);
 		if (cursor != null)
 			cursor.moveToFirst();
 
@@ -412,7 +423,8 @@ public class LocationLogDbAdapter {
 		db.endTransaction();
 	}
 
-	public void updateWaypoint(long id, String name, String description, double latitude, double longitude,
+	public void updateWaypoint(long id, String name, String description, double latitude,
+			double longitude,
 			float altitude, int waypointType) {
 		ContentValues vals = new ContentValues();
 
@@ -432,13 +444,18 @@ public class LocationLogDbAdapter {
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
 		/**
+		 * Added three acceleration columns
+		 */
+		private static final int addedAccelVersion = 6;
+
+		/**
 		 * The android version # that we can accept without needing to upgrade
 		 * DB
 		 */
-		private int minCompatibleDBVersion = 5;
+		private static final int VERSION = 6;
 
 		DatabaseHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			super(context, DATABASE_NAME, null, VERSION);
 		}
 
 		@Override
@@ -453,23 +470,25 @@ public class LocationLogDbAdapter {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			if (oldVersion >= minCompatibleDBVersion)
+			if (oldVersion >= VERSION)
 				Log.d(TAG, "Skipping DB upgrade, schema has not changed.");
 			else {
-				Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
-						+ ", which will destroy all old data");
+				if (oldVersion < addedAccelVersion) {
+					db.execSQL("ALTER TABLE " + LOCINFO_TABLE + " ADD accx double");
+					db.execSQL("ALTER TABLE " + LOCINFO_TABLE + " ADD accy double");
+					db.execSQL("ALTER TABLE " + LOCINFO_TABLE + " ADD accz double");
+				}
+				// Log.w(TAG, "Upgrading database from version " + oldVersion +
+				// " to " + newVersion
+				// + ", which will destroy all old data");
 
-				// Not needed, the docs say the baseclass will make transactions
-				// db.beginTransaction();
-				db.execSQL("DROP TABLE IF EXISTS " + LOCINFO_TABLE);
-				db.execSQL("DROP TABLE IF EXISTS " + FLTINFO_TABLE);
-				db.execSQL("DROP TABLE IF EXISTS " + WAYPOINT_TABLE);
-				db.execSQL("DROP TABLE IF EXISTS " + ROUTE_TABLE);
-				db.execSQL("DROP TABLE IF EXISTS " + RCONTENTS_TABLE);
-
-				onCreate(db);
-				// db.setTransactionSuccessful();
-				// db.endTransaction();
+				// db.execSQL("DROP TABLE IF EXISTS " + LOCINFO_TABLE);
+				// db.execSQL("DROP TABLE IF EXISTS " + FLTINFO_TABLE);
+				// db.execSQL("DROP TABLE IF EXISTS " + WAYPOINT_TABLE);
+				// db.execSQL("DROP TABLE IF EXISTS " + ROUTE_TABLE);
+				// db.execSQL("DROP TABLE IF EXISTS " + RCONTENTS_TABLE);
+				//
+				// onCreate(db);
 			}
 		}
 	}

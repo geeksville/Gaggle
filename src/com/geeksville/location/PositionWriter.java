@@ -37,15 +37,17 @@ public interface PositionWriter {
 	 * 
 	 * @param time
 	 *            number of milliseconds since 1970 (unix time)
+	 * @param altitude
+	 *            in meters, NaN for unknown
 	 * @param bearing
 	 *            the ground track in degrees from 0-359
 	 * @param groundSpeed
 	 *            in km/hr
-	 * @param altitude
-	 *            in meters, NaN for unknown
+	 * @param accel
+	 *            TODO
 	 */
 	void emitPosition(long time, double latitude, double longitude, float altitude, int bearing,
-			float groundSpeed);
+			float groundSpeed, float[] accel);
 
 	/**
 	 * Add standard end of file stuff

@@ -82,7 +82,7 @@ public class LocationDBWriter implements PositionWriter {
 
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed) {
+			int bearing, float groundSpeed, float[] accel) {
 
 		lastTime = time;
 
@@ -93,7 +93,7 @@ public class LocationDBWriter implements PositionWriter {
 		}
 
 		// FIXME, figure out if reported bearing is a heading or a ground track
-		db.addLocation(flightId, time, latitude, longitude, altitude, bearing, groundSpeed);
+		db.addLocation(flightId, time, latitude, longitude, altitude, bearing, groundSpeed, accel);
 	}
 
 	@Override

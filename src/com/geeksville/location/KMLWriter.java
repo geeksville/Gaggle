@@ -109,7 +109,6 @@ public class KMLWriter implements PositionWriter {
 		this.pilotId = pilotId;
 		this.pilotName = pilotName;
 		this.flightDesc = flightDesc;
-		// fixme - also write waypoints
 	}
 
 	/**
@@ -140,7 +139,7 @@ public class KMLWriter implements PositionWriter {
 	 */
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed) {
+			int bearing, float groundSpeed, float[] accel) {
 		// B
 		// HHMMSS - time UTC
 		// DDMMmmmN(or S) latitude

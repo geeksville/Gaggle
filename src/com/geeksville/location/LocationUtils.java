@@ -145,10 +145,15 @@ public final class LocationUtils {
 		int timeCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_TIME);
 		int bearingCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_GNDTRACK);
 		int speedCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_GNDSPEED);
+		int accxCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_ACCX);
+		int accyCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_ACCY);
+		int acczCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_ACCZ);
 
 		int numPts = pts.getCount();
 
 		dest.emitProlog();
+
+		float[] accelArray = new float[3];
 
 		for (int i = 0; i < numPts; i++) {
 			double latitude = pts.getDouble(latCol);
@@ -158,7 +163,16 @@ public final class LocationUtils {
 			int bearing = pts.getInt(bearingCol);
 			int groundSpeed = pts.getInt(speedCol);
 
-			dest.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed);
+			float[] accel = accelArray;
+			if (pts.isNull(accxCol))
+				accel = null; // No accel data available for this point
+			else {
+				accel[0] = pts.getFloat(accxCol);
+				accel[1] = pts.getFloat(accyCol);
+				accel[2] = pts.getFloat(acczCol);
+			}
+
+			dest.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed, accel);
 
 			pts.moveToNext();
 		}

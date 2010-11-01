@@ -115,7 +115,7 @@ public class IGCWriter implements PositionWriter {
 	 */
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed) {
+			int bearing, float groundSpeed, float[] accel) {
 		// B
 		// HHMMSS - time UTC
 		// DDMMmmmN(or S) latitude
