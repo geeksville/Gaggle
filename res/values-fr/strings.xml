@@ -145,8 +145,8 @@ point de navigation = waypoint, and may be left in the french version. Your deci
     <string name="topo_us_contour">Topo (US contour)</string>
     <string name="topo_europe">Topo (Europe)</string>
     <string name="street_map">Street Map</string>
-    <string name="distance_s_s_glide_s">Distance: %s %s
-Glide: %s:1</string>
+    <string name="distance_s_s_glide_s">Distance: %1$s %2$s
+Glide: %3$s:1</string>
     <string name="off">Off</string>
     <string name="acquiring_gps_fix">Acquisition du fix GPS</string>
     <string name="landed">Posé</string>
