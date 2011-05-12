@@ -65,14 +65,26 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 					"http://tile3.toposm.com/us/color-relief/");
 
 	private static final IOpenStreetMapRendererInfo TopOSMContours =
-			new XYRenderer("Topo Contours (USA)", ResourceProxy.string.unknown, 12, 15, 8, ".png",
-					"http://tile1.toposm.com/us/contours/",
-					"http://tile2.toposm.com/us/contours/",
-					"http://tile3.toposm.com/us/contours/");
+		new XYRenderer("Topo Contours (USA)", ResourceProxy.string.unknown, 12, 15, 8, ".png",
+				"http://tile1.toposm.com/us/contours/",
+				"http://tile2.toposm.com/us/contours/",
+				"http://tile3.toposm.com/us/contours/");
 
+	private static final IOpenStreetMapRendererInfo OpenCycleMap =
+		new XYRenderer("www.opencyclemap.org", ResourceProxy.string.unknown, 1, 18, 8, ".png",
+				"http://a.tile.opencyclemap.org/cycle/",
+				"http://b.tile.opencyclemap.org/cycle/",
+				"http://c.tile.opencyclemap.org/cycle/"
+				);
+
+	private static final IOpenStreetMapRendererInfo OpenHikingMap =
+		new XYRenderer("maps.refuges.info", ResourceProxy.string.unknown, 1, 18, 8, ".jpeg",
+				"http://maps.refuges.info/tiles/renderer.py/hiking/");
+	
 	private static IOpenStreetMapRendererInfo supportedRenderers[] = {
-			// OpenStreetMapRendererFactory.MAPNIK,
 			OpenStreetMapRendererFactory.OSMARENDER,
+			OpenCycleMap,
+			OpenHikingMap,
 			OpenStreetMapRendererFactory.TOPO,
 			TopOSMContours,
 			TopOSMRelief
@@ -84,6 +96,8 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		// FIXME - do this someplace better
 		OpenStreetMapRendererFactory.addRenderer(TopOSMContours);
 		OpenStreetMapRendererFactory.addRenderer(TopOSMRelief);
+		OpenStreetMapRendererFactory.addRenderer(OpenCycleMap);
+		OpenStreetMapRendererFactory.addRenderer(OpenHikingMap);
 	}
 
 	/** Called when the activity is first created. */
@@ -92,6 +106,8 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		supportedRendererNames = new String[] {
 				getString(R.string.street_map),
+				getString(R.string.opencyclemap),
+				getString(R.string.openhikingmap),
 				getString(R.string.topo_europe),
 				getString(R.string.topo_us_contour),
 				getString(R.string.topo_us_relief)
