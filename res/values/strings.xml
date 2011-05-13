@@ -103,6 +103,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="select_all">Select All</string>
     <string name="upload_selected">Upload Selected</string>
     <string name="send_kml_file">Send KML file</string>
+    <string name="send_gpx_file">Send GPX file</string>
     <string name="send_igc_file">Send IGC file</string>
     <string name="upload_to_leonardo">Upload to Leonardo</string>
     <string name="view_on_map">View on map</string>
@@ -167,9 +168,11 @@ Still waiting for GPS fix</string>
     <string name="topo_us_relief">Topo (US relief)</string>
     <string name="topo_us_contour">Topo (US contour)</string>
     <string name="topo_europe">Topo (Europe)</string>
-    <string name="street_map">Street Map</string>
-    <string name="distance_s_s_glide_s">Distance: %s %s
-Glide: %s:1</string>
+    <string name="street_map">OpenStreetMap</string>
+    <string name="openhikingmap">Hiking map (Europe)</string>
+    <string name="opencyclemap">Opencyclemap</string>
+    <string name="distance_s_s_glide_s">Distance: %1$s %2$s
+Glide: %3$s:1</string>
     <string name="off">Off</string>
     <string name="acquiring_gps_fix">Acquiring GPS fix</string>
     <string name="landed">Landed</string>

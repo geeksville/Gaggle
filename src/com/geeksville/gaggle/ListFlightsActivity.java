@@ -35,6 +35,7 @@ import com.geeksville.gaggle.R;
 import com.geeksville.location.CSVWriter;
 import com.geeksville.location.IGCWriter;
 import com.geeksville.location.KMLWriter;
+import com.geeksville.location.GPXWriter;
 import com.geeksville.location.LeonardoUpload;
 import com.geeksville.location.LocationList;
 import com.geeksville.location.LocationListWriter;
@@ -117,6 +118,9 @@ public class ListFlightsActivity extends DBListActivity {
 			return true;
 		case R.id.send_kml:
 			emailFlight(itemToRowId(item), "kml");
+			return true;
+		case R.id.send_gpx:
+			emailFlight(itemToRowId(item), "gpx");
 			return true;
 		case R.id.send_csv:
 			emailFlight(itemToRowId(item), "csv");
@@ -445,6 +449,12 @@ public class ListFlightsActivity extends DBListActivity {
 					null,
 					prefs.getWingModel(),
 					prefs.getPilotId());
+		else if (filetype.equals("gpx"))
+			writer = new GPXWriter(s,
+					prefs.getPilotName(),
+					null,
+					prefs.getWingModel(),
+					prefs.getPilotId());
 		else
 			writer = new KMLWriter(s,
 					prefs.getPilotName(),
@@ -533,7 +543,7 @@ public class ListFlightsActivity extends DBListActivity {
 	 * 
 	 * @param flightid
 	 * @param filetype
-	 *            kml or igc
+	 *            kml, igc, csv or gpx
 	 */
 	private void emailFlight(final long flightid, final String filetype) {
 
@@ -565,6 +575,8 @@ public class ListFlightsActivity extends DBListActivity {
 								sendIntent.setType("application/x-igc");
 							else if (filetype.equals("csv"))
 								sendIntent.setType("text/csv; header");
+							else if (filetype.equals("gpx"))
+								sendIntent.setType("application/gpx+xml");
 							else
 								// FIXME, support kmz
 								sendIntent.setType("application/vnd.google-earth.kml+xml");
