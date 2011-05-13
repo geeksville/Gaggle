@@ -142,8 +142,8 @@ GPS adatok még nem pontosak</string>
     <string name="topo_us_contour">Topo (US szintgörbék)</string>
     <string name="topo_europe">Topo (Európa)</string>
     <string name="street_map">Utcatérkép</string>
-    <string name="distance_s_s_glide_s">Távolság: %s %s
-Siklás: %s:1</string>
+    <string name="distance_s_s_glide_s">Távolság: %1$s %2$s
+Siklás: %3$s:1</string>
     <string name="off">Ki</string>
     <string name="acquiring_gps_fix">GPS adatokra várva</string>
     <string name="landed">Leszállt</string>
