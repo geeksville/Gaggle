@@ -101,5 +101,22 @@
 		<item>MPerSec</item>
 		<item>FeetPerMin</item>	
 		<item>KtsPerHr</item>						
-	</string-array>											
+	</string-array>		
+	
+	<string-array name="competition_class_names">
+		<item>Flexible Wing</item>
+		<item>Rigid Wing</item>
+		<item>Paraglider (open)</item>
+		<item>Paraglider (sport)</item>
+		<item>Paraglider (Tandem)</item>									
+	</string-array>
+	
+	<string-array name="competition_class_vals">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>			
+		<item>5</item>		
+	</string-array>
+													
 </resources>

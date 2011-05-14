@@ -55,15 +55,15 @@ public class LeonardoUpload {
 	 * @return null for success, otherwise a string description of the problem
 	 * @throws IOException
 	 */
-	public static String upload(String username, String password, String postURL,
-			String shortFilename, String igcFile)
+	public static String upload(String username, String password, String postURL, 
+			int competitionClass, String shortFilename, String igcFile)
 			throws IOException {
 
 		// Strip off extension (leonado docs say they don't want it
 		int i = shortFilename.lastIndexOf('.');
 		if (i >= 1)
 			shortFilename = shortFilename.substring(0, i);
-
+		String sCompetitionClass = String.valueOf(competitionClass);
 		HttpClient httpclient = new DefaultHttpClient();
 		httpclient.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE,
 				false);
@@ -73,7 +73,7 @@ public class LeonardoUpload {
 		nameValuePairs.add(new BasicNameValuePair("user", username));
 		nameValuePairs.add(new BasicNameValuePair("pass", password));
 		nameValuePairs.add(new BasicNameValuePair("igcfn", shortFilename));
-		nameValuePairs.add(new BasicNameValuePair("Klasse", "3"));
+		nameValuePairs.add(new BasicNameValuePair("Klasse", sCompetitionClass));
 		nameValuePairs.add(new BasicNameValuePair("IGCigcIGC", igcFile));
 		// FIXME,for now we always claim paraglider, open
 		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));

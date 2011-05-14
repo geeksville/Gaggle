@@ -41,7 +41,10 @@ public class GagglePrefs {
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(c);
 	}
-
+	public int getCompetitionClass() {
+		String val = prefs.getString("competition_class_pref", "3").trim();
+		return Integer.parseInt(val);
+	}
 	public String getWingModel() {
 		return prefs.getString("wing_model_pref", "").trim();
 	}

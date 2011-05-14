@@ -20,6 +20,11 @@
 				android:key="wing_model_pref" android:title="@string/wing_model"
 				android:summary="@string/model_summary" android:capitalize="words"
 				android:singleLine="true" />
+		
+			<ListPreference android:key="competition_class_pref" 
+				android:title="@string/competition_class" android:summary="@string/competition_class_summary" android:capitalize="words"
+				android:defaultValue="3" android:entries="@array/competition_class_names"
+				android:entryValues="@array/competition_class_vals" />
 
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="glideratio_pref" android:title="@string/glide_ratio"

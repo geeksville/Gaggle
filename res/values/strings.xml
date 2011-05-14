@@ -187,5 +187,7 @@ please email kevinh@geeksville.com.</string>
     <string name="app_name">Gaggle</string>
 	<string name="LiveLoggingPrompt">Live Logging</string>
 	<string name="app_description">A tool for glider pilots</string>
+	<string name="competition_class">Competition Class</string>
+	<string name="competition_class_summary">Leonardo Competition class</string>
 </resources>
   
