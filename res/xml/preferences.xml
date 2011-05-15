@@ -125,10 +125,21 @@
 			<EditTextPreference android:key="live2_password_pref"
 				android:singleLine="true" android:title="@string/password"
 				android:inputType="textPassword" android:hint="Password" />
-
+<!-- 
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="live2_connection_timeout_pref" 
+				android:title="@string/leonardo_connection_timeout"
+				android:inputType="number" android:summary="@string/live2_connection_timeout_summary" 
+				android:defaultValue="3" />
+		
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="live2_operation_timeout_pref" 
+				android:title="@string/leonardo_operation_timeout"
+				android:inputType="number" android:summary="@string/live2_operation_timeout_summary" 
+				android:defaultValue="30"/>
+--> 
 		</PreferenceScreen>
-
-		<PreferenceScreen android:key="delayed_prefs"
+ 		<PreferenceScreen android:key="delayed_prefs"
 			android:title="@string/leonardo_server" android:summary="@string/server_and_account_information">
 
 			<EditTextPreference
@@ -153,6 +164,17 @@
 				android:singleLine="true" android:title="@string/password"
 				android:inputType="textPassword" android:hint="Password" />
 
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="delayed_connection_timeout_pref" 
+				android:title="@string/leonardo_connection_timeout"
+				android:inputType="number" android:summary="@string/leonardo_connection_timeout_summary" 
+				android:defaultValue="3" />
+		
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="delayed_operation_timeout_pref" 
+				android:title="@string/leonardo_operation_timeout"
+				android:inputType="number" android:summary="@string/leonardo_operation_timeout_summary" 
+				android:defaultValue="30"/>
 		</PreferenceScreen>
 	</PreferenceCategory>
 

@@ -472,6 +472,7 @@ public class ListFlightsActivity extends DBListActivity {
 
 		final Account acct = new Account(this, "delayed");
 		final GagglePrefs gprefs = new GagglePrefs(this);
+		
 		if (acct.isValid()) {
 			AsyncProgressDialog progress =
 					new AsyncProgressDialog(this, getString(R.string.uploading),
@@ -492,10 +493,13 @@ public class ListFlightsActivity extends DBListActivity {
 
 					try {
 						String basename = getString(R.string.flight_) + flightid;
-
-						showCompletionToast(LeonardoUpload.upload(acct.username, acct.password,
+						String toastMessage = LeonardoUpload.upload(acct.username, acct.password,
 								acct.serverURL, gprefs.getCompetitionClass(), basename,
-								fileLoc));
+								fileLoc, acct.connectionTimeout, acct.operationTimeout);
+	
+						if(toastMessage != null && toastMessage.length() == 0)
+							toastMessage = context.getString(R.string.upload_failed_bad_url);
+						showCompletionToast(toastMessage);
 
 					} catch (IOException ex) {
 						showCompletionDialog(getString(R.string.upload_failed), ex
