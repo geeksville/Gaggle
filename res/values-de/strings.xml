@@ -164,7 +164,7 @@ Warte immer noch auf den GPS fix</string>
     <string name="topo_us_relief">Topo (US relief)</string>
     <string name="topo_us_contour">Topo (US contour)</string>
     <string name="topo_europe">Topo (Europe)</string>
-    <string name="street_map">Street Map</string>
+    <string name="street_map">OpenStreetMap</string>
     <string name="distance_s_s_glide_s">Distanz: %1$s %2$s
 Flug: %3$s:1</string>
     <string name="off">Aus</string>
