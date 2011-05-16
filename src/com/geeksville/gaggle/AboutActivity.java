@@ -25,18 +25,19 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+
 public class AboutActivity extends Activity {
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
+		
 		setContentView(R.layout.about_main);
 		super.onCreate(savedInstanceState);
 
 		WebView view = (WebView) findViewById(R.id.main);
-
-		// view.getSettings().setJavaScriptEnabled(true);
+		view.setWebViewClient(new WebViewClient());
+		//view.getSettings().setJavaScriptEnabled(true);
 		view.loadUrl("file:///android_asset/manual/index.html");
 	}
 
