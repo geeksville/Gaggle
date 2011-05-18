@@ -378,7 +378,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 								// FIXME - do this in an async dialog helper
 								PositionWriter liveWriter = new LeonardoLiveWriter(
 										LoggingControl.this, acct.serverURL,
-										acct.username, acct.password, prefs.getWingModel(), prefs
+										acct.username, acct.password, prefs.getWingModel(), prefs.getLeonardoLiveVehicleType(), prefs
 												.getLogInterval());
 
 								selected = new PositionWriter[] { dbwriter, ramwriter, liveWriter };

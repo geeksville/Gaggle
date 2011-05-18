@@ -36,7 +36,7 @@ public class GagglePrefs {
 	 * my preferences DB
 	 */
 	SharedPreferences prefs;
-
+	
 	public GagglePrefs(Context c) {
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(c);
@@ -45,6 +45,12 @@ public class GagglePrefs {
 		String val = prefs.getString("competition_class_pref", "3").trim();
 		return Integer.parseInt(val);
 	}
+	
+	public int getLeonardoLiveVehicleType() {
+		String val = prefs.getString("leonardo_live_vehicle_type_pref", "1").trim();
+		return Integer.parseInt(val);
+	}
+	
 	public String getWingModel() {
 		return prefs.getString("wing_model_pref", "").trim();
 	}

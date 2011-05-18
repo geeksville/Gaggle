@@ -118,5 +118,28 @@
 		<item>4</item>			
 		<item>5</item>		
 	</string-array>
+
+	<string-array name="vehicle_type_names">
+		<item>Paraglider</item>
+		<item>Flex wing FAI1</item>
+		<item>Rigid wing FAI5</item>
+		<item>Glider</item>
+		<item>Paramotor</item>	
+		<item>Trike</item>	
+		<item>Powered flight</item>	
+		<item>Hot Air Balloon</item>						
+	</string-array>
+	
+	<string-array name="vehicle_type_vals">
+		<item>1</item>
+		<item>2</item>
+		<item>4</item>
+		<item>8</item>			
+		<item>16</item>
+		<item>32</item>
+		<item>64</item>
+		<item>128</item>
+	</string-array>
+
 													
 </resources>

@@ -20,6 +20,11 @@
 				android:key="wing_model_pref" android:title="@string/wing_model"
 				android:summary="@string/model_summary" android:capitalize="words"
 				android:singleLine="true" />
+
+			<ListPreference android:key="leonardo_live_vehicle_type_pref" 
+				android:title="@string/vehicle_type" android:summary="@string/vehicle_type_summary" android:capitalize="words"
+				android:defaultValue="1" android:entries="@array/vehicle_type_names"
+				android:entryValues="@array/vehicle_type_vals" />
 		
 			<ListPreference android:key="competition_class_pref" 
 				android:title="@string/competition_class" android:summary="@string/competition_class_summary" android:capitalize="words"
