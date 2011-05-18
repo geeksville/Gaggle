@@ -27,17 +27,38 @@ public class AccelerometerClient extends SensorClient {
 
 	public AccelerometerClient(Context context) {
 
-		super(context, SensorManager.SENSOR_ACCELEROMETER);
+		super(context, Sensor.TYPE_ACCELEROMETER);
+	}
+	float[] gravity = {0,0,0};
+	private boolean firstpass = true;
+	@Override
+		public void onThrottledSensorChanged(float[] values) {
+			// alpha is calculated as t / (t + dT)          
+			// with t, the low-pass filter's time-constant          
+			// and dT, the event delivery rate
+			final float alpha = 0.8f;          
+			gravity[0] = alpha * gravity[0] + (1 - alpha) * values[0];          
+			gravity[1] = alpha * gravity[1] + (1 - alpha) * values[1];          
+			gravity[2] = alpha * gravity[2] + (1 - alpha) * values[2];          
+			float xAccel = values[0] - gravity[0];          
+			float yAccel = values[1] - gravity[1];          
+			float zAccel = values[2] - gravity[2];
+			float force;
+			if(firstpass)
+				{
+				force = 0;
+				firstpass = false;
+				}
+			else
+				force = Math.abs(xAccel) + Math.abs(yAccel) + Math.abs(zAccel);
+			setChanged();
+			notifyObservers(force);
 	}
 
 	@Override
-	public void onThrottledSensorChanged(float[] values) {
-		float zAccel = values[2]; // FIXME, correct this for phone
-		// orientation
-
-		setChanged();
-		notifyObservers(zAccel);
-
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		//  Auto-generated method stub
+		
 	}
 
 }

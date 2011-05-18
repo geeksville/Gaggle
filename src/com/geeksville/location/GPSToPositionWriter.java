@@ -156,7 +156,7 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 		if (!isLogging()) {
 			accel = new AccelerometerClient(context); // FIXME - make this
 														// optional
-			accel.startListening();
+			//accel.startListening();
 
 			this.numPoints = 0;
 			this.pollInterval = pollIntervalSecs;
