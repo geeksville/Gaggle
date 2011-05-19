@@ -75,6 +75,26 @@
 				<data android:scheme="content" android:host="*"
 					android:pathPattern=".*\\.WPT" />
 
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.dat" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.dat" />
+
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.dat" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.dat" />
+
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.DAT" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.DAT" />
+
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.DAT" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.DAT" />
+
 				<!--
 					<data android:scheme="http" android:host="*"
 					android:pathPattern=".*" android:mimeType="application/download" />

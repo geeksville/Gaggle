@@ -71,12 +71,14 @@
 			
 	<string-array name="speedunits_enum_names">
 		<item>kph</item>
-		<item>mph</item>					
+		<item>mph</item>	
+		<item>kts</item>				
 	</string-array>
 	
 	<string-array name="speedunits_enum_vals">
 		<item>KmPerHr</item>
-		<item>MilePerHr</item>							
+		<item>MilePerHr</item>
+		<item>KtsPerHr</item>						
 	</string-array>
 						
 	<string-array name="distunits_enum_names">
