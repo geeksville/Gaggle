@@ -95,6 +95,26 @@
 				<data android:scheme="content" android:host="*"
 					android:pathPattern=".*\\.DAT" />
 
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.cup" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.cup" />
+
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.cup" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.cup" />
+
+				<data android:scheme="http" android:host="*"
+					android:pathPattern=".*\\.CUP" />
+				<data android:scheme="https" android:host="*"
+					android:pathPattern=".*\\.CUP" />
+
+				<data android:scheme="file" android:host="*"
+					android:pathPattern=".*\\.CUP" />
+				<data android:scheme="content" android:host="*"
+					android:pathPattern=".*\\.CUP" />
+
 				<!--
 					<data android:scheme="http" android:host="*"
 					android:pathPattern=".*" android:mimeType="application/download" />
