@@ -21,6 +21,7 @@
 package com.geeksville.location;
 
 import android.content.Context;
+import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
 public class CompassClient extends SensorClient {
@@ -31,7 +32,7 @@ public class CompassClient extends SensorClient {
 	public int bearing;
 
 	public CompassClient(Context context) {
-		super(context, SensorManager.SENSOR_ORIENTATION);
+		super(context, Sensor.TYPE_ORIENTATION);
 	}
 
 	@Override
@@ -40,6 +41,12 @@ public class CompassClient extends SensorClient {
 
 		setChanged();
 		notifyObservers(bearing);
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// Auto-generated method stub
+		
 	}
 
 }

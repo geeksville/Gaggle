@@ -21,23 +21,34 @@
 package com.geeksville.gaggle;
 
 import com.geeksville.gaggle.R;
+import com.geeksville.webkit.WebViewClient;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.webkit.WebView;
 
 public class AboutActivity extends Activity {
-
+	WebView mWebView;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
+		
 		setContentView(R.layout.about_main);
 		super.onCreate(savedInstanceState);
 
-		WebView view = (WebView) findViewById(R.id.main);
-
-		// view.getSettings().setJavaScriptEnabled(true);
-		view.loadUrl("file:///android_asset/manual/index.html");
+		mWebView = (WebView) findViewById(R.id.main);
+		mWebView.setWebViewClient(new WebViewClient());
+		//view.getSettings().setJavaScriptEnabled(true);
+		mWebView.loadUrl("file:///android_asset/manual/index.html");
+	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
+	        mWebView.goBack();
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 
 }

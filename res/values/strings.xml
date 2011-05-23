@@ -187,5 +187,16 @@ please email kevinh@geeksville.com.</string>
     <string name="app_name">Gaggle</string>
 	<string name="LiveLoggingPrompt">Live Logging</string>
 	<string name="app_description">A tool for glider pilots</string>
+	<string name="competition_class">Competition Class</string>
+	<string name="competition_class_summary">Leonardo Competition class</string>
+	<string name="upload_failed_bad_url">The upload failed. Please check the Leonardo server Submission URL.</string>
+	<string name="leonardo_connection_timeout">Connection Timeout</string>
+	<string name="leonardo_connection_timeout_summary">Connection timeout in seconds.</string>
+	<string name="live2_connection_timeout_summary">Connection timeout in seconds. - Not implemented.</string>
+	<string name="leonardo_operation_timeout">Operation Timeout</string>
+	<string name="leonardo_operation_timeout_summary">Operation timeout in seconds</string>
+	<string name="live2_operation_timeout_summary">Operation timeout in seconds. - Not implemented.</string>
+	<string name="vehicle_type">Aircraft type.</string>
+	<string name="vehicle_type_summary">Leonardo Live server aircraft type.</string>
 </resources>
   
