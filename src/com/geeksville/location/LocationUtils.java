@@ -108,10 +108,14 @@ public final class LocationUtils {
 	 */
 	public static double DMSToDegrees(int degrees, int minutes, float seconds, boolean isPostive) {
 		double r = (isPostive ? 1 : -1) * (degrees + (minutes / 60.0) + (seconds / 3600.0));
-
+		return r;
+	}
+	public static double DMSToDegrees(int degrees, float minutes, float seconds, boolean isPostive) {
+		double r = (isPostive ? 1 : -1) * (degrees + (minutes / 60.0) + (seconds / 3600.0));
 		return r;
 	}
 
+	
 	/**
 	 * Utility glue for reading from a DB and writing to a position writer (used
 	 * for file export)

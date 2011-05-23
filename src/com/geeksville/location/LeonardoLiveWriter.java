@@ -93,7 +93,7 @@ public class LeonardoLiveWriter implements PositionWriter {
 	 * @throws Exception
 	 */
 	public LeonardoLiveWriter(Context context, String serverURL, String userName, String password,
-			String vehicleName, int expectedInterval) throws Exception {
+			String vehicleName, int vehicleType, int expectedInterval) throws Exception {
 		PackageManager pm = context.getPackageManager();
 		PackageInfo pi;
 		try {
@@ -112,6 +112,8 @@ public class LeonardoLiveWriter implements PositionWriter {
 
 		this.userName = userName;
 		this.password = password;
+		this.vehicleType = vehicleType;
+		this.vehicleName = vehicleName;
 		expectedIntervalSecs = expectedInterval;
 
 		doLogin(); // Login here, so we can find out about bad passwords ASAP
