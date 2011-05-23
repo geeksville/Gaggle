@@ -160,4 +160,6 @@ Finesse: %2$s:1</string>
     <string name="app_name">Gaggle</string>
     <string name="LiveLoggingPrompt">Live Logging</string> 
     <string name="app_description">Outil pour vélivoles</string>
+    <string name="competition_class">Classe de compétition</string>
+    <string name="competition_class_summary">Classe de compétition Leonardo</string>
 </resources>

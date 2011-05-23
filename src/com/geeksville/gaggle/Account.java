@@ -35,7 +35,9 @@ public class Account {
 	public String username;
 	public String password;
 	public String serverURL;
-
+	public int connectionTimeout;
+	public int operationTimeout;
+	
 	private SharedPreferences prefs;
 
 	/**
@@ -52,9 +54,13 @@ public class Account {
 		if (prefs == null)
 			return; // FIXME - still need to know how to detect eclipse
 
+		connectionTimeout = Integer.parseInt(prefs.getString(prefsName + "_connection_timeout_pref", "3")) * 1000;
+		operationTimeout = Integer.parseInt(prefs.getString(prefsName + "_operation_timeout_pref", "30")) * 1000;
+		// FIXME - the Timeout values are not yet used by the leonardo live server code.
 		username = prefs.getString(prefsName + "_username_pref", "").trim();
 		password = prefs.getString(prefsName + "_password_pref", "").trim();
 		serverURL = prefs.getString(prefsName + "_servername_pref", "");
+		
 	}
 
 	/**
@@ -74,7 +80,8 @@ public class Account {
 		edit.putString("username", username);
 		edit.putString("password", password);
 		edit.putString("servername", serverURL);
-
+		edit.putInt("connectionTimeout", connectionTimeout);
+		edit.putInt("operationTimeout", operationTimeout);
 		edit.commit();
 	}
 }

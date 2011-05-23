@@ -20,14 +20,18 @@
  ******************************************************************************/
 package com.geeksville.location;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 
-abstract class SensorClient extends Observable implements SensorListener {
+abstract class SensorClient extends Observable implements SensorEventListener {
 
 	private SensorManager sensorMan;
 
@@ -54,10 +58,14 @@ abstract class SensorClient extends Observable implements SensorListener {
 	 * is here folks who want to poll instead
 	 */
 	public void startListening() {
+		List<Sensor> sensors = sensorMan.getSensorList(sensorType);
+		if (sensors.size() > 0){
+			Sensor sensor = sensors.get(0);
 		sensorMan.registerListener(
 				this,
-				sensorType,
+				sensor,
 				SensorManager.SENSOR_DELAY_NORMAL);
+		}
 	}
 
 	/*
@@ -69,7 +77,6 @@ abstract class SensorClient extends Observable implements SensorListener {
 	public synchronized void addObserver(Observer observer) {
 		if (countObservers() == 0)
 			startListening();
-
 		super.addObserver(observer);
 	}
 
@@ -84,11 +91,6 @@ abstract class SensorClient extends Observable implements SensorListener {
 
 		if (countObservers() == 0)
 			stopListening();
-	}
-
-	@Override
-	public void onAccuracyChanged(int sensor, int accuracy) {
-		// Do nothing
 	}
 
 	float[] values;
@@ -107,12 +109,10 @@ abstract class SensorClient extends Observable implements SensorListener {
 	long lastUpdate = System.currentTimeMillis();
 
 	@Override
-	public void onSensorChanged(int sensor, float[] values) {
-		this.values = values; // No need for a deep copy
-
+	public void onSensorChanged(SensorEvent event) {
+		this.values = event.values; // No need for a deep copy
 		// We limit updates to a slowish rate to avoid burning cycles elsewhere
 		long nowMs = System.currentTimeMillis();
-
 		long diff = nowMs - lastUpdate;
 		if (diff >= timeSpanMs) {
 			onThrottledSensorChanged(values);
