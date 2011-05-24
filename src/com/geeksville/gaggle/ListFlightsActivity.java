@@ -413,10 +413,15 @@ public class ListFlightsActivity extends DBListActivity {
 		if (!sdcard.exists())
 			throw new IOException(getString(R.string.sd_card_not_found));
 
-		File tracklog = new File(sdcard, getString(R.string.tracklogs));
+		String path = getString(R.string.file_folder); 
+		File tracklog = new File(sdcard, path);
 		if (!tracklog.exists())
 			tracklog.mkdir();
-
+		path += '/' + getString(R.string.tracklogs);
+		tracklog = new File(sdcard, path);
+		if (!tracklog.exists())
+			tracklog.mkdir();
+		
 		String basename = getString(R.string.flight_) + flightid + "." + filetype; // FIXME,
 		// use
 		// a
