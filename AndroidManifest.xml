@@ -42,85 +42,41 @@
 				<data android:scheme="content" android:mimeType="application/octet-stream" />
 
 			</intent-filter>
+			
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-
-				<!--
-					We understand wpt format waypoint files, see
-					http://www.santacruzparagliding.com/NCXC/NCXC_2010_waypoints.wpt
-					for example <data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.wpt" /> <data android:scheme="content"
-					android:host="*" android:pathPattern=".*\\.WPT" />
-				-->
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.dat" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.dat" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.dat" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.dat" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.DAT" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.DAT" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.DAT" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.DAT" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.cup" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.cup" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.cup" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.cup" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.CUP" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.CUP" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.CUP" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.CUP" />
-
-				<!--
-					<data android:scheme="http" android:host="*"
-					android:pathPattern=".*" android:mimeType="application/download" />
-					<data android:scheme="http" />
-				-->
-
+				
+				<data android:scheme="http" />
+				<data android:scheme="https" />
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.WPT" />
+				<data android:pathPattern=".*\\.wpt" />
+				<data android:pathPattern=".*\\.DAT" />
+				<data android:pathPattern=".*\\.dat" />
+				<data android:pathPattern=".*\\.CUP" />
+				<data android:pathPattern=".*\\.cup" />
+			</intent-filter>
+			<!-- 
+				We're using separate intent-filters for download (http/s) and local files (file/content) as they require
+				different settings for mimeType to each other.
+			  -->
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				
+				<data android:scheme="file" />
+				<data android:scheme="content" /> 
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.WPT" />
+				<data android:pathPattern=".*\\.wpt" />
+				<data android:pathPattern=".*\\.DAT" />
+				<data android:pathPattern=".*\\.dat" />
+				<data android:pathPattern=".*\\.CUP" />
+				<data android:pathPattern=".*\\.cup" />
+				<data android:mimeType="*/*" />
 			</intent-filter>
 		</activity>
 
@@ -138,23 +94,28 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.igc" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.igc" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.igc" />
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.igc" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.IGC" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.IGC" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.IGC" />
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.IGC" />
+				
+				<data android:scheme="http" />
+				<data android:scheme="https" />
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.IGC" />
+				<data android:pathPattern=".*\\.igc" />
+			</intent-filter>
+			<!-- 
+				We're using separate intent-filters for download (http/s) and local files (file/content) as they require
+				different settings for mimeType to each other.
+			  -->
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				
+				<data android:scheme="file" />
+				<data android:scheme="content" /> 
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.IGC" />
+				<data android:pathPattern=".*\\.igc" />
+				<data android:mimeType="*/*" />
 			</intent-filter>
 		</activity>
 		<!--   <uses-library android:name="com.google.android.maps" /> -->

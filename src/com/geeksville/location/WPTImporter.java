@@ -23,15 +23,7 @@ package com.geeksville.location;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.geeksville.location.parse.*;
-
-import android.util.Log;
 
 /**
  * Import waypoints (.wpt files into our DB)
@@ -75,7 +67,7 @@ public class WPTImporter {
 	public WPTImporter(WaypointDB db) {
 		this.db = db;
 	}
-
+	public String fileContents;
 	/**
 	 * 
 	 * @param s
@@ -95,22 +87,23 @@ public class WPTImporter {
 				sb.append(line);
 			}
 		}
+		fileContents = sb.toString();
 		
 		Parse parser;
 				
-		parser = new CambridgeDat(sb.toString(), db);
+		parser = new CambridgeDat(fileContents, db);
 		if (parser.Find() == 0)
 		{
-			parser = new CompeGPS(sb.toString(),db);
+			parser = new CompeGPS(fileContents,db);
 			if (parser.Find() == 0)
 			{ 
-				parser = new OziExplorer(sb.toString(),db);
+				parser = new OziExplorer(fileContents,db);
 				if (parser.Find() == 0)
 				{ 
-					parser = new SeeYouCUP(sb.toString(),db);
+					parser = new SeeYouCUP(fileContents,db);
 					if (parser.Find() == 0)
 					{
-						parser = new Jug(sb.toString(),db);
+						parser = new Jug(fileContents,db);
 						parser.Find();
 					}
 				}

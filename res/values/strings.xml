@@ -159,6 +159,8 @@ Still waiting for GPS fix</string>
     <string name="uploading">Uploading</string>
     <string name="flight_">flight_</string>
     <string name="tracklogs">Tracklogs</string>
+    <string name="file_folder">Gaggle</string>
+    <string name="waypoints">Waypoints</string>
     <string name="sd_card_not_found">SD card not found</string>
     <string name="file_write_failed">File write failed</string>
     <string name="please_set_your_leonardo_account_information">Please set your Leonardo account information</string>
