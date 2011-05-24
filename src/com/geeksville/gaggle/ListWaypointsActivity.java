@@ -20,7 +20,11 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -32,6 +36,7 @@ import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -51,6 +56,7 @@ import com.flurry.android.FlurryAgent;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.android.DBListActivity;
 import com.geeksville.info.Units;
+import com.geeksville.io.LineEndingStream;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.GPSClientStub;
 import com.geeksville.location.LocationLogDbAdapter;
@@ -192,10 +198,8 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 		String typ = intent.getType();
 		final Uri uri = intent.getData();
 		String action = intent.getAction();
-
 		if (uri != null && action != null && action.equals(Intent.ACTION_VIEW)) {
 			Log.d("ListWaypointsActivity", "Considering " + typ);
-
 			AsyncProgressDialog progress = new AsyncProgressDialog(this, getString(R.string.importing_waypoints),
 					getString(R.string.please_wait)) {
 				@Override
@@ -209,8 +213,14 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 
 						WPTImporter imp = new WPTImporter(db);
 						int numadded = imp.addFromStream(s);
+						if (numadded>0)
+							{// Save file locally.	
+								waypointsToFile(imp.fileContents, uri.getLastPathSegment());
+							}
 
 						String msg = String.format(getString(R.string.imported_d_waypoints), numadded);
+						
+												
 						showCompletionToast(msg);
 
 						FlurryAgent.onEvent("WPT import success");
@@ -220,7 +230,6 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 						showCompletionDialog(getString(R.string.import_failed), ex.getLocalizedMessage());
 					}
 				}
-
 				/*
 				 * (non-Javadoc)
 				 * 
@@ -237,13 +246,44 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 					// webserver because we failed
 					else
 						myCursor.requery();
+					finish();
 				}
 			};
-
 			progress.execute();
 		}
 	}
 
+
+	private boolean waypointsToFile(String waypoints, String filename) throws IOException {
+		PrintStream out = null;
+		try{
+			if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+				return false;
+			File sdcard = Environment.getExternalStorageDirectory();
+			if (!sdcard.exists())
+				return false;
+	
+			String path = getString(R.string.file_folder); 
+			File directory = new File(sdcard, path);
+			if (!directory.exists())
+				directory.mkdir();
+			path += '/' + getString(R.string.waypoints);
+			directory = new File(sdcard, path);
+			if (!directory.exists())
+				directory.mkdir();
+			String basename = filename; 
+			File fullname = new File(directory, basename);
+	
+			FileOutputStream s = new FileOutputStream(fullname);
+			out = new PrintStream(new LineEndingStream(s));
+			out.print(waypoints);
+		}
+		finally{
+			out.close();
+		}
+		return true;
+
+	}
 	/**
 	 * @see com.geeksville.android.DBListActivity#createCursor()
 	 */
