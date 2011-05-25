@@ -37,16 +37,42 @@ public final class LocationUtils {
 		char dirLetter = isLatitude ? (isPos ? 'N' : 'S') : (isPos ? 'E' : 'W');
 
 		degIn = Math.abs(degIn);
-		int degFloor = (int) degIn;
-		double minutes = 60 * (degIn - degFloor);
+		int degOut = (int) degIn;
+		double minutes = 60 * (degIn - degOut);
 		int minwhole = (int) minutes;
-		int seconds = (int) ((minutes - minwhole) * 60);
+		double seconds = ((minutes - minwhole) * 60);
 
-		return new String[] { Integer.toString(degFloor), Integer.toString(minwhole),
+		return new String[] { Integer.toString(degOut), Integer.toString(minwhole),
+				Double.toString(seconds),
+				Character.toString(dirLetter) };
+	}
+	public static String[] degreesToDM(double degIn, boolean isLatitude) {
+		boolean isPos = degIn >= 0;
+		char dirLetter = isLatitude ? (isPos ? 'N' : 'S') : (isPos ? 'E' : 'W');
+
+		degIn = Math.abs(degIn);
+		int degOut = (int) degIn;
+		double minutes = 60 * (degIn - degOut);
+		int seconds = 0;
+
+		return new String[] { Integer.toString(degOut), Double.toString(minutes),
 				Integer.toString(seconds),
 				Character.toString(dirLetter) };
 	}
 
+	public static String[] degreesToD(double degIn, boolean isLatitude) {
+		boolean isPos = degIn >= 0;
+		char dirLetter = isLatitude ? (isPos ? 'N' : 'S') : (isPos ? 'E' : 'W');
+
+		degIn = Math.abs(degIn);
+		double degOut = degIn;
+		int minutes = 0;
+		int seconds = 0;
+
+		return new String[] { Double.toString(degOut), Integer.toString(minutes),
+				Integer.toString(seconds),
+				Character.toString(dirLetter) };
+	}
 	/**
 	 * A not super efficent mapping from a starting lat/long + a distance at a
 	 * certain direction
@@ -110,7 +136,7 @@ public final class LocationUtils {
 		double r = (isPostive ? 1 : -1) * (degrees + (minutes / 60.0) + (seconds / 3600.0));
 		return r;
 	}
-	public static double DMSToDegrees(int degrees, float minutes, float seconds, boolean isPostive) {
+	public static double DMSToDegrees(double degrees, double minutes, double seconds, boolean isPostive) {
 		double r = (isPostive ? 1 : -1) * (degrees + (minutes / 60.0) + (seconds / 3600.0));
 		return r;
 	}
@@ -216,5 +242,7 @@ public final class LocationUtils {
 	public static double radToBearing(double rad) {
 		return (Math.toDegrees(rad) + 360) % 360;
 	}
+
+
 
 }
