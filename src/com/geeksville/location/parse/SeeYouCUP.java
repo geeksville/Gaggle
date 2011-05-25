@@ -29,11 +29,11 @@ public class SeeYouCUP extends Parse {
 					break;
 				String latDStr = matcher.group(2), 
 				latMstr = matcher.group(3),
-				latSstr = matcher.group(4),
+				latMDecimalStr = matcher.group(4),
 				latNS = matcher.group(5), 
 				lonDStr = matcher.group(6),
 				lonMstr = matcher.group(7),
-				lonSstr = matcher.group(8),
+				lonMDecimalStr = matcher.group(8),
 				lonEW = matcher.group(9), 
 				altStr = matcher.group(10), 
 				altUnits = matcher.group(11),
@@ -41,19 +41,15 @@ public class SeeYouCUP extends Parse {
 				int wpStyle = Integer.parseInt(waypointStyle);
 				if(wpStyle>1 && wpStyle< 6)
 					type = Waypoint.Type.Landing;
-				else 
+				else  
 					type = Waypoint.Type.Unknown;
 				name = matcher.group(1).trim();
 				description = matcher.group(13).trim();
 				float latM = 0, latS = 0, lonM = 0 , lonS = 0;
 				if (latMstr != null)
-					latM = Float.parseFloat(latMstr);
-				if (latSstr != null)
-					latS = Float.parseFloat(latSstr);
+					latM = Float.parseFloat(latMstr + "." + latMDecimalStr);
 				if (lonMstr != null)
-					latS = Float.parseFloat(lonMstr);
-				if (lonSstr != null)
-					lonS = Float.parseFloat(lonSstr);
+					lonM = Float.parseFloat(lonMstr + "." +  lonMDecimalStr);
 				
 				latitude = LocationUtils.DMSToDegrees(Integer.parseInt(latDStr), latM, latS, latNS.equals("N"));
 				longitude = LocationUtils.DMSToDegrees(Integer.parseInt(lonDStr), lonM, lonS, lonEW.equals("E"));
