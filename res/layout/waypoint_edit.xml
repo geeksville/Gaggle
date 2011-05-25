@@ -24,27 +24,33 @@
 
 		<LinearLayout android:orientation="horizontal"
 			android:id="@+id/latitude" android:layout_gravity="center_horizontal"
-			android:layout_width="wrap_content" android:layout_height="wrap_content">
+			android:layout_width="wrap_content" android:layout_height="45dip">
 
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/degree" android:layout_margin="1dip"
-				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:layout_width="50dip" android:layout_height="match_parent"
 				android:hint="@string/degrees_short" android:maxLength="3" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="°"></TextView>
+				android:layout_height="match_parent" android:text="°"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/minute" android:layout_margin="1dip"
-				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:layout_width="40dip" android:layout_height="match_parent"
 				android:hint="@string/minutes_short" android:maxLength="2" android:lines="1" />
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="'"></TextView>
+			<TextView android:id="@+id/symbol_minute" android:layout_width="wrap_content"
+				android:layout_height="match_parent" android:text="'"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/second" android:layout_margin="1dip"
-				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="@string/fractions_of_mins_short" android:maxLength="3" android:lines="1" />
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text='"'></TextView>
+				android:layout_width="70dip" android:layout_height="match_parent"
+				android:hint="@string/fractions_of_mins_short" android:maxLength="7" android:lines="1" />
+			<TextView android:id="@+id/symbol_second" android:layout_width="wrap_content"
+				android:layout_height="match_parent" android:text='"'></TextView>
+			<Spinner
+				android:layout_height="match_parent" android:layout_width="wrap_content"
+				android:id="@+id/hemisphere" android:layout_gravity="center"
+				android:entries="@array/ns_vals" android:background="@android:drawable/edit_text" />
 
+				 
+			
 		</LinearLayout>
 
 		<TextView android:layout_width="wrap_content"
@@ -52,26 +58,30 @@
 
 		<LinearLayout android:orientation="horizontal"
 			android:id="@+id/longitude" android:layout_gravity="center_horizontal"
-			android:layout_width="wrap_content" android:layout_height="wrap_content">
+			android:layout_width="wrap_content" android:layout_height="45dip">
 
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/degree" android:layout_margin="1dip"
-				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:layout_width="50dip" android:layout_height="match_parent"
 				android:hint="@string/degrees_short" android:maxLength="3" android:lines="1" />
 			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="°"></TextView>
+				android:layout_height="match_parent" android:text="°"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/minute" android:layout_margin="1dip"
-				android:layout_width="60dip" android:layout_height="wrap_content"
+				android:layout_width="40dip" android:layout_height="match_parent"
 				android:hint="@string/minutes_short" android:maxLength="2" android:lines="1" />
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="'"></TextView>
+			<TextView android:id="@+id/symbol_minute" android:layout_width="wrap_content"
+				android:layout_height="match_parent" android:text="'"></TextView>
 			<com.geeksville.view.NumberEdit
 				android:id="@+id/second" android:layout_margin="1dip"
-				android:layout_width="60dip" android:layout_height="wrap_content"
-				android:hint="@string/fractions_of_mins_short" android:maxLength="3" android:lines="1" />
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text='"'></TextView>
+				android:layout_width="70dip" android:layout_height="match_parent"
+				android:hint="@string/fractions_of_mins_short" android:maxLength="7" android:lines="1" />
+			<TextView android:id="@+id/symbol_second" android:layout_width="wrap_content"
+				android:layout_height="match_parent" android:text='"'></TextView>
+			<Spinner
+				android:layout_height="match_parent" android:layout_width="wrap_content"
+				android:id="@+id/hemisphere" android:layout_gravity="center"
+				android:entries="@array/ew_vals" android:background="@android:drawable/edit_text"/>
 
 		</LinearLayout>
 		<TextView android:layout_width="wrap_content"
@@ -79,7 +89,7 @@
 
 		<LinearLayout android:orientation="horizontal"
 			android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
+			android:layout_height="45dip">
 			<com.geeksville.view.NumberEdit
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:id="@+id/altitude"

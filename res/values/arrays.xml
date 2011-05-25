@@ -142,6 +142,23 @@
 		<item>64</item>
 		<item>128</item>
 	</string-array>
-
-													
+	
+	<string-array name="ns_vals">
+		<item>N</item>
+		<item>S</item>
+	</string-array>
+	<string-array name="ew_vals">
+		<item>E</item>
+		<item>W</item>
+	</string-array>
+	<string-array name="coordinate_set_enum_names">
+		<item>DMS.dddd</item>
+		<item>DM.ddddd</item>
+		<item>D.ddddddd</item>
+	</string-array>
+	<string-array name="coordinate_set_enum_vals">
+		<item>DMS</item>
+		<item>DM</item>
+		<item>D</item>
+	</string-array>													
 </resources>
