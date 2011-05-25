@@ -117,6 +117,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="longitude">Longitude</string>
     <string name="latitude_short">Lat</string>
     <string name="latitude">Latitude</string>
+    <string name="coordinate_set_units">Coordinates Set</string>
     <string name="gr_needed_for_wpt_short">GR req Wpt</string>
     <string name="gr_needed_for_wpt">GR needed for Wpt</string>
     <string name="ground_speed_short">GSpd</string>

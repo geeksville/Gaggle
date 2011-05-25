@@ -65,6 +65,11 @@
 			<ListPreference android:key="vspdunits1_pref"
 				android:title="@string/vertical_speed_units" android:defaultValue="FeetPerMin"
 				android:entries="@array/vspdunits_enum_names" android:entryValues="@array/vspdunits_enum_vals" />
+			
+			<ListPreference android:key="coordinateset_pref"
+				android:title="@string/coordinate_set_units" android:defaultValue="DMS"
+				android:entries="@array/coordinate_set_enum_names" android:entryValues="@array/coordinate_set_enum_vals" />
+				  
 		</PreferenceScreen>
 	</PreferenceCategory>
 
