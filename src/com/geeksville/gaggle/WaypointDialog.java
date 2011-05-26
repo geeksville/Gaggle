@@ -37,7 +37,6 @@ import android.widget.TextView;
 
 import com.geeksville.info.Units;
 import com.geeksville.info.Units.CoordinateSet;
-import com.geeksville.info.Units.Distance;
 import com.geeksville.location.LocationUtils;
 import com.geeksville.location.Waypoint;
 import com.geeksville.view.EnhancedSpinner;
@@ -126,7 +125,7 @@ public class WaypointDialog implements DialogInterface.OnClickListener {
 		double mins = ((NumberEdit) group.findViewById(R.id.minute)).getDouble();
 		double secs = ((NumberEdit) group.findViewById(R.id.second)).getDouble();
 
-		boolean isPositive = "NW".contains(((Spinner) group.findViewById(R.id.hemisphere)).getSelectedItem().toString());
+		boolean isPositive = "NE".contains(((Spinner) group.findViewById(R.id.hemisphere)).getSelectedItem().toString());
 
 		return LocationUtils.DMSToDegrees(degs, mins, secs, isPositive);
 	}
@@ -183,7 +182,7 @@ public class WaypointDialog implements DialogInterface.OnClickListener {
 		vs.setMinMax(0,60);
 		vs.setText(dms[2]);	
 		Spinner NSEW = (Spinner) group.findViewById(R.id.hemisphere);
-		if ("NW".contains(dms[3]))
+		if ("NE".contains(dms[3]))
 			NSEW.setSelection(0);
 		else
 			NSEW.setSelection(1);		

@@ -56,13 +56,13 @@ public class CambridgeDat extends Parse {
 					type = Waypoint.Type.Unknown;
 				name = matcher.group(12).trim();
 				description = matcher.group(13).trim();
-				float latM = 0, latS = 0, lonM = 0 , lonS = 0;
+				double latM = 0, latS = 0, lonM = 0 , lonS = 0;
 				if (latMstr != null)
 					latM = Float.parseFloat(latMstr);
 				if (latSstr != null)
 					latS = Float.parseFloat(latSstr);
 				if (lonMstr != null)
-					latS = Float.parseFloat(lonMstr);
+					lonM = Float.parseFloat(lonMstr);
 				if (lonSstr != null)
 					lonS = Float.parseFloat(lonSstr);
 				
