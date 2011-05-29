@@ -457,8 +457,8 @@ public class GPSClient extends Service implements IGPSClient {
 			String provider = (simData != null) ? simData.getProvider()
 					: LocationManager.GPS_PROVIDER;
 
-			manager.requestLocationUpdates(provider, minTimePerUpdate,
-					minDistPerUpdate, listener, thread.getLooper());
+			manager.requestLocationUpdates(provider,0 ,
+					0, listener, thread.getLooper());
 		}
 
 		// Provide an initial location if we know where we are
