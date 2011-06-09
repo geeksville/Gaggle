@@ -38,6 +38,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.IBinder;
 import com.geeksville.android.PreferenceUtil;
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 
 /**
@@ -102,12 +103,17 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	public WaypointDB(Context context, LocationLogDbAdapter db) {
 		this.db = db;
 		this.context = context;
-
+		
+		GagglePrefs prefs = new GagglePrefs(context);
+		minTimeMs = prefs.getLogTimeInterval();
+		minDistMeters = prefs.getLogDistanceInterval();
+		
+		
 		// FIXME - reread when prefs change
 		typicalGlideRatio = PreferenceUtil.getFloat(context, "glideratio_pref", 7.0f);
 		minAltMargin = PreferenceUtil.getFloat(context, "altmargin_min_pref", 0.0f);
 		extraAltMargin = PreferenceUtil.getFloat(context, "altmargin_extra_pref", 100f);
-
+		
 		markers = new Drawable[Waypoint.Type.values().length][ExtendedWaypoint.Color.values().length];
 		for (int wpType = 0; wpType < Waypoint.Type.values().length; wpType++)
 			for (int wpColor = 0; wpColor < ExtendedWaypoint.Color.values().length; wpColor++)
@@ -163,7 +169,6 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	@Override
 	public void onServiceConnected(ComponentName name, IBinder service) {
 		gps = (IGPSClient) service;
-
 		gps.addLocationListener(minTimeMs, minDistMeters, this);
 	}
 

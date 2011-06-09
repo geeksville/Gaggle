@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>FAQ</title>
+</head>
+<body>
+<strong>Where are my tracklog files?</strong>
+<div>Tracklogs are written to the internal storage of your phone when you use the Send file features. After recording a flight, long tap on that flight in the flights view, then select "Send IGC file", or one of the other supported formats. After sending the file is completed, the file will be found in the /Gaggle/Tracklogs/ directory on your phone.</div>
+<strong>How can I view only relevant waypoints?</strong>
+<div>When you import waypoints from the web, or from a supported format file on your local file system, that file is saved under /gaggle/Waypoints/. You can delete all waypoints from gaggle, then re-import the files by browsing to them with a file browser on your phone, and selecting the file.</div>
+<strong>Which waypoint formats are currently supported</strong>
+<div>Ozi Explorer .wpt, See You .cup, Cambridge .dat & a couple of other .wpt formats. All formats are expected to be using the WGS84 ellipsoid. If you're unsure whether your .wpt format is supported, try to import it, then compare the co-ordinates of the waypoints in Gaggle with what you expect them to be.</div>
+<strong>What are all these time & distance interval settings?</strong>
+<div>These are to enable you to balance the performance of Gaggle with the battery life of your Android. If you set them all to 0, then you will get the most frequent possible position updates and the screen will be refreshed more frequently. The downside to this is that more cpu cycles will be used, which equates to more battery drain. Some devices have proven to require more frquent updates just to enable Gaggle to hold a gps lock, so if you find that Gaggle is losing sattelites, reduce these settings. If however you wish to prolong your battery life, increase these settings.</div>
+<strong>Why does the g-meter take so long to start?</strong>
+<div>The g-meter is measuring the change in acceleration, expressed as g-force. The first time that the sensors send a measurement of this acceleration, Gaggle compares that accelleration with the previous measurement. As Gravity is always applying a constant accelleration, the first measurement would always be "1g" so we ignore it. The first ten updates from the phone's sensors are ignored to give you time to ensure that the phone is sitting still - preferably not held in your hand.</div>
+</body>
+</html>

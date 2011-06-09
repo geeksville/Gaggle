@@ -28,6 +28,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.geeksville.android.ChangeHandler;
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 
 /**
@@ -179,9 +180,11 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 				.getString(R.string.capturing_tracklog));
 
 		setStatus(Status.WAIT_FOR_LOCK);
-
-		long minTime = pollInterval * 1000; // num msec between events
-		float minDist = 5; // need at least this many meters
+		
+		GagglePrefs prefs = new GagglePrefs(context);
+				
+		long minTime = prefs.getGPSUpdateFreq() * 1000; // num msec between events
+		float minDist = prefs.getGPSUpdateDist(); // need at least this many meters
 
 		gps.addLocationListener(minTime, minDist, this);
 	}
