@@ -1,0 +1,3 @@
+* Switch to fragments use the app - see here https://groups.google.com/group/android-developers/browse_thread/thread/4f35a37566761c83/4a7ac883717c660c?pli=1
+* Update to latest OSM code
+* get rid of tab pane

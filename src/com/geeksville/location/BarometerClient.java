@@ -22,21 +22,40 @@ package com.geeksville.location;
 
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorManager;
 
-public class AccelerometerClient extends SensorClient {
+/// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
+public class BarometerClient extends SensorClient {
 
-	public AccelerometerClient(Context context) {
+	/**
+	 * Current compass reading
+	 */
+	public float pressure;
 
-		super(context, Sensor.TYPE_ACCELEROMETER);
+	// / Defaults to 1013.25 hPa
+	public float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
+
+	public BarometerClient(Context context) {
+		super(context, Sensor.TYPE_PRESSURE);
+	}
+
+	// / Given a GPS based altitude, reverse engineer what the correct reference
+	// pressure is
+	public void setAltitude(float meters) {
+		throw new RuntimeException("setAltitude");
+	}
+
+	// / Return altitude in meters
+	public float getAltitude() {
+		return SensorManager.getAltitude(reference, pressure);
 	}
 
 	@Override
 	public void onThrottledSensorChanged(float[] values) {
-		float zAccel = values[2]; // FIXME, correct this for phone
-		// orientation
+		pressure = values[0];
 
 		setChanged();
-		notifyObservers(zAccel);
+		notifyObservers(pressure);
 	}
 
 }

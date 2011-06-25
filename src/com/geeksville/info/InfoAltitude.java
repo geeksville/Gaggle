@@ -21,8 +21,10 @@
 package com.geeksville.info;
 
 import android.location.Location;
+
 import com.geeksville.gaggle.R;
 
+/// FIXME - show either baro or GPS based altitude?
 public class InfoAltitude extends GPSField {
 
 	public InfoAltitude() {

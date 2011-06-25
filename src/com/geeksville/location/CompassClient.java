@@ -21,7 +21,7 @@
 package com.geeksville.location;
 
 import android.content.Context;
-import android.hardware.SensorManager;
+import android.hardware.Sensor;
 
 public class CompassClient extends SensorClient {
 
@@ -31,7 +31,7 @@ public class CompassClient extends SensorClient {
 	public int bearing;
 
 	public CompassClient(Context context) {
-		super(context, SensorManager.SENSOR_ORIENTATION);
+		super(context, Sensor.TYPE_MAGNETIC_FIELD);
 	}
 
 	@Override
