@@ -161,7 +161,7 @@ public class GPSClient extends Service implements IGPSClient {
 			context.unbindService(conns);
 		}
 	}
-
+	
 	private static class Republisher implements ServiceConnection {
 
 		Set<ServiceConnection> clients = new HashSet<ServiceConnection>();
@@ -457,8 +457,8 @@ public class GPSClient extends Service implements IGPSClient {
 			String provider = (simData != null) ? simData.getProvider()
 					: LocationManager.GPS_PROVIDER;
 
-			manager.requestLocationUpdates(provider, minTimePerUpdate,
-					minDistPerUpdate, listener, thread.getLooper());
+			manager.requestLocationUpdates(provider,minTimeMs ,
+					minDistMeters, listener, thread.getLooper());
 		}
 
 		// Provide an initial location if we know where we are

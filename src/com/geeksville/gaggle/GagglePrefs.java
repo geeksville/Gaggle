@@ -63,11 +63,38 @@ public class GagglePrefs {
 		return prefs.getBoolean("live_logging_pref", false);
 	}
 
-	public int getLogInterval() {
-		String val = prefs.getString("log_interval_pref", "5");
+		public int getLiveLogTimeInterval(){
+		String val = prefs.getString("livelog_update_freq_pref", "5");
 		return Integer.parseInt(val);
 	}
-
+	
+	public int getLogTimeInterval() {
+		String val = prefs.getString("tracklog_update_freq_pref", "5");
+		return Integer.parseInt(val);
+	}
+	
+	public float getLogDistanceInterval() {
+		String val = prefs.getString("tracklog_update_dist_pref", "100");
+		return Float.parseFloat(val);
+	}
+	public long getScreenUpdateFreq() {
+		String val = prefs.getString("screen_update_freq_pref", "5");
+		return Integer.parseInt(val);
+	}
+	public float getScreenUpdateDist() {
+		String val = prefs.getString("screen_update_dist_pref", "100");
+		return Float.parseFloat(val);
+	}
+	public int getGPSUpdateFreq() {
+		String val = prefs.getString("gps_update_freq_pref", "5");
+		return Integer.parseInt(val);
+	}
+	public float getGPSUpdateDist() {
+		String val = prefs.getString("gps_update_dist_pref", "100");
+		return Float.parseFloat(val);
+	}
+	
+	
 	public int getLaunchDistX() {
 		String val = prefs.getString("launch_dist_x", "40");
 		if (val.length() == 0)
@@ -95,5 +122,6 @@ public class GagglePrefs {
 	public String getPilotName() {
 		return prefs.getString("pilot_name_pref", "").trim();
 	}
+
 
 }
