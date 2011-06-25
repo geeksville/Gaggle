@@ -51,6 +51,12 @@ public class BarometerClient extends SensorClient {
 	}
 
 	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// Auto-generated method stub
+
+	}
+
+	@Override
 	public void onThrottledSensorChanged(float[] values) {
 		pressure = values[0];
 
