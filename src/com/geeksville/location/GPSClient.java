@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -390,7 +390,14 @@ public class GPSClient extends Service implements IGPSClient {
 			m.invoke(this, id, notification);
 		} catch (NoSuchMethodException ex) {
 			// Fall back to the old API
-			setForeground(true);
+			// setForeground(true);
+			try {
+				Method m = Service.class.getMethod("setForeground",
+						new Class[] { Boolean.TYPE });
+				m.invoke(this, true);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -408,7 +415,14 @@ public class GPSClient extends Service implements IGPSClient {
 			m.invoke(this, removeNotification);
 		} catch (NoSuchMethodException ex) {
 			// Fall back to the old API
-			setForeground(false);
+			// setForeground(false);
+			try {
+				Method m = Service.class.getMethod("setForeground",
+						new Class[] { Boolean.TYPE });
+				m.invoke(this, false);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
