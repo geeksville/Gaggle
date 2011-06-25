@@ -26,9 +26,10 @@ import android.content.ServiceConnection;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.os.IBinder; 
 import android.util.Log;
 
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.location.GPSClient;
 import com.geeksville.location.IGPSClient;
 
@@ -113,11 +114,16 @@ public abstract class GPSField extends InfoField implements LocationListener, Se
 	 */
 	@Override
 	public void onServiceConnected(ComponentName name, IBinder service) {
+
+		GagglePrefs prefs = new GagglePrefs(context);
+		
+		minTimeMs = prefs.getScreenUpdateFreq();
+		minDistMeters = prefs.getScreenUpdateDist();
 		gps = (IGPSClient) service;
 
 		gps.addLocationListener(minTimeMs, minDistMeters, this);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 

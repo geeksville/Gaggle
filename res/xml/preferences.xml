@@ -81,10 +81,15 @@
 		<CheckBoxPreference android:key="delayed_logging_pref"
 			android:title="@string/automatic_upload" android:summary="@string/using_a_leonardo_server" />
 
-		<ListPreference android:key="log_interval_pref"
+		<ListPreference android:key="tracklog_update_freq_pref"
 			android:title="@string/interval" android:summary="@string/time_between_each_log_record"
 			android:defaultValue="3" android:entries="@array/log_interval_names"
 			android:entryValues="@array/log_interval_vals" />
+
+		<ListPreference android:key="tracklog_update_dist_pref"
+			android:title="@string/distance_interval" android:summary="@string/dist_between_each_log_record"
+			android:defaultValue="3" android:entries="@array/log_distance_interval_names"
+			android:entryValues="@array/log_distance_interval_vals" />
 
 		<CheckBoxPreference android:key="disable_wifi_pref"
 			android:title="@string/disable_wi_fi" android:defaultValue="false"
@@ -105,6 +110,27 @@
 				android:key="launch_dist_y" android:title="@string/launch_distance_vertical"
 				android:summary="@string/launch_distance_horiz_summary"
 				android:defaultValue="7" android:inputType="number" />
+				
+			<ListPreference android:key="screen_update_freq_pref"
+				android:title="@string/interval_screen" android:summary="@string/time_between_each_screen_update"
+				android:defaultValue="3" android:entries="@array/log_interval_names"
+				android:entryValues="@array/log_interval_vals" />
+
+			<ListPreference android:key="screen_update_dist_pref"
+				android:title="@string/distance_interval_screen" android:summary="@string/dist_between_each_screen_update"
+				android:defaultValue="3" android:entries="@array/log_distance_interval_names"
+				android:entryValues="@array/log_distance_interval_vals" />
+
+			<ListPreference android:key="gps_update_freq_pref"
+				android:title="@string/interval_gps" android:summary="@string/time_between_each_gps_update"
+				android:defaultValue="3" android:entries="@array/log_interval_names"
+				android:entryValues="@array/log_interval_vals" />
+
+			<ListPreference android:key="gps_update_dist_pref"
+				android:title="@string/distance_interval_gps" android:summary="@string/dist_between_each_gps_update"
+				android:defaultValue="3" android:entries="@array/log_distance_interval_names"
+				android:entryValues="@array/log_distance_interval_vals" />
+
 		</PreferenceScreen>
 	</PreferenceCategory>
 
@@ -135,6 +161,12 @@
 			<EditTextPreference android:key="live2_password_pref"
 				android:singleLine="true" android:title="@string/password"
 				android:inputType="textPassword" android:hint="Password" />
+			
+			<ListPreference android:key="livelog_update_freq_pref"
+				android:title="@string/interval" android:summary="@string/live_time_between_each_position_update"
+				android:defaultValue="3" android:entries="@array/log_interval_names"
+				android:entryValues="@array/log_interval_vals" />
+			
 <!-- 
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="live2_connection_timeout_pref" 

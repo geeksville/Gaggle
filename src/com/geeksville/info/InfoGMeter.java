@@ -97,17 +97,24 @@ public class InfoGMeter extends InfoField implements Observer {
 			accel.addObserver(this);
 	}
 	
-	
+	boolean isStarting = true;
+	int startCycles = 0;
 	@Override
 	public void update(Observable observable, Object data) {
 		
 		// convert from m/sec to g's
 		float newg = ((Float) data) / 9.6f;
-
+		
 		newg = Math.abs(newg - g);
 		if (newg != g) {
 			g = newg;
-			gMax = Math.max(g, gMax);
+			if (!isStarting)
+				gMax = Math.max(g, gMax);
+			else
+				if (startCycles<=10)
+					startCycles ++;
+				else
+					isStarting = false;
 			onChanged();
 		}
 	}

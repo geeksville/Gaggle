@@ -379,7 +379,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 								PositionWriter liveWriter = new LeonardoLiveWriter(
 										LoggingControl.this, acct.serverURL,
 										acct.username, acct.password, prefs.getWingModel(), prefs.getLeonardoLiveVehicleType(), prefs
-												.getLogInterval());
+												.getLiveLogTimeInterval());
 
 								selected = new PositionWriter[] { dbwriter, ramwriter, liveWriter };
 							} catch (Exception ex) {
@@ -399,7 +399,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 						GPSToPositionWriter gpsToPos = ((GaggleApplication) getApplication())
 								.getGpsLogger();
 
-						gpsToPos.startLogging(getApplication(), writer, prefs.getLogInterval(),
+						gpsToPos.startLogging(getApplication(), writer, prefs.getLogTimeInterval(),
 								prefs.getLaunchDistX(), prefs.getLaunchDistY());
 					}
 

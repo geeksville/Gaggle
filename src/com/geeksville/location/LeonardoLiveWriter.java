@@ -19,6 +19,10 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.SystemClock;
+import android.text.format.Time;
+import android.text.method.DateTimeKeyListener;
+import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 
@@ -170,7 +174,7 @@ public class LeonardoLiveWriter implements PositionWriter {
 			System.out.println("Ignoring on epilog: " + ex);
 		}
 	}
-
+	long lastUpdateTime = SystemClock.elapsedRealtime();
 	/**
 	 * @see com.geeksville.location.PositionWriter#emitPosition(long, double,
 	 *      double, float, int, float, float[])
@@ -182,13 +186,17 @@ public class LeonardoLiveWriter implements PositionWriter {
 			int groundKmPerHr = (int) groundSpeed;
 			int unixTimestamp = (int) (time / 1000); // Convert from msecs to
 			// secs
-
-			String opts = String.format(Locale.US,
-					"lat=%f&lon=%f&alt=%d&sog=%d&cog=%d&tm=%d", latitude,
-					longitude, Float.isNaN(altitude) ? 0 : (int) altitude, groundKmPerHr, bearing,
-					unixTimestamp);
-
-			sendPacket(PACKET_POINT, opts);
+			long now = SystemClock.elapsedRealtime();
+			if (lastUpdateTime + (expectedIntervalSecs *1000) < now)
+			{
+				String opts = String.format(Locale.US,
+						"lat=%f&lon=%f&alt=%d&sog=%d&cog=%d&tm=%d", latitude,
+						longitude, Float.isNaN(altitude) ? 0 : (int) altitude, groundKmPerHr, bearing,
+						unixTimestamp);
+				Log.d("XXX", opts);
+				sendPacket(PACKET_POINT, opts);
+				lastUpdateTime = SystemClock.elapsedRealtime();
+			}
 		} catch (IOException ex) {
 			System.out.println("Ignoring on epilog: " + ex);
 		}
@@ -244,7 +252,7 @@ public class LeonardoLiveWriter implements PositionWriter {
 							"client=%s&v=%s&user=%s&pass=%s&phone=%s&gps=%s&trk1=%d&vtype=%d&vname=%s",
 							programName, ourVersion, userName, password, phoneName, gpsType,
 							expectedIntervalSecs, vehicleType, vehicleName);
-
+			Log.d("XXX", opts);
 			sendPacket(PACKET_START, opts);
 
 			// Keep stats on # of live uploads
