@@ -21,6 +21,16 @@
 				android:summary="@string/model_summary" android:capitalize="words"
 				android:singleLine="true" />
 
+			<ListPreference android:key="leonardo_live_vehicle_type_pref" 
+				android:title="@string/vehicle_type" android:summary="@string/vehicle_type_summary" android:capitalize="words"
+				android:defaultValue="1" android:entries="@array/vehicle_type_names"
+				android:entryValues="@array/vehicle_type_vals" />
+		
+			<ListPreference android:key="competition_class_pref" 
+				android:title="@string/competition_class" android:summary="@string/competition_class_summary" android:capitalize="words"
+				android:defaultValue="3" android:entries="@array/competition_class_names"
+				android:entryValues="@array/competition_class_vals" />
+
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="glideratio_pref" android:title="@string/glide_ratio"
 				android:summary="@string/glide_ratio_summary"
@@ -55,6 +65,11 @@
 			<ListPreference android:key="vspdunits1_pref"
 				android:title="@string/vertical_speed_units" android:defaultValue="FeetPerMin"
 				android:entries="@array/vspdunits_enum_names" android:entryValues="@array/vspdunits_enum_vals" />
+			
+			<ListPreference android:key="coordinateset_pref"
+				android:title="@string/coordinate_set_units" android:defaultValue="DMS"
+				android:entries="@array/coordinate_set_enum_names" android:entryValues="@array/coordinate_set_enum_vals" />
+				  
 		</PreferenceScreen>
 	</PreferenceCategory>
 
@@ -120,10 +135,21 @@
 			<EditTextPreference android:key="live2_password_pref"
 				android:singleLine="true" android:title="@string/password"
 				android:inputType="textPassword" android:hint="Password" />
-
+<!-- 
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="live2_connection_timeout_pref" 
+				android:title="@string/leonardo_connection_timeout"
+				android:inputType="number" android:summary="@string/live2_connection_timeout_summary" 
+				android:defaultValue="3" />
+		
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="live2_operation_timeout_pref" 
+				android:title="@string/leonardo_operation_timeout"
+				android:inputType="number" android:summary="@string/live2_operation_timeout_summary" 
+				android:defaultValue="30"/>
+--> 
 		</PreferenceScreen>
-
-		<PreferenceScreen android:key="delayed_prefs"
+ 		<PreferenceScreen android:key="delayed_prefs"
 			android:title="@string/leonardo_server" android:summary="@string/server_and_account_information">
 
 			<EditTextPreference
@@ -148,6 +174,17 @@
 				android:singleLine="true" android:title="@string/password"
 				android:inputType="textPassword" android:hint="Password" />
 
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="delayed_connection_timeout_pref" 
+				android:title="@string/leonardo_connection_timeout"
+				android:inputType="number" android:summary="@string/leonardo_connection_timeout_summary" 
+				android:defaultValue="3" />
+		
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="delayed_operation_timeout_pref" 
+				android:title="@string/leonardo_operation_timeout"
+				android:inputType="number" android:summary="@string/leonardo_operation_timeout_summary" 
+				android:defaultValue="30"/>
 		</PreferenceScreen>
 	</PreferenceCategory>
 

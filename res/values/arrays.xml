@@ -71,12 +71,14 @@
 			
 	<string-array name="speedunits_enum_names">
 		<item>kph</item>
-		<item>mph</item>					
+		<item>mph</item>	
+		<item>kts</item>				
 	</string-array>
 	
 	<string-array name="speedunits_enum_vals">
 		<item>KmPerHr</item>
-		<item>MilePerHr</item>							
+		<item>MilePerHr</item>
+		<item>KtsPerHr</item>						
 	</string-array>
 						
 	<string-array name="distunits_enum_names">
@@ -101,5 +103,62 @@
 		<item>MPerSec</item>
 		<item>FeetPerMin</item>	
 		<item>KtsPerHr</item>						
-	</string-array>											
+	</string-array>		
+	
+	<string-array name="competition_class_names">
+		<item>Flexible Wing</item>
+		<item>Rigid Wing</item>
+		<item>Paraglider (open)</item>
+		<item>Paraglider (sport)</item>
+		<item>Paraglider (Tandem)</item>									
+	</string-array>
+	
+	<string-array name="competition_class_vals">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>			
+		<item>5</item>		
+	</string-array>
+
+	<string-array name="vehicle_type_names">
+		<item>Paraglider</item>
+		<item>Flex wing FAI1</item>
+		<item>Rigid wing FAI5</item>
+		<item>Glider</item>
+		<item>Paramotor</item>	
+		<item>Trike</item>	
+		<item>Powered flight</item>	
+		<item>Hot Air Balloon</item>						
+	</string-array>
+	
+	<string-array name="vehicle_type_vals">
+		<item>1</item>
+		<item>2</item>
+		<item>4</item>
+		<item>8</item>			
+		<item>16</item>
+		<item>32</item>
+		<item>64</item>
+		<item>128</item>
+	</string-array>
+	
+	<string-array name="ns_vals">
+		<item>N</item>
+		<item>S</item>
+	</string-array>
+	<string-array name="ew_vals">
+		<item>E</item>
+		<item>W</item>
+	</string-array>
+	<string-array name="coordinate_set_enum_names">
+		<item>DMS.dddd</item>
+		<item>DM.ddddd</item>
+		<item>D.ddddddd</item>
+	</string-array>
+	<string-array name="coordinate_set_enum_vals">
+		<item>DMS</item>
+		<item>DM</item>
+		<item>D</item>
+	</string-array>													
 </resources>

@@ -81,7 +81,10 @@ public class Units {
 	public enum Distance {
 		Meters, Feet, KM, Miles, NauticalMiles
 	}
-
+	public enum CoordinateSet
+	{
+		DMS, DM, D
+	}
 	private String getDistanceUnits(Distance d) {
 		final String[] distanceUnits = { "m", "'", "km", "mi", "Nm" };
 

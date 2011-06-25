@@ -32,8 +32,12 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+
 
 /**
  * Uses an HTTP post to submit an IGC file to Leonardo
@@ -55,29 +59,34 @@ public class LeonardoUpload {
 	 * @return null for success, otherwise a string description of the problem
 	 * @throws IOException
 	 */
-	public static String upload(String username, String password, String postURL,
-			String shortFilename, String igcFile)
+	public static String upload(String username, String password, String postURL, 
+			int competitionClass, String shortFilename, String igcFile, int connectionTimeout, int operationTimeout)
 			throws IOException {
 
 		// Strip off extension (leonado docs say they don't want it
 		int i = shortFilename.lastIndexOf('.');
 		if (i >= 1)
 			shortFilename = shortFilename.substring(0, i);
+		String sCompetitionClass = String.valueOf(competitionClass);
+		HttpParams httpParameters = new BasicHttpParams();
+		// Set the timeout in milliseconds until a connection is established.
+		HttpConnectionParams.setConnectionTimeout(httpParameters, connectionTimeout);
+		// Set the default socket timeout (SO_TIMEOUT) 
+		// in milliseconds which is the timeout for waiting for data.
+		HttpConnectionParams.setSoTimeout(httpParameters, operationTimeout);
 
-		HttpClient httpclient = new DefaultHttpClient();
+		HttpClient httpclient = new DefaultHttpClient(httpParameters);
 		httpclient.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE,
 				false);
 		HttpPost httppost = new HttpPost(postURL);
-
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("user", username));
 		nameValuePairs.add(new BasicNameValuePair("pass", password));
 		nameValuePairs.add(new BasicNameValuePair("igcfn", shortFilename));
-		nameValuePairs.add(new BasicNameValuePair("Klasse", "3"));
+		nameValuePairs.add(new BasicNameValuePair("Klasse", sCompetitionClass));
 		nameValuePairs.add(new BasicNameValuePair("IGCigcIGC", igcFile));
-		// FIXME,for now we always claim paraglider, open
 		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
+		
 		HttpResponse response = httpclient.execute(httppost);
 		HttpEntity entity = response.getEntity();
 
@@ -91,23 +100,18 @@ public class LeonardoUpload {
 		if (resp.contains("flight scored"))
 			resp = null;
 		else {
-			// Strip off body
 			int bodLoc = resp.indexOf("<body>");
 			if (bodLoc >= 0)
 				resp = resp.substring(bodLoc + 6);
-
 			int probLoc = resp.indexOf("problem");
 			if (probLoc >= 0)
-				// drop problem
 				resp = resp.substring(probLoc + 7);
-
 			if (resp.startsWith("<br>"))
-				resp = resp.substring(4); // drop br
-
-			// Drop any other markup
+				resp = resp.substring(4); 
 			int markLoc = resp.indexOf('<');
 			if (markLoc >= 0)
 				resp = resp.substring(0, markLoc);
+			resp = resp.trim();
 		}
 
 		return resp;

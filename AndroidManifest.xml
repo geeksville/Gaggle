@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="89" android:versionName="0.88(bug fix)">
+	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="94" android:versionName="0.94">
 
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"
@@ -8,7 +8,7 @@
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:description="@string/app_description" android:name="com.geeksville.gaggle.GaggleApplication"
-		android:theme="@android:style/Theme.NoTitleBar" android:debuggable="true"> <!-- "@android:style/Theme.Light.NoTitleBar" -->
+		android:theme="@android:style/Theme.NoTitleBar" android:debuggable="false"> <!-- "@android:style/Theme.Light.NoTitleBar" -->
 
 		<meta-data android:name="CLOUDMADE_KEY" android:value="683f9355fa964a70bcde43fe4a420de2" />
 
@@ -42,45 +42,41 @@
 				<data android:scheme="content" android:mimeType="application/octet-stream" />
 
 			</intent-filter>
+			
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-
-				<!--
-					We understand wpt format waypoint files, see
-					http://www.santacruzparagliding.com/NCXC/NCXC_2010_waypoints.wpt
-					for example <data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.wpt" /> <data android:scheme="content"
-					android:host="*" android:pathPattern=".*\\.WPT" />
-				-->
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.wpt" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.WPT" />
-
-				<!--
-					<data android:scheme="http" android:host="*"
-					android:pathPattern=".*" android:mimeType="application/download" />
-					<data android:scheme="http" />
-				-->
-
+				
+				<data android:scheme="http" />
+				<data android:scheme="https" />
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.WPT" />
+				<data android:pathPattern=".*\\.wpt" />
+				<data android:pathPattern=".*\\.DAT" />
+				<data android:pathPattern=".*\\.dat" />
+				<data android:pathPattern=".*\\.CUP" />
+				<data android:pathPattern=".*\\.cup" />
+			</intent-filter>
+			<!-- 
+				We're using separate intent-filters for download (http/s) and local files (file/content) as they require
+				different settings for mimeType to each other.
+			  -->
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				
+				<data android:scheme="file" />
+				<data android:scheme="content" /> 
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.WPT" />
+				<data android:pathPattern=".*\\.wpt" />
+				<data android:pathPattern=".*\\.DAT" />
+				<data android:pathPattern=".*\\.dat" />
+				<data android:pathPattern=".*\\.CUP" />
+				<data android:pathPattern=".*\\.cup" />
+				<data android:mimeType="*/*" />
 			</intent-filter>
 		</activity>
 
@@ -98,23 +94,28 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.igc" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.igc" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.igc" />
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.igc" />
-
-				<data android:scheme="http" android:host="*"
-					android:pathPattern=".*\\.IGC" />
-				<data android:scheme="https" android:host="*"
-					android:pathPattern=".*\\.IGC" />
-				<data android:scheme="content" android:host="*"
-					android:pathPattern=".*\\.IGC" />
-				<data android:scheme="file" android:host="*"
-					android:pathPattern=".*\\.IGC" />
+				
+				<data android:scheme="http" />
+				<data android:scheme="https" />
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.IGC" />
+				<data android:pathPattern=".*\\.igc" />
+			</intent-filter>
+			<!-- 
+				We're using separate intent-filters for download (http/s) and local files (file/content) as they require
+				different settings for mimeType to each other.
+			  -->
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				
+				<data android:scheme="file" />
+				<data android:scheme="content" /> 
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.IGC" />
+				<data android:pathPattern=".*\\.igc" />
+				<data android:mimeType="*/*" />
 			</intent-filter>
 		</activity>
 		<!--   <uses-library android:name="com.google.android.maps" /> -->
@@ -140,6 +141,8 @@
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+    <!-- Needed for OSM -->
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	
 	<!--
 		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />

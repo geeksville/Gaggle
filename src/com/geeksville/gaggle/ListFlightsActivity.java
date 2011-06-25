@@ -35,6 +35,7 @@ import com.geeksville.gaggle.R;
 import com.geeksville.location.CSVWriter;
 import com.geeksville.location.IGCWriter;
 import com.geeksville.location.KMLWriter;
+import com.geeksville.location.GPXWriter;
 import com.geeksville.location.LeonardoUpload;
 import com.geeksville.location.LocationList;
 import com.geeksville.location.LocationListWriter;
@@ -117,6 +118,9 @@ public class ListFlightsActivity extends DBListActivity {
 			return true;
 		case R.id.send_kml:
 			emailFlight(itemToRowId(item), "kml");
+			return true;
+		case R.id.send_gpx:
+			emailFlight(itemToRowId(item), "gpx");
 			return true;
 		case R.id.send_csv:
 			emailFlight(itemToRowId(item), "csv");
@@ -409,10 +413,15 @@ public class ListFlightsActivity extends DBListActivity {
 		if (!sdcard.exists())
 			throw new IOException(getString(R.string.sd_card_not_found));
 
-		File tracklog = new File(sdcard, getString(R.string.tracklogs));
+		String path = getString(R.string.file_folder); 
+		File tracklog = new File(sdcard, path);
 		if (!tracklog.exists())
 			tracklog.mkdir();
-
+		path += '/' + getString(R.string.tracklogs);
+		tracklog = new File(sdcard, path);
+		if (!tracklog.exists())
+			tracklog.mkdir();
+		
 		String basename = getString(R.string.flight_) + flightid + "." + filetype; // FIXME,
 		// use
 		// a
@@ -445,6 +454,12 @@ public class ListFlightsActivity extends DBListActivity {
 					null,
 					prefs.getWingModel(),
 					prefs.getPilotId());
+		else if (filetype.equals("gpx"))
+			writer = new GPXWriter(s,
+					prefs.getPilotName(),
+					null,
+					prefs.getWingModel(),
+					prefs.getPilotId());
 		else
 			writer = new KMLWriter(s,
 					prefs.getPilotName(),
@@ -461,7 +476,8 @@ public class ListFlightsActivity extends DBListActivity {
 	private void leonardoUpload(final long flightid) {
 
 		final Account acct = new Account(this, "delayed");
-
+		final GagglePrefs gprefs = new GagglePrefs(this);
+		
 		if (acct.isValid()) {
 			AsyncProgressDialog progress =
 					new AsyncProgressDialog(this, getString(R.string.uploading),
@@ -482,10 +498,13 @@ public class ListFlightsActivity extends DBListActivity {
 
 					try {
 						String basename = getString(R.string.flight_) + flightid;
-
-						showCompletionToast(LeonardoUpload.upload(acct.username, acct.password,
-								acct.serverURL, basename,
-								fileLoc));
+						String toastMessage = LeonardoUpload.upload(acct.username, acct.password,
+								acct.serverURL, gprefs.getCompetitionClass(), basename,
+								fileLoc, acct.connectionTimeout, acct.operationTimeout);
+	
+						if(toastMessage != null && toastMessage.length() == 0)
+							toastMessage = context.getString(R.string.upload_failed_bad_url);
+						showCompletionToast(toastMessage);
 
 					} catch (IOException ex) {
 						showCompletionDialog(getString(R.string.upload_failed), ex
@@ -533,7 +552,7 @@ public class ListFlightsActivity extends DBListActivity {
 	 * 
 	 * @param flightid
 	 * @param filetype
-	 *            kml or igc
+	 *            kml, igc, csv or gpx
 	 */
 	private void emailFlight(final long flightid, final String filetype) {
 
@@ -565,6 +584,8 @@ public class ListFlightsActivity extends DBListActivity {
 								sendIntent.setType("application/x-igc");
 							else if (filetype.equals("csv"))
 								sendIntent.setType("text/csv; header");
+							else if (filetype.equals("gpx"))
+								sendIntent.setType("application/gpx+xml");
 							else
 								// FIXME, support kmz
 								sendIntent.setType("application/vnd.google-earth.kml+xml");

@@ -34,7 +34,7 @@ import com.geeksville.location.AccelerometerClient;
  */
 public class InfoGMeter extends InfoField implements Observer {
 
-	private float g = 1.0f, gMin = 1.0f, gMax = 1.0f;
+	private float g = 0.0f, gMax = 0.0f;
 
 	private AccelerometerClient accel;
 
@@ -49,7 +49,7 @@ public class InfoGMeter extends InfoField implements Observer {
 	 */
 	@Override
 	public String getText() {
-		return String.format("%.1f/%.1f/%.1f", g, gMin, gMax);
+		return String.format("%.1f(%.1f)", g, gMax);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class InfoGMeter extends InfoField implements Observer {
 	 */
 	@Override
 	public String getUnits() {
-		return "cur/min/max";
+		return "cur(max)";
 	}
 
 	/**
@@ -96,23 +96,18 @@ public class InfoGMeter extends InfoField implements Observer {
 		if (accel != null)
 			accel.addObserver(this);
 	}
-
+	
+	
 	@Override
 	public void update(Observable observable, Object data) {
-
+		
 		// convert from m/sec to g's
 		float newg = ((Float) data) / 9.6f;
 
-		// if the phone is being pulled away from the pilot that reports as neg
-		// g's but in pilot speak that is really positive gs
-		newg = (newg + 1) + 1;
-
+		newg = Math.abs(newg - g);
 		if (newg != g) {
 			g = newg;
-
-			gMin = Math.min(g, gMin);
 			gMax = Math.max(g, gMax);
-
 			onChanged();
 		}
 	}

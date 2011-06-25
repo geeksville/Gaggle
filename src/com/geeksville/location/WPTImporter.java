@@ -23,10 +23,7 @@ package com.geeksville.location;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.SortedMap;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.geeksville.location.parse.*;
 
 /**
  * Import waypoints (.wpt files into our DB)
@@ -70,11 +67,7 @@ public class WPTImporter {
 	public WPTImporter(WaypointDB db) {
 		this.db = db;
 	}
-
-	private enum Encoding {
-		CompeGPS, Jug, OziExplorer
-	};
-
+	public String fileContents;
 	/**
 	 * 
 	 * @param s
@@ -83,186 +76,39 @@ public class WPTImporter {
 	 */
 	public int addFromStream(InputStream s) throws Exception {
 		BufferedReader r = new BufferedReader(new InputStreamReader(s));
-
-		int numFound = 0;
-		Encoding encoding = Encoding.Jug;
-
-		// For this format the only row that matters is:
-		// W T04220 A 46.3678156439ºN 13.5556925350ºE 27-MAR-62 00:00:00
-		// 2208.000000 T04220 T04
-		// I use \\s rather than the deg symbol because it seems like the deg
-		// symbol mismatches
-		String pattern = "^W\\s+(\\S+)\\s+\\S+\\s+([\\d\\.]+)\\S(\\S)\\s+([\\d\\.]+)\\S(\\S)\\s+\\S+\\s+\\S+\\s+(-?[\\d\\.]+)\\s+(.*)";
-		Pattern compeRegex = Pattern.compile(pattern);
-
-		String delimiters = null; // If not null we will use this as our
-		// delimiter for string parsing
-
-		try {
-			String line;
-
-			// We read the name cache once (for speed, because it will get
-			// repeatedly generated)
-			SortedMap<String, ExtendedWaypoint> names = db.getNameCache();
-
+		StringBuilder sb = new StringBuilder(); 
+		String line = null;
+		final String newline = "\n";
+		if ((line = r.readLine()) != null) // This construct avoids adding a superfluous newline at the end of the string.
+			{
+			sb.append(line);
 			while ((line = r.readLine()) != null) {
-				line = line.trim();
-
-				if (!line.startsWith("$")) {
-					StringTokenizer splitter = (delimiters == null)
-							? new StringTokenizer(line)
-							: new StringTokenizer(line, delimiters);
-
-					String token = splitter.nextToken();
-
-					// Determine the file type by the first line
-					if (numFound == 0)
-						if (token.equals("G")) {
-							encoding = Encoding.CompeGPS;
-							continue;
-						} else if (token.equals("OziExplorer")) {
-							encoding = Encoding.OziExplorer;
-							delimiters = ","; // csv for the lines we care about
-							r.readLine(); // Ignore the next three lines
-							r.readLine();
-							r.readLine();
-							continue;
-						}
-
-					double latitude = 0, longitude = 0, altitude = 0;
-					String name = null, desc = null;
-
-					switch (encoding) {
-					case Jug:
-						// Non compegps files look like:
-						// Ignore comments
-						// $FormatGEO
-						// 49917 N 36 46 53.16 W 119 07 17.09 1511 HILL 49917
-						// 4LNTRN N 37 03 54.42 W 119 27 24.00 645 4 LANE TURN
-						// AIRSTR N 36 42 59.34 W 119 08 15.54 641 AIRSTRIP
-
-						name = token;
-
-						boolean latpos = splitter.nextToken().charAt(0) == 'N';
-						int latdeg = Integer.parseInt(splitter.nextToken());
-						int latmin = Integer.parseInt(splitter.nextToken());
-						float latsecs = Float.parseFloat(splitter.nextToken());
-						latitude = LocationUtils.DMSToDegrees(latdeg, latmin, latsecs, latpos);
-
-						boolean longpos = splitter.nextToken().charAt(0) == 'E';
-						int longdeg = Integer.parseInt(splitter.nextToken());
-						int longmin = Integer.parseInt(splitter.nextToken());
-						float longsecs = Float.parseFloat(splitter.nextToken());
-						longitude = LocationUtils.DMSToDegrees(longdeg, longmin, longsecs, longpos);
-
-						altitude = Float.parseFloat(splitter.nextToken()); // In
-																			// meters
-
-						desc = splitter.nextToken("").trim();
-						break;
-					case CompeGPS:
-						// For this format the only row that matters is:
-						// W T04220 A 46.3678156439ºN 13.5556925350ºE 27-MAR-62
-						// 00:00:00 2208.000000 T04220 T04
-						Matcher m = compeRegex.matcher(line);
-						if (m.find()) {
-							name = m.group(1);
-							String latStr = m.group(2), latNS = m.group(3), longStr = m.group(4), longEW = m
-									.group(5), altStr = m.group(6);
-							desc = m.group(7);
-
-							latitude = Double.parseDouble(latStr) * (latNS.equals("N") ? 1 : -1);
-							longitude = Double.parseDouble(longStr) * (longEW.equals("E") ? 1 : -1);
-							altitude = 0.3048 * Double.parseDouble(altStr); // in
-																			// feet
-																			// according
-																			// to
-																			// spec
-						}
-						break;
-					case OziExplorer:
-						// Look for lines like:
-						// "1,L00007 , 45.930833, 13.710833,40140.8923032,18, 1, 3, 0, 65535,L00007 OKROGLICA , 0, 0, 0, 246"
-
-						// the current token should contain the wpt # (which we
-						// ignore)
-
-						String[] splitted = line.split(",");
-						// Log.d("x", splitted.toString());
-						name = splitted[1].trim();
-						latitude = Double.parseDouble(splitted[2].trim());
-						longitude = Double.parseDouble(splitted[3].trim());
-						desc = splitted[10].trim();
-
-						// For some files the trailing part of the description
-						// might have hyphens that we should skip
-						// FIXME, scan from tail of string and remove them
-						// for example of this see
-						// http://parapente.ffvl.fr/compet/1398/balises
-						altitude = 0.3048 * Double.parseDouble(splitted[14].trim()); // in
-																						// feet
-																						// according
-																						// to
-																						// spec
-						break;
-					}
-
-					// Did we find anything?
-					if (desc != null) {
-						// Check for common abbreviations
-						Waypoint.Type type = Waypoint.Type.Unknown;
-
-						String desclower = desc.toLowerCase();
-						if (desclower.contains("lz")) // FIXME, make this
-							// localizable
-							type = Waypoint.Type.Landing;
-						else if (desclower.contains("launch"))
-							type = Waypoint.Type.Launch;
-
-						// If the user specified a name, replace any existing
-						// items
-						// with the
-						// same name
-						// FIXME - figure out how to have SQL take care of
-						// merging/replacing
-						// existing items
-						ExtendedWaypoint existingWaypoint;
-						if (name.length() != 0 && (existingWaypoint = names.get(name)) != null) {
-							existingWaypoint.latitude = latitude;
-							existingWaypoint.longitude = longitude;
-							existingWaypoint.altitude = (int) altitude;
-							existingWaypoint.type = type;
-							if (!desc.equals(name) && desc.length() != 0) // A
-								// lot
-								// of
-								// saved
-								// wpt
-								// files
-								// have
-								// redundant
-								// entries
-								// for
-								// description
-								existingWaypoint.description = desc;
-
-							existingWaypoint.commit();
-						} else {
-							ExtendedWaypoint w = new ExtendedWaypoint(name, latitude, longitude,
-									(int) altitude, type
-											.ordinal());
-							if (!desc.equals(name) && desc.length() != 0)
-								w.description = desc; // Optional
-							db.add(w);
-						}
-
-						numFound++;
+				sb.append(newline);
+				sb.append(line);
+			}
+		}
+		fileContents = sb.toString();
+		
+		Parse parser;
+				
+		parser = new CambridgeDat(fileContents, db);
+		if (parser.Find() == 0)
+		{
+			parser = new CompeGPS(fileContents,db);
+			if (parser.Find() == 0)
+			{ 
+				parser = new OziExplorer(fileContents,db);
+				if (parser.Find() == 0)
+				{ 
+					parser = new SeeYouCUP(fileContents,db);
+					if (parser.Find() == 0)
+					{
+						parser = new Jug(fileContents,db);
+						parser.Find();
 					}
 				}
 			}
-		} finally {
-			r.close();
 		}
-
-		return numFound;
+		return parser.numFound;
 	}
 }
