@@ -181,6 +181,11 @@ public class Units {
 	public String meterPerSecToSpeed(double v) {
 		return String.format("%.1f", toSelectedUnits(hspeed, speedScaling, v));
 	}
+	
+	public String kilometerPerHourToSpeed(double v) {
+		double meters =  v / speedScaling[Speed.KmPerHr.ordinal()];
+		return String.format("%.1f", toSelectedUnits(hspeed, speedScaling, meters));
+	}
 
 	/**
 	 * generate the user's preferred degrees, minutes, seconds string

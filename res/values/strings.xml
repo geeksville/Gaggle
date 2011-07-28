@@ -212,5 +212,15 @@ please email kevinh@geeksville.com.</string>
 	<string name="live2_operation_timeout_summary">Operation timeout in seconds. - Not implemented.</string>
 	<string name="vehicle_type">Aircraft type.</string>
 	<string name="vehicle_type_summary">Leonardo Live server aircraft type.</string>
+	<string name="start">Start</string>
+	<string name="end">End</string>
+	<string name="duration">Duration</string>
+	<string name="start_altitude">Start altitude</string>
+	<string name="max_altitude_after_launch">Max altitude after launch</string>
+	<string name="max_ground_speed">Max ground speed</string>
+	<string name="average_ground_speed">Average ground speed</string>
+	<string name="total_ground_distance_traveled">Total ground distance travelled</string>
+	<string name="total_vertical_distance_traveled">Total vertical distance travelled</string>
+	<string name="max_distance_from_launch">Max distance from launch</string>
 </resources>
   

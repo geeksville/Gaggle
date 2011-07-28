@@ -32,6 +32,7 @@ import java.util.Map;
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.DBListActivity;
 import com.geeksville.gaggle.R;
+import com.geeksville.info.FlightSummary;
 import com.geeksville.location.CSVWriter;
 import com.geeksville.location.IGCWriter;
 import com.geeksville.location.KMLWriter;
@@ -42,6 +43,7 @@ import com.geeksville.location.LocationListWriter;
 import com.geeksville.location.LocationLogDbAdapter;
 import com.geeksville.location.PositionWriter;
 import com.geeksville.location.LocationUtils;
+import com.geeksville.location.SummaryWriter;
 import com.geeksville.view.AsyncProgressDialog;
 
 import android.content.Intent;
@@ -128,13 +130,16 @@ public class ListFlightsActivity extends DBListActivity {
 			// case R.id.view_kml:
 			// externalViewFlight(itemToRowId(item), "kml");
 			// return true;
+		case R.id.view_summary:
+			viewFlightSummary(itemToRowId(item));
+			return true;
 		default:
 			break;
 		}
 
 		return super.onContextItemSelected(item);
 	}
-
+	
 	/**
 	 * Another flight might have been added, so refresh our cursor
 	 * 
@@ -358,6 +363,21 @@ public class ListFlightsActivity extends DBListActivity {
 		LocationUtils.dbToWriter(db, locsWriter, flightid);
 
 		Intent i = FlyMapActivity.createIntentLogView(this, locs);
+		startActivity(i);
+	}
+	
+	/**
+	 * View flight summary statistics
+	 * 
+	 * @param flightId
+	 */
+	private void viewFlightSummary(final long flightId) {
+		FlightSummary summary = new FlightSummary();
+		SummaryWriter summaryWriter = new SummaryWriter(summary);
+		LocationUtils.dbToWriter(db, summaryWriter, flightId);
+		
+		Intent i = new Intent(this, SummaryListActivity.class);
+		summary.addDataToIntent(i);
 		startActivity(i);
 	}
 
