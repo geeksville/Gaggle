@@ -37,7 +37,7 @@ public class SummaryListActivity extends ListActivity {
 		String duration = getFriendlyTimeDifference(summary.getStartDate(), summary.getEndDate());
 		String startAltitude = units.metersToAltitude(summary.getStartAltitude()) + altUnits;
 		String maxAltitudeAfterLaunch = units.metersToAltitude(summary.getMaxAltitudeAfterLaunch()) + altUnits;
-		String maxGroundSpeed = units.kilometerPerSecToSpeed(summary.getMaxGroundSpeed()) + speedUnits;
+		String maxGroundSpeed = units.kilometerPerHourToSpeed(summary.getMaxGroundSpeed()) + speedUnits;
 		String averageGroundSpeed = units.kilometerPerHourToSpeed(summary.getAverageGroundSpeed()) + speedUnits;
 		String totalGroundDistance = units.metersToDistance(summary.getTotalGroundDistance()) + distUnits;
 		String totalVerticalDistance = units.metersToAltitude(summary.getTotalVerticalDistance()) + altUnits;
