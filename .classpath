@@ -7,5 +7,5 @@
 	<classpathentry kind="lib" path="libs/FlurryAgent.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-android-1.5.8.jar"/>
 	<classpathentry kind="lib" path="libs/osmdroid-android-1.08.jar" sourcepath="/osmdroid-android"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="95" android:versionName="0.95">
+	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="99" android:versionName="0.99">
 
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"

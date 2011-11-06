@@ -14,11 +14,13 @@
 	<string-array name="delayed_server_names">
 		<item>Paragliding Forum</item>
 		<item>DHV</item> 
+		<item>ArgentinaXC</item>
 	</string-array>
  
 	<string-array name="delayed_server_urls">
 		<item>http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</item>
 		<item>http://xc.dhv.de/xc/modules/leonardo/flight_submit.php</item>
+		<item>http://xc.parapente.com.ar/modules/leonardo/flight_submit.php</item>
 	</string-array>
 	
 	<string-array name="log_interval_names">

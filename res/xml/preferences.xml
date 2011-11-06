@@ -188,11 +188,11 @@
 				android:key="delayed_servername_pref" android:title="@string/submission_url"
 				android:summary="@string/for_servers_other_than_paraglidingforum_com"
 				android:inputType="textUri"
-				android:defaultValue="http://www.paraglidingforum.com/modules/leonardo/flight_submit.php" />
+				android:defaultValue="@string/default_leonardo_url" />
 			<!--
 				<ListPreference android:key="delayed_servername_pref"
 				android:title="Server name"
-				android:defaultValue="http://www.paraglidingforum.com/modules/leonardo/flight_submit.php"
+				android:defaultValue="@string/default_leonardo_url"
 				android:summary="See www.paraglidingforum.com for more information"
 				android:entries="@array/delayed_server_names"
 				android:entryValues="@array/delayed_server_urls" />
