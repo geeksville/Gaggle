@@ -15,7 +15,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
 	worry about this too much - if you can't get a clear translation in the given length, feel free to use a longer phrase
 	(I might need to fix some layout files in the app though).
 6) If the name of a particular string has _short at the end, it is _is_ important to use the shortest possible translation.
-	It is likely I'm using it in a very small summary field and appreviations are okay.
+	It is likely I'm using it in a very small summary field and abbreviations are okay.
 7) After you make your translation, email the file to me and I'll add it to a test version of Gaggle.  After tweaking it
 	a little, I'll send you a test version to see if you are also happy with our work.  Then it will be released in the
 	regular distribution.

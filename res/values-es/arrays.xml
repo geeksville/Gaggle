@@ -57,7 +57,7 @@
 	
 	<!-- The following strings should probably be localized -->	    
 	<string-array name="speedunits_enum_vals">
-		<item>Km/hora/item>
+		<item>Km/hora</item>
 		<item>Millas/hora</item>
 		<item>Nudos/hora</item>						
 	</string-array>
