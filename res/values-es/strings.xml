@@ -96,9 +96,9 @@ Thanks to Ale Spitznagel www.parapente.com.ar for this translation!
     <string name="delete_selected">Borrar seleccionado</string>
     <string name="select_all">Seleccionar Todo</string>
     <string name="upload_selected">Enviar seleccionado</string>
-    <string name="send_kml_file">Enviar KML</string>
-    <string name="send_gpx_file">Enviar GPX</string>
-    <string name="send_igc_file">Enviar IGC</string>
+    <string name="send_kml_file">Enviar archivo KML</string>
+    <string name="send_gpx_file">Enviar archivo GPX</string>
+    <string name="send_igc_file">Enviar archivo IGC</string>
     <string name="upload_to_leonardo">Enviar a Leonardo</string>
     <string name="view_on_map">Ver en el mapa</string>
     <string name="customize_fields">Campos Personalizados</string>
@@ -196,8 +196,8 @@ por favor enviame un email: kevinh@geeksville.com</string>
 	<string name="vehicle_type">Tipo de aeronave.</string>
 	<string name="vehicle_type_summary">Tipo de aeronave para el servidor Leonardo Live.</string>
 	
-	<string name="send_csv_file">Send CSV file</string>
-	<string name="g_meter_label">G</string>
-	<string name="g_meter_caption">cur(max)</string>	
+	<string name="send_csv_file">Enviar archivo CSV</string>
+	<string name="g_meter_label">Gs</string>
+	<string name="g_meter_caption">act(max)</string>	
 </resources>
   
