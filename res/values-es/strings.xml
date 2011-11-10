@@ -195,5 +195,9 @@ por favor enviame un email: kevinh@geeksville.com</string>
 	<string name="live2_operation_timeout_summary">Tiempo de espera en segundos. - No implementado.</string>
 	<string name="vehicle_type">Tipo de aeronave.</string>
 	<string name="vehicle_type_summary">Tipo de aeronave para el servidor Leonardo Live.</string>
+	
+	<string name="send_csv_file">Send CSV file</string>
+	<string name="g_meter_label">G</string>
+	<string name="g_meter_caption">cur(max)</string>	
 </resources>
   

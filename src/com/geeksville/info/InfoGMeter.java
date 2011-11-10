@@ -24,6 +24,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import android.app.Activity;
+import com.geeksville.gaggle.R;
 import com.geeksville.location.AccelerometerClient;
 
 /**
@@ -34,89 +35,89 @@ import com.geeksville.location.AccelerometerClient;
  */
 public class InfoGMeter extends InfoField implements Observer {
 
-	private float g = 0.0f, gMax = 0.0f;
+  private float g = 0.0f, gMax = 0.0f;
 
-	private AccelerometerClient accel;
+  private AccelerometerClient accel;
 
-	@Override
-	public String getLabel() {
-		return "G";
-	}
+  @Override
+  public String getLabel() {
+    return context.getString(R.string.g_meter_label);
+  }
 
-	/**
-	 * 
-	 * @see com.geeksville.info.InfoField#getText()
-	 */
-	@Override
-	public String getText() {
-		return String.format("%.1f(%.1f)", g, gMax);
-	}
+  /**
+   * 
+   * @see com.geeksville.info.InfoField#getText()
+   */
+  @Override
+  public String getText() {
+    return String.format("%.1f(%.1f)", g, gMax);
+  }
 
-	/**
-	 * 
-	 * @see com.geeksville.info.InfoField#getUnits()
-	 */
-	@Override
-	public String getUnits() {
-		return "cur(max)";
-	}
+  /**
+   * 
+   * @see com.geeksville.info.InfoField#getUnits()
+   */
+  @Override
+  public String getUnits() {
+    return context.getString(R.string.g_meter_caption);
+  }
 
-	/**
-	 * @see com.geeksville.info.InfoField#onCreate(android.app.Activity)
-	 */
-	@Override
-	public void onCreate(Activity context) {
-		super.onCreate(context);
+  /**
+   * @see com.geeksville.info.InfoField#onCreate(android.app.Activity)
+   */
+  @Override
+  public void onCreate(Activity context) {
+    super.onCreate(context);
 
-		if (context != null) {
+    if (context != null) {
 
-			// FIXME - we should share one accel client object
-			accel = new AccelerometerClient(context);
-		}
-	}
+      // FIXME - we should share one accel client object
+      accel = new AccelerometerClient(context);
+    }
+  }
 
-	/**
-	 * @see com.geeksville.info.InfoField#onHidden()
-	 */
-	@Override
-	void onHidden() {
-		super.onHidden();
+  /**
+   * @see com.geeksville.info.InfoField#onHidden()
+   */
+  @Override
+  void onHidden() {
+    super.onHidden();
 
-		if (accel != null)
-			accel.deleteObserver(this);
-	}
+    if (accel != null)
+      accel.deleteObserver(this);
+  }
 
-	/**
-	 * @see com.geeksville.info.InfoField#onShown()
-	 */
-	@Override
-	void onShown() {
-		super.onShown();
+  /**
+   * @see com.geeksville.info.InfoField#onShown()
+   */
+  @Override
+  void onShown() {
+    super.onShown();
 
-		if (accel != null)
-			accel.addObserver(this);
-	}
-	
-	boolean isStarting = true;
-	int startCycles = 0;
-	@Override
-	public void update(Observable observable, Object data) {
-		
-		// convert from m/sec to g's
-		float newg = ((Float) data) / 9.6f;
-		
-		newg = Math.abs(newg - g);
-		if (newg != g) {
-			g = newg;
-			if (!isStarting)
-				gMax = Math.max(g, gMax);
-			else
-				if (startCycles<=10)
-					startCycles ++;
-				else
-					isStarting = false;
-			onChanged();
-		}
-	}
+    if (accel != null)
+      accel.addObserver(this);
+  }
+
+  boolean isStarting = true;
+  int startCycles = 0;
+
+  @Override
+  public void update(Observable observable, Object data) {
+
+    // convert from m/sec to g's
+    float newg = ((Float) data) / 9.6f;
+
+    newg = Math.abs(newg - g);
+    if (newg != g) {
+      g = newg;
+      if (!isStarting)
+        gMax = Math.max(g, gMax);
+      else if (startCycles <= 10)
+        startCycles++;
+      else
+        isStarting = false;
+      onChanged();
+    }
+  }
 
 }

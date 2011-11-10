@@ -215,5 +215,9 @@ please email kevinh@geeksville.com.</string>
 	<string name="live2_operation_timeout_summary">Operation timeout in seconds. - Not implemented.</string>
 	<string name="vehicle_type">Aircraft type.</string>
 	<string name="vehicle_type_summary">Leonardo Live server aircraft type.</string>
+	
+	<string name="send_csv_file">Send CSV file</string>
+	<string name="g_meter_label">G</string>
+	<string name="g_meter_caption">cur(max)</string>
 </resources>
   

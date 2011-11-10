@@ -5,6 +5,6 @@
 	<item android:id="@+id/send_igc" android:title="@string/send_igc_file" android:icon="@android:drawable/ic_menu_send" />
 	<item android:id="@+id/send_kml" android:title="@string/send_kml_file" android:icon="@android:drawable/ic_menu_send" />
 	<item android:id="@+id/send_gpx" android:title="@string/send_gpx_file" android:icon="@android:drawable/ic_menu_send" />
-	<item android:id="@+id/send_csv" android:title="Send CSV file" android:icon="@android:drawable/ic_menu_send" />
+	<item android:id="@+id/send_csv" android:title="@string/send_csv_file" android:icon="@android:drawable/ic_menu_send" />
 	<!-- <item android:id="@+id/view_kml" android:title="View KML file" android:icon="@android:drawable/ic_menu_view" />
 	  --></menu>

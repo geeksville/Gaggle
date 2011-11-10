@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-	<string-array name="live_server_names">
-		<item>Leonardo Live</item>
-		<item>Leonardo Live (Test Server)</item>
-	</string-array>
-
-	<string-array name="live_server_urls">
-		<item>http://www.livetrack24.com</item>
-		<item>http://test.livetrack24.com</item>
-	</string-array>
-	
-	<string-array name="delayed_server_names">
-		<item>Paragliding Forum</item>
-		<item>DHV</item> 
-		<item>ArgentinaXC</item>
-	</string-array>
- 
-	<string-array name="delayed_server_urls">
-		<item>http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</item>
-		<item>http://xc.dhv.de/xc/modules/leonardo/flight_submit.php</item>
-		<item>http://xc.parapente.com.ar/modules/leonardo/flight_submit.php</item>
-	</string-array>
 	
 	<string-array name="log_interval_names">
 		<item>undefined (fastest)</item>
@@ -34,19 +12,6 @@
 		<item>1 minute</item>
 		<item>2 minute</item>
 		<item>5 minute</item>									
-	</string-array>
-	
-	<string-array name="log_interval_vals">
-		<item>0</item>
-		<item>1</item>
-		<item>3</item>
-		<item>5</item>
-		<item>10</item>
-		<item>15</item>
-		<item>20</item>			
-		<item>60</item>		
-		<item>120</item>	
-		<item>300</item>								
 	</string-array>
 	
 	<!-- The following strings should probably be localized -->	    
@@ -62,33 +27,13 @@
 		<item>100 meters</item>
 		<item>200 meters</item>									
 	</string-array>
-	
-	<string-array name="log_distance_interval_vals">
-		<item>0</item>
-		<item>1</item>
-		<item>5</item>
-		<item>10</item>
-		<item>15</item>
-		<item>20</item>
-		<item>30</item>			
-		<item>50</item>
-		<item>100</item>
-		<item>200</item>									
-	</string-array>
-							
+		
 	<!-- The following strings should probably be localized -->	    
 	<string-array name="waypoint_type_names">
 		<item>Unknown</item>
 		<item>Landing Zone</item>
 		<item>Launch</item>	
 		<item>Turn point</item>							
-	</string-array>
-	
-	<string-array name="waypoint_type_vals">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>								
 	</string-array>
 
 	<!-- The following strings should probably be localized -->	    
@@ -153,14 +98,6 @@
 		<item>Paraglider (sport)</item>
 		<item>Paraglider (Tandem)</item>									
 	</string-array>
-	
-	<string-array name="competition_class_vals">
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-		<item>4</item>			
-		<item>5</item>		
-	</string-array>
 
 	<!-- The following strings should probably be localized -->
 	<string-array name="vehicle_type_names">
@@ -173,34 +110,5 @@
 		<item>Powered flight</item>	
 		<item>Hot Air Balloon</item>						
 	</string-array>
-	
-	<string-array name="vehicle_type_vals">
-		<item>1</item>
-		<item>2</item>
-		<item>4</item>
-		<item>8</item>			
-		<item>16</item>
-		<item>32</item>
-		<item>64</item>
-		<item>128</item>
-	</string-array>
-	
-	<string-array name="ns_vals">
-		<item>N</item>
-		<item>S</item>
-	</string-array>
-	<string-array name="ew_vals">
-		<item>E</item>
-		<item>W</item>
-	</string-array>
-	<string-array name="coordinate_set_enum_names">
-		<item>DMS.dddd</item>
-		<item>DM.ddddd</item>
-		<item>D.ddddddd</item>
-	</string-array>
-	<string-array name="coordinate_set_enum_vals">
-		<item>DMS</item>
-		<item>DM</item>
-		<item>D</item>
-	</string-array>													
+												
 </resources>
