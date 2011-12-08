@@ -4,6 +4,7 @@ Thanks to Ale Spitznagel www.parapente.com.ar for this translation!
  -->
  
 <resources>
+    <string name="no_waypoints_url">file:///android_asset/no_waypoints-es.html</string>        
     <string name="no_flights_url">file:///android_asset/no_flights-es.html</string>
     <string name="default_leonardo_url">http://xc.parapente.com.ar/modules/leonardo/flight_submit.php</string>
     
