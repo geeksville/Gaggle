@@ -200,5 +200,8 @@ por favor enviame un email: kevinh@geeksville.com</string>
 	<string name="send_csv_file">Enviar archivo CSV</string>
 	<string name="g_meter_label">Gs</string>
 	<string name="g_meter_caption">act(max)</string>	
+	<string name="confirm_delete_">Confirmar la eliminación?</string>
+	<string name="yes">Sí</string>
+	<string name="no">No</string>	
 </resources>
   

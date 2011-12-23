@@ -220,5 +220,8 @@ please email kevinh@geeksville.com.</string>
 	<string name="send_csv_file">Send CSV file</string>
 	<string name="g_meter_label">G</string>
 	<string name="g_meter_caption">cur(max)</string>
+	<string name="confirm_delete_">Confirm delete?</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
 </resources>
   

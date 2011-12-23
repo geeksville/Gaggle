@@ -180,5 +180,9 @@ Kartenansicht und Flugbahnberechnungen.  Willst Du beim Betatest dieser App mith
 schicke ein Email an kevinh@geeksville.com.</string>
 	<string name="LiveLoggingPrompt">Live Aufzeichung</string>
 	<string name="app_description">Anwendung für Hängegleiterpiloten</string>
+	
+	<string name="confirm_delete_">Löschen bestätigen?</string>
+	<string name="yes">Ja</string>
+	<string name="no">Nein</string>		
 </resources>
   

@@ -20,7 +20,9 @@
  ******************************************************************************/
 package com.geeksville.android;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -39,6 +41,9 @@ import com.geeksville.location.LocationLogDbAdapter;
 public abstract class DBListActivity extends ListActivity {
 
 	protected Cursor myCursor;
+
+	// / Should the user be shown a confirming dialog
+	protected Boolean isConfirmDeletes = true;
 
 	BaseAdapter adapter;
 
@@ -83,6 +88,39 @@ public abstract class DBListActivity extends ListActivity {
 		FlurryAgent.onEndSession(this);
 	}
 
+	private void doDelete(MenuItem item) {
+		if (handleDeleteItem(item)) {
+			myCursor.requery(); // We just deleted a
+								// row, it seems we need
+			// to manually refetch the cursor
+
+			Toast.makeText(this, R.string.deleted, Toast.LENGTH_SHORT).show();
+		}
+
+		// adapter.notifyDataSetChanged(); // this
+		// doesn't seem to do
+		// anything
+	}
+
+	private void confirmDelete(final MenuItem item) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.confirm_delete_)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+								doDelete(item);
+							}
+						})
+				.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
 	/**
 	 * Handle our context menu
 	 * 
@@ -93,16 +131,10 @@ public abstract class DBListActivity extends ListActivity {
 		switch (item.getItemId()) {
 
 		case R.id.delete_menu:
-			// FIXME - show confirmation dialog before deleting an entry?
-			if (handleDeleteItem(item)) {
-				myCursor.requery(); // We just deleted a row, it seems we need
-				// to manually refetch the cursor
-
-				Toast.makeText(this, R.string.deleted, Toast.LENGTH_SHORT).show();
-			}
-
-			// adapter.notifyDataSetChanged(); // this doesn't seem to do
-			// anything
+			if (isConfirmDeletes)
+				confirmDelete(item);
+			else
+				doDelete(item);
 			return true;
 
 		case R.id.view_menu:
