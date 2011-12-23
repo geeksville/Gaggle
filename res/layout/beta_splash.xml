@@ -5,15 +5,15 @@
 
 	<TextView android:text="@string/beta_text" android:id="@+id/label_beta_text"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:autoLink="email" android:layout_margin="10px"></TextView>
+		android:autoLink="email" android:layout_margin="10dp"></TextView>
 
 	<TextView android:text="Enter beta unlock code:"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:layout_gravity="center_horizontal" android:layout_marginTop="10px"></TextView>
+		android:layout_gravity="center_horizontal" android:layout_marginTop="10dp"></TextView>
 
 	<EditText android:id="@+id/edit_beta_password"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal" android:hint="@string/code"
-		android:gravity="center_horizontal" android:layout_marginLeft="20px"
-		android:layout_marginRight="20px" android:singleLine="true"></EditText>
+		android:gravity="center_horizontal" android:layout_marginLeft="20dp"
+		android:layout_marginRight="20dp" android:singleLine="true"></EditText>
 </LinearLayout>

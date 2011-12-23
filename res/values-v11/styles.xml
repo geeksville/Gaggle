@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!-- If we are on Honeycomb 3.0 - we assume that we are on a tablet -->
-<style name="MainThemeSelector" parent="@android:style/Theme.Holo">
-</style>
+<!-- <style name="MainThemeSelector" parent="@android:style/Theme.Holo"> 
+</style> -->
 </resources>
