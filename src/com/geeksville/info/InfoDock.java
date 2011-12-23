@@ -30,6 +30,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,7 +50,8 @@ import com.geeksville.gaggle.R;
  *         infodock_shortlabel: a short label (suitable for map) infodock_units:
  *         units display
  */
-public class InfoDock extends LinearLayout implements InfoField.OnChangedListener, LifeCycleHandler {
+public class InfoDock extends LinearLayout implements
+		InfoField.OnChangedListener, LifeCycleHandler {
 
 	static final String TAG = "InfoDock";
 
@@ -101,13 +103,15 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 
 		listenToLifecycle();
 
-		TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.InfoDock);
+		TypedArray arr = context.obtainStyledAttributes(attrs,
+				R.styleable.InfoDock);
 
 		// The user probably wants to specify a field name
 		String fieldName = arr.getString(R.styleable.InfoDock_info_field);
 
 		// default to a wide layout unless the user asked for something else
-		layoutId = arr.getResourceId(R.styleable.InfoDock_layout_id, R.layout.info_dock_wide);
+		layoutId = arr.getResourceId(R.styleable.InfoDock_layout_id,
+				R.layout.info_dock_wide);
 		arr.recycle();
 
 		if (fieldName != null)
@@ -131,7 +135,8 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 		super.onFinishInflate();
 
 		Context context = getContext();
-		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
+		((LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
 				layoutId, this);
 
 		label = (TextView) findViewById(R.id.infodock_label);
@@ -198,23 +203,34 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 
 	@SuppressWarnings("unchecked")
 	public void setInfoField(String fieldName) {
-		try {
-			InfoField f;
+		InfoField f;
 
+		try {
 			if (!infoFields.containsKey(fieldName)) {
 				Class c = Class.forName(fieldName);
 				Constructor<InfoField> cons = c.getConstructor((Class[]) null);
 
 				f = cons.newInstance();
 
-				// Pass in null if we are running in eclipse (by noticing the
-				// context is not Activity)
-				Activity activity = (getContext() == null) ? null
-						: Activity.class.isInstance(getContext()) ? (Activity) getContext()
-								: null;
-				f.onCreate(activity);
+				// if onCreate fails, we still leave our dock around but
+				// disabled
+				try {
+					// Pass in null if we are running in eclipse (by noticing
+					// the
+					// context is not Activity)
+					Activity activity = (getContext() == null) ? null
+							: Activity.class.isInstance(getContext()) ? (Activity) getContext()
+									: null;
+					f.onCreate(activity);
 
-				// This cache doesn't work yet?
+				} catch (Exception ex) {
+					// If we failed to create the info field the user probably
+					// doesn't have the hardware on their phone
+					Log.e(TAG, "Can't create info dock for " + fieldName + " "
+							+ ex.getMessage());
+					setEnabled(false);
+				}
+
 				infoFields.put(fieldName, f);
 			} else
 				f = infoFields.get(fieldName);
@@ -224,12 +240,11 @@ public class InfoDock extends LinearLayout implements InfoField.OnChangedListene
 				setContents(f);
 			else
 				contents = f;
-
 		} catch (Exception ex) {
-			throw new RuntimeException("Exception while creating " + fieldName, ex); // Should
-			// not
-			// happen
-			// post
+			throw new RuntimeException("Can't create InfoField", ex); // Should
+																		// not
+																		// happen
+																		// post
 			// development
 		}
 	}

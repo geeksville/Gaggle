@@ -56,6 +56,8 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 	 */
 	@Override
 	public void onCreate(Activity context) {
+		super.onCreate(context);
+
 		// The following check is necessary to work in the IDE
 		if (context != null) {
 			GaggleApplication app = (GaggleApplication) context.getApplication();
@@ -65,9 +67,6 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 			compass = new CompassClient(context);
 			image = new HeadingDrawable(context, compass);
 		}
-
-		// Do after we do our init, because it might call onResume
-		super.onCreate(context);
 	}
 
 	/**
@@ -89,7 +88,8 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 	 */
 	@Override
 	void onHidden() {
-		compass.deleteObserver(this);
+		if (compass != null)
+			compass.deleteObserver(this);
 
 		db.deleteObserver(this);
 
@@ -100,7 +100,8 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 	void onShown() {
 		super.onShown();
 
-		compass.addObserver(this); // FIXME, we are leaking observers, we
+		if (compass != null)
+			compass.addObserver(this); // FIXME, we are leaking observers, we
 		// should remove ourselves later
 
 		// We now care about waypoints moving around
@@ -150,7 +151,7 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 	 * @return
 	 */
 	private boolean isValid() {
-		return (getWaypoint() != null && db.pilotLoc != null);
+		return (getWaypoint() != null && db.pilotLoc != null && compass != null);
 	}
 
 	/**

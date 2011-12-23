@@ -223,5 +223,6 @@ please email kevinh@geeksville.com.</string>
 	<string name="confirm_delete_">Confirm delete?</string>
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
+	<string name="barometer">Barometer</string>
 </resources>
   

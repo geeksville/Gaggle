@@ -42,6 +42,9 @@ abstract class SensorClient extends Observable implements SensorEventListener {
 		sensorMan = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
 		this.sensorType = sensorType;
+
+		if (getSensor() == null)
+			throw new RuntimeException("Sensor not found");
 	}
 
 	/**
@@ -52,19 +55,25 @@ abstract class SensorClient extends Observable implements SensorEventListener {
 		sensorMan.unregisterListener(this);
 	}
 
+	// / The hardware sensor we are connected to (or null for not found)
+	public Sensor getSensor() {
+		List<Sensor> sensors = sensorMan.getSensorList(sensorType);
+		if (sensors.size() > 0)
+			return sensors.get(0);
+		else
+			return null;
+	}
+
 	/**
 	 * If you are just using observers, you do not need to call this method. It
 	 * is here folks who want to poll instead
 	 */
 	public void startListening() {
-		List<Sensor> sensors = sensorMan.getSensorList(sensorType);
-		if (sensors.size() > 0){
-			Sensor sensor = sensors.get(0);
+		Sensor sensor = getSensor();
 		sensorMan.registerListener(
 				this,
 				sensor,
 				SensorManager.SENSOR_DELAY_NORMAL);
-		}
 	}
 
 	/*

@@ -53,7 +53,6 @@ public class BarometerClient extends SensorClient {
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// Auto-generated method stub
-
 	}
 
 	@Override

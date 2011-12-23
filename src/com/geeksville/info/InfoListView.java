@@ -58,9 +58,10 @@ public class InfoListView extends ListView {
 			"com.geeksville.info.InfoNearestLZ",
 			"com.geeksville.info.InfoGRNearestLZ",
 			"com.geeksville.info.InfoCompass",
-			"com.geeksville.info.InfoLatitude", "com.geeksville.info.InfoLongitude",
+			"com.geeksville.info.InfoLatitude",
+			"com.geeksville.info.InfoLongitude",
 			"com.geeksville.info.InfoGMeter",
-			};
+			"com.geeksville.info.InfoBarometer" };
 
 	private ArrayList<String> shownNames = new ArrayList<String>();
 
@@ -73,7 +74,8 @@ public class InfoListView extends ListView {
 	public InfoListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.InfoListView);
+		TypedArray arr = context.obtainStyledAttributes(attrs,
+				R.styleable.InfoListView);
 
 		// default to a wide layout unless the user asked for something else
 		rowLayoutId = arr.getResourceId(R.styleable.InfoListView_row_layout_id,
@@ -153,7 +155,8 @@ public class InfoListView extends ListView {
 		LayoutInflater inflater;
 
 		public CheckedDockAdapter(Context context) {
-			inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+			inflater = (LayoutInflater) context
+					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		}
 
 		/**
@@ -178,12 +181,16 @@ public class InfoListView extends ListView {
 				InfoDock dock = (InfoDock) row.findViewById(R.id.info);
 				String name = (String) getItem(position);
 				boolean isChecked = checkedNames.contains(name);
-				dock.setInfoField(name);
-				// dock.setEnabled(isChecked); // If not checked, show the item
-				// greyed out
 
+				dock.setInfoField(name);
+
+				boolean isValid = dock.isEnabled(); // false if we couldn't make
+													// the info field
+				if (!isValid)
+					checkedNames.remove(name);
 				CheckBox checkbox = (CheckBox) row.findViewById(R.id.checkbox);
-				checkbox.setChecked(isChecked);
+				checkbox.setEnabled(isValid);
+				checkbox.setChecked(isValid && isChecked);
 				checkbox.setVisibility(isShowCheckmarks() ? VISIBLE : GONE);
 				checkbox.setTag(name);
 				checkbox.setOnCheckedChangeListener(this);
@@ -211,7 +218,8 @@ public class InfoListView extends ListView {
 		}
 
 		@Override
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		public void onCheckedChanged(CompoundButton buttonView,
+				boolean isChecked) {
 			String name = (String) buttonView.getTag();
 
 			if (isChecked)
