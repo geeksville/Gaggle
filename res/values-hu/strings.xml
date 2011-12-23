@@ -27,7 +27,7 @@
     <string name="options_for_advanced_users">Haladó felhasználói beállítások</string>
     <string name="keeps_the_display_from_going_to_sleep">A képerny?t életbe tartja a repülés alatt</string>
     <string name="screen_on_in_flight">Képerny? be repülés közbe</string>
-    <string name="saves_power_not_yet_implemented">Energiatakarékos üzemmód... Még nem használható</string>
+    <string name="saves_power_not_yet_implemented">Energiatakarékos üzemmód&#8230 Még nem használható</string>
     <string name="disable_wi_fi">Wi-Fi kikapcsolás</string>
     <string name="time_between_each_log_record">Bejegyzett pontok sürüsége</string>
     <string name="interval">Pontsürüség</string>
@@ -40,7 +40,7 @@
     <string name="distance_units">Távolság mértékegysége</string>
     <string name="speed_units">Sebesség mértékegysége</string>
     <string name="altitude_units">Magasság mértékegysége</string>
-    <string name="feet_meters_etc">Láb, Méter, stb...</string>
+    <string name="feet_meters_etc">Láb, Méter, stb&#8230</string>
     <string name="units">Mértékegységek</string>
     <string name="performance_and_model_information">Model és teljesítményadatok</string>
     <string name="glider_information">Siklóerny?adatok</string>
@@ -149,7 +149,7 @@ Siklás: %3$s:1</string>
     <string name="landed">Leszállt</string>
     <string name="in_flight_d_pts">Repülés közben (%d pts)</string>
     <string name="waiting_for_launch_d_pts">Startra várva (%d pts)</string>
-    <string name="please_wait">Kérem várjon...</string>
+    <string name="please_wait">Kérem várjon&#8230</string>
     <string name="importing_waypoints">Fordulópóntok beimportálása</string>
     <string name="imported_d_waypoints">Bejegyezve %d fordulópont</string>
     <string name="beta_text">A Gaggle mindenféle siklórepülésre alkalmas esköz. R?gzít térképet szolgáltat siklószámot számol.  Ha a betateszterek bels? körébe akar tartozni, kérje ezt a kevinh@geeksville.com címen.</string>

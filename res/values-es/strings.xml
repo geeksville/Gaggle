@@ -9,7 +9,7 @@ Thanks to Ale Spitznagel www.parapente.com.ar for this translation!
     <string name="default_leonardo_url">http://xc.parapente.com.ar/modules/leonardo/flight_submit.php</string>
     
     <string name="updating_from_a_prior_release">Actualización desde una versión anterior</string>
-    <string name="starting_logging">Grabando...</string>
+    <string name="starting_logging">Grabando&#8230</string>
     <!-- Initial release for localization below this line -->
     <string name="launch_distance_vertical">Distancia despegue (vertical)</string>
     <string name="launch_distance_horiz_summary">Desplazándose esta distancia se considera despegue (en metros)</string>
@@ -37,7 +37,7 @@ Thanks to Ale Spitznagel www.parapente.com.ar for this translation!
     <string name="options_for_advanced_users">Opciones para usuarios avanzados</string>
     <string name="keeps_the_display_from_going_to_sleep">Mantiene la pantalla encendida</string>
     <string name="screen_on_in_flight">Pantalla encendida en vuelo</string>
-    <string name="saves_power_not_yet_implemented">Ahorra batería... No implementado aún...</string>
+    <string name="saves_power_not_yet_implemented">Ahorra batería&#8230 No implementado aún&#8230</string>
     <string name="disable_wi_fi">Desactivar Wi-Fi</string>
     <string name="time_between_each_log_record">Tiempo entre cada registro</string>
     <string name="dist_between_each_log_record">Distancia en m entre cada registro</string>
@@ -61,7 +61,7 @@ Thanks to Ale Spitznagel www.parapente.com.ar for this translation!
     <string name="distance_units">Distancia</string>
     <string name="speed_units">Velocidad</string>
     <string name="altitude_units">Altitud</string>
-    <string name="feet_meters_etc">Pies, Metros, Km, etc...</string>
+    <string name="feet_meters_etc">Pies, Metros, Km, etc&#8230</string>
     <string name="units">Unidades</string>
     <string name="performance_and_model_information">Información de modelo y rendimiento</string>
     <string name="glider_information">Información del ala</string>
@@ -176,7 +176,7 @@ Planeo: %3$s:1</string>
     <string name="landed">Aterrizado</string>
     <string name="in_flight_d_pts">En vuelo (%d pts)</string>
     <string name="waiting_for_launch_d_pts">Esperando para despegue (%d pts)</string>
-    <string name="please_wait">Espere...</string>
+    <string name="please_wait">Espere&#8230</string>
     <string name="importing_waypoints">Importando waypoints</string>
     <string name="imported_d_waypoints">%d Waypoints importados</string>
     <string name="beta_text">Gaggle es una herramienta para pilotos de todo tipo de planeadores; con funciones como registro,

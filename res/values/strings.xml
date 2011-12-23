@@ -57,7 +57,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="options_for_advanced_users">Options for advanced users</string>
     <string name="keeps_the_display_from_going_to_sleep">Keeps the display from going to sleep</string>
     <string name="screen_on_in_flight">Screen on in flight</string>
-    <string name="saves_power_not_yet_implemented">Saves power... Not yet implemented...</string>
+    <string name="saves_power_not_yet_implemented">Saves power&#8230 Not yet implemented&#8230</string>
     <string name="disable_wi_fi">Disable Wi-Fi</string>
     <string name="time_between_each_log_record">Time between each log record</string>
     <string name="dist_between_each_log_record">Distance in m between each log record</string>
@@ -81,7 +81,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="distance_units">Distance units</string>
     <string name="speed_units">Speed units</string>
     <string name="altitude_units">Altitude units</string>
-    <string name="feet_meters_etc">Feet, Meters, etc...</string>
+    <string name="feet_meters_etc">Feet, Meters, etc&#8230</string>
     <string name="units">Units</string>
     <string name="performance_and_model_information">Performance and model information</string>
     <string name="glider_information">Glider information</string>
@@ -196,7 +196,7 @@ Glide: %3$s:1</string>
     <string name="landed">Landed</string>
     <string name="in_flight_d_pts">In flight (%d pts)</string>
     <string name="waiting_for_launch_d_pts">Waiting for launch (%d pts)</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait&#8230</string>
     <string name="importing_waypoints">Importing waypoints</string>
     <string name="imported_d_waypoints">Imported %d waypoints</string>
     <string name="beta_text">Gaggle is a tool for glider pilots of all types; with features such as logging, 

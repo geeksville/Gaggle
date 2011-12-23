@@ -32,7 +32,7 @@ point de navigation = waypoint, and may be left in the french version. Your deci
     <string name="options_for_advanced_users">Options pour utilisateurs avancés</string>
     <string name="keeps_the_display_from_going_to_sleep">Empêcher la mise en veille et conserver l\'affichage actif</string>
     <string name="screen_on_in_flight">Écran actif durant le vol</string>
-    <string name="saves_power_not_yet_implemented">Économiser la batterie... Bientôt disponible...</string>
+    <string name="saves_power_not_yet_implemented">Économiser la batterie&#8230 Bientôt disponible&#8230</string>
     <string name="disable_wi_fi">Désactiver le Wifi</string>
     <string name="time_between_each_log_record">Temps entre chaque enregistrement</string>
     <string name="interval">Intervalle</string>
@@ -153,7 +153,7 @@ Finesse: %2$s:1</string>
     <string name="landed">Posé</string>
     <string name="in_flight_d_pts">En vol (%d pts)</string>
     <string name="waiting_for_launch_d_pts">En attente de lancement (%d pts)</string>
-    <string name="please_wait">Attendez s\'il vous plait...</string>
+    <string name="please_wait">Attendez s\'il vous plait&#8230</string>
     <string name="importing_waypoints">Importation des points de navigation</string>
     <string name="imported_d_waypoints">%d points de navigation importés</string>
     <string name="beta_text">Gaggle est un outil pour vélivoles; avec des fonctionnalités telles que l\'enregistrement, la consultation de cartes ou de calculs tels que la finesse. Si vous souhaitez faire partie des beta-testeurs écrivez à  kevinh@geeksville.com.</string>
