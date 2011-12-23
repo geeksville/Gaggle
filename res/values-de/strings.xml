@@ -184,5 +184,6 @@ schicke ein Email an kevinh@geeksville.com.</string>
 	<string name="confirm_delete_">Löschen bestätigen?</string>
 	<string name="yes">Ja</string>
 	<string name="no">Nein</string>		
+	<string name="barometer">Barometer</string>  	
 </resources>
   

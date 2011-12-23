@@ -162,4 +162,9 @@ Finesse: %2$s:1</string>
     <string name="app_description">Outil pour vélivoles</string>
     <string name="competition_class">Classe de compétition</string>
     <string name="competition_class_summary">Classe de compétition Leonardo</string>
+    
+	<string name="confirm_delete_">Confirmer la suppression?</string>
+	<string name="yes">Oui</string>
+	<string name="no">No</string>
+	<string name="barometer">Baromètre</string>    
 </resources>

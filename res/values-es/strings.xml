@@ -203,5 +203,6 @@ por favor enviame un email: kevinh@geeksville.com</string>
 	<string name="confirm_delete_">Confirmar la eliminación?</string>
 	<string name="yes">Sí</string>
 	<string name="no">No</string>	
+	<string name="barometer">Barómetro</string>  	
 </resources>
   
