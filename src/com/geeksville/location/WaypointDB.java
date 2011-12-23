@@ -37,6 +37,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.IBinder;
+
 import com.geeksville.android.PreferenceUtil;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;

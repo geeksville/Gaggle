@@ -20,8 +20,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.SystemClock;
-import android.text.format.Time;
-import android.text.method.DateTimeKeyListener;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;

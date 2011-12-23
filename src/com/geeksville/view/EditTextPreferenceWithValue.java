@@ -20,13 +20,13 @@
  ******************************************************************************/
 package com.geeksville.view;
 
-import com.geeksville.gaggle.R;
-
 import android.content.Context;
 import android.preference.EditTextPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+import com.geeksville.gaggle.R;
 
 /**
  * Display current prefs value on the preferences menu itself

@@ -22,7 +22,6 @@ package com.geeksville.location;
 
 import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorManager;
 
 public class CompassClient extends SensorClient {
 

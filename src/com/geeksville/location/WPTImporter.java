@@ -23,7 +23,13 @@ package com.geeksville.location;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import com.geeksville.location.parse.*;
+
+import com.geeksville.location.parse.CambridgeDat;
+import com.geeksville.location.parse.CompeGPS;
+import com.geeksville.location.parse.Jug;
+import com.geeksville.location.parse.OziExplorer;
+import com.geeksville.location.parse.Parse;
+import com.geeksville.location.parse.SeeYouCUP;
 
 /**
  * Import waypoints (.wpt files into our DB)

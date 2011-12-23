@@ -21,6 +21,7 @@
 package com.geeksville.info;
 
 import android.location.Location;
+
 import com.geeksville.gaggle.R;
 
 public class InfoLongitude extends GPSField {

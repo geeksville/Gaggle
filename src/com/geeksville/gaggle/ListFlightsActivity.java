@@ -29,21 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.flurry.android.FlurryAgent;
-import com.geeksville.android.DBListActivity;
-import com.geeksville.gaggle.R;
-import com.geeksville.location.CSVWriter;
-import com.geeksville.location.IGCWriter;
-import com.geeksville.location.KMLWriter;
-import com.geeksville.location.GPXWriter;
-import com.geeksville.location.LeonardoUpload;
-import com.geeksville.location.LocationList;
-import com.geeksville.location.LocationListWriter;
-import com.geeksville.location.LocationLogDbAdapter;
-import com.geeksville.location.PositionWriter;
-import com.geeksville.location.LocationUtils;
-import com.geeksville.view.AsyncProgressDialog;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Address;
@@ -54,15 +39,29 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.DateFormat;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.flurry.android.FlurryAgent;
+import com.geeksville.android.DBListActivity;
+import com.geeksville.location.CSVWriter;
+import com.geeksville.location.GPXWriter;
+import com.geeksville.location.IGCWriter;
+import com.geeksville.location.KMLWriter;
+import com.geeksville.location.LeonardoUpload;
+import com.geeksville.location.LocationList;
+import com.geeksville.location.LocationListWriter;
+import com.geeksville.location.LocationLogDbAdapter;
+import com.geeksville.location.LocationUtils;
+import com.geeksville.location.PositionWriter;
+import com.geeksville.view.AsyncProgressDialog;
 
 /**
  * Browse previous flights

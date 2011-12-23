@@ -13,11 +13,6 @@ import org.andnav.osm.tileprovider.util.CloudmadeUtil;
 import org.andnav.osm.util.GeoPoint;
 import org.andnav.osm.views.util.IOpenStreetMapRendererInfo;
 import org.andnav.osm.views.util.OpenStreetMapRendererFactory;
-import org.andnav.osm.views.util.OpenStreetMapTileProvider;
-import org.andnav.osm.views.util.OpenStreetMapTileProviderDirect;
-
-import com.geeksville.gaggle.R;
-import com.geeksville.location.LocationUtils;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -31,9 +26,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+
+import com.geeksville.gaggle.R;
+import com.geeksville.location.LocationUtils;
 
 public class PrefetchMapActivity extends Activity {
 

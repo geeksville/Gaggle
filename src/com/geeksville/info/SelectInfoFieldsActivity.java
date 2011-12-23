@@ -20,14 +20,15 @@
  ******************************************************************************/
 package com.geeksville.info;
 
-import com.geeksville.android.LifeCycleHandler;
-import com.geeksville.android.LifeCyclePublisher;
-import com.geeksville.android.LifeCyclePublisherImpl;
-import com.geeksville.gaggle.R;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+
+import com.geeksville.android.LifeCycleHandler;
+import com.geeksville.android.LifeCyclePublisher;
+import com.geeksville.android.LifeCyclePublisherImpl;
+import com.geeksville.gaggle.R;
 
 /**
  * Allows selecting the contents of InfoDockListView

@@ -1,13 +1,10 @@
 package com.geeksville.location.parse;
 
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.util.Log;
 
 import com.geeksville.location.LocationUtils;
-import com.geeksville.location.Waypoint;
 import com.geeksville.location.WaypointDB;
 
 public class Jug extends Parse {

@@ -27,18 +27,14 @@ import java.util.Observer;
 import org.andnav.osm.DefaultResourceProxyImpl;
 import org.andnav.osm.views.OpenStreetMapView;
 import org.andnav.osm.views.overlay.OpenStreetMapViewItemizedOverlay;
-import org.andnav.osm.views.overlay.OpenStreetMapViewItemizedOverlayWithFocus;
 
 import android.app.Activity;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Paint.Align;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
-import android.util.Log;
 
 import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.R;

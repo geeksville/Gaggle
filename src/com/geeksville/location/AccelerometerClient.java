@@ -21,7 +21,7 @@
 package com.geeksville.location;
 
 import android.content.Context;
-import android.hardware.*;
+import android.hardware.Sensor;
 
 public class AccelerometerClient extends SensorClient {
 

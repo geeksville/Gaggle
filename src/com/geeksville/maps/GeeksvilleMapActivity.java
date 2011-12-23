@@ -22,7 +22,6 @@ package com.geeksville.maps;
 
 import org.andnav.osm.ResourceProxy;
 import org.andnav.osm.util.GeoPoint;
-import org.andnav.osm.views.OpenStreetMapView;
 import org.andnav.osm.views.OpenStreetMapViewController;
 import org.andnav.osm.views.overlay.MyLocationOverlay;
 import org.andnav.osm.views.util.IOpenStreetMapRendererInfo;
@@ -33,8 +32,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.SubMenu;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.LifeCycleHandler;

@@ -20,20 +20,20 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
-import com.geeksville.location.LocationList;
-import com.geeksville.util.MathUtil;
-import com.geeksville.view.ViewUtil;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.geeksville.location.LocationList;
+import com.geeksville.util.MathUtil;
+import com.geeksville.view.ViewUtil;
 
 /**
  * Draw an altitude plot

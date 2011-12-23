@@ -23,8 +23,6 @@ package com.geeksville.gaggle;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.geeksville.gaggle.R;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

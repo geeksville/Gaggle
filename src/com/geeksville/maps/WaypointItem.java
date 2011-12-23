@@ -23,11 +23,8 @@ package com.geeksville.maps;
 import org.andnav.osm.views.overlay.OpenStreetMapViewOverlayItem;
 
 import android.app.Activity;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 

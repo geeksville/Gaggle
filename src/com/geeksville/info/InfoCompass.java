@@ -25,6 +25,7 @@ import java.util.Observer;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+
 import com.geeksville.gaggle.R;
 import com.geeksville.location.CompassClient;
 

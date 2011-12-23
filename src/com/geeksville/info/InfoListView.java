@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.geeksville.gaggle.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -38,6 +36,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+
+import com.geeksville.gaggle.R;
 
 /**
  * A vertical list of info docks

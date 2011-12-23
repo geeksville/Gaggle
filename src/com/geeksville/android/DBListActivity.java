@@ -20,21 +20,21 @@
  ******************************************************************************/
 package com.geeksville.android;
 
-import com.flurry.android.FlurryAgent;
-import com.geeksville.gaggle.R;
-import com.geeksville.location.LocationLogDbAdapter;
-
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
+
+import com.flurry.android.FlurryAgent;
+import com.geeksville.gaggle.R;
+import com.geeksville.location.LocationLogDbAdapter;
 
 public abstract class DBListActivity extends ListActivity {
 

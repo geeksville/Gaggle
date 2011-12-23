@@ -20,12 +20,12 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
-import com.geeksville.gaggle.R;
-import com.geeksville.webkit.WebViewClient;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebView;
+
+import com.geeksville.webkit.WebViewClient;
 
 public class AboutActivity extends Activity {
 	WebView mWebView;

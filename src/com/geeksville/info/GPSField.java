@@ -26,7 +26,7 @@ import android.content.ServiceConnection;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.IBinder; 
+import android.os.IBinder;
 import android.util.Log;
 
 import com.geeksville.gaggle.GagglePrefs;
