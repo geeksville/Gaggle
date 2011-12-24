@@ -24,8 +24,14 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
+import com.geeksville.util.IIRFilter;
+
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient extends SensorClient {
+
+	IIRFilter filter = new IIRFilter(0.15f); // FIXME - let the user adjust this
+												// 0.20 is a little too noisy,
+												// 0.05 is too stable
 
 	/**
 	 * Current compass reading
@@ -64,7 +70,9 @@ public class BarometerClient extends SensorClient {
 
 	@Override
 	public void onThrottledSensorChanged(float[] values) {
-		pressure = values[0];
+		filter.addSample(values[0]);
+
+		pressure = filter.get();
 
 		setChanged();
 		notifyObservers(pressure);
