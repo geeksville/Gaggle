@@ -32,7 +32,7 @@ import android.hardware.SensorManager;
 
 abstract class SensorClient extends Observable implements SensorEventListener {
 
-	private SensorManager sensorMan;
+	protected static SensorManager sensorMan;
 
 	private int sensorType;
 

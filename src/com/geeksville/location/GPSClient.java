@@ -73,7 +73,7 @@ public class GPSClient extends Service implements IGPSClient {
 		}
 	}
 
-	private static GPSClient instance;
+	public static GPSClient instance;
 
 	private HashMap<LocationListener, UpdateFreq> listeners = new HashMap<LocationListener, UpdateFreq>();
 
@@ -87,6 +87,9 @@ public class GPSClient extends Service implements IGPSClient {
 	private TestGPSDriver simData = null;
 
 	private int currentStatus = OUT_OF_SERVICE;
+
+	// / Once we get a GPS altitude we will fixup the barometer
+	private boolean hasSetBarometer = false;
 
 	/**
 	 * Older SDKs don't define LocationProvider.AVAILABLE etc...
@@ -543,6 +546,12 @@ public class GPSClient extends Service implements IGPSClient {
 
 			// If we receive a position update, assume the GPS is working
 			currentStatus = AVAILABLE;
+
+			if (!hasSetBarometer && BarometerClient.isAvailable()
+					&& location.hasAltitude()) {
+				hasSetBarometer = true;
+				BarometerClient.setAltitude((float) location.getAltitude());
+			}
 
 			// Used to avoid holding the lock while running (slow) handlers
 			synchronized (listeners) {

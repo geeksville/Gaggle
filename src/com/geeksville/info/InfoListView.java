@@ -61,7 +61,8 @@ public class InfoListView extends ListView {
 			"com.geeksville.info.InfoLatitude",
 			"com.geeksville.info.InfoLongitude",
 			"com.geeksville.info.InfoGMeter",
-			"com.geeksville.info.InfoBarometer" };
+			"com.geeksville.info.InfoBarometer",
+			"com.geeksville.info.InfoBaroAltitude" };
 
 	private ArrayList<String> shownNames = new ArrayList<String>();
 

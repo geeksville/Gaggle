@@ -33,7 +33,7 @@ public class BarometerClient extends SensorClient {
 	public float pressure;
 
 	// / Defaults to 1013.25 hPa
-	public float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
+	private static float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
 
 	public BarometerClient(Context context) {
 		super(context, Sensor.TYPE_PRESSURE);
@@ -41,8 +41,15 @@ public class BarometerClient extends SensorClient {
 
 	// / Given a GPS based altitude, reverse engineer what the correct reference
 	// pressure is
-	public void setAltitude(float meters) {
-		throw new RuntimeException("setAltitude");
+	public static void setAltitude(float meters) {
+		float p0 = 101325; // Pressure at sea level (Pa)
+		float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
+
+		reference = p / 100; // Convert from Pa to hPa
+	}
+
+	public static boolean isAvailable() {
+		return sensorMan.getSensorList(Sensor.TYPE_PRESSURE).size() > 0;
 	}
 
 	// / Return altitude in meters

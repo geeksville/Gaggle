@@ -29,12 +29,12 @@ import com.geeksville.gaggle.R;
 import com.geeksville.location.BarometerClient;
 
 /**
- * A simple barometer display
+ * Display altitude from the barometer
  * 
  * @author kevinh
  * 
  */
-public class InfoBarometer extends InfoField implements Observer {
+public class InfoBaroAltitude extends InfoField implements Observer {
 
 	private float pressure;
 
@@ -42,16 +42,17 @@ public class InfoBarometer extends InfoField implements Observer {
 
 	@Override
 	public String getLabel() {
-		return context.getString(R.string.barometer);
+		return "Baro Altitude"; // No need to localize - this info block is only
+								// used for testing
 	}
 
 	/**
 	 * 
-	 * @see com.geeksville.info.InfoField#getText()
+	 * @see com.geeksville.info.InfoField#getLabel()
 	 */
 	@Override
-	public String getText() {
-		return String.format("%.2f", pressure);
+	public String getShortLabel() {
+		return context.getString(R.string.altitude_short);
 	}
 
 	/**
@@ -60,7 +61,22 @@ public class InfoBarometer extends InfoField implements Observer {
 	 */
 	@Override
 	public String getUnits() {
-		return "mb";
+		// TODO Auto-generated method stub
+		return Units.instance.getAltitudeUnits();
+	}
+
+	float altMeters = Float.NaN;
+
+	/**
+	 * 
+	 * @see com.geeksville.info.InfoField#getText()
+	 */
+	@Override
+	public String getText() {
+		if (Float.isNaN(altMeters))
+			return "---";
+
+		return Units.instance.metersToAltitude(altMeters);
 	}
 
 	/**
@@ -101,10 +117,10 @@ public class InfoBarometer extends InfoField implements Observer {
 	@Override
 	public void update(Observable observable, Object data) {
 
-		float npressure = (Float) data;
+		float nalt = baro.getAltitude();
 
-		if (npressure != pressure) {
-			pressure = npressure;
+		if (nalt != altMeters) {
+			altMeters = nalt;
 
 			onChanged();
 		}

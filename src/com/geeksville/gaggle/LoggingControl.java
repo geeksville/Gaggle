@@ -26,6 +26,7 @@ import java.io.ObjectOutputStream;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -43,6 +44,8 @@ import com.geeksville.android.LifeCyclePublisher;
 import com.geeksville.android.LifeCyclePublisherImpl;
 import com.geeksville.info.InfoListView;
 import com.geeksville.info.SelectInfoFieldsActivity;
+import com.geeksville.location.BarometerClient;
+import com.geeksville.location.GPSClient;
 import com.geeksville.location.GPSToPositionWriter;
 import com.geeksville.location.LeonardoLiveWriter;
 import com.geeksville.location.LocationDBWriter;
@@ -272,6 +275,12 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 		super.onCreateOptionsMenu(menu);
 
 		getMenuInflater().inflate(R.menu.current_flight, menu);
+		menu.findItem(R.id.setAltFromGPS).setVisible(
+				BarometerClient.isAvailable()
+						&& GPSClient.instance != null
+						&& GPSClient.instance.getLastKnownLocation() != null
+						&& GPSClient.instance.getLastKnownLocation()
+								.hasAltitude());
 
 		return true;
 	}
@@ -287,7 +296,13 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 			intent.putExtra("checked", infoView.getChecked());
 			startActivityForResult(intent, INFOSELECT_REQUEST);
 			return true;
+		case R.id.setAltFromGPS:
+			// FIXME - http://blueflyvario.blogspot.com/2011_05_01_archive.html
+			Location loc = GPSClient.instance.getLastKnownLocation();
+			BarometerClient.setAltitude((float) loc.getAltitude());
+			return true;
 		}
+
 		return super.onMenuItemSelected(featureId, item);
 	}
 
@@ -347,8 +362,8 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 		final Account acct = new Account(this, "live2");
 
 		// We always log to the DB
-		final PositionWriter dbwriter = new LocationDBWriter(this, prefs
-				.isDelayedUpload(), prefs.getPilotName(), null);
+		final PositionWriter dbwriter = new LocationDBWriter(this,
+				prefs.isDelayedUpload(), prefs.getPilotName(), null);
 
 		// Also always keep the the current live track
 		// FIXME - skanky way we pass live tracks to the map
@@ -360,61 +375,67 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 		loggingButton.setEnabled(false); // Turn off the button until our
 		// background thread finishes
 
-		AsyncProgressDialog progress =
-				new AsyncProgressDialog(this, getString(R.string.starting_logging),
-						getString(R.string.please_wait)) {
+		AsyncProgressDialog progress = new AsyncProgressDialog(this,
+				getString(R.string.starting_logging),
+				getString(R.string.please_wait)) {
 
-					@Override
-					protected void doInBackground() {
-						PositionWriter[] selected = null;
+			@Override
+			protected void doInBackground() {
+				PositionWriter[] selected = null;
 
-						// Possibly also leonardo live
-						if (prefs.isLiveUpload()) {
-							try {
-								if (!acct.isValid())
-									throw new Exception(
-											getString(R.string.username_or_password_is_unset));
+				// Possibly also leonardo live
+				if (prefs.isLiveUpload()) {
+					try {
+						if (!acct.isValid())
+							throw new Exception(
+									getString(R.string.username_or_password_is_unset));
 
-								// FIXME - do this in an async dialog helper
-								PositionWriter liveWriter = new LeonardoLiveWriter(
-										LoggingControl.this, acct.serverURL,
-										acct.username, acct.password, prefs.getWingModel(), prefs.getLeonardoLiveVehicleType(), prefs
-												.getLiveLogTimeInterval());
+						// FIXME - do this in an async dialog helper
+						PositionWriter liveWriter = new LeonardoLiveWriter(
+								LoggingControl.this, acct.serverURL,
+								acct.username, acct.password,
+								prefs.getWingModel(),
+								prefs.getLeonardoLiveVehicleType(),
+								prefs.getLiveLogTimeInterval());
 
-								selected = new PositionWriter[] { dbwriter, ramwriter, liveWriter };
-							} catch (Exception ex) {
-								// Bad password or connection problems
-						showCompletionDialog(LoggingControl.this
-										.getString(R.string.leonardolive_problem), ex.getMessage());
-							}
-						}
-
-						// If we haven't already connected to the live server
-						if (selected == null)
-							selected = new PositionWriter[] { dbwriter, ramwriter };
-
-						PositionWriter writer = new PositionWriterSet(selected);
-
-						// Start up our logger service
-						GPSToPositionWriter gpsToPos = ((GaggleApplication) getApplication())
-								.getGpsLogger();
-
-						gpsToPos.startLogging(getApplication(), writer, prefs.getLogTimeInterval(),
-								prefs.getLaunchDistX(), prefs.getLaunchDistY());
+						selected = new PositionWriter[] { dbwriter, ramwriter,
+								liveWriter };
+					} catch (Exception ex) {
+						// Bad password or connection problems
+						showCompletionDialog(
+								LoggingControl.this
+										.getString(R.string.leonardolive_problem),
+								ex.getMessage());
 					}
+				}
 
-					/**
-					 * @see com.geeksville.view.AsyncProgressDialog#onPostExecute
-					 *      (java.lang.Void)
-					 */
-					@Override
-					protected void onPostExecute(Void unused) {
-						loggingButton.setEnabled(true);
+				// If we haven't already connected to the live server
+				if (selected == null)
+					selected = new PositionWriter[] { dbwriter, ramwriter };
 
-						super.onPostExecute(unused);
-					}
+				PositionWriter writer = new PositionWriterSet(selected);
 
-				};
+				// Start up our logger service
+				GPSToPositionWriter gpsToPos = ((GaggleApplication) getApplication())
+						.getGpsLogger();
+
+				gpsToPos.startLogging(getApplication(), writer,
+						prefs.getLogTimeInterval(), prefs.getLaunchDistX(),
+						prefs.getLaunchDistY());
+			}
+
+			/**
+			 * @see com.geeksville.view.AsyncProgressDialog#onPostExecute
+			 *      (java.lang.Void)
+			 */
+			@Override
+			protected void onPostExecute(Void unused) {
+				loggingButton.setEnabled(true);
+
+				super.onPostExecute(unused);
+			}
+
+		};
 
 		progress.execute();
 	}
