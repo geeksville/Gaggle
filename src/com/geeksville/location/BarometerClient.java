@@ -65,7 +65,7 @@ public class BarometerClient extends SensorClient {
 
 	// / In m/s
 	public float getVerticalSpeed() {
-		return regression.getSlope();
+		return regression.getSlope() * 1000;
 	}
 
 	@Override

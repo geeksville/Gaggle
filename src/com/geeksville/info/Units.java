@@ -178,8 +178,16 @@ public class Units {
 		return getSpeedUnits(hspeed);
 	}
 
+	public String getVSpeedUnits() {
+		return getSpeedUnits(vspeed);
+	}
+
 	public String meterPerSecToSpeed(double v) {
 		return String.format("%.1f", toSelectedUnits(hspeed, speedScaling, v));
+	}
+
+	public String meterPerSecToVSpeed(double v) {
+		return String.format("%.1f", toSelectedUnits(vspeed, speedScaling, v));
 	}
 
 	/**
