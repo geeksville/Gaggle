@@ -119,6 +119,10 @@ abstract class SensorClient extends Observable implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		this.values = event.values; // No need for a deep copy
+		fullRateSensorChanged(values);
+	}
+
+	protected void fullRateSensorChanged(float[] values) {
 		// We limit updates to a slowish rate to avoid burning cycles elsewhere
 		long nowMs = System.currentTimeMillis();
 		long diff = nowMs - lastUpdate;

@@ -25,6 +25,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
 import com.geeksville.util.IIRFilter;
+import com.geeksville.util.LinearRegression;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient extends SensorClient {
@@ -33,10 +34,9 @@ public class BarometerClient extends SensorClient {
 												// 0.20 is a little too noisy,
 												// 0.05 is too stable
 
-	/**
-	 * Current compass reading
-	 */
-	public float pressure;
+	LinearRegression regression = new LinearRegression();
+
+	public float pressure, altitude;
 
 	// / Defaults to 1013.25 hPa
 	private static float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
@@ -60,7 +60,12 @@ public class BarometerClient extends SensorClient {
 
 	// / Return altitude in meters
 	public float getAltitude() {
-		return SensorManager.getAltitude(reference, pressure);
+		return altitude;
+	}
+
+	// / In m/s
+	public float getVerticalSpeed() {
+		return regression.getSlope();
 	}
 
 	@Override
@@ -68,12 +73,20 @@ public class BarometerClient extends SensorClient {
 		// Auto-generated method stub
 	}
 
+	// / We want to sample _every_ baro reading we see
 	@Override
-	public void onThrottledSensorChanged(float[] values) {
+	protected void fullRateSensorChanged(float[] values) {
 		filter.addSample(values[0]);
 
 		pressure = filter.get();
+		altitude = SensorManager.getAltitude(reference, pressure);
+		regression.addSample(System.currentTimeMillis(), altitude);
 
+		super.fullRateSensorChanged(values);
+	}
+
+	@Override
+	public void onThrottledSensorChanged(float[] values) {
 		setChanged();
 		notifyObservers(pressure);
 	}
