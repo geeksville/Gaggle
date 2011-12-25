@@ -53,11 +53,12 @@ public class IGCWriter implements PositionWriter {
 	private String flightDesc;
 	private String gliderType;
 	private String pilotId;
+	private boolean hasJRecord = false;
 
 	private Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 
-	public IGCWriter(OutputStream dest, String pilotName, String flightDesc, String gliderType,
-			String pilotId) throws IOException {
+	public IGCWriter(OutputStream dest, String pilotName, String flightDesc,
+			String gliderType, String pilotId) throws IOException {
 		out = new PrintStream(new LineEndingStream(dest));
 
 		this.gliderType = gliderType;
@@ -76,7 +77,7 @@ public class IGCWriter implements PositionWriter {
 		out.println("GGaggleDoesntDoGRecordsYet");
 
 		// out.println("G03C15AF3BC8A4A288FAB70442A567DEB");
-		
+
 		out.close();
 	}
 
@@ -99,8 +100,7 @@ public class IGCWriter implements PositionWriter {
 		// DDMMmmmN(or S) latitude
 		// DDDMMmmmE(or W) longitude
 		String s = String.format(Locale.US, (isLatitude ? "%02d" : "%03d")
-				+ "%02d%03d%c", (int) degIn,
-				minwhole, minfract, dirLetter);
+				+ "%02d%03d%c", (int) degIn, minwhole, minfract, dirLetter);
 		return s;
 	}
 
@@ -114,8 +114,9 @@ public class IGCWriter implements PositionWriter {
 	 *            sect 4.1, B=fix plus extension data mentioned in I
 	 */
 	@Override
-	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed, float[] accel, float vspd) {
+	public void emitPosition(long time, double latitude, double longitude,
+			float altitude, int bearing, float groundSpeed, float[] accel,
+			float vspd) {
 		// B
 		// HHMMSS - time UTC
 		// DDMMmmmN(or S) latitude
@@ -139,14 +140,28 @@ public class IGCWriter implements PositionWriter {
 
 		int hours = cal.get(Calendar.HOUR_OF_DAY);
 		out.format(Locale.US, "B%02d%02d%02d%s%s%c%05d%05d%03d", hours, cal
-				.get(Calendar.MINUTE), cal
-				.get(Calendar.SECOND),
-				degreeStr(latitude, true), degreeStr(longitude, false), is3D ? 'A' : 'V',
-				(int) (is3D ? altitude : 0), // FIXME convert altitudes
+				.get(Calendar.MINUTE), cal.get(Calendar.SECOND),
+				degreeStr(latitude, true), degreeStr(longitude, false),
+				is3D ? 'A' : 'V', (int) (is3D ? altitude : 0), // FIXME convert
+																// altitudes
 				// correctly
 				(int) (is3D ? altitude : 0), // FIXME convert alts
 				(int) groundSpeed);
 		out.println();
+
+		if (!Float.isNaN(vspd)) {
+
+			if (!hasJRecord) {
+				// less frequent extension - vario data
+				out.println("J010812VAR");
+				hasJRecord = true;
+			}
+
+			out.format(Locale.US, "K%02d%02d%02d%03d", hours,
+					cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND),
+					(int) vspd);
+			out.println();
+		}
 	}
 
 	/**
@@ -159,8 +174,7 @@ public class IGCWriter implements PositionWriter {
 
 		// sect 3.3.1, H=file header
 		String dstr = String.format(Locale.US, "HFDTE%02d%02d%02d",
-				cal.get(Calendar.DAY_OF_MONTH),
-				cal.get(Calendar.MONTH) + 1,
+				cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1,
 				(cal.get(Calendar.YEAR) - 1900) % 100); // date
 
 		out.println(dstr); // date
