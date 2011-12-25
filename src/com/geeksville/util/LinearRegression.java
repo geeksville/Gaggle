@@ -21,7 +21,7 @@ public class LinearRegression {
 	long sumx;
 	double sumy;
 
-	private long xspan = 20 * 1000; // typically milliseconds
+	private long xspan = 2 * 1000; // typically milliseconds
 
 	public float getXspan() {
 		return xspan;
