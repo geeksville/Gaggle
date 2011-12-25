@@ -30,8 +30,17 @@ public class CompassClient extends SensorClient {
 	 */
 	public int bearing;
 
-	public CompassClient(Context context) {
+	private static CompassClient instance = null;
+
+	private CompassClient(Context context) {
 		super(context, Sensor.TYPE_ORIENTATION);
+	}
+
+	public CompassClient create(Context context) {
+		if (instance == null)
+			instance = new CompassClient(context);
+
+		return instance;
 	}
 
 	@Override

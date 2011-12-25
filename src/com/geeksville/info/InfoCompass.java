@@ -75,9 +75,7 @@ public class InfoCompass extends InfoField implements Observer {
 		super.onCreate(context);
 
 		if (context != null) {
-
-			// FIXME - we should share one compass client object
-			compass = new CompassClient(context);
+			compass = CompassClient.create(context);
 
 			image = new HeadingDrawable(context, compass);
 		}

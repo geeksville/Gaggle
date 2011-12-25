@@ -64,7 +64,7 @@ public class InfoDistWaypoint extends InfoField implements Observer {
 			db = app.getWaypoints();
 
 			// FIXME - we should share one compass client object
-			compass = new CompassClient(context);
+			compass = CompassClient.create(context);
 			image = new HeadingDrawable(context, compass);
 		}
 	}
