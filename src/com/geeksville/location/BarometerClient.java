@@ -25,6 +25,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import com.geeksville.android.PreferenceUtil;
 import com.geeksville.util.IIRFilter;
 import com.geeksville.util.LinearRegression;
 
@@ -33,9 +34,7 @@ public class BarometerClient extends SensorClient {
 
 	private static final String TAG = "BarometerClient";
 
-	IIRFilter filter = new IIRFilter(0.15f); // FIXME - let the user adjust this
-												// 0.20 is a little too noisy,
-												// 0.05 is too stable
+	IIRFilter filter = new IIRFilter();
 
 	LinearRegression regression = new LinearRegression();
 
@@ -48,6 +47,14 @@ public class BarometerClient extends SensorClient {
 
 	private BarometerClient(Context context) {
 		super(context, Sensor.TYPE_PRESSURE);
+
+		// 0.20 is a little too noisy,
+		// 0.05 is too stable
+		filter.setDampingFactor(PreferenceUtil.getFloat(context,
+				"averaging_percentage", 0.15f));
+
+		regression.setXspan((long) (PreferenceUtil.getFloat(context,
+				"integration_period", 1.0f) * 1000));
 	}
 
 	/**

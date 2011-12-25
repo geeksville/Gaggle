@@ -16,9 +16,15 @@ package com.geeksville.util;
  */
 public class IIRFilter {
 	private float current = Float.NaN;
-	private float dampingFactor;
 
-	public IIRFilter(float dampingFactor) {
+	// / Default to no averaging
+	private float dampingFactor = 1.0f;
+
+	public float getDampingFactor() {
+		return dampingFactor;
+	}
+
+	public void setDampingFactor(float dampingFactor) {
 		this.dampingFactor = dampingFactor;
 	}
 
