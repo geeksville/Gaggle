@@ -20,12 +20,19 @@
  ******************************************************************************/
 package com.geeksville.info;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import android.app.Activity;
 import android.location.Location;
 
 import com.geeksville.gaggle.R;
+import com.geeksville.location.BarometerClient;
 
 /// FIXME - show either baro or GPS based altitude?
-public class InfoAltitude extends GPSField {
+public class InfoAltitude extends GPSField implements Observer {
+
+	private BarometerClient baro;
 
 	public InfoAltitude() {
 		// minDistMeters = 0; // We want updates even if horizontal pos hasn't
@@ -74,6 +81,42 @@ public class InfoAltitude extends GPSField {
 		return Units.instance.metersToAltitude(altMeters);
 	}
 
+	/**
+	 * @see com.geeksville.info.InfoField#onCreate(android.app.Activity)
+	 */
+	@Override
+	public void onCreate(Activity context) {
+		super.onCreate(context);
+
+		if (context != null) {
+			// FIXME - we should share one compass client object
+			baro = BarometerClient.create(context);
+		}
+	}
+
+	/**
+	 * @see com.geeksville.info.InfoField#onHidden()
+	 */
+	@Override
+	void onHidden() {
+		super.onHidden();
+
+		if (baro != null)
+			baro.deleteObserver(this);
+	}
+
+	/**
+	 * @see com.geeksville.info.InfoField#onShown()
+	 */
+	@Override
+	void onShown() {
+		super.onShown();
+
+		if (baro != null)
+			baro.addObserver(this);
+	}
+
+	// / Handle updates from GPS
 	@Override
 	public void onLocationChanged(Location location) {
 		double naltMeters = location.hasAltitude() ? location.getAltitude() : Double.NaN;
@@ -85,4 +128,16 @@ public class InfoAltitude extends GPSField {
 		}
 	}
 
+	// / Handle updates from barometer
+	@Override
+	public void update(Observable observable, Object data) {
+
+		float nalt = baro.getAltitude();
+
+		if (nalt != altMeters) {
+			altMeters = nalt;
+
+			onChanged();
+		}
+	}
 }

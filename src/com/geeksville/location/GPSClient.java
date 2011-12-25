@@ -549,10 +549,15 @@ public class GPSClient extends Service implements IGPSClient {
 			// If we receive a position update, assume the GPS is working
 			currentStatus = AVAILABLE;
 
-			if (!hasSetBarometer && baro != null
-					&& location.hasAltitude()) {
-				hasSetBarometer = true;
-				baro.setAltitude((float) location.getAltitude());
+			if (baro != null) {
+				if (!hasSetBarometer && location.hasAltitude()) {
+					hasSetBarometer = true;
+					baro.setAltitude((float) location.getAltitude());
+				}
+
+				// Before forwarding the location to others, substitude the
+				// (better) baro based altitude
+				baro.improveLocation(location);
 			}
 
 			// Used to avoid holding the lock while running (slow) handlers

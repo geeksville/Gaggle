@@ -25,6 +25,7 @@ import java.util.Observer;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.util.Log;
 
 import com.geeksville.android.PreferenceUtil;
@@ -44,6 +45,9 @@ public class BarometerClient extends SensorClient {
 
 	// / Defaults to 1013.25 hPa
 	private float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
+
+	// / true if we've been set based on the GPS
+	private boolean isCalibrated = false;
 
 	private Context context;
 
@@ -83,6 +87,13 @@ public class BarometerClient extends SensorClient {
 		return instance;
 	}
 
+	// / If we've been calibrated, override the GPS provided altitude with our
+	// baro based alt
+	public void improveLocation(Location l) {
+		if (isCalibrated)
+			l.setAltitude(altitude);
+	}
+
 	// / Given a GPS based altitude, reverse engineer what the correct reference
 	// pressure is
 	public void setAltitude(float meters) {
@@ -91,8 +102,10 @@ public class BarometerClient extends SensorClient {
 		float p0 = pressure / (float) Math.pow((1 - meters / 44330), 5.255);
 
 		reference = p0;
+		altitude = SensorManager.getAltitude(reference, pressure);
 
 		Log.w(TAG, "Setting baro reference to " + reference + " alt=" + meters);
+		isCalibrated = true;
 	}
 
 	private static boolean isAvailable() {
