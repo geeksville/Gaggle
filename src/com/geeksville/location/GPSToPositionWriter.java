@@ -20,6 +20,9 @@
  ******************************************************************************/
 package com.geeksville.location;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
@@ -38,7 +41,8 @@ import com.geeksville.gaggle.R;
  * @author kevinh
  * 
  */
-public class GPSToPositionWriter extends AbstractLocationListener implements ServiceConnection {
+public class GPSToPositionWriter extends AbstractLocationListener implements
+		ServiceConnection, Observer {
 
 	private Location initialPos;
 
@@ -72,6 +76,7 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 	ChangeHandler myObserver;
 
 	AccelerometerClient accel = null;
+	BarometerClient baro = null;
 
 	public void setObserver(ChangeHandler obs) {
 		myObserver = obs;
@@ -144,8 +149,13 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 			GPSClient.unbindFrom(context, this);
 
 			if (accel != null) {
-				accel.stopListening();
+				accel.deleteObserver(this);
 				accel = null;
+			}
+
+			if (baro != null) {
+				baro.deleteObserver(this);
+				baro = null;
 			}
 		}
 	}
@@ -155,9 +165,13 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 		this.context = context;
 
 		if (!isLogging()) {
-			accel = new AccelerometerClient(context); // FIXME - make this
-														// optional
-			//accel.startListening();
+			accel = AccelerometerClient.create(context);
+			if (accel != null)
+				accel.addObserver(this);
+
+			baro = BarometerClient.create(context);
+			if (baro != null)
+				baro.addObserver(this);
 
 			this.numPoints = 0;
 			this.pollInterval = pollIntervalSecs;
@@ -231,6 +245,7 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 		// convert m/sec to km/hr
 
 		float[] accelVals = (accel != null) ? accel.getValues() : null;
+		float vspd = (baro != null) ? baro.getVerticalSpeed() : Float.NaN;
 
 		// The emulator will falsely claim 0 for the first point reported -
 		// skip it
@@ -238,7 +253,7 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 			dest.emitPosition(location.getTime(), lat, longitude,
 					location.hasAltitude() ? (float) location
 							.getAltitude() : Float.NaN, (int) location.getBearing(), kmPerHr,
-					accelVals);
+					accelVals, vspd);
 	}
 
 	@Override
@@ -302,6 +317,12 @@ public class GPSToPositionWriter extends AbstractLocationListener implements Ser
 	@Override
 	public void onProviderDisabled(String provider) {
 		stopLogging();
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

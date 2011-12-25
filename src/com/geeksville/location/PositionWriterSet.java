@@ -49,9 +49,9 @@ public class PositionWriterSet implements PositionWriter {
 
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed, float[] accel) {
+			int bearing, float groundSpeed, float[] accel, float vspd) {
 		for (PositionWriter w : writers) {
-			w.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed, accel);
+			w.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed, accel, Float.NaN);
 		}
 	}
 

@@ -65,7 +65,8 @@ public class LocationDBWriter implements PositionWriter {
 	 * @param wantUpload
 	 *            true if we'd like this flight uploaded asap
 	 */
-	public LocationDBWriter(Context context, boolean wantUpload, String pilotName, String flightDesc) {
+	public LocationDBWriter(Context context, boolean wantUpload,
+			String pilotName, String flightDesc) {
 		db = new LocationLogDbAdapter(context);
 
 		this.wantUpload = wantUpload;
@@ -81,8 +82,9 @@ public class LocationDBWriter implements PositionWriter {
 	}
 
 	@Override
-	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed, float[] accel) {
+	public void emitPosition(long time, double latitude, double longitude,
+			float altitude, int bearing, float groundSpeed, float[] accel,
+			float vspd) {
 
 		lastTime = time;
 
@@ -93,7 +95,8 @@ public class LocationDBWriter implements PositionWriter {
 		}
 
 		// FIXME, figure out if reported bearing is a heading or a ground track
-		db.addLocation(flightId, time, latitude, longitude, altitude, bearing, groundSpeed, accel);
+		db.addLocation(flightId, time, latitude, longitude, altitude, bearing,
+				groundSpeed, accel, vspd);
 	}
 
 	@Override

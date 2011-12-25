@@ -99,7 +99,7 @@ public class GPXWriter implements PositionWriter {
 	 */
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed, float[] accel) {
+			int bearing, float groundSpeed, float[] accel, float vspd) {
 		/* Trackpoint gpx format :			
  		<trkpt lat="45.563466667" lon="5.916783333">
 		  <ele>362.000000</ele>

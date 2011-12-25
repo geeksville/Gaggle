@@ -36,7 +36,7 @@ public class CompassClient extends SensorClient {
 		super(context, Sensor.TYPE_ORIENTATION);
 	}
 
-	public CompassClient create(Context context) {
+	public static CompassClient create(Context context) {
 		if (instance == null)
 			instance = new CompassClient(context);
 

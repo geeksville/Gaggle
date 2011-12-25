@@ -50,9 +50,13 @@ public class BarometerClient extends SensorClient {
 		super(context, Sensor.TYPE_PRESSURE);
 	}
 
-	// / All users of barometer share the same (expensive) instance
+	/**
+	 * All users of barometer share the same (expensive) instance
+	 * 
+	 * @return null for if not available
+	 */
 	public static BarometerClient create(Context context) {
-		if (instance == null)
+		if (instance == null && isAvailable())
 			instance = new BarometerClient(context);
 
 		return instance;

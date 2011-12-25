@@ -178,6 +178,8 @@ public final class LocationUtils {
 		int accxCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_ACCX);
 		int accyCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_ACCY);
 		int acczCol = pts.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_ACCZ);
+		int vspdCol = pts
+				.getColumnIndexOrThrow(LocationLogDbAdapter.KEY_LOC_VSPD);
 
 		int numPts = pts.getCount();
 
@@ -202,7 +204,11 @@ public final class LocationUtils {
 				accel[2] = pts.getFloat(acczCol);
 			}
 
-			dest.emitPosition(time, latitude, longitude, altitude, bearing, groundSpeed, accel);
+			float vspd = pts.isNull(vspdCol) ? Float.NaN : pts
+					.getFloat(vspdCol);
+
+			dest.emitPosition(time, latitude, longitude, altitude, bearing,
+					groundSpeed, accel, vspd);
 
 			pts.moveToNext();
 		}

@@ -51,7 +51,7 @@ abstract class SensorClient extends Observable implements SensorEventListener {
 	 * If you are just using observers, you do not need to call this method. It
 	 * is here folks who want to poll instead
 	 */
-	public void stopListening() {
+	private void stopListening() {
 		sensorMan.unregisterListener(this);
 	}
 
@@ -68,7 +68,7 @@ abstract class SensorClient extends Observable implements SensorEventListener {
 	 * If you are just using observers, you do not need to call this method. It
 	 * is here folks who want to poll instead
 	 */
-	public void startListening() {
+	private void startListening() {
 		Sensor sensor = getSensor();
 		sensorMan.registerListener(
 				this,

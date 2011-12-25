@@ -175,11 +175,11 @@ public class LeonardoLiveWriter implements PositionWriter {
 	long lastUpdateTime = SystemClock.elapsedRealtime();
 	/**
 	 * @see com.geeksville.location.PositionWriter#emitPosition(long, double,
-	 *      double, float, int, float, float[])
+	 *      double, float, int, float, float[], float)
 	 */
 	@Override
 	public void emitPosition(long time, double latitude, double longitude, float altitude,
-			int bearing, float groundSpeed, float[] accel) {
+			int bearing, float groundSpeed, float[] accel, float vspd) {
 		try {
 			int groundKmPerHr = (int) groundSpeed;
 			int unixTimestamp = (int) (time / 1000); // Convert from msecs to
