@@ -86,12 +86,13 @@ public class BarometerClient extends SensorClient {
 	// / Given a GPS based altitude, reverse engineer what the correct reference
 	// pressure is
 	public void setAltitude(float meters) {
-		float p0 = 101325; // Pressure at sea level (Pa)
-		float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
+		// float p0 = 1013.25f; // Pressure at sea level (hPa)
+		// float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
+		float p0 = pressure / (float) Math.pow((1 - meters / 44330), 5.255);
 
-		reference = p / 100; // Convert from Pa to hPa
-		Log.w(TAG, "Setting baro reference to " + reference + " due to alt "
-				+ meters);
+		reference = p0;
+
+		Log.w(TAG, "Setting baro reference to " + reference + " alt=" + meters);
 	}
 
 	private static boolean isAvailable() {
