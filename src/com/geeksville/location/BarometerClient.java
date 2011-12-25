@@ -66,11 +66,15 @@ public class BarometerClient extends SensorClient {
 
 		// 0.20 is a little too noisy,
 		// 0.05 is too stable
-		filter.setDampingFactor(PreferenceUtil.getFloat(context,
-				"averaging_percentage", 0.15f));
+		float damp = PreferenceUtil.getFloat(context, "averaging_percentage",
+				0.17f);
+		filter.setDampingFactor(damp);
 
-		regression.setXspan((long) (PreferenceUtil.getFloat(context,
-				"integration_period", 1.0f) * 1000));
+		long xspan = (long) (PreferenceUtil.getFloat(context,
+				"integration_period", 1.0f) * 1000);
+		regression.setXspan(xspan);
+
+		Log.d(TAG, "Setting damp=" + damp + " xspan=" + xspan);
 	}
 
 	/**

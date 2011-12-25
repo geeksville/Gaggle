@@ -52,8 +52,8 @@
 
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="averaging_percentage" android:title="Averaging Percentage"
-				android:summary="For our IIR filter"
-				android:defaultValue="0.10" android:inputType="numberDecimal" />
+				android:summary="For our IIR filter (recommended 0.17)"
+				android:defaultValue="0.17" android:inputType="numberDecimal" />
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="integration_period" android:title="Integration period"
