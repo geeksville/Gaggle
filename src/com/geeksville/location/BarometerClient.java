@@ -20,6 +20,8 @@
  ******************************************************************************/
 package com.geeksville.location;
 
+import java.util.Observer;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -41,12 +43,22 @@ public class BarometerClient extends SensorClient {
 	public float pressure, altitude;
 
 	// / Defaults to 1013.25 hPa
-	private static float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
+	private float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
+
+	private Context context;
 
 	private static BarometerClient instance = null;
 
 	private BarometerClient(Context context) {
 		super(context, Sensor.TYPE_PRESSURE);
+		this.context = context;
+	}
+
+	/** Cheezy trick to apply preferences changes immediately on view change */
+	@Override
+	public synchronized void addObserver(Observer observer) {
+		// TODO Auto-generated method stub
+		super.addObserver(observer);
 
 		// 0.20 is a little too noisy,
 		// 0.05 is too stable
@@ -63,6 +75,8 @@ public class BarometerClient extends SensorClient {
 	 * @return null for if not available
 	 */
 	public static BarometerClient create(Context context) {
+		initManager(context);
+
 		if (instance == null && isAvailable())
 			instance = new BarometerClient(context);
 
@@ -71,7 +85,7 @@ public class BarometerClient extends SensorClient {
 
 	// / Given a GPS based altitude, reverse engineer what the correct reference
 	// pressure is
-	public static void setAltitude(float meters) {
+	public void setAltitude(float meters) {
 		float p0 = 101325; // Pressure at sea level (Pa)
 		float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
 
@@ -80,7 +94,7 @@ public class BarometerClient extends SensorClient {
 				+ meters);
 	}
 
-	public static boolean isAvailable() {
+	private static boolean isAvailable() {
 		return sensorMan.getSensorList(Sensor.TYPE_PRESSURE).size() > 0;
 	}
 

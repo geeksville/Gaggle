@@ -27,19 +27,23 @@ public class AccelerometerClient extends SensorClient {
 
 	private static AccelerometerClient instance = null;
 
+	float[] gravity = { 0, 0, 0 };
+	private boolean firstpass = true;
+
 	private AccelerometerClient(Context context) {
 		super(context, Sensor.TYPE_ACCELEROMETER);
 	}
 
 	public static AccelerometerClient create(Context context) {
-		if (instance == null)
+		if (instance == null && isAvailable())
 			instance = new AccelerometerClient(context);
 
 		return instance;
 	}
 
-	float[] gravity = { 0, 0, 0 };
-	private boolean firstpass = true;
+	private static boolean isAvailable() {
+		return sensorMan.getSensorList(Sensor.TYPE_ACCELEROMETER).size() > 0;
+	}
 
 	@Override
 	public void onThrottledSensorChanged(float[] values) {

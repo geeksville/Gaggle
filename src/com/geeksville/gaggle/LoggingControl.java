@@ -276,7 +276,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 
 		getMenuInflater().inflate(R.menu.current_flight, menu);
 		menu.findItem(R.id.setAltFromGPS).setVisible(
-				BarometerClient.isAvailable()
+				BarometerClient.create(this) != null
 						&& GPSClient.instance != null
 						&& GPSClient.instance.getLastKnownLocation() != null
 						&& GPSClient.instance.getLastKnownLocation()
@@ -299,7 +299,7 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
 		case R.id.setAltFromGPS:
 			// FIXME - http://blueflyvario.blogspot.com/2011_05_01_archive.html
 			Location loc = GPSClient.instance.getLastKnownLocation();
-			BarometerClient.setAltitude((float) loc.getAltitude());
+			BarometerClient.create(this).setAltitude((float) loc.getAltitude());
 			return true;
 		}
 

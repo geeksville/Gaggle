@@ -39,12 +39,18 @@ abstract class SensorClient extends Observable implements SensorEventListener {
 	protected int timeSpanMs = 500;
 
 	public SensorClient(Context context, int sensorType) {
-		sensorMan = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+		initManager(context);
 
 		this.sensorType = sensorType;
 
 		if (getSensor() == null)
 			throw new RuntimeException("Sensor not found");
+	}
+
+	static void initManager(Context context) {
+		if (sensorMan == null)
+			sensorMan = (SensorManager) context
+					.getSystemService(Context.SENSOR_SERVICE);
 	}
 
 	/**

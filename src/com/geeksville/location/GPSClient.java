@@ -90,6 +90,7 @@ public class GPSClient extends Service implements IGPSClient {
 
 	// / Once we get a GPS altitude we will fixup the barometer
 	private boolean hasSetBarometer = false;
+	private BarometerClient baro = null;
 
 	/**
 	 * Older SDKs don't define LocationProvider.AVAILABLE etc...
@@ -258,6 +259,7 @@ public class GPSClient extends Service implements IGPSClient {
 
 		instance = this;
 		manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		baro = BarometerClient.create(GPSClient.this);
 
 		// Start our looper up
 		thread.start();
@@ -547,10 +549,10 @@ public class GPSClient extends Service implements IGPSClient {
 			// If we receive a position update, assume the GPS is working
 			currentStatus = AVAILABLE;
 
-			if (!hasSetBarometer && BarometerClient.isAvailable()
+			if (!hasSetBarometer && baro != null
 					&& location.hasAltitude()) {
 				hasSetBarometer = true;
-				BarometerClient.setAltitude((float) location.getAltitude());
+				baro.setAltitude((float) location.getAltitude());
 			}
 
 			// Used to avoid holding the lock while running (slow) handlers
