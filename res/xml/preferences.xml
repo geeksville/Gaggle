@@ -47,6 +47,21 @@
 				android:defaultValue="100" android:inputType="number" />
 		</PreferenceScreen>
 
+		<PreferenceScreen android:key="vario_prefs"
+			android:title="Vario preferences" android:summary="Only for devices with barometer hardware" >
+
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="averaging_percentage" android:title="Averaging Percentage"
+				android:summary="For our IIR filter"
+				android:defaultValue="0.10" android:inputType="numberDecimal" />
+				
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="integration_period" android:title="Integration period"
+				android:summary="Number of seconds for vario integration (1.0 recommended)"
+				android:defaultValue="1.0" android:inputType="numberDecimal" />
+				
+		</PreferenceScreen>
+				
 		<PreferenceScreen android:key="units_prefs"
 			android:title="@string/units" android:summary="@string/feet_meters_etc"> 
 
