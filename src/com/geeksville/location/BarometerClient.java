@@ -23,12 +23,15 @@ package com.geeksville.location;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import com.geeksville.util.IIRFilter;
 import com.geeksville.util.LinearRegression;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient extends SensorClient {
+
+	private static final String TAG = "BarometerClient";
 
 	IIRFilter filter = new IIRFilter(0.15f); // FIXME - let the user adjust this
 												// 0.20 is a little too noisy,
@@ -41,8 +44,18 @@ public class BarometerClient extends SensorClient {
 	// / Defaults to 1013.25 hPa
 	private static float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
 
-	public BarometerClient(Context context) {
+	private static BarometerClient instance = null;
+
+	private BarometerClient(Context context) {
 		super(context, Sensor.TYPE_PRESSURE);
+	}
+
+	// / All users of barometer share the same (expensive) instance
+	public static BarometerClient create(Context context) {
+		if (instance == null)
+			instance = new BarometerClient(context);
+
+		return instance;
 	}
 
 	// / Given a GPS based altitude, reverse engineer what the correct reference
@@ -52,6 +65,8 @@ public class BarometerClient extends SensorClient {
 		float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
 
 		reference = p / 100; // Convert from Pa to hPa
+		Log.w(TAG, "Setting baro reference to " + reference + " due to alt "
+				+ meters);
 	}
 
 	public static boolean isAvailable() {
