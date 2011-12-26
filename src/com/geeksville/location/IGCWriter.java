@@ -149,7 +149,9 @@ public class IGCWriter implements PositionWriter {
 				(int) groundSpeed);
 		out.println();
 
-		if (!Float.isNaN(vspd)) {
+		// Don't store vertical speed info until I can find an example data
+		// file.
+		if (!Float.isNaN(vspd) && false) {
 
 			if (!hasJRecord) {
 				// less frequent extension - vario data
@@ -159,7 +161,7 @@ public class IGCWriter implements PositionWriter {
 
 			out.format(Locale.US, "K%02d%02d%02d%03d", hours,
 					cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND),
-					(int) vspd);
+					(int) vspd * 10);
 			out.println();
 		}
 	}
