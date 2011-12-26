@@ -16,9 +16,12 @@ public class TonePlayer {
 	private final byte toneSound[] = new byte[2 * numSamples];
 	private final byte generatedSound[] = new byte[2 * numSamples];
 
+	private AudioTrack audioTrack;
+
 	public TonePlayer() {
 		setFrequency(440);
 		setDutyCycle(0.3f);
+		createNative();
 	}
 
 	// / What percentage of time is the tone on
@@ -27,6 +30,11 @@ public class TonePlayer {
 		// bytes
 		int splitPoint = 2 * (int) (numSamples * onTime);
 
+		for (int i = 0; i < splitPoint; i++)
+			generatedSound[i] = toneSound[i];
+
+		for (int j = splitPoint; j < 2 * numSamples; j++)
+			generatedSound[j] = 0;
 	}
 
 	// / @param freqOfTone in Hz
@@ -47,12 +55,18 @@ public class TonePlayer {
 		}
 	}
 
-	void playSound() {
-		final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+	private void createNative() {
+		audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
 				sampleRate, AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT, numSamples,
 				AudioTrack.MODE_STATIC);
 		audioTrack.write(generatedSound, 0, generatedSound.length);
+		audioTrack.setNotificationMarkerPosition(numSamples - 1);
+	}
+
+	public void play() {
+		audioTrack.stop();
+		audioTrack.reloadStaticData();
 		audioTrack.play();
 	}
 }

@@ -50,6 +50,9 @@
 		<PreferenceScreen android:key="vario_prefs"
 			android:title="Vario preferences" android:summary="Only for devices with barometer hardware" >
 
+			<CheckBoxPreference android:key="use_audible_vario"
+				android:title="Use audible vario" android:summary="Only for devices with barometer hardware" />
+					    
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="averaging_percentage" android:title="Averaging Percentage"
 				android:summary="For our IIR filter (recommended 0.17)"
@@ -59,6 +62,16 @@
 				android:key="integration_period" android:title="Integration period"
 				android:summary="Number of seconds for vario integration (1.0 recommended)"
 				android:defaultValue="1.0" android:inputType="numberDecimal" />
+			
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="sink_threshold" android:title="Sink Threshold"
+				android:summary="Audible sink tone threshold ()"
+				android:defaultValue="1.0" android:inputType="numberDecimal" />			
+				
+			<com.geeksville.view.EditTextPreferenceWithValue
+				android:key="lift_threshold" android:title="Lift Threshold"
+				android:summary="Audible lift tone threshold (m/s)"
+				android:defaultValue="0.25" android:inputType="numberDecimal" />			
 				
 		</PreferenceScreen>
 				

@@ -32,6 +32,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.geeksville.gaggle.AudioVario;
 import com.geeksville.gaggle.R;
 import com.geeksville.gaggle.TopActivity;
 
@@ -91,6 +92,7 @@ public class GPSClient extends Service implements IGPSClient {
 	// / Once we get a GPS altitude we will fixup the barometer
 	private boolean hasSetBarometer = false;
 	private BarometerClient baro = null;
+	private AudioVario vario = new AudioVario();
 
 	/**
 	 * Older SDKs don't define LocationProvider.AVAILABLE etc...
@@ -260,6 +262,7 @@ public class GPSClient extends Service implements IGPSClient {
 		instance = this;
 		manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		baro = BarometerClient.create(GPSClient.this);
+		vario.onCreate(this);
 
 		// Start our looper up
 		thread.start();
@@ -321,6 +324,8 @@ public class GPSClient extends Service implements IGPSClient {
 	 */
 	@Override
 	public void onDestroy() {
+
+		vario.onDestroy();
 
 		// Forcibly unsubscribe anyone still using us
 		synchronized (listeners) {
