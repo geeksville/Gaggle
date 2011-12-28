@@ -31,7 +31,8 @@ public class AudioVario implements Observer, Runnable {
 
       // FIXME - we should share one compass client object
       baro = BarometerClient.create(context);
-      baro.addObserver(this);
+      if (baro != null)
+        baro.addObserver(this);
     }
   }
 
