@@ -6,8 +6,8 @@
 	<ImageView android:id="@+id/image" android:src="@drawable/lz_red"
 		android:layout_width="30dip" android:layout_height="30dip"
 		android:adjustViewBounds="true" android:scaleType="center"
-		android:minHeight="32px" android:minWidth="32px" android:maxHeight="32px"
-		android:maxWidth="32px" android:layout_gravity="left"
+		android:minHeight="32dp" android:minWidth="32dp" android:maxHeight="32dp"
+		android:maxWidth="32dp" android:layout_gravity="left"
 		android:layout_marginRight="2dip"></ImageView>
 
 	<LinearLayout android:layout_width="fill_parent"

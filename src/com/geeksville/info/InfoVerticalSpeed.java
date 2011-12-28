@@ -25,6 +25,7 @@ import java.util.Observer;
 
 import android.app.Activity;
 
+import com.geeksville.gaggle.R;
 import com.geeksville.location.BarometerClient;
 
 /**
@@ -35,91 +36,91 @@ import com.geeksville.location.BarometerClient;
  */
 public class InfoVerticalSpeed extends InfoField implements Observer {
 
-	private float vspd = Float.NaN;
+  private float vspd = Float.NaN;
 
-	private BarometerClient baro;
+  private BarometerClient baro;
 
-	@Override
-	public String getLabel() {
-		return "Vertical Speed";
-	}
+  @Override
+  public String getLabel() {
+    return context.getString(R.string.vertical_speed);
+  }
 
-	/**
-	 * 
-	 * @see com.geeksville.info.InfoField#getLabel()
-	 */
-	@Override
-	public String getShortLabel() {
-		return "VSpd";
-	}
+  /**
+   * 
+   * @see com.geeksville.info.InfoField#getLabel()
+   */
+  @Override
+  public String getShortLabel() {
+    return context.getString(R.string.vspd);
+  }
 
-	/**
-	 * 
-	 * @see com.geeksville.info.InfoField#getText()
-	 */
-	@Override
-	public String getText() {
-		if (Float.isNaN(vspd))
-			return "---";
+  /**
+   * 
+   * @see com.geeksville.info.InfoField#getText()
+   */
+  @Override
+  public String getText() {
+    if (Float.isNaN(vspd))
+      return "---";
 
-		return Units.instance.meterPerSecToVSpeed(vspd);
-	}
+    return Units.instance.meterPerSecToVSpeed(vspd);
+  }
 
-	/**
-	 * 
-	 * @see com.geeksville.info.InfoField#getUnits()
-	 */
-	@Override
-	public String getUnits() {
-		// TODO Auto-generated method stub
-		return Units.instance.getVSpeedUnits();
-	}
+  /**
+   * 
+   * @see com.geeksville.info.InfoField#getUnits()
+   */
+  @Override
+  public String getUnits() {
+    // TODO Auto-generated method stub
+    return Units.instance.getVSpeedUnits();
+  }
 
-	/**
-	 * @see com.geeksville.info.InfoField#onCreate(android.app.Activity)
-	 */
-	@Override
-	public void onCreate(Activity context) {
-		super.onCreate(context);
+  /**
+   * @see com.geeksville.info.InfoField#onCreate(android.app.Activity)
+   */
+  @Override
+  public void onCreate(Activity context) {
+    super.onCreate(context);
 
-		if (context != null) {
-			// FIXME - we should share one compass client object
-			baro = BarometerClient.create(context);
-		}
-	}
+    if (context != null) {
+      // FIXME - we should share one compass client object
+      baro = BarometerClient.create(context);
+    }
+  }
 
-	/**
-	 * @see com.geeksville.info.InfoField#onHidden()
-	 */
-	@Override
-	void onHidden() {
-		super.onHidden();
+  /**
+   * @see com.geeksville.info.InfoField#onHidden()
+   */
+  @Override
+  void onHidden() {
+    super.onHidden();
 
-		if (baro != null)
-			baro.deleteObserver(this);
-	}
+    if (baro != null)
+      baro.deleteObserver(this);
+  }
 
-	/**
-	 * @see com.geeksville.info.InfoField#onShown()
-	 */
-	@Override
-	void onShown() {
-		super.onShown();
+  /**
+   * @see com.geeksville.info.InfoField#onShown()
+   */
+  @Override
+  void onShown() {
+    super.onShown();
 
-		if (baro != null)
-			baro.addObserver(this);
-	}
+    if (baro != null)
+      baro.addObserver(this);
+  }
 
-	@Override
-	public void update(Observable observable, Object data) {
+  @Override
+  public void update(Observable observable, Object data) {
 
-		float nvspd = baro.getVerticalSpeed();
+    float nvspd = baro.getVerticalSpeed();
 
-		if (nvspd != vspd) {
-			vspd = nvspd;
+    if (nvspd != vspd) {
+      vspd = nvspd;
 
-			onChanged();
-		}
-	}
+      onChanged();
+    }
+  }
 
 }

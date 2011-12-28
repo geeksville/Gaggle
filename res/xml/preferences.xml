@@ -48,69 +48,69 @@
 		</PreferenceScreen>
 
 		<PreferenceScreen android:key="vario_prefs"
-			android:title="Vario preferences" android:summary="Only for devices with barometer hardware" >
+			android:title="Vario preferences" android:summary="@string/only_for_devices_with_barometer_hardware" >
 
 			<CheckBoxPreference android:key="use_audible_vario" android:defaultValue="true"
-				android:title="Use audible vario" android:summary="Only for devices with barometer hardware" />
+				android:title="@string/use_audible_vario" android:summary="@string/only_for_devices_with_barometer_hardware" />
 					    
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="averaging_percentage" android:title="Averaging Percentage"
-				android:summary="For our IIR filter (recommended 0.17)"
+				android:key="averaging_percentage" android:title="@string/averaging_percentage"
+				android:summary="@string/for_our_iir_filter_recommended_0_17_"
 				android:defaultValue="0.17" android:inputType="numberDecimal" />
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="integration_period" android:title="Integration period"
-				android:summary="Number of seconds for vario integration (1.0 recommended)"
+				android:key="integration_period" android:title="@string/integration_period"
+				android:summary="@string/number_of_seconds_for_vario_integration_1_0_recommended_"
 				android:defaultValue="1.0" android:inputType="numberDecimal" />
 			
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="minSinkThreshold" android:title="Min Sink Threshold"
-				android:summary="Minimum sink tone threshold (m/s)"
+				android:key="minSinkThreshold" android:title="@string/min_sink_threshold"
+				android:summary="@string/minimum_sink_tone_threshold_m_s_"
 				android:defaultValue="2.0" android:inputType="numberDecimal" />			
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="minLiftThreshold" android:title="Min Lift Threshold"
-				android:summary="Minimum lift tone threshold (m/s)"
+				android:key="minLiftThreshold" android:title="@string/min_lift_threshold"
+				android:summary="@string/minimum_lift_tone_threshold_m_s_"
 				android:defaultValue="0.5" android:inputType="numberDecimal" />		
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="maxSinkThreshold" android:title="Max Sink Threshold"
-				android:summary="Maximum sink tone threshold (m/s)"
+				android:key="maxSinkThreshold" android:title="@string/max_sink_threshold"
+				android:summary="@string/maximum_sink_tone_threshold_m_s_"
 				android:defaultValue="4.0" android:inputType="numberDecimal" />			
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="maxLiftThreshold" android:title="Max Lift Threshold"
-				android:summary="Maximum lift tone threshold (m/s)"
+				android:key="maxLiftThreshold" android:title="@string/max_lift_threshold"
+				android:summary="@string/maximum_lift_tone_threshold_m_s_"
 				android:defaultValue="4.0" android:inputType="numberDecimal" />	
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="minSinkHz" android:title="Min sink beep rate"
-				android:summary="Minimum beep rate in sink (Hz)"
+				android:key="minSinkHz" android:title="@string/min_sink_beep_rate"
+				android:summary="@string/minimum_beep_rate_in_sink_hz_"
 				android:defaultValue="1" android:inputType="numberDecimal" />		
 								
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="maxSinkHz" android:title="Max sink beep rate"
-				android:summary="Maximum beep rate in sink (Hz)"
+				android:key="maxSinkHz" android:title="@string/max_sink_beep_rate"
+				android:summary="@string/maximum_beep_rate_in_sink_hz_"
 				android:defaultValue="10" android:inputType="numberDecimal" />			
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="minLiftHz" android:title="Min lift beep rate"
-				android:summary="Minimum beep rate in lift (Hz)"
+				android:key="minLiftHz" android:title="@string/min_lift_beep_rate"
+				android:summary="@string/minimum_beep_rate_in_lift_hz_"
 				android:defaultValue="1" android:inputType="numberDecimal" />		
 								
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="maxLiftHz" android:title="Max lift beep rate"
-				android:summary="Maximum beep rate in lift (Hz)"
+				android:key="maxLiftHz" android:title="@string/max_lift_beep_rate"
+				android:summary="@string/maximum_beep_rate_in_lift_hz_"
 				android:defaultValue="10" android:inputType="numberDecimal" />		
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="liftTone" android:title="Lift tone"
-				android:summary="Lift tone frequency (Hz)"
+				android:key="liftTone" android:title="@string/lift_tone"
+				android:summary="@string/lift_tone_frequency_hz_"
 				android:defaultValue="880" android:inputType="numberDecimal" />		
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="sinkTone" android:title="Sink tone"
-				android:summary="Sink tone frequency (Hz)"
+				android:key="sinkTone" android:title="@string/sink_tone"
+				android:summary="@string/sink_tone_frequency_hz_"
 				android:defaultValue="220" android:inputType="numberDecimal" />																
         		
 		</PreferenceScreen>

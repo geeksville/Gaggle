@@ -41,25 +41,12 @@
 		<item>Pies</item>
 		<item>Metros</item>					
 	</string-array>
-	
-	<!-- The following strings should probably be localized -->	    
-	<string-array name="altunits_enum_vals">
-		<item>Pies</item>
-		<item>Metros</item>							
-	</string-array>
 			
 	<!-- The following strings should probably be localized -->	    
 	<string-array name="speedunits_enum_names">
 		<item>km/h</item>
 		<item>mi/h</item>	
 		<item>kn</item>				
-	</string-array>
-	
-	<!-- The following strings should probably be localized -->	    
-	<string-array name="speedunits_enum_vals">
-		<item>Km/hora</item>
-		<item>Millas/hora</item>
-		<item>Nudos/hora</item>						
 	</string-array>
 				
 	<!-- The following strings should probably be localized -->	    		
@@ -70,25 +57,11 @@
 	</string-array>
 	
 	<!-- The following strings should probably be localized -->	    
-	<string-array name="distunits_enum_vals">
-		<item>KM</item>
-		<item>Millas</item>	
-		<item>Millas Náuticas</item>						
-	</string-array>
-			
-	<!-- The following strings should probably be localized -->	    
 	<string-array name="vspdunits_enum_names">
 		<item>m/s</item>
 		<item>ft/m</item>	
 		<item>kn</item>			
 	</string-array>
-	
-	<!-- The following strings should probably be localized -->	    
-	<string-array name="vspdunits_enum_vals">
-		<item>Metros/seg</item>
-		<item>Pies/min</item>	
-		<item>Nudos/hora</item>						
-	</string-array>		
 	
 	<!-- The following strings should probably be localized -->	    
 	<string-array name="competition_class_names">

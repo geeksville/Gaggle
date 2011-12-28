@@ -97,7 +97,7 @@
 		<item>Meters</item>					
 	</string-array>
 	
-	<!-- The following strings should probably be localized -->	    
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
 	<string-array name="altunits_enum_vals">
 		<item>Feet</item>
 		<item>Meters</item>							
@@ -110,7 +110,7 @@
 		<item>kts</item>				
 	</string-array>
 	
-	<!-- The following strings should probably be localized -->	    
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
 	<string-array name="speedunits_enum_vals">
 		<item>KmPerHr</item>
 		<item>MilePerHr</item>
@@ -124,7 +124,7 @@
 		<item>Nm</item>				
 	</string-array>
 	
-	<!-- The following strings should probably be localized -->	    
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
 	<string-array name="distunits_enum_vals">
 		<item>KM</item>
 		<item>Miles</item>	
@@ -138,7 +138,7 @@
 		<item>Knots</item>			
 	</string-array>
 	
-	<!-- The following strings should probably be localized -->	    
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
 	<string-array name="vspdunits_enum_vals">
 		<item>MPerSec</item>
 		<item>FeetPerMin</item>	
