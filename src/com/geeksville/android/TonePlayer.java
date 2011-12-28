@@ -24,6 +24,11 @@ public class TonePlayer {
     createNative();
   }
 
+  public void close() {
+    audioTrack.stop();
+    audioTrack.release();
+  }
+
   /*
    * // / What percentage of time is the tone on void setDutyCycle(float onTime)
    * { // We copy some number of the tone bytes followed by 1-onTime of zero //

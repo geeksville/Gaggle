@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.geeksville.android.PreferenceUtil;
 import com.geeksville.android.TonePlayer;
 import com.geeksville.location.BarometerClient;
 
@@ -17,14 +18,14 @@ public class AudioVario implements Observer, Runnable {
 
   private static final String TAG = "AudioVario";
 
-  private TonePlayer liftTone = new TonePlayer(880f);
-  private TonePlayer sinkTone = new TonePlayer(220f);
-  private TonePlayer curTone = liftTone;
+  private TonePlayer liftTone;
+  private TonePlayer sinkTone;
+  private TonePlayer curTone;
 
   private BarometerClient baro;
   Handler handler;
 
-  /** Or -1 for disabled */
+  /** Or <0 for disabled */
   long beepDelayMsec = -1;
   boolean isPlaying = false;
 
@@ -41,14 +42,37 @@ public class AudioVario implements Observer, Runnable {
    */
   public void onCreate(Context context, Looper looper) {
     if (context != null) {
-      handler = new Handler(looper);
 
-      // FIXME - we should share one compass client object
-      baro = BarometerClient.create(context);
-      if (baro != null)
-        baro.addObserver(this);
+      if (PreferenceUtil.getBoolean(context, "use_audible_vario", true)) {
 
-      testTones();
+        liftTone = new TonePlayer(PreferenceUtil.getFloat(context, "liftTone",
+            880f));
+        sinkTone = new TonePlayer(PreferenceUtil.getFloat(context, "sinkTone",
+            220f));
+
+        minSinkThreshold = PreferenceUtil.getFloat(context, "minSinkThreshold",
+            2.0f);
+        maxSinkThreshold = PreferenceUtil.getFloat(context, "maxSinkThreshold",
+            4.0f);
+        minSinkHz = PreferenceUtil.getFloat(context, "minSinkHz", 1f);
+        maxSinkHz = PreferenceUtil.getFloat(context, "maxSinkHz", 10f);
+
+        minLiftThreshold = PreferenceUtil.getFloat(context, "minLiftThreshold",
+            0.5f);
+        maxLiftThreshold = PreferenceUtil.getFloat(context, "maxLiftThreshold",
+            4.0f);
+        minLiftHz = PreferenceUtil.getFloat(context, "minLiftHz", 1f);
+        maxLiftHz = PreferenceUtil.getFloat(context, "maxLiftHz", 10f);
+
+        handler = new Handler(looper);
+
+        // FIXME - we should share one compass client object
+        baro = BarometerClient.create(context);
+        if (baro != null)
+          baro.addObserver(this);
+
+        // testTones();
+      }
     }
   }
 
@@ -58,6 +82,10 @@ public class AudioVario implements Observer, Runnable {
   public void onDestroy() {
     if (baro != null)
       baro.deleteObserver(this);
+    if (liftTone != null)
+      liftTone.close();
+    if (sinkTone != null)
+      sinkTone.close();
   }
 
   @Override
