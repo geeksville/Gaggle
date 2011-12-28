@@ -224,7 +224,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 	<string name="barometer">Barometer</string>
-
+ 
 	<string name="start">Start</string>
 	<string name="end">End</string>
 	<string name="duration">Duration</string>
@@ -232,8 +232,8 @@ please email kevinh@geeksville.com.</string>
 	<string name="max_altitude_after_launch">Max altitude after launch</string>
 	<string name="max_ground_speed">Max ground speed</string>
 	<string name="average_ground_speed">Average ground speed</string>
-	<string name="total_ground_distance_traveled">Total ground distance travelled</string>
-	<string name="total_vertical_distance_traveled">Total vertical distance travelled</string>
+	<string name="total_ground_distance_traveled">Total ground distance traveled</string>
+	<string name="total_vertical_distance_traveled">Total vertical distance traveled</string>
 	<string name="max_distance_from_launch">Max distance from launch</string>
 </resources>
   

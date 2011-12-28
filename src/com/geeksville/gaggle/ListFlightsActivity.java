@@ -29,26 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-<<<<<<< HEAD
-=======
-import com.flurry.android.FlurryAgent;
-import com.geeksville.android.DBListActivity;
-import com.geeksville.gaggle.R;
-import com.geeksville.info.FlightSummary;
-import com.geeksville.location.CSVWriter;
-import com.geeksville.location.IGCWriter;
-import com.geeksville.location.KMLWriter;
-import com.geeksville.location.GPXWriter;
-import com.geeksville.location.LeonardoUpload;
-import com.geeksville.location.LocationList;
-import com.geeksville.location.LocationListWriter;
-import com.geeksville.location.LocationLogDbAdapter;
-import com.geeksville.location.PositionWriter;
-import com.geeksville.location.LocationUtils;
-import com.geeksville.location.SummaryWriter;
-import com.geeksville.view.AsyncProgressDialog;
-
->>>>>>> rythos/master
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Address;
@@ -71,6 +51,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.DBListActivity;
+import com.geeksville.info.FlightSummary;
 import com.geeksville.location.CSVWriter;
 import com.geeksville.location.GPXWriter;
 import com.geeksville.location.IGCWriter;
@@ -81,6 +62,7 @@ import com.geeksville.location.LocationListWriter;
 import com.geeksville.location.LocationLogDbAdapter;
 import com.geeksville.location.LocationUtils;
 import com.geeksville.location.PositionWriter;
+import com.geeksville.location.SummaryWriter;
 import com.geeksville.view.AsyncProgressDialog;
 
 /**
@@ -147,9 +129,9 @@ public class ListFlightsActivity extends DBListActivity {
       // case R.id.view_kml:
       // externalViewFlight(itemToRowId(item), "kml");
       // return true;
-		case R.id.view_summary:
-			viewFlightSummary(itemToRowId(item));
-			return true;
+    case R.id.view_summary:
+      viewFlightSummary(itemToRowId(item));
+      return true;
     default:
       break;
     }
@@ -386,20 +368,20 @@ public class ListFlightsActivity extends DBListActivity {
     startActivity(i);
   }
 
-/**
-	 * View flight summary statistics
-	 * 
-	 * @param flightId
-	 */
-	private void viewFlightSummary(final long flightId) {
-		FlightSummary summary = new FlightSummary();
-		SummaryWriter summaryWriter = new SummaryWriter(summary);
-		LocationUtils.dbToWriter(db, summaryWriter, flightId);
-		
-		Intent i = new Intent(this, SummaryListActivity.class);
-		summary.addDataToIntent(i);
-		startActivity(i);
-	}
+  /**
+   * View flight summary statistics
+   * 
+   * @param flightId
+   */
+  private void viewFlightSummary(final long flightId) {
+    FlightSummary summary = new FlightSummary();
+    SummaryWriter summaryWriter = new SummaryWriter(summary);
+    LocationUtils.dbToWriter(db, summaryWriter, flightId);
+
+    Intent i = new Intent(this, SummaryListActivity.class);
+    summary.addDataToIntent(i);
+    startActivity(i);
+  }
 
   /**
    * Write a flight to an in memory stream of IGC data

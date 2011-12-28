@@ -30,6 +30,7 @@
 			android:label="Select fields">
 		</activity>
 		<activity android:name=".AboutActivity"></activity>
+		<activity android:name=".SummaryListActivity"></activity>		
 		<activity android:name=".ListWaypointsActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
