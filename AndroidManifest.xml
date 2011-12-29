@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Regular release uses com.geeksville.gaggle, testing builds use com.geeksville.gaggletest -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="151" android:versionName="1.51">
+	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="153" android:versionName="1.53">
 
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"
@@ -15,6 +15,15 @@
 
 		<meta-data android:name="CLOUDMADE_KEY" android:value="683f9355fa964a70bcde43fe4a420de2" />
 
+		<service android:name="com.geeksville.billing.BillingService" />
+		<receiver android:name="com.geeksville.billing.BillingReceiver" >
+            <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+                <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        
 		<activity android:name=".TopActivity" android:label="@string/app_name"
 			android:launchMode="singleTask" android:screenOrientation="portrait">
 			<intent-filter>
@@ -146,6 +155,9 @@
     <!-- Needed for OSM -->
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	
+    <!-- Required permission to use in-app billing. -->
+    <uses-permission android:name="com.android.vending.BILLING" />
+    	
 	<!--
 		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

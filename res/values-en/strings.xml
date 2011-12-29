@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This is a brief summary of the steps needed to localize Gaggle for a new language:
+
+1) Thank you for volunteering to do a translation!  How would you like your name to read in the credits?  What email address
+	do you want to publish (if any)?
+2) Use a simple text editor to edit this file (Notepad on Windows or gedit on Linux)
+3) The strings in the table below are the english language version, if for your language you do not think it is appropriate
+	to translate that line at all (i.e. we should show the english version), just delete the full XML string element from
+	your file.
+4) If you are not sure about a translation and would like to use english for a particular line until you know a bit more
+	about how it is used in the program, just comment the line out using the XML comment delimeters.
+5) Please try to keep the translated strings approximately the same length as their english versions.  That said, don't 
+	worry about this too much - if you can't get a clear translation in the given length, feel free to use a longer phrase
+	(I might need to fix some layout files in the app though).
+6) If the name of a particular string has _short at the end, it is _is_ important to use the shortest possible translation.
+	It is likely I'm using it in a very small summary field and abbreviations are okay.
+7) After you make your translation, email the file to me and I'll add it to a test version of Gaggle.  After tweaking it
+	a little, I'll send you a test version to see if you are also happy with our work.  Then it will be released in the
+	regular distribution.
+8) If a string spans multiple lines in this file, please try to keep the line breaks approximately the same in your 
+	translation.  
+-->
+
+<resources>
+
+    <string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text -->
+
+</resources>

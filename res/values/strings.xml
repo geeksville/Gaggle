@@ -235,6 +235,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="total_ground_distance_traveled">Total ground distance traveled</string>
 	<string name="total_vertical_distance_traveled">Total vertical distance traveled</string>
 	<string name="max_distance_from_launch">Max distance from launch</string>
+	
 	<string name="only_for_devices_with_barometer_hardware">Only for devices with barometer hardware</string>
 	<string name="use_audible_vario">Use audible vario</string>
 	<string name="averaging_percentage">Averaging Percentage</string>
@@ -263,5 +264,17 @@ please email kevinh@geeksville.com.</string>
 	<string name="sink_tone">Sink tone</string>
 	<string name="vertical_speed">Vertical Speed</string>
 	<string name="vspd">VSpd</string>
+	
+	<string name="should_prompt_to_donate">false</string> <!-- Only set to true if we've localized the donation text  -->
+    <string name="donate_text">Development of this ad-free application is funded entirely by donations.  If you would like to donate, 
+        please click yes 
+        and Google will prompt you with an amount.  We think this small request is a bargain compared to 
+        other flying costs.\n\nIf you choose not to donate, all features of the application are still available.\n\nAs always, if you have questions, choose the Help menu item and visit our volunteer forum.
+    </string>	
+    <string name="restoring_transactions">Checking for donations</string>
+    <!-- The following are reserved skus defined by Market for testing. -->
+    <string name="donation">Donation</string>
+    <string name="yes_i_d_like_to_donate">Yes, I\'d like to donate</string>
+    <string name="no_not_right_now">No, not right now</string>	 
 </resources>
   
