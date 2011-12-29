@@ -104,9 +104,9 @@ public class TopActivity extends TabActivity {
     FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
 
     BetaSplashActivity.perhapsSplash(this);
-    // Doesn't yet work - problems with google market
-    // Donate d = new Donate(this);
-    // d.perhapsSplash();
+
+    Donate d = new Donate(this);
+    d.perhapsSplash();
 
     updateFromOld();
 
@@ -239,6 +239,10 @@ public class TopActivity extends TabActivity {
 
     menuItem = menu.findItem(R.id.about_menu);
     menuItem.setIntent(new Intent(this, AboutActivity.class));
+
+    // No need to show this for now...
+    menu.findItem(R.id.donate_menu).setVisible(
+        !Donate.isDonated(this) && Donate.canPromptToUpdate(this));
 
     return true;
   }

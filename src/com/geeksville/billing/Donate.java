@@ -220,7 +220,7 @@ public class Donate {
    * 
    * @return
    */
-  private boolean isDonated() {
+  public static boolean isDonated(Context context) {
 
     // Even though this is an open source app, don't turn off this check and
     // release a version without
@@ -230,6 +230,10 @@ public class Donate {
 
     return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
         "has_donated", false);
+  }
+
+  public static boolean canPromptToUpdate(Context context) {
+    return context.getString(R.string.should_prompt_to_donate).equals("true");
   }
 
   /**
@@ -245,7 +249,7 @@ public class Donate {
     // receive repays me for
     // the huge amount of time I have invested. -kevin
 
-    if (!context.getString(R.string.should_prompt_to_donate).equals("true"))
+    if (!canPromptToUpdate(context))
       return false;
 
     SharedPreferences prefs = PreferenceManager
@@ -297,7 +301,7 @@ public class Donate {
     // receive repays me for
     // the huge amount of time I have invested. -kevin
 
-    if (isDonated()) {
+    if (isDonated(context)) {
       thanksForDonating();
       close();
     } else if (isPromptToUpdate())
@@ -307,7 +311,7 @@ public class Donate {
   }
 
   public void splash() {
-    if (isDonated()) {
+    if (isDonated(context)) {
       thanksForDonating();
       close();
     } else
@@ -321,7 +325,7 @@ public class Donate {
     mPurchaseObserver = new DonatePurchaseObserver(mHandler);
 
     // If we've already donate no need to start the service
-    if (!isDonated()) {
+    if (!isDonated(context)) {
       mBillingService = new BillingService();
       mBillingService.setContext(context);
 
