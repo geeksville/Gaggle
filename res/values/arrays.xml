@@ -23,6 +23,7 @@
 		<item>http://xc.parapente.com.ar/modules/leonardo/flight_submit.php</item>
 	</string-array>
 	
+	<!-- The following strings should probably be localized -->	
 	<string-array name="log_interval_names">
 		<item>undefined (fastest)</item>
 		<item>1 second</item>
@@ -185,6 +186,7 @@
 		<item>128</item>
 	</string-array>
 	
+	<!-- The following strings should _not_ be localized - they map to enum names -->
 	<string-array name="ns_vals">
 		<item>N</item>
 		<item>S</item>

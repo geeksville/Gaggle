@@ -239,9 +239,9 @@ please email kevinh@geeksville.com.</string>
 	<string name="only_for_devices_with_barometer_hardware">Only for devices with barometer hardware</string>
 	<string name="use_audible_vario">Use audible vario</string>
 	<string name="averaging_percentage">Averaging Percentage</string>
-	<string name="for_our_iir_filter_recommended_0_17_">For our IIR filter (recommended 0.17)</string>
+	<string name="for_our_iir_filter_recommended_0_17_">For our IIR filter (recommended 0.10)</string>
 	<string name="integration_period">Integration period</string>
-	<string name="number_of_seconds_for_vario_integration_1_0_recommended_">Number of seconds for vario integration (1.0 recommended)</string>
+	<string name="number_of_seconds_for_vario_integration_1_0_recommended_">Number of seconds for vario integration (0.7 recommended)</string>
 	<string name="min_sink_threshold">Min Sink Threshold</string>
 	<string name="minimum_sink_tone_threshold_m_s_">Minimum sink tone threshold (m/s)</string>
 	<string name="min_lift_threshold">Min Lift Threshold</string>
@@ -266,8 +266,8 @@ please email kevinh@geeksville.com.</string>
 	<string name="vspd">VSpd</string>
 	
 	<string name="should_prompt_to_donate">false</string> <!-- Only set to true if we've localized the donation text  -->
-    <string name="donate_text">Development of this ad-free application is funded entirely by donations.  If you would like to donate, 
-        please click yes 
+    <string name="donate_text">Development of this ad-free application is funded entirely by donations (just beer money).  
+        If you would like to donate, please click yes 
         and Google will prompt you with an amount.  We think this small request is a bargain compared to 
         other flying costs.\n\nIf you choose not to donate, all features of the application are still available.\n\nAs always, if you have questions, choose the Help menu item and visit our volunteer forum.
     </string>	

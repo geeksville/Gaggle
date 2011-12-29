@@ -16,6 +16,7 @@
 
 package com.geeksville.billing;
 
+import com.flurry.android.FlurryAgent;
 import com.geeksville.gaggle.R;
 import com.geeksville.billing.BillingService.RequestPurchase;
 import com.geeksville.billing.BillingService.RestoreTransactions;
@@ -42,8 +43,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -196,6 +200,7 @@ public class Donate {
         .setPositiveButton(R.string.yes_i_d_like_to_donate,
             new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
+                FlurryAgent.onEvent("DonateYes");
                 String sku = "donate_basic";
                 Log.d(TAG, "buying: " + sku);
                 dialog.cancel();
@@ -207,6 +212,7 @@ public class Donate {
         .setNegativeButton(R.string.no_not_right_now,
             new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
+                FlurryAgent.onEvent("DonateNo");
                 close();
                 dialog.cancel();
               }
@@ -304,13 +310,17 @@ public class Donate {
     // receive repays me for
     // the huge amount of time I have invested. -kevin
 
+    // Keep stats on # of emails sent
     if (isDonated(context)) {
+      FlurryAgent.onEvent("DonateStart");
       thanksForDonating();
       close();
     } else if (isPromptToUpdate())
       promptToDonate();
-    else
+    else {
+      FlurryAgent.onEvent("NonDonateStart");
       close(); // Not bothering the user this time
+    }
   }
 
   public void splash() {
