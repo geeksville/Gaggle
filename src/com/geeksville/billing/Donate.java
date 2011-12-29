@@ -257,16 +257,19 @@ public class Donate {
     long lastCheckDate = prefs.getLong("donate_check_date", -1);
 
     long now = System.currentTimeMillis();
-    prefs.edit().putLong("donate_check_date", now).commit();
 
-    if (lastCheckDate == -1) // Don't nag the first time we launch
+    if (lastCheckDate == -1) { // Don't nag the first time we launch
+      prefs.edit().putLong("donate_check_date", now).commit();
       return false;
+    }
 
     long span = now - lastCheckDate;
     long checkInterval = 3 * 24 * 60 * 60 * 1000; // Only nag once every three
                                                   // days
     if (span < checkInterval)
       return false;
+
+    prefs.edit().putLong("donate_check_date", now).commit();
 
     // Check to see if the market server says we already have donated
     Cursor c = mPurchaseDatabase.queryAllPurchasedItems();

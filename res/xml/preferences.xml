@@ -54,14 +54,14 @@
 				android:title="@string/use_audible_vario" android:summary="@string/only_for_devices_with_barometer_hardware" />
 					    
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="averaging_percentage" android:title="@string/averaging_percentage"
+				android:key="averaging_percentage2" android:title="@string/averaging_percentage"
 				android:summary="@string/for_our_iir_filter_recommended_0_17_"
-				android:defaultValue="0.17" android:inputType="numberDecimal" />
+				android:defaultValue="0.10" android:inputType="numberDecimal" />
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="integration_period" android:title="@string/integration_period"
+				android:key="integration_period2" android:title="@string/integration_period"
 				android:summary="@string/number_of_seconds_for_vario_integration_1_0_recommended_"
-				android:defaultValue="1.0" android:inputType="numberDecimal" />
+				android:defaultValue="0.7" android:inputType="numberDecimal" />
 			
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="minSinkThreshold" android:title="@string/min_sink_threshold"
@@ -104,9 +104,9 @@
 				android:defaultValue="10" android:inputType="numberDecimal" />		
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
-				android:key="liftTone" android:title="@string/lift_tone"
+				android:key="liftTone2" android:title="@string/lift_tone"
 				android:summary="@string/lift_tone_frequency_hz_"
-				android:defaultValue="880" android:inputType="numberDecimal" />		
+				android:defaultValue="1100" android:inputType="numberDecimal" />		
 				
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="sinkTone" android:title="@string/sink_tone"

@@ -109,7 +109,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="add_waypoint">Add waypoint</string>
     <string name="edit">Edit</string>
     <string name="preferences">Preferences</string>
-    <string name="about">About</string>
+    <string name="about">Help</string>
     <string name="download_map">Download map</string>
     <string name="select_map">Select map</string>
     <string name="my_location">My location</string>
