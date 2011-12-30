@@ -203,6 +203,18 @@ por favor enviame un email: kevinh@geeksville.com</string>
 	<string name="confirm_delete_">Confirmar la eliminación?</string>
 	<string name="yes">Sí</string>
 	<string name="no">No</string>	
-	<string name="barometer">Barómetro</string>  	
+	<string name="barometer">Barómetro</string>  
+	
+	<string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text  -->
+    <string name="donate_text">El desarrollo de esta aplicación libre de publicidades es totalmente financiado 
+        por donaciones. Si deseas hacer una donación, por favor hacé clic en SI y Google indicará una cantidad. 
+        Creemos que esta pequeña petición es mínima comparado con otros costos para volar.\n\nSi escoges no donar, 
+        todas las funciones de la aplicación estarán igualmente disponibles.\n\nComo siempre, si tienes preguntas, 
+        selecciona el menú de Ayuda y vistá nuestro foro de voluntarios.</string>	
+    <string name="restoring_transactions">La comprobación de las donaciones</string>
+    <!-- The following are reserved skus defined by Market for testing. -->
+    <string name="donation">Donación</string>
+    <string name="yes_i_d_like_to_donate">Sí, me gustaría hacer una donación</string>
+    <string name="no_not_right_now">No, no ahora</string>	 		
 </resources>
   
