@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Regular release uses com.geeksville.gaggle, testing builds use com.geeksville.gaggletest -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="157" android:versionName="1.57">
+	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="158" android:versionName="1.58">
 
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"

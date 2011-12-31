@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<string-array name="delayed_server_names">
+		<item>XCBrasil</item>
+		<item>Paragliding Forum</item>
+		<item>DHV</item> 
+		<item>ArgentinaXC</item>
+	</string-array>
+ 
+	<string-array name="delayed_server_urls">
+		<item>http://www.xcbrasil.org/leonardo/flight_submit.php</item>
+		<item>http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</item>
+		<item>http://xc.dhv.de/xc/modules/leonardo/flight_submit.php</item>
+		<item>http://xc.parapente.com.ar/modules/leonardo/flight_submit.php</item>
+	</string-array>
+	
 	<string-array name="log_interval_names">
 		<item>indefinido (rápido)</item>
 		<item>1 segundo</item>

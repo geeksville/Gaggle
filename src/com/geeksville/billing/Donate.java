@@ -16,39 +16,23 @@
 
 package com.geeksville.billing;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.flurry.android.FlurryAgent;
-import com.geeksville.gaggle.R;
 import com.geeksville.billing.BillingService.RequestPurchase;
 import com.geeksville.billing.BillingService.RestoreTransactions;
 import com.geeksville.billing.Consts.PurchaseState;
 import com.geeksville.billing.Consts.ResponseCode;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.SpannableStringBuilder;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Toast;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import com.geeksville.gaggle.R;
 
 /**
  * A sample application that demonstrates in-app billing.
