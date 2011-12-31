@@ -27,6 +27,7 @@ import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.widget.Toast;
 
 /**
  * Reads an IGC file to move the Android GPS location around (for development)
@@ -36,132 +37,140 @@ import android.location.LocationManager;
  */
 public class TestGPSDriver {
 
-	/**
-	 * Debugging tag
-	 */
-	@SuppressWarnings("unused")
-	private static final String TAG = "TestGPS";
+  /**
+   * Debugging tag
+   */
+  @SuppressWarnings("unused")
+  private static final String TAG = "TestGPS";
 
-	private LocationManager manager;
+  private LocationManager manager;
 
-	private String provider = "simdata";
+  private String provider = "simdata";
 
-	private GPSDriverThread myThread = new GPSDriverThread();
+  private GPSDriverThread myThread = new GPSDriverThread();
 
-	private IGCReader inData;
+  private IGCReader inData;
 
-	private boolean isExiting = false;
+  private boolean isExiting = false;
+  private Context context;
 
-	public TestGPSDriver(Context context) {
-		manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+  public TestGPSDriver(Context context) {
+    this.context = context;
 
-		// Blow away any old providers
-		try {
-			manager.removeTestProvider(provider);
-		} catch (Exception ex) {
-			// Ignore
-		}
+    manager = (LocationManager) context
+        .getSystemService(Context.LOCATION_SERVICE);
 
-		manager.addTestProvider(provider, false, false, false, false, true, true, true,
-				Criteria.POWER_LOW,
-				Criteria.ACCURACY_FINE);
+    // Blow away any old providers
+    try {
+      manager.removeTestProvider(provider);
+    } catch (Exception ex) {
+      // Ignore
+    }
 
-		// Turn the GPS on and claim tracking
-		manager.setTestProviderEnabled(provider, true);
+    manager.addTestProvider(provider, false, false, false, false, true, true,
+        true, Criteria.POWER_LOW, Criteria.ACCURACY_FINE);
 
-		try {
-			InputStream s = context.getAssets().open("testfile.igc");
-			inData = new IGCReader(provider, s);
-		} catch (IOException ex) {
-			// We should never fail opening this file
-			throw new RuntimeException(ex);
-		}
+    // Turn the GPS on and claim tracking
+    manager.setTestProviderEnabled(provider, true);
 
-		myThread.start();
-	}
+    try {
+      InputStream s = context.getAssets().open("testfile.igc");
+      inData = new IGCReader(provider, s);
+    } catch (IOException ex) {
+      // We should never fail opening this file
+      throw new RuntimeException(ex);
+    }
 
-	public String getProvider() {
-		return provider;
-	}
+    myThread.start();
+  }
 
-	/**
-	 * Shut down our sim data
-	 */
-	public void close() {
+  public String getProvider() {
+    return provider;
+  }
 
-		isExiting = true; // Let our thread notice this the next time he wakes
-		// up
-	}
+  /**
+   * Shut down our sim data
+   */
+  public void close() {
 
-	private void sendNewUpdate() {
-		// Bundle extras = new Bundle();
-		// long updateTime = 0;
-		// manager.setTestProviderStatus(provider,
-		// GpsStatus.GPS_EVENT_SATELLITE_STATUS, extras, updateTime);
+    isExiting = true; // Let our thread notice this the next time he wakes
+    // up
+  }
 
-		Location loc = null;
-		try {
-			loc = inData.readLocation();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+  private void sendNewUpdate() {
+    // Bundle extras = new Bundle();
+    // long updateTime = 0;
+    // manager.setTestProviderStatus(provider,
+    // GpsStatus.GPS_EVENT_SATELLITE_STATUS, extras, updateTime);
 
-		if (loc != null) {
-			loc.setProvider(provider);
-			manager.setTestProviderLocation(provider, loc);
-		}
-	}
+    Location loc = null;
+    try {
+      loc = inData.readLocation();
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
-	private class GPSDriverThread extends Thread {
+    try {
+      if (loc != null) {
+        loc.setProvider(provider);
+        manager.setTestProviderLocation(provider, loc);
+      }
+    } catch (SecurityException ex) {
+      close();
+      Toast.makeText(context, "Simulated GPS data disabled by your device",
+          Toast.LENGTH_LONG).show();
+    }
+  }
 
-		/**
-		 * Constructor
-		 */
-		public GPSDriverThread() {
-			super("SimGPS");
-		}
+  private class GPSDriverThread extends Thread {
 
-		/*
-		 * @see java.lang.Thread#run()
-		 */
-		@Override
-		public void run() {
-			try {
-				Thread.sleep(3 * 1000);
-				// Pretend to find sats
-				/*
-				 * Bundle extras = new Bundle();
-				 * manager.setTestProviderStatus(provider,
-				 * GpsStatus.GPS_EVENT_STARTED, extras, (new Date()).getTime());
-				 * manager.setTestProviderStatus(provider,
-				 * GpsStatus.GPS_EVENT_FIRST_FIX, extras, (new
-				 * Date()).getTime()); manager.setTestProviderStatus(provider,
-				 * GpsStatus.GPS_EVENT_SATELLITE_STATUS, extras, (new
-				 * Date()).getTime());
-				 */
+    /**
+     * Constructor
+     */
+    public GPSDriverThread() {
+      super("SimGPS");
+    }
 
-				while (!isExiting) {
-					Thread.sleep(500 /* 3 * 1000 */);
-					sendNewUpdate();
-				}
+    /*
+     * @see java.lang.Thread#run()
+     */
+    @Override
+    public void run() {
+      try {
+        Thread.sleep(3 * 1000);
+        // Pretend to find sats
+        /*
+         * Bundle extras = new Bundle(); manager.setTestProviderStatus(provider,
+         * GpsStatus.GPS_EVENT_STARTED, extras, (new Date()).getTime());
+         * manager.setTestProviderStatus(provider,
+         * GpsStatus.GPS_EVENT_FIRST_FIX, extras, (new Date()).getTime());
+         * manager.setTestProviderStatus(provider,
+         * GpsStatus.GPS_EVENT_SATELLITE_STATUS, extras, (new
+         * Date()).getTime());
+         */
 
-			} catch (InterruptedException ex) {
-				// Just exit
-			}
+        while (!isExiting) {
+          Thread.sleep(500 /* 3 * 1000 */);
+          sendNewUpdate();
+        }
 
-			try {
-				inData.close();
-			} catch (IOException ex) {
-				// Ignore errors on close
-			}
+      } catch (InterruptedException ex) {
+        // Just exit
+      }
 
-			manager.clearTestProviderEnabled(provider);
-			manager.clearTestProviderLocation(provider);
-			manager.clearTestProviderStatus(provider);
+      try {
+        inData.close();
+      } catch (IOException ex) {
+        // Ignore errors on close
+      }
 
-			manager.removeTestProvider(provider);
-		}
+      manager.clearTestProviderEnabled(provider);
+      manager.clearTestProviderLocation(provider);
+      manager.clearTestProviderStatus(provider);
 
-	}
+      manager.removeTestProvider(provider);
+    }
+
+  }
 }
