@@ -42,287 +42,287 @@ import com.geeksville.gaggle.R;
  * 
  */
 public class GPSToPositionWriter extends AbstractLocationListener implements
-		ServiceConnection, Observer {
+    ServiceConnection, Observer {
 
-	private Location initialPos;
+  private Location initialPos;
 
-	private PositionWriter dest;
+  private PositionWriter dest;
 
-	private Context context;
+  private Context context;
 
-	private IGPSClient gps;
+  private IGPSClient gps;
 
-	private int pollInterval;
+  private int pollInterval;
 
-	private static final String TAG = "GPSToPositionWriter";
+  private static final String TAG = "GPSToPositionWriter";
 
-	private int numPoints;
+  private int numPoints;
 
-	/**
-	 * Distance in meters from initial position before we'll detect it as a
-	 * launch
-	 */
-	private int launchDistanceY, launchDistanceX;
+  /**
+   * Distance in meters from initial position before we'll detect it as a launch
+   */
+  private int launchDistanceY, launchDistanceX;
 
-	/**
-	 * How many meters to a degree (approx)
-	 */
-	private static final double metersLatitudePerDeg = 111131.745;
-	private static final double metersLongitudePerDeg = 78846.80572069259;
+  /**
+   * How many meters to a degree (approx)
+   */
+  private static final double metersLatitudePerDeg = 111131.745;
+  private static final double metersLongitudePerDeg = 78846.80572069259;
 
-	/**
-	 * The person watching us
-	 */
-	ChangeHandler myObserver;
+  /**
+   * The person watching us
+   */
+  ChangeHandler myObserver;
 
-	AccelerometerClient accel = null;
-	BarometerClient baro = null;
+  AccelerometerClient accel = null;
+  BarometerClient baro = null;
 
-	public void setObserver(ChangeHandler obs) {
-		myObserver = obs;
-	}
+  public void setObserver(ChangeHandler obs) {
+    myObserver = obs;
+  }
 
-	private void setStatus(Status stat) {
-		curStatus = stat;
-		if (myObserver != null)
-			myObserver.onChanged(this);
-	}
+  private void setStatus(Status stat) {
+    curStatus = stat;
+    if (myObserver != null)
+      myObserver.onChanged(this);
+  }
 
-	public enum Status {
-		OFF, WAIT_FOR_LOCK, WAIT_FOR_LAUNCH, IN_FLIGHT, LANDED
-	}
+  public enum Status {
+    OFF, WAIT_FOR_LOCK, WAIT_FOR_LAUNCH, IN_FLIGHT, LANDED
+  }
 
-	private Status curStatus = Status.OFF;
+  private Status curStatus = Status.OFF;
 
-	public GPSToPositionWriter(Context _context) {
-		context = _context;
-	}
+  public GPSToPositionWriter(Context _context) {
+    context = _context;
+  }
 
-	public Status getStatus() {
-		return curStatus;
-	}
+  public Status getStatus() {
+    return curStatus;
+  }
 
-	public boolean isLogging() {
-		return curStatus != Status.OFF && curStatus != Status.LANDED;
-	}
+  public boolean isLogging() {
+    return curStatus != Status.OFF && curStatus != Status.LANDED;
+  }
 
-	/**
-	 * A human readable description of our status
-	 * 
-	 * @return
-	 */
-	public String getStatusString() {
-		switch (curStatus) {
-		case OFF:
-			return context.getString(R.string.off);
-		case WAIT_FOR_LOCK:
-			return context.getString(R.string.acquiring_gps_fix);
-		case WAIT_FOR_LAUNCH:
-			return String.format(context.getString(R.string.waiting_for_launch_d_pts), numPoints);
-		case IN_FLIGHT:
-			return String.format(context.getString(R.string.in_flight_d_pts), numPoints);
-		case LANDED:
-			return context.getString(R.string.landed);
-		}
+  /**
+   * A human readable description of our status
+   * 
+   * @return
+   */
+  public String getStatusString() {
+    switch (curStatus) {
+    case OFF:
+      return context.getString(R.string.off);
+    case WAIT_FOR_LOCK:
+      return context.getString(R.string.acquiring_gps_fix);
+    case WAIT_FOR_LAUNCH:
+      return String.format(
+          context.getString(R.string.waiting_for_launch_d_pts), numPoints);
+    case IN_FLIGHT:
+      return String.format(context.getString(R.string.in_flight_d_pts),
+          numPoints);
+    case LANDED:
+      return context.getString(R.string.landed);
+    }
 
-		throw new IllegalStateException("Unknown GPS logging state");
-	}
+    throw new IllegalStateException("Unknown GPS logging state");
+  }
 
-	/**
-	 * Stop logging
-	 */
-	public void stopLogging() {
-		if (isLogging()) {
+  /**
+   * Stop logging
+   */
+  public synchronized void stopLogging() {
+    if (isLogging()) {
 
-			gps.removeLocationListener(this);
+      gps.removeLocationListener(this);
 
-			if (curStatus == Status.IN_FLIGHT) {
-				dest.emitEpilog();
-				// flightStopTime = new Date();
-			}
+      if (curStatus == Status.IN_FLIGHT) {
+        dest.emitEpilog();
+        // flightStopTime = new Date();
+      }
 
-			gps.stopForeground();
+      gps.stopForeground();
 
-			// If we never started flying, just return to off
-			setStatus(curStatus == Status.IN_FLIGHT ? Status.LANDED : Status.OFF);
+      // If we never started flying, just return to off
+      setStatus(curStatus == Status.IN_FLIGHT ? Status.LANDED : Status.OFF);
 
-			GPSClient.unbindFrom(context, this);
+      GPSClient.unbindFrom(context, this);
 
-			if (accel != null) {
-				accel.deleteObserver(this);
-				accel = null;
-			}
+      if (accel != null) {
+        accel.deleteObserver(this);
+        accel = null;
+      }
 
-			if (baro != null) {
-				baro.deleteObserver(this);
-				baro = null;
-			}
-		}
-	}
+      if (baro != null) {
+        baro.deleteObserver(this);
+        baro = null;
+      }
+    }
+  }
 
-	public void startLogging(Context context, PositionWriter dest, int pollIntervalSecs,
-			int launchDistanceX, int launchDistanceY) {
-		this.context = context;
+  public void startLogging(Context context, PositionWriter dest,
+      int pollIntervalSecs, int launchDistanceX, int launchDistanceY) {
+    this.context = context;
 
-		if (!isLogging()) {
-			accel = AccelerometerClient.create(context);
-			if (accel != null)
-				accel.addObserver(this);
+    if (!isLogging()) {
+      accel = AccelerometerClient.create(context);
+      if (accel != null)
+        accel.addObserver(this);
 
-			baro = BarometerClient.create(context);
-			if (baro != null)
-				baro.addObserver(this);
+      baro = BarometerClient.create(context);
+      if (baro != null)
+        baro.addObserver(this);
 
-			this.numPoints = 0;
-			this.pollInterval = pollIntervalSecs;
-			this.dest = dest;
+      this.numPoints = 0;
+      this.pollInterval = pollIntervalSecs;
+      this.dest = dest;
 
-			this.launchDistanceX = launchDistanceX;
-			this.launchDistanceY = launchDistanceY;
+      this.launchDistanceX = launchDistanceX;
+      this.launchDistanceY = launchDistanceY;
 
-			GPSClient.bindTo(context, this);
-		} else
-			throw new IllegalStateException("Already logging");
-	}
+      GPSClient.bindTo(context, this);
+    } else
+      throw new IllegalStateException("Already logging");
+  }
 
-	@Override
-	public void onServiceConnected(ComponentName name, IBinder service) {
-		gps = (IGPSClient) service;
+  @Override
+  public void onServiceConnected(ComponentName name, IBinder service) {
+    gps = (IGPSClient) service;
 
-		// FIXME - move to correct place
-		gps.startForeground(context.getString(R.string.tracklog_started), context
-				.getString(R.string.capturing_tracklog));
+    // FIXME - move to correct place
+    gps.startForeground(context.getString(R.string.tracklog_started),
+        context.getString(R.string.capturing_tracklog));
 
-		setStatus(Status.WAIT_FOR_LOCK);
-		
-		GagglePrefs prefs = new GagglePrefs(context);
-				
-		long minTime = prefs.getGPSUpdateFreq() * 1000; // num msec between events
-		float minDist = prefs.getGPSUpdateDist(); // need at least this many meters
+    setStatus(Status.WAIT_FOR_LOCK);
 
-		gps.addLocationListener(minTime, minDist, this);
-	}
+    GagglePrefs prefs = new GagglePrefs(context);
 
-	@Override
-	public void onServiceDisconnected(ComponentName name) {
-		// TODO Auto-generated method stub
+    long minTime = prefs.getGPSUpdateFreq() * 1000; // num msec between events
+    float minDist = prefs.getGPSUpdateDist(); // need at least this many meters
 
-	}
+    gps.addLocationListener(minTime, minDist, this);
+  }
 
-	/**
-	 * Called after we have a GPS lock
-	 */
-	private void newStateWaitForLaunch() {
-		setStatus(Status.WAIT_FOR_LAUNCH);
-	}
+  @Override
+  public void onServiceDisconnected(ComponentName name) {
+    // TODO Auto-generated method stub
 
-	/**
-	 * Called once we've determined we've moved far enough from launch
-	 * 
-	 * @param initialPoints
-	 *            points we've saved up that should now be added to the tracklog
-	 */
-	private void newStateFlight(Location[] initialPoints) {
+  }
 
-		// flightStartTime = new Date();
+  /**
+   * Called after we have a GPS lock
+   */
+  private void newStateWaitForLaunch() {
+    setStatus(Status.WAIT_FOR_LAUNCH);
+  }
 
-		setStatus(Status.IN_FLIGHT);
+  /**
+   * Called once we've determined we've moved far enough from launch
+   * 
+   * @param initialPoints
+   *          points we've saved up that should now be added to the tracklog
+   */
+  private synchronized void newStateFlight(Location[] initialPoints) {
 
-		dest.emitProlog();
-		for (Location l : initialPoints)
-			emitPosition(l);
-	}
+    // flightStartTime = new Date();
 
-	/**
-	 * Add a point to the tracklog
-	 * 
-	 * @param location
-	 */
-	private void emitPosition(Location location) {
-		double lat = location.getLatitude();
-		double longitude = location.getLongitude();
-		float kmPerHr = location.hasSpeed() ? (float) (location.getSpeed() * 3.6) : Float.NaN;
-		// convert m/sec to km/hr
+    setStatus(Status.IN_FLIGHT);
 
-		float[] accelVals = (accel != null) ? accel.getValues() : null;
-		float vspd = (baro != null) ? baro.getVerticalSpeed() : Float.NaN;
+    dest.emitProlog();
+    for (Location l : initialPoints)
+      emitPosition(l);
+  }
 
-		// The emulator will falsely claim 0 for the first point reported -
-		// skip it
-		if (lat != 0.0)
-			dest.emitPosition(location.getTime(), lat, longitude,
-					location.hasAltitude() ? (float) location
-							.getAltitude() : Float.NaN, (int) location.getBearing(), kmPerHr,
-					accelVals, vspd);
-	}
+  /**
+   * Add a point to the tracklog
+   * 
+   * @param location
+   */
+  private void emitPosition(Location location) {
+    double lat = location.getLatitude();
+    double longitude = location.getLongitude();
+    float kmPerHr = location.hasSpeed() ? (float) (location.getSpeed() * 3.6)
+        : Float.NaN;
+    // convert m/sec to km/hr
 
-	@Override
-	public void onLocationChanged(Location location) {
+    float[] accelVals = (accel != null) ? accel.getValues() : null;
+    float vspd = (baro != null) ? baro.getVerticalSpeed() : Float.NaN;
 
-		numPoints++;
-		setStatus(curStatus); // For debugging
+    // The emulator will falsely claim 0 for the first point reported -
+    // skip it
+    if (lat != 0.0)
+      dest.emitPosition(location.getTime(), lat, longitude,
+          location.hasAltitude() ? (float) location.getAltitude() : Float.NaN,
+          (int) location.getBearing(), kmPerHr, accelVals, vspd);
+  }
 
-		switch (curStatus) {
-		case OFF: // Ignore - stale message
-			break;
+  @Override
+  public void onLocationChanged(Location location) {
 
-		case WAIT_FOR_LOCK:
-			// We need a 3d position before we can even start moving
-			if (location.hasAltitude()) {
-				initialPos = location;
-				newStateWaitForLaunch(); // We must now have a lock
-			}
-			break;
+    numPoints++;
+    setStatus(curStatus); // For debugging
 
-		case WAIT_FOR_LAUNCH:
-			if (location.hasAltitude()) {
-				int deltay = Math.abs(((int) initialPos.getAltitude())
-						- ((int) location.getAltitude()));
+    switch (curStatus) {
+    case OFF: // Ignore - stale message
+      break;
 
-				double metersLat = metersLatitudePerDeg
-						* Math.abs(initialPos.getLatitude() - location.getLatitude());
-				double metersLong = metersLongitudePerDeg
-						* Math.abs(initialPos.getLongitude() - location.getLongitude());
+    case WAIT_FOR_LOCK:
+      // We need a 3d position before we can even start moving
+      if (location.hasAltitude()) {
+        initialPos = location;
+        newStateWaitForLaunch(); // We must now have a lock
+      }
+      break;
 
-				/*
-				 * Too low a precision to be useful (at my house it shows 2000
-				 * meter distance int deltax = (int)
-				 * LocationUtils.LatLongToMeter((float)
-				 * initialPos.getLatitude(), (float) initialPos .getLongitude(),
-				 * (float) location.getLatitude(), (float) location
-				 * .getLongitude());
-				 */
+    case WAIT_FOR_LAUNCH:
+      if (location.hasAltitude()) {
+        int deltay = Math.abs(((int) initialPos.getAltitude())
+            - ((int) location.getAltitude()));
 
-				if (launchDistanceY == 0 || launchDistanceX == 0 || metersLat >= launchDistanceX
-						|| metersLong >= launchDistanceX || deltay >= launchDistanceY) {
-					Log.i(TAG, String.format("Launch detected dx=%f, dy=%f, dz=%d", metersLong,
-							metersLat, deltay));
-					newStateFlight(new Location[] { initialPos, location });
-				}
-			}
-			break;
+        double metersLat = metersLatitudePerDeg
+            * Math.abs(initialPos.getLatitude() - location.getLatitude());
+        double metersLong = metersLongitudePerDeg
+            * Math.abs(initialPos.getLongitude() - location.getLongitude());
 
-		case IN_FLIGHT:
-			emitPosition(location);
-			break;
+        /*
+         * Too low a precision to be useful (at my house it shows 2000 meter
+         * distance int deltax = (int) LocationUtils.LatLongToMeter((float)
+         * initialPos.getLatitude(), (float) initialPos .getLongitude(), (float)
+         * location.getLatitude(), (float) location .getLongitude());
+         */
 
-		case LANDED: // Ignore - stale message
-			break;
-		}
-	}
+        if (launchDistanceY == 0 || launchDistanceX == 0
+            || metersLat >= launchDistanceX || metersLong >= launchDistanceX
+            || deltay >= launchDistanceY) {
+          Log.i(TAG, String.format("Launch detected dx=%f, dy=%f, dz=%d",
+              metersLong, metersLat, deltay));
+          newStateFlight(new Location[] { initialPos, location });
+        }
+      }
+      break;
 
-	/**
-	 * If onProviderDisabled called, then stop track log
-	 */
-	@Override
-	public void onProviderDisabled(String provider) {
-		stopLogging();
-	}
+    case IN_FLIGHT:
+      emitPosition(location);
+      break;
 
-	@Override
-	public void update(Observable observable, Object data) {
-		// TODO Auto-generated method stub
+    case LANDED: // Ignore - stale message
+      break;
+    }
+  }
 
-	}
+  /**
+   * If onProviderDisabled called, then stop track log
+   */
+  @Override
+  public void onProviderDisabled(String provider) {
+    stopLogging();
+  }
+
+  @Override
+  public void update(Observable observable, Object data) {
+    // TODO Auto-generated method stub
+
+  }
 
 }
