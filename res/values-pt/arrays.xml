@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="log_interval_names">
+		<item>indefinido (rápido)</item>
+		<item>1 segundo</item>
+		<item>3 segundos</item>
+		<item>5 segundos</item>
+		<item>10 segundos</item>
+		<item>15 segundos</item>
+		<item>20 segundos</item>			
+		<item>1 minuto</item>
+		<item>2 minutos</item>
+		<item>5 minutos</item>									
+	</string-array>
+	
+	<!-- As seguintes palavras devem ser localizadas -->	    
+	<string-array name="log_distance_interval_names">
+		<item>indefinido (rápido)</item>
+		<item>1 metro</item>
+		<item>5 metros</item>
+		<item>10 metros</item>
+		<item>15 metros</item>
+		<item>20 metros</item>
+		<item>30 metros</item>			
+		<item>50 metros</item>
+		<item>100 metros</item>
+		<item>200 metros</item>									
+	</string-array>
+	
+	<!-- As seguintes palavras devem ser localizadas -->	    
+	<string-array name="waypoint_type_names">
+		<item>Desconhecido</item>
+		<item>Área de pouso</item>
+		<item>Decolagem</item>	
+		<item>Ponto de virada</item>							
+	</string-array>
+	
+	<!-- As seguintes palavras devem ser localizadas -->	    
+	<string-array name="altunits_enum_names">
+		<item>Pés</item>
+		<item>Metros</item>					
+	</string-array>
+	
+	<!-- As seguintes palavras devem ser localizadas -->	    		
+	<string-array name="distunits_enum_names">
+		<item>Km</item>
+		<item>Milhas</item>
+		<item>Nm</item>				
+	</string-array>
+	
+	<!-- As seguintes palavras devem ser localizadas -->	    
+	<string-array name="competition_class_names">
+		<item>Asa Flexível</item>
+		<item>Asa Rígida</item>
+		<item>Parapente (open)</item>
+		<item>Parapente (sport)</item>
+		<item>Parapente (Tandem)</item>									
+	</string-array>
+
+	<!-- As seguintes palavras devem ser localizadas -->
+	<string-array name="vehicle_type_names">
+		<item>Parapente</item>
+		<item>Asa Flex FAI1</item>
+		<item>Asa Rigida FAI5</item>
+		<item>Planador</item>
+		<item>Paramotor</item>	
+		<item>Trike</item>	
+		<item>Voo Motorizado</item>	
+		<item>Balonismo</item>						
+	</string-array>
+													
+</resources>

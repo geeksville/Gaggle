@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="only_for_devices_with_barometer_hardware">Apenas para aparelhos que possuem em seu hardware Sensor barométrico.</string>
+	<string name="use_audible_vario">Ativar audio vario</string>
+	<string name="averaging_percentage">Porcentagem média</string>
+	<string name="for_our_iir_filter_recommended_0_17_">para filtro IIR (recomendamos 0.10)</string>
+	<string name="integration_period">Tempo de integração</string>
+	<string name="number_of_seconds_for_vario_integration_1_0_recommended_">Número de segundos para integração do vario (recomendamos 0.7)</string>
+	<string name="min_sink_threshold">Min Descendente</string>
+	<string name="minimum_sink_tone_threshold_m_s_">Começar apitar a DESCENDENTE com (m/s)</string>
+	<string name="min_lift_threshold">Min Ascendente</string>
+	<string name="minimum_lift_tone_threshold_m_s_">Começar apitar a ASCENDENTE com (m/s)</string>
+	<string name="max_sink_threshold">Max Descendente</string>
+	<string name="maximum_sink_tone_threshold_m_s_">Tom máximo de Descendente com (m/s)</string>
+	<string name="max_lift_threshold">Max Ascendente</string>
+	<string name="maximum_lift_tone_threshold_m_s_">Tom máximo de Descendente com (m/s)</string>
+	<string name="min_sink_beep_rate">Taxa MIN beep DESCENDENTE</string>
+	<string name="minimum_beep_rate_in_sink_hz_">Beep minino para taxa de DESCENDENTE (Hz)</string>
+	<string name="max_sink_beep_rate">Taxa Max beep DESCENDENTE</string>
+	<string name="maximum_beep_rate_in_sink_hz_">Beep máximo para taxa de DESCENDENTE (Hz)</string>
+	<string name="min_lift_beep_rate">Taxa MIN beep ASCENDENTE</string>
+	<string name="minimum_beep_rate_in_lift_hz_">Beep mínino para taxa de ASCENDENTE (Hz)</string>
+	<string name="max_lift_beep_rate">Taxa Max beep ASCENDENTE</string>
+	<string name="maximum_beep_rate_in_lift_hz_">Beep máximo para taxa de ASCENDENTE (Hz)</string>
+	<string name="lift_tone">Tom ASCENDENTE</string>
+	<string name="lift_tone_frequency_hz_">Frequencia de tom ASCENDENTE (Hz)</string>
+	<string name="sink_tone_frequency_hz_">Frequencia de tom DESCENDENTE</string>
+	<string name="sink_tone">Tom DESCENDENTE</string>
+	<string name="vertical_speed">Velocidade Vertical</string>
+	<string name="vspd">VSpd</string>
+
+	<string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text -->	
+    <string name="donate_text">O desenvolvimento dessa aplicação é livre e financiada apenas através de doações (dinheiro para cerveja). Se você gostaria de doar, por favor, clique em sim e o Google irá perguntar uma quantidade. Nós pensamos que este pequeno pedido é uma pechincha comparado com outros custos de equipamentos de vôo. Se mesmo assim, você decidir em não doar, tudo bem, todos os recursos ainda estarão disponíveis. Se tiver dúvidas, existe um guia no menu, ou mesmo vá até o nosso fórum  de voluntáriado. Obrigado.
+    </string>	
+    <string name="restoring_transactions">Verificando doações</string>
+    <string name="donation">Doação</string>
+    <string name="yes_i_d_like_to_donate">Sim, eu gostaria de doar</string>
+    <string name="no_not_right_now">Não agora</string>
+    
+</resources>
