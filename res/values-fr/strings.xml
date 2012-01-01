@@ -167,4 +167,54 @@ Finesse: %2$s:1</string>
 	<string name="yes">Oui</string>
 	<string name="no">No</string>
 	<string name="barometer">Baromètre</string>    
+	
+	<string name="updating_from_a_prior_release">Mise à jour depuis une précédente version</string>
+    <string name="starting_logging">Initialisation de la connexion</string>
+    <string name="start">Début</string>
+    <string name="end">Fin</string>
+    <string name="duration">Durée</string>
+    <string name="start_altitude">Altitude de départ</string>
+    <string name="max_altitude_after_launch">Altitude max après lancement</string>
+    <string name="max_ground_speed">Vitese max au sol</string>
+    <string name="average_ground_speed">Vitesse moyenne au sol</string>
+    <string name="total_ground_distance_traveled">Distance au sol totale parcourue/string>
+    <string name="total_vertical_distance_traveled">Distance verticale totale parcourue</string>
+    <string name="max_distance_from_launch">Distance max depuis le lancement</string>    
+    <string name="only_for_devices_with_barometer_hardware">Seulement pour les équipements contenant un baromètre</string>
+    <string name="use_audible_vario">Utiliser le vario avec le son</string>
+    <string name="averaging_percentage">Pourcentage moyen</string>
+    <string name="for_our_iir_filter_recommended_0_17_">Pour le filtre IIR ( 0.10 recommandé)</string>
+    <string name="integration_period">Période d’intégration</string>
+    <string name="number_of_seconds_for_vario_integration_1_0_recommended_">Nombre de seconde pour l’intégration des données du Vario (recommandé 0,7)</string>
+    <string name="min_sink_threshold">Seuil de chute minimal</string>
+    <string name="minimum_sink_tone_threshold_m_s_">Seuil de chute minimal pour la tonalité(m/s)</string>
+    <string name="min_lift_threshold">Seuil de montée minimal</string>
+    <string name="minimum_lift_tone_threshold_m_s_">Seuil de montée minimal pour la tonalité(m/s)</string>
+    <string name="max_sink_threshold">Seuil de chute maximal</string>
+    <string name="maximum_sink_tone_threshold_m_s_">Seuil de chute maximal pour la tonalité(m/s)</string>
+    <string name="max_lift_threshold">Seuil de montée maximal</string>
+    <string name="maximum_lift_tone_threshold_m_s_">Seuil de montée maximal pour la tonalité(m/s)</string>
+    <string name="min_sink_beep_rate">Taux de chute minimum pour le signal sonore</string>
+    <string name="minimum_beep_rate_in_sink_hz_">Signal sonore minimum en chute (Hz)</string>
+    <string name="max_sink_beep_rate">Taux de chute maximum pour le signal sonore</string>
+    <string name="maximum_beep_rate_in_sink_hz_">Signal sonore maximum en chute (Hz)</string>
+    <string name="min_lift_beep_rate">Taux de chute maximum pour le signal sonore</string>
+    <string name="minimum_beep_rate_in_lift_hz_">Signal sonore minimum en montée (Hz)</string>
+    <string name="max_lift_beep_rate">Taux de montée maximum pour le signal sonore</string>
+    <string name="maximum_beep_rate_in_lift_hz_">Signal sonore maximum en montée(Hz)</string>
+    <string name="lift_tone">Signal sonore de montée</string>
+    <string name="lift_tone_frequency_hz_">Fréquence du signal sonore de montée (Hz)</string>
+    <string name="sink_tone_frequency_hz_">Fréquence du signal sonore de chute (Hz)</string>
+    <string name="sink_tone">Signal sonor de chute</string>
+    <string name="vertical_speed">Vitesse verticale</string>
+    <string name="vspd">Vit.Vert</string>
+    
+	<string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text -->	    
+    <string name="donate_text">Le développement de cette application entièrement gratuite est entièrement financée par les dons (des pour-boire en réalité). Si vous voulez participer en faisant une donation, cliquez sur “Yes” et Google vous proposera un montant. Nous pensons que cette demande est négligeable face aux autres coûts induits par le vol à voile. \n\n Qui plus est, si vous ne préférez pas donner pour l’instant, toutes les fonctionnalités de l’application restent entièrement disponibles. \n\n Vous pouvez bien sûr nous poser vos questions, pour cela, allez dans l’aide, et accéder au formulaire dédié.
+    </string>    
+    <string name="restoring_transactions">Vérification</string>
+    <string name="donation">Donner</string>
+    <string name="yes_i_d_like_to_donate">Oui, j’aimerais faire une donation</string>
+
+    <string name="no_not_right_now">Non, pas pour l’instant</string>	
 </resources>

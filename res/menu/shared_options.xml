@@ -2,5 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:id="@+id/about_menu" android:title="@string/about" android:icon="@android:drawable/ic_menu_help" />
 	<item android:id="@+id/preferences_menu" android:title="@string/preferences" android:icon="@android:drawable/ic_menu_preferences"  />	
-	<item android:id="@+id/donate_menu" android:title="Donate"  />
+	<item android:id="@+id/donate_menu" android:title="@string/donate"  />
 </menu>

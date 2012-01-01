@@ -206,6 +206,7 @@ por favor enviame un email: kevinh@geeksville.com</string>
 	<string name="barometer">Barómetro</string>  
 	
 	<string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text  -->
+	<string name="donate">Donar</string>	
     <string name="donate_text">El desarrollo de esta aplicación libre de publicidades es totalmente financiado 
         por donaciones. Si deseas hacer una donación, por favor hacé clic en SI y Google indicará una cantidad. 
         Creemos que esta pequeña petición es mínima comparado con otros costos para volar.\n\nSi escoges no donar, 

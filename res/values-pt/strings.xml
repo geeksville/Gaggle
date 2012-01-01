@@ -240,6 +240,7 @@ por favor envie um email para kevinh@geeksville.com</string>
 	<string name="vspd">VSpd</string>
 
 	<string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text -->	
+	<string name="donate">Doar</string>	
     <string name="donate_text">O desenvolvimento dessa aplicação é livre e financiada apenas através de doações (dinheiro para cerveja). Se você gostaria de doar, por favor, clique em sim e o Google irá perguntar uma quantidade. Nós pensamos que este pequeno pedido é uma pechincha comparado com outros custos de equipamentos de vôo. Se mesmo assim, você decidir em não doar, tudo bem, todos os recursos ainda estarão disponíveis. Se tiver dúvidas, existe um guia no menu, ou mesmo vá até o nosso fórum  de voluntáriado. Obrigado.
     </string>	
     <string name="restoring_transactions">Verificando doações</string>

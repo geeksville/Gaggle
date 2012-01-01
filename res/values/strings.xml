@@ -266,6 +266,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="vspd">VSpd</string>
 	
 	<string name="should_prompt_to_donate">false</string> <!-- Only set to true if we've localized the donation text  -->
+	<string name="donate">Donate</string>
     <string name="donate_text">Development of this ad-free application is funded entirely by donations (just beer money).  
         If you would like to donate, please click yes 
         and Google will prompt you with an amount.  We think this small request is a bargain compared to 
