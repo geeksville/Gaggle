@@ -117,7 +117,7 @@
     <string name="glide_ratio">Razão de Planeio</string>
     <string name="to_wpt">Para Wpt</string>
     <string name="distance_to_wpt">Distância para Wpt</string>
-    <string name="heading">Título</string>
+    <string name="heading">Bússula</string>
     <string name="altitude_short">Alt</string>
     <string name="altitude">Altitude</string>
     <string name="go_to">Ir para</string>
@@ -191,7 +191,7 @@ por favor envie um email para kevinh@geeksville.com</string>
 	<string name="vehicle_type">Tipo de aeronave.</string>
 	<string name="vehicle_type_summary">Leonardo Live server tipo de aeronave.</string>
 
-	<string name="send_csv_file">Enviar CSV file</string>
+	<string name="send_csv_file">Enviar arquivo CSV</string>
 	<string name="g_meter_label">G</string>
 	<string name="g_meter_caption">cur(max)</string>
 	<string name="confirm_delete_">Confirmar exclusão?</string>
@@ -240,7 +240,7 @@ por favor envie um email para kevinh@geeksville.com</string>
 	<string name="vspd">VSpd</string>
 
 	<string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text -->	
-	<string name="donate">Doar</string>	
+	<string name="donate">Doação</string>	
     <string name="donate_text">O desenvolvimento dessa aplicação é livre e financiada apenas através de doações (dinheiro para cerveja). Se você gostaria de doar, por favor, clique em sim e o Google irá perguntar uma quantidade. Nós pensamos que este pequeno pedido é uma pechincha comparado com outros custos de equipamentos de vôo. Se mesmo assim, você decidir em não doar, tudo bem, todos os recursos ainda estarão disponíveis. Se tiver dúvidas, existe um guia no menu, ou mesmo vá até o nosso fórum  de voluntáriado. Obrigado.
     </string>	
     <string name="restoring_transactions">Verificando doações</string>
@@ -248,4 +248,7 @@ por favor envie um email para kevinh@geeksville.com</string>
     <string name="yes_i_d_like_to_donate">Sim, eu gostaria de doar</string>
     <string name="no_not_right_now">Não agora</string>
     
+    <string name="view_summary">Detalhes do voo</string>
+	<string name="vario_preferences">Configurações Variometro</string>   
+	<string name="advanced">Avançado</string>    
 </resources>

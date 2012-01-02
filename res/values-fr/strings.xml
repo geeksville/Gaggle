@@ -177,7 +177,7 @@ Finesse: %2$s:1</string>
     <string name="max_altitude_after_launch">Altitude max après lancement</string>
     <string name="max_ground_speed">Vitese max au sol</string>
     <string name="average_ground_speed">Vitesse moyenne au sol</string>
-    <string name="total_ground_distance_traveled">Distance au sol totale parcourue/string>
+    <string name="total_ground_distance_traveled">Distance au sol totale parcourue</string>
     <string name="total_vertical_distance_traveled">Distance verticale totale parcourue</string>
     <string name="max_distance_from_launch">Distance max depuis le lancement</string>    
     <string name="only_for_devices_with_barometer_hardware">Seulement pour les équipements contenant un baromètre</string>

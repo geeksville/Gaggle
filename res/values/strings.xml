@@ -266,7 +266,6 @@ please email kevinh@geeksville.com.</string>
 	<string name="vspd">VSpd</string>
 	
 	<string name="should_prompt_to_donate">false</string> <!-- Only set to true if we've localized the donation text  -->
-	<string name="donate">Donate</string>
     <string name="donate_text">Development of this ad-free application is funded entirely by donations (just beer money).  
         If you would like to donate, please click yes 
         and Google will prompt you with an amount.  We think this small request is a bargain compared to 
@@ -277,5 +276,10 @@ please email kevinh@geeksville.com.</string>
     <string name="donation">Donation</string>
     <string name="yes_i_d_like_to_donate">Yes, I\'d like to donate</string>
     <string name="no_not_right_now">No, not right now</string>	 
+    
+    <string name="view_summary">View Summary</string>
+	<string name="donate">Donate</string> 
+	<string name="vario_preferences">Vario Preferences</string>   
+	<string name="advanced">Advanced</string>
 </resources>
   

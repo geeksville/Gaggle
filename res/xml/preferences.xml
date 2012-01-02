@@ -48,7 +48,7 @@
 		</PreferenceScreen>
 
 		<PreferenceScreen android:key="vario_prefs"
-			android:title="Vario preferences" android:summary="@string/only_for_devices_with_barometer_hardware" >
+			android:title="@string/vario_preferences" android:summary="@string/only_for_devices_with_barometer_hardware" >
 
 			<CheckBoxPreference android:key="use_audible_vario" android:defaultValue="true"
 				android:title="@string/use_audible_vario" android:summary="@string/only_for_devices_with_barometer_hardware" />
@@ -168,7 +168,7 @@
 			android:summary="@string/keeps_the_display_from_going_to_sleep" />
 
 		<PreferenceScreen android:key="advanced"
-			android:title="Advanced" android:summary="@string/options_for_advanced_users">
+			android:title="@string/advanced" android:summary="@string/options_for_advanced_users">
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="launch_dist_x" android:title="@string/launch_distance_horizontal"
 				android:summary="@string/launch_distance_horiz_summary"
