@@ -51,296 +51,296 @@ import com.geeksville.gaggle.R;
  *         units display
  */
 public class InfoDock extends LinearLayout implements
-		InfoField.OnChangedListener, LifeCycleHandler {
+    InfoField.OnChangedListener, LifeCycleHandler {
 
-	static final String TAG = "InfoDock";
+  static final String TAG = "InfoDock";
 
-	/**
-	 * The layout we are using for this doc
-	 */
-	int layoutId;
+  /**
+   * The layout we are using for this doc
+   */
+  int layoutId;
 
-	InfoField contents = null;
+  InfoField contents = null;
 
-	TextView shortLabel;
+  TextView shortLabel;
 
-	TextView label, text, units;
+  TextView label, text, units;
 
-	ImageView image;
+  ImageView image;
 
-	// Need handler for callbacks to the UI thread
-	private final Handler handler = new Handler();
+  // Need handler for callbacks to the UI thread
+  private final Handler handler = new Handler();
 
-	/**
-	 * Used to check for 'real' changes of text values
-	 */
-	private String oldText;
+  /**
+   * Used to check for 'real' changes of text values
+   */
+  private String oldText;
 
-	/**
-	 * Have we already inflated this component?
-	 */
-	private boolean isInflated = false;
+  /**
+   * Have we already inflated this component?
+   */
+  private boolean isInflated = false;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param context
-	 * @param layoutId
-	 *            An ID such as R.layout.info_dock_wide
-	 * @param fieldName
-	 */
-	public InfoDock(Context context, int layoutId, String fieldName) {
-		super(context);
+  /**
+   * Constructor
+   * 
+   * @param context
+   * @param layoutId
+   *          An ID such as R.layout.info_dock_wide
+   * @param fieldName
+   */
+  public InfoDock(Context context, int layoutId, String fieldName) {
+    super(context);
 
-		listenToLifecycle();
+    listenToLifecycle();
 
-		this.layoutId = layoutId;
-		setInfoField(fieldName);
-	}
+    this.layoutId = layoutId;
+    setInfoField(fieldName);
+  }
 
-	public InfoDock(Context context, AttributeSet attrs) {
-		super(context, attrs);
+  public InfoDock(Context context, AttributeSet attrs) {
+    super(context, attrs);
 
-		listenToLifecycle();
+    listenToLifecycle();
 
-		TypedArray arr = context.obtainStyledAttributes(attrs,
-				R.styleable.InfoDock);
+    TypedArray arr = context
+        .obtainStyledAttributes(attrs, R.styleable.InfoDock);
 
-		// The user probably wants to specify a field name
-		String fieldName = arr.getString(R.styleable.InfoDock_info_field);
+    // The user probably wants to specify a field name
+    String fieldName = arr.getString(R.styleable.InfoDock_info_field);
 
-		// default to a wide layout unless the user asked for something else
-		layoutId = arr.getResourceId(R.styleable.InfoDock_layout_id,
-				R.layout.info_dock_wide);
-		arr.recycle();
+    // default to a wide layout unless the user asked for something else
+    layoutId = arr.getResourceId(R.styleable.InfoDock_layout_id,
+        R.layout.info_dock_wide);
+    arr.recycle();
 
-		if (fieldName != null)
-			setInfoField(fieldName);
-	}
+    if (fieldName != null)
+      setInfoField(fieldName);
+  }
 
-	/**
-	 * When our app is paused, we want to stop updating our widgets
-	 */
-	void listenToLifecycle() {
-		if (getContext() instanceof LifeCyclePublisher)
-			((LifeCyclePublisher) getContext()).addLifeCycleHandler(this);
-	}
+  /**
+   * When our app is paused, we want to stop updating our widgets
+   */
+  void listenToLifecycle() {
+    if (getContext() instanceof LifeCyclePublisher)
+      ((LifeCyclePublisher) getContext()).addLifeCycleHandler(this);
+  }
 
-	/**
-	 * Add the children from our layout.xml - FIXME, is there a better way to do
-	 * this?
-	 */
-	@Override
-	protected void onFinishInflate() {
-		super.onFinishInflate();
+  /**
+   * Add the children from our layout.xml - FIXME, is there a better way to do
+   * this?
+   */
+  @Override
+  protected void onFinishInflate() {
+    super.onFinishInflate();
 
-		Context context = getContext();
-		((LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
-				layoutId, this);
+    Context context = getContext();
+    ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+        .inflate(layoutId, this);
 
-		label = (TextView) findViewById(R.id.infodock_label);
-		shortLabel = (TextView) findViewById(R.id.infodock_shortlabel);
-		text = (TextView) findViewById(R.id.infodock_text);
-		units = (TextView) findViewById(R.id.infodock_units);
-		image = (ImageView) findViewById(R.id.infodock_image);
+    label = (TextView) findViewById(R.id.infodock_label);
+    shortLabel = (TextView) findViewById(R.id.infodock_shortlabel);
+    text = (TextView) findViewById(R.id.infodock_text);
+    units = (TextView) findViewById(R.id.infodock_units);
+    image = (ImageView) findViewById(R.id.infodock_image);
 
-		// If we already have contents, fill fields and invalidate as needed
-		setContents(contents);
+    // If we already have contents, fill fields and invalidate as needed
+    setContents(contents);
 
-		isInflated = true;
+    isInflated = true;
 
-		setSaveEnabled(true);
-	}
+    setSaveEnabled(true);
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.geeksville.android.LifeCycleHandler#onPause()
-	 */
-	@Override
-	public void onPause() {
-		if (contents != null)
-			contents.onHidden();
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.geeksville.android.LifeCycleHandler#onPause()
+   */
+  @Override
+  public void onPause() {
+    if (contents != null)
+      contents.onHidden();
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.geeksville.android.LifeCycleHandler#onResume()
-	 */
-	@Override
-	public void onResume() {
-		if (contents != null) {
-			contents.onShown();
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.geeksville.android.LifeCycleHandler#onResume()
+   */
+  @Override
+  public void onResume() {
+    if (contents != null) {
+      contents.onShown();
 
-			updateLabels();
-		}
-	}
+      updateLabels();
+    }
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.geeksville.android.LifeCycleHandler#onStart()
-	 */
-	@Override
-	public void onStart() {
-		// nothing
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.geeksville.android.LifeCycleHandler#onStart()
+   */
+  @Override
+  public void onStart() {
+    // nothing
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.geeksville.android.LifeCycleHandler#onStop()
-	 */
-	@Override
-	public void onStop() {
-		// nothing
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.geeksville.android.LifeCycleHandler#onStop()
+   */
+  @Override
+  public void onStop() {
+    // nothing
+  }
 
-	// We keep a cache of all infofields, so we can keep reusing them
-	static Map<String, InfoField> infoFields = new HashMap<String, InfoField>();
+  // We keep a cache of all infofields, so we can keep reusing them
+  static Map<String, InfoField> infoFields = new HashMap<String, InfoField>();
 
-	@SuppressWarnings("unchecked")
-	public void setInfoField(String fieldName) {
-		InfoField f;
+  @SuppressWarnings("unchecked")
+  public void setInfoField(String fieldName) {
+    InfoField f;
 
-		try {
-			if (!infoFields.containsKey(fieldName)) {
-				Class c = Class.forName(fieldName);
-				Constructor<InfoField> cons = c.getConstructor((Class[]) null);
+    try {
+      if (!infoFields.containsKey(fieldName)) {
+        Class c = Class.forName(fieldName);
+        Constructor<InfoField> cons = c.getConstructor((Class[]) null);
 
-				f = cons.newInstance();
+        f = cons.newInstance();
 
-				// if onCreate fails, we still leave our dock around but
-				// disabled
-				try {
-					// Pass in null if we are running in eclipse (by noticing
-					// the
-					// context is not Activity)
-					Activity activity = (getContext() == null) ? null
-							: Activity.class.isInstance(getContext()) ? (Activity) getContext()
-									: null;
-					f.onCreate(activity);
+        // if onCreate fails, we still leave our dock around but
+        // disabled
+        try {
+          // Pass in null if we are running in eclipse (by noticing
+          // the
+          // context is not Activity)
+          Activity activity = (getContext() == null) ? null : Activity.class
+              .isInstance(getContext()) ? (Activity) getContext() : null;
+          f.onCreate(activity);
 
-				} catch (Exception ex) {
-					// If we failed to create the info field the user probably
-					// doesn't have the hardware on their phone
-					Log.e(TAG, "Can't create info dock for " + fieldName + " "
-							+ ex.getMessage());
-					setEnabled(false);
-				}
+        } catch (Throwable ex) {
+          // We catch Throwable instead of Exception because VerifyErrors can
+          // occur on android 1.5
 
-				infoFields.put(fieldName, f);
-			} else
-				f = infoFields.get(fieldName);
+          // If we failed to create the info field the user probably
+          // doesn't have the hardware on their phone
+          Log.e(TAG,
+              "Can't create info dock for " + fieldName + " " + ex.getMessage());
+          setEnabled(false);
+        }
 
-			// If we are already inflated, we'll need to swap info fields now
-			if (isInflated)
-				setContents(f);
-			else
-				contents = f;
-		} catch (Exception ex) {
-			throw new RuntimeException("Can't create InfoField", ex); // Should
-																		// not
-																		// happen
-																		// post
-			// development
-		}
-	}
+        infoFields.put(fieldName, f);
+      } else
+        f = infoFields.get(fieldName);
 
-	/**
-	 * Update our units and short label
-	 */
-	private void updateLabels() {
-		if (label != null)
-			label.setText(contents.getLabel());
+      // If we are already inflated, we'll need to swap info fields now
+      if (isInflated)
+        setContents(f);
+      else
+        contents = f;
+    } catch (Exception ex) {
+      throw new RuntimeException("Can't create InfoField", ex); // Should
+      // not
+      // happen
+      // post
+      // development
+    }
+  }
 
-		if (shortLabel != null)
-			shortLabel.setText(contents.getShortLabel());
+  /**
+   * Update our units and short label
+   */
+  private void updateLabels() {
+    if (label != null)
+      label.setText(contents.getLabel());
 
-		// We might not be displaying the units field
-		if (units != null)
-			units.setText(contents.getUnits());
-	}
+    if (shortLabel != null)
+      shortLabel.setText(contents.getShortLabel());
 
-	/**
-	 * Install a new info field into this dock
-	 * 
-	 * @param f
-	 */
-	private void setContents(InfoField f) {
-		// Tell the old field that it wasn't being shown no more
-		// onVisibilityChanged(false);
+    // We might not be displaying the units field
+    if (units != null)
+      units.setText(contents.getUnits());
+  }
 
-		// We no longer care about our old contents
-		if (contents != null) {
-			contents.setOnChanged(null);
-			contents.onHidden();
-		}
+  /**
+   * Install a new info field into this dock
+   * 
+   * @param f
+   */
+  private void setContents(InfoField f) {
+    // Tell the old field that it wasn't being shown no more
+    // onVisibilityChanged(false);
 
-		contents = f;
+    // We no longer care about our old contents
+    if (contents != null) {
+      contents.setOnChanged(null);
+      contents.onHidden();
+    }
 
-		if (contents != null) {
-			contents.onShown();
+    contents = f;
 
-			updateLabels();
+    if (contents != null) {
+      contents.onShown();
 
-			// Subscribe to this info field
-			contents.setOnChanged(this);
+      updateLabels();
 
-			// Draw the adjustable contents of the control now, so as to prevent
-			// flicker
-			drawInfoContents();
-		}
-	}
+      // Subscribe to this info field
+      contents.setOnChanged(this);
 
-	@Override
-	public void onInfoChanged(InfoField source) {
-		// Only update the GUI if we must
-		String newText = contents.getText();
+      // Draw the adjustable contents of the control now, so as to prevent
+      // flicker
+      drawInfoContents();
+    }
+  }
 
-		// If the user is using an image, we are not yet smart enough to optize
-		// that case - just let the call happen
-		if (!newText.equals(oldText) || image != null) {
-			oldText = newText;
+  @Override
+  public void onInfoChanged(InfoField source) {
+    // Only update the GUI if we must
+    String newText = contents.getText();
 
-			handler.post(infoChangedGuiWork);
-		}
-	}
+    // If the user is using an image, we are not yet smart enough to optize
+    // that case - just let the call happen
+    if (!newText.equals(oldText) || image != null) {
+      oldText = newText;
 
-	private void drawInfoContents() {
-		int color = contents.getTextColor();
-		text.setTextColor(color);
+      handler.post(infoChangedGuiWork);
+    }
+  }
 
-		text.setText(oldText);
+  private void drawInfoContents() {
+    int color = contents.getTextColor();
+    text.setTextColor(color);
 
-		if (image != null) {
-			Drawable img = contents.getImage();
+    text.setText(oldText);
 
-			if (img != null) {
-				image.setImageDrawable(img);
-				image.setVisibility(VISIBLE);
-				image.invalidate();
-			} else {
-				// If this info field doesn't have a drawable now, no point
-				// in drawing the image view
-				image.setVisibility(INVISIBLE);
-			}
-		}
-		// Redraw our drawable too
-		// if (image != null && image.getVisibility() == VISIBLE)
-		// image.invalidate();
-	}
+    if (image != null) {
+      Drawable img = contents.getImage();
 
-	/**
-	 * Handles updates from the infofield, but guaranteed to run in the gui
-	 * thread
-	 */
-	final Runnable infoChangedGuiWork = new Runnable() {
-		public void run() {
-			drawInfoContents();
-		}
-	};
+      if (img != null) {
+        image.setImageDrawable(img);
+        image.setVisibility(VISIBLE);
+        image.invalidate();
+      } else {
+        // If this info field doesn't have a drawable now, no point
+        // in drawing the image view
+        image.setVisibility(INVISIBLE);
+      }
+    }
+    // Redraw our drawable too
+    // if (image != null && image.getVisibility() == VISIBLE)
+    // image.invalidate();
+  }
+
+  /**
+   * Handles updates from the infofield, but guaranteed to run in the gui thread
+   */
+  final Runnable infoChangedGuiWork = new Runnable() {
+    public void run() {
+      drawInfoContents();
+    }
+  };
 
 }

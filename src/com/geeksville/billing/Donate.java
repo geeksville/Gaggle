@@ -319,18 +319,23 @@ public class Donate {
     this.context = context;
 
     mHandler = new Handler();
-    mPurchaseObserver = new DonatePurchaseObserver(mHandler);
+    try {
+      mPurchaseObserver = new DonatePurchaseObserver(mHandler);
 
-    // If we've already donate no need to start the service
-    if (!isDonated(context)) {
-      mBillingService = new BillingService();
-      mBillingService.setContext(context);
+      // If we've already donate no need to start the service
+      if (!isDonated(context)) {
+        mBillingService = new BillingService();
+        mBillingService.setContext(context);
 
-      mPurchaseDatabase = new PurchaseDatabase(context);
+        mPurchaseDatabase = new PurchaseDatabase(context);
 
-      // Check if billing is supported.
-      ResponseHandler.register(mPurchaseObserver);
-      isBillingSupported = mBillingService.checkBillingSupported();
+        // Check if billing is supported.
+        ResponseHandler.register(mPurchaseObserver);
+        isBillingSupported = mBillingService.checkBillingSupported();
+      }
+    } catch (Throwable t) {
+      // Android 1.5 throws a VerifyError loading the library
+      Log.e(TAG, "Skipping donate due to " + t);
     }
   }
 

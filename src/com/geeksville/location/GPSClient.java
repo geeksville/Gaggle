@@ -92,7 +92,7 @@ public class GPSClient extends Service implements IGPSClient {
   // / Once we get a GPS altitude we will fixup the barometer
   private boolean hasSetBarometer = false;
   private BarometerClient baro = null;
-  private AudioVario vario = new AudioVario();
+  private AudioVario vario;
 
   /**
    * Older SDKs don't define LocationProvider.AVAILABLE etc...
@@ -103,6 +103,11 @@ public class GPSClient extends Service implements IGPSClient {
   private static Map<Context, Republisher> clients = new HashMap<Context, Republisher>();
 
   public GPSClient() {
+    try {
+      vario = new AudioVario();
+    } catch (VerifyError ex) {
+      Log.e(TAG, "Not supported on 1.5: " + ex);
+    }
   }
 
   /**
@@ -264,8 +269,14 @@ public class GPSClient extends Service implements IGPSClient {
     // Start our looper up
     thread.start();
 
-    baro = BarometerClient.create(GPSClient.this);
-    vario.onCreate(this, thread.getLooper());
+    try {
+      baro = BarometerClient.create(GPSClient.this);
+
+      if (vario != null)
+        vario.onCreate(this, thread.getLooper());
+    } catch (VerifyError ex) {
+      Log.e(TAG, "Not on 1.5: " + ex);
+    }
 
     setSimByPrefs();
 
@@ -321,7 +332,8 @@ public class GPSClient extends Service implements IGPSClient {
   @Override
   public void onDestroy() {
 
-    vario.onDestroy();
+    if (vario != null)
+      vario.onDestroy();
 
     // Forcibly unsubscribe anyone still using us
     synchronized (listeners) {

@@ -170,7 +170,11 @@ public class GPSToPositionWriter extends AbstractLocationListener implements
       if (accel != null)
         accel.addObserver(this);
 
-      baro = BarometerClient.create(context);
+      try {
+        baro = BarometerClient.create(context);
+      } catch (VerifyError ex) {
+        Log.e(TAG, "Not on 1.5: " + ex);
+      }
       if (baro != null)
         baro.addObserver(this);
 
