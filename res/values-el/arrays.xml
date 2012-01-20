@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="live_server_names">
+		<item>Leonardo Live</item>
+		<item>Leonardo Live (Test Server)</item>
+	</string-array>
+
+	<string-array name="live_server_urls">
+		<item>http://www.livetrack24.com</item>
+		<item>http://test.livetrack24.com</item>
+	</string-array>
+	
+	<string-array name="delayed_server_names">
+		<item>Hanggliding Forum</item>
+		<item>DHV</item> 
+		<item>Paragliding Forum</item>
+	</string-array>
+ 
+	<string-array name="delayed_server_urls">
+		<item>http://www.hang-gliding.eu/modules/leonardo/flight_submit.php</item>
+		<item>http://xc.dhv.de/xc/modules/leonardo/flight_submit.php</item>
+		<item>http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</item>
+	</string-array>
+	
+	<!-- The following strings should probably be localized -->	
+	<string-array name="log_interval_names">
+		<item>ακαθόριστο (ταχύτερo)</item>
+		<item>1 δευτερόλεπτο</item>
+		<item>3 δευτερόλεπτα</item>
+		<item>5 δευτερόλεπτα</item>
+		<item>10 δευτερόλεπτα</item>
+		<item>15 δευτερόλεπτα</item>
+		<item>20 δευτερόλεπτα</item>			
+		<item>1 λεπτό</item>
+		<item>2 λεπτά</item>
+		<item>5 λεπτά</item>									
+	</string-array>
+	
+	<string-array name="log_interval_vals">
+		<item>0</item>
+		<item>1</item>
+		<item>3</item>
+		<item>5</item>
+		<item>10</item>
+		<item>15</item>
+		<item>20</item>			
+		<item>60</item>		
+		<item>120</item>	
+		<item>300</item>								
+	</string-array>
+	
+	<!-- The following strings should probably be localized -->	    
+	<string-array name="log_distance_interval_names">
+		<item>ακαθόριστο (ταχύτερo)</item>
+		<item>1 μέρο</item>
+		<item>5 μέτρα</item>
+		<item>10 μέτρα</item>
+		<item>15 μέτρα</item>
+		<item>20 μέτρα</item>
+		<item>30 μέτρα</item>			
+		<item>50 μέτρα</item>
+		<item>100 μέτρα</item>
+		<item>200 μέτρα</item>									
+	</string-array>
+	
+	<string-array name="log_distance_interval_vals">
+		<item>0</item>
+		<item>1</item>
+		<item>5</item>
+		<item>10</item>
+		<item>15</item>
+		<item>20</item>
+		<item>30</item>			
+		<item>50</item>
+		<item>100</item>
+		<item>200</item>									
+	</string-array>
+							
+	<!-- The following strings should probably be localized -->	    
+	<string-array name="waypoint_type_names">
+		<item>Άγνωστη</item>
+		<item>Ζώνη Προσγείωσης</item>
+		<item>Απογείωση</item>	
+		<item>Σημείο Στροφής</item>							
+	</string-array>
+	
+	<string-array name="waypoint_type_vals">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>								
+	</string-array>
+
+	<!-- The following strings should probably be localized -->	    
+	<string-array name="altunits_enum_names">
+		<item>Πόδια</item>
+		<item>Μέτρα</item>					
+	</string-array>
+	
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
+	<string-array name="altunits_enum_vals">
+		<item>Feet</item>
+		<item>Meters</item>							
+	</string-array>
+			
+	<!-- The following strings should probably be localized -->	    
+	<string-array name="speedunits_enum_names">
+		<item>Kph</item>
+		<item>mph</item>	
+		<item>kts</item>				
+	</string-array>
+	
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
+	<string-array name="speedunits_enum_vals">
+		<item>KmPerHr</item>
+		<item>MilePerHr</item>
+		<item>KtsPerHr</item>						
+	</string-array>
+				
+	<!-- The following strings should probably be localized -->	    		
+	<string-array name="distunits_enum_names">
+		<item>Km</item>
+		<item>Miles</item>
+		<item>Nm</item>				
+	</string-array>
+	
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
+	<string-array name="distunits_enum_vals">
+		<item>KM</item>
+		<item>Miles</item>	
+		<item>NauticalMiles</item>						
+	</string-array>
+			
+	<!-- The following strings should probably be localized -->	    
+	<string-array name="vspdunits_enum_names">
+		<item>M/s</item>
+		<item>FPM</item>	
+		<item>Knots</item>			
+	</string-array>
+	
+	<!-- The following strings should _not_ be localized - they map to enum names -->	    
+	<string-array name="vspdunits_enum_vals">
+		<item>MPerSec</item>
+		<item>FeetPerMin</item>	
+		<item>KtsPerHr</item>						
+	</string-array>		
+	
+	<!-- The following strings should probably be localized -->	    
+	<string-array name="competition_class_names">
+		<item>Flexible Wing</item>
+		<item>Rigid Wing</item>
+		<item>Paraglider (open)</item>
+		<item>Paraglider (sport)</item>
+		<item>Paraglider (Tandem)</item>									
+	</string-array>
+	
+	<string-array name="competition_class_vals">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>			
+		<item>5</item>		
+	</string-array>
+
+	<!-- The following strings should probably be localized -->
+	<string-array name="vehicle_type_names">
+		<item>Paraglider</item>
+		<item>Flex wing FAI1</item>
+		<item>Rigid wing FAI5</item>
+		<item>Glider</item>
+		<item>Paramotor</item>	
+		<item>Trike</item>	
+		<item>Powered flight</item>	
+		<item>Hot Air Balloon</item>						
+	</string-array>
+	
+	<string-array name="vehicle_type_vals">
+		<item>1</item>
+		<item>2</item>
+		<item>4</item>
+		<item>8</item>			
+		<item>16</item>
+		<item>32</item>
+		<item>64</item>
+		<item>128</item>
+	</string-array>
+	
+	<!-- The following strings should _not_ be localized - they map to enum names -->
+	<string-array name="ns_vals">
+		<item>N</item>
+		<item>S</item>
+	</string-array>
+	<string-array name="ew_vals">
+		<item>E</item>
+		<item>W</item>
+	</string-array>
+	<string-array name="coordinate_set_enum_names">
+		<item>DMS.dddd</item>
+		<item>DM.ddddd</item>
+		<item>D.ddddddd</item>
+	</string-array>
+	<string-array name="coordinate_set_enum_vals">
+		<item>DMS</item>
+		<item>DM</item>
+		<item>D</item>
+	</string-array>													
+</resources>

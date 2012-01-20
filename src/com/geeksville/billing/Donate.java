@@ -174,7 +174,7 @@ public class Donate {
   private String mItemName;
   private String mSku;
 
-  private boolean isBillingSupported;
+  private static boolean isBillingSupported;
 
   private void promptToDonate() {
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -223,7 +223,8 @@ public class Donate {
   }
 
   public static boolean canPromptToUpdate(Context context) {
-    return context.getString(R.string.should_prompt_to_donate).equals("true");
+    return context.getString(R.string.should_prompt_to_donate).equals("true")
+        && isBillingSupported;
   }
 
   /**

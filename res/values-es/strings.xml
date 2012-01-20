@@ -216,6 +216,46 @@ por favor enviame un email: kevinh@geeksville.com</string>
     <!-- The following are reserved skus defined by Market for testing. -->
     <string name="donation">Donación</string>
     <string name="yes_i_d_like_to_donate">Sí, me gustaría hacer una donación</string>
-    <string name="no_not_right_now">No, no ahora</string>	 		
+    <string name="no_not_right_now">No, no ahora</string>	 	
+    
+    <string name="start">Inicio</string>
+    <string name="end">Fin</string>
+    <string name="duration">Duración</string>
+    <string name="start_altitude">Altitud de inicio</string>
+    <string name="max_altitude_after_launch">Altitud Max después del despegue</string>
+    <string name="max_ground_speed">Velocidad tierra Max</string>
+    <string name="average_ground_speed">Promedio velocidad tierra</string>
+    <string name="total_ground_distance_traveled">Distancia tierra total recorrida</string>
+    <string name="total_vertical_distance_traveled">Distancia total vertical recorrida</string>
+    <string name="max_distance_from_launch">Distancia Max desde despegue</string>
+
+    <string name="only_for_devices_with_barometer_hardware">Unicamente para dispositivos con barómetro</string>
+    <string name="use_audible_vario">Usar vario audible</string>
+    <string name="averaging_percentage">Porcentaje promedio</string>
+    <string name="for_our_iir_filter_recommended_0_17_">Para nuestro filtro IIR (recomendado 0.10)</string>
+    <string name="integration_period">Período de integración</string>
+    <string name="number_of_seconds_for_vario_integration_1_0_recommended_">Número de segundos para integración vario (0.7 recomendado)</string>
+    <string name="min_sink_threshold">Umbral descenso Min</string>
+    <string name="minimum_sink_tone_threshold_m_s_">Tono umbral descenso Min (m/s)</string>
+    <string name="min_lift_threshold">Umbral ascenso Min</string>
+    <string name="minimum_lift_tone_threshold_m_s_">Tono umbral ascenso Min (m/s)</string>
+    <string name="max_sink_threshold">Umbral descenso Max</string>
+    <string name="maximum_sink_tone_threshold_m_s_">Tono umbral descenso Max (m/s)</string>
+    <string name="max_lift_threshold">Umbral ascenso Max</string>
+    <string name="maximum_lift_tone_threshold_m_s_">Tono umbral ascenso Max (m/s)</string>
+    <string name="min_sink_beep_rate">Intervalo sonido descenso Min</string>
+    <string name="minimum_beep_rate_in_sink_hz_">Intervalo mínimo de sonido en descenso (Hz)</string>
+    <string name="max_sink_beep_rate">Intervalo de sonido descenso Max</string>
+    <string name="maximum_beep_rate_in_sink_hz_">Intervalo de sonido Max en descenso (Hz)</string>
+    <string name="min_lift_beep_rate">Intervalo de sonido ascenso Min</string>
+    <string name="minimum_beep_rate_in_lift_hz_">Intervalo mínimo de sonido en ascenso (Hz)</string>
+    <string name="max_lift_beep_rate">Intervalo de sonido ascenso Max</string>
+    <string name="maximum_beep_rate_in_lift_hz_">Intervalo de sonido Max en asenso (Hz)</string>
+    <string name="lift_tone">Tono de ascenso</string>
+    <string name="lift_tone_frequency_hz_">Frequencia tono ascenso (Hz)</string>
+    <string name="sink_tone_frequency_hz_">Frecuencia tono descenso (Hz)</string>
+    <string name="sink_tone">Tono descenso</string>
+    <string name="vertical_speed">Velocidad vertical</string>
+    <string name="vspd">VVert</string>    	
 </resources>
   

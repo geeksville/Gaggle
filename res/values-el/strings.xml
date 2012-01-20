@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+
+This is a brief summary of the steps needed to localize Gaggle for a new language:
+
+1) Thank you for volunteering to do a translation!  How would you like your name to read in the credits?  What email address
+	do you want to publish (if any)?
+2) Use a simple text editor to edit this file (Notepad on Windows or gedit on Linux)
+3) The strings in the table below are the english language version, if for your language you do not think it is appropriate
+	to translate that line at all (i.e. we should show the english version), just delete the full XML string element from
+	your file.
+4) If you are not sure about a translation and would like to use english for a particular line until you know a bit more
+	about how it is used in the program, just comment the line out using the XML comment delimeters.
+5) Please try to keep the translated strings approximately the same length as their english versions.  That said, don't 
+	worry about this too much - if you can't get a clear translation in the given length, feel free to use a longer phrase
+	(I might need to fix some layout files in the app though).
+6) If the name of a particular string has _short at the end, it is _is_ important to use the shortest possible translation.
+	It is likely I'm using it in a very small summary field and abbreviations are okay.
+7) After you make your translation, email the file to me and I'll add it to a test version of Gaggle.  After tweaking it
+	a little, I'll send you a test version to see if you are also happy with our work.  Then it will be released in the
+	regular distribution.
+8) If a string spans multiple lines in this file, please try to keep the line breaks approximately the same in your 
+	translation.  
+ -->
+ 
+<resources>
+    <string name="no_waypoints_url">file:///android_asset/no_waypoints-el.html</string>    
+    <string name="no_flights_url">file:///android_asset/no_flights-el.html</string>
+    <string name="default_leonardo_url">http://http://www.hang-gliding.eu/tracks/GR/alltimes/brand:all,cat:0,class:all,xctype:all,club:all,pilot:0_0,takeoff:all</string>
+        
+    <string name="updating_from_a_prior_release">Ενημέρωση από την προηγούμενη έκδοση</string>
+    <string name="starting_logging">Έναρξη καταγραφής</string>
+    <!-- Initial release for localization below this line -->
+    <string name="launch_distance_vertical">Απόσταση απογείωσης (κάθετα)</string>
+    <string name="launch_distance_horiz_summary">Μόλις διανύσεις αυτή την απόσταση θεωρείται ως απογείωση (σε μέτρα)</string>
+    <string name="launch_distance_horizontal">Απόσταση απογείωσης (οριζόντια)</string>
+    <string name="extra_altitude_summary">Το επιπλέον υψός του απαιτείται, πάνω από το ελάχιστο, για την Ζώνη Προσγείωσης (σε μέτρα)</string>
+    <string name="extra_altitude_margin">Όριο επιπλέον ύψους</string>
+    <string name="min_alt_at_lz">Το ελάχιστο ύψος που απαιτείται για την Ζώνη Προσγείωσης (σε μέτρα)</string>
+    <string name="minimum_altitude_margin">Όριο ελάχιστου υψους</string>
+    <string name="glide_ratio_summary">Το σημείο έναρξης των υπολογισμών ολίσθησης</string>
+    <string name="model_summary">δηλ. Sport2 ή T2C</string>
+    <string name="wing_model">Μοντέλο πτέρυγας</string>
+    <string name="id_string">Σύντομο αναγνωριστικό (ID), αποθηκεύεται στα IGC αρχεία (χρήσιμο σε αγώνες)</string>
+    <string name="pilot_identifier">Αναγνωριστικό πιλότου</string>
+    <string name="used_in_flight_reports">Χρησιμοποιείται σε αναφορές πτήσης</string>
+    <string name="pilot_name">Όνομα πιλότου</string>
+    <string name="allows_testing_gaggle_at_home">Επιτρέπει τη δοκιμή του gaggle στο σπίτι</string>
+    <string name="simulate_gps_data">Προσομοίωση δεδομένων GPS</string>
+    <string name="for_servers_other_than_paraglidingforum_com">Για servers εκτός του www.hang-gliding.eu</string>
+    <string name="leonardo_server">Leonardo server</string>
+    <string name="see_www_livetrack24_com_for_more_information">Για περισσότερα δες το www.livetrack24.com</string>
+    <string name="submission_url">URL υποβολής πτήσης</string>
+    <string name="server_and_account_information">Πληροφορίες server και λογαριασμού</string>
+    <string name="leonardo_live_server">Leonardo Live server</string>
+    <string name="server_settings">Ρυθμίσεις Server</string>
+    <string name="options_for_advanced_users">Επιλογές για προχωρημένους χρήστες</string>
+    <string name="keeps_the_display_from_going_to_sleep">Οθόνη συνεχώς ενεργή</string>
+    <string name="screen_on_in_flight">Οθόνη ενεργή κατά την πτήση</string>
+    <string name="saves_power_not_yet_implemented">Εξοικονόμηση ενέργειας… Δεν λειτουργεί ακόμα…</string>
+    <string name="disable_wi_fi">Απενεργοποίηση του Wi-Fi</string>
+    <string name="time_between_each_log_record">Χρόνος μεταξύ κάθε εγγραφής</string>
+    <string name="dist_between_each_log_record">Απόσταση (σε μέτρα) μεταξύ κάθε εγγραφής</string>
+    <string name="live_time_between_each_position_update">Χρόνος μεταξύ ενημέρωσης θέσης</string>
+    <string name="time_between_each_screen_update">Χρόνος για ανανέωση της οθόνης</string>
+    <string name="dist_between_each_screen_update">Απόσταση για ανανέωση της οθόνης</string>
+    <string name="time_between_each_gps_update">Χρονικό διάστημα για ενημέρωση της θέσης από το GPS.</string>
+    <string name="dist_between_each_gps_update">Ελάχιστη απόσταση για ενημέρωση της θέσης από το GPS.</string>
+    <string name="distance_interval">Διάστημα απόστασης</string>
+    <string name="interval">Χρονικό διάστημα</string>
+    <string name="distance_interval_screen">Διάστημα απόστασης</string>
+    <string name="interval_screen">Χρονικό διάστημα</string>
+    <string name="distance_interval_gps">Διάστημα απόστασης</string>
+    <string name="interval_gps">Χρονικό διάστημα</string>
+    <string name="using_a_leonardo_server">Χρήση του Leonardo server</string>
+    <string name="automatic_upload">Αυτόματο "Ανέβασμα" δεδομένων</string>
+    <string name="using_a_leonardo_live_server">Χρήση του Leonardo Live server</string>
+    <string name="live_logging">"Ζωντανή" καταγραφή</string>
+    <string name="logging_settings">Ρυθμίσεις καταγραφής</string>
+    <string name="vertical_speed_units">Μονάδες κάθετης ταχύτητας</string>
+    <string name="distance_units">Μονάδες απόστασης</string>
+    <string name="speed_units">Μονάδες ταχύτητας</string>
+    <string name="altitude_units">Μονάδες υψόμετρου</string>
+    <string name="feet_meters_etc">Μέτρα, πόδια, κτλ…</string>
+    <string name="units">Μονάδες μέτρησης</string>
+    <string name="performance_and_model_information">Xαρακτιρηστικά και Επιδόσεις του Μοντέλου</string>
+    <string name="glider_information">Πληροφορίες ανεμόπτερου</string>
+    <string name="testing_tools">Εργαλεία δοκιμών</string>
+    <string name="type">Τύπος</string>
+    <string name="name">Όνομα</string>
+    <string name="description">Περιγραφή</string>
+    <string name="fractions_of_mins_short">κλασμ</string>
+    <string name="minutes_short">λεπ</string>
+    <string name="degrees_short">μοιρ</string>
+    <string name="distance_from_center">Απόσταση από το κέντρο</string>
+    <string name="start_download">Έναρξη λήψης δεδομένων "Κατέβασμα"</string>
+    <string name="estimated_required">Εκτίμηση: 20MB χώρος απαιτείται στην SD κάρτα μνήνης</string>
+    <string name="map_download_hint">Το Gaggle μπορεί να "Κατεβάσει" όλα τα απαιτούμενα πλακίδια χάρτη στην τοπική κάρτα μνήμης SD. Αυτή η δυνατότητα θα σας επιτρέψει να έχετε ενεργούς χάρτες σε περιοχές που δεν υπάρχει κάλυψη κινητής τηλεφωνίας. Σημείωση:Η ενεργοποίηση αυτής της δυνατότητας απαιτεί επιπλέον χώρο στην SD κάρτα μνήμης, γι’ αυτό χρησιμοποιήστε μεγαλύτερη κάρτα μνήμης (8/16 GB) ή κατεβάστε μόνο τα αναγκαία πλακίδια χάρτη για την πτήση σας. Τα πλακίδια χάρτη θα "Κατεβούν" από το παρόν σημείο λήψης χάρτη και στην προεπιλεγμένη μεγέθυνση, οπότε βεβαιωθείτε ότι ο χάρτης εμφανίζεται όπως επιθυμείτε πριν πατήσετε το πλήκτρο "Κατέβασμα"</string>
+    <string name="_status_">(κατάσταση)</string>
+    <string name="start_flight">Έναρξη πτήσης</string>
+    <string name="code">Κωδικός</string>
+    <string name="login_name">Όνομα σύνδεσης</string>
+    <string name="password">Κωδικός πρόσβασης</string>
+    <string name="username">Όνομα χρήστη</string>
+    <string name="by_name">κατά όνομα</string>
+    <string name="by_distance">κατά απόσταση</string>
+    <string name="order">Στοίχιση</string>
+    <string name="delete_all">Διαγραφή όλλων</string>
+    <string name="add_waypoint">Πρόσθεση Σημείου Διέλευσης</string>
+    <string name="edit">Επεξεργασία</string>
+    <string name="preferences">Προτιμήσεις</string>
+    <string name="about">Βοήθεια</string>
+    <string name="download_map">"Κατέβασμα" χάρτη</string>
+    <string name="select_map">Επιλογή χάρτη</string>
+    <string name="my_location">Η θεσή μου</string>
+    <string name="send_selected">Αποστολή επιλεγμένου</string>
+    <string name="delete_selected">Διαγραφή επιλεγμένου</string>
+    <string name="select_all">Επιλογή όλων</string>
+    <string name="upload_selected">"Ανέβασμα" επιλεγμένου</string>
+    <string name="send_kml_file">Αποστολή αρχείου KML</string>
+    <string name="send_gpx_file">Αποστολή αρχείου GPX</string>
+    <string name="send_igc_file">Αποστολή αρχείου IGC</string>
+    <string name="upload_to_leonardo">"Ανέβασμα" στόν Leonardo</string>
+    <string name="view_on_map">Προβολή στον χάρτη</string>
+    <string name="customize_fields">Προσαρμογή πεδίων</string>
+    <string name="mock_location_required">Gaggle \'προσομοίωση δεδομένων GPS\' απαιτείται να \'Application Settings / Development / Allow Mock Locations(Επιτρέπονται πλαστές τοποθεσίες)\' επιλεγεί στις Προτιμήσεις (System Preferences).  Δεδομένου ότι η ρύθμιση αυτή είναι προς το παρόν ανενεργή το Gaggle επανέρχεται στο πραγματικό GPS.</string>
+    <string name="capturing_tracklog">Σύλληψη καταγραφής πορείας</string>
+    <string name="tracklog_started">Η καταγραφή πορείας ξεκίνησε</string>
+    <string name="distance_to_lz_short">Στην ΖΠ</string>
+    <string name="distance_to_lz">Απόσταση από την Ζώνη Προσγείωσης</string>
+    <string name="longitude_short">ΓΜήκος</string>
+    <string name="longitude">Γεωγραφικό μήκος</string>
+    <string name="latitude_short">ΓΠλάτος</string>
+    <string name="latitude">Γεωγραφικό πλάτος</string>
+    <string name="coordinate_set_units">Συντεταγμένες</string>
+    <string name="gr_needed_for_wpt_short">ΛΚ για ΣΔ</string>
+    <string name="gr_needed_for_wpt">Ο Λόγος Κατολίσθησης που απαιτείται για το επόμενο Σημείο Διέλευσης</string>
+    <string name="ground_speed_short">ΤαχΕδ</string>
+    <string name="speed">Ταχύτητα Εδάφους</string>
+    <string name="gr_needed_short">ΛΚ για ΖΠ</string>
+    <string name="gr_needed">Ο Λόγος Κατολίσθησης που απαιτείται για την Ζώνη Προσγείωσης</string>
+    <string name="glide_ratio_short">ΛΚ</string>
+    <string name="glide_ratio">Λόγος Κατολίσθησης</string>
+    <string name="to_wpt">από ΣΔ</string>
+    <string name="distance_to_wpt">Απόσταση από το επόμενο Σημείο Διέλευσης</string>
+    <string name="heading">Αζιμούθιο</string>
+    <string name="altitude_short">Ύψος</string>
+    <string name="altitude">Υψόμετρο</string>
+    <string name="go_to">πήγαινε στο</string>
+    <string name="edit_waypoint">Επεξεργασία Σημείου Διέλευσης</string>
+    <string name="ignore">Αγνόησε</string>
+    <string name="leonardolive_problem">Πρόβλημα στο LeonardoLive</string>
+    <string name="username_or_password_is_unset">Όνομα χρήστη ή κωδικός πρόσβασης μη ορισμένος</string>
+    <string name="start_logging">Έναρξη καταγραφής</string>
+    <string name="stop_logging">Διακοπή καταγραφής</string>
+    <string name="plot_1_hour">Γράφημα: 1 ώρας</string>
+    <string name="plot_20_min">Γράφημα: 20 λεπτών</string>
+    <string name="plot_5_min">Γράφημα: 5 λεπτών</string>
+    <string name="plot_all">Γράφημα: Συνολικό</string>
+    <string name="view_flight">Προβολή πτήσης</string>
+    <string name="okay">Εντάξει</string>
+    <string name="unable_to_open_igc_file">Αδυνατώ να ανοίξω το αρχείο IGC</string>
+    <string name="deleted">Διεγράφη</string>
+	<string name="sorry">Συγνώμη, η Geeksville εφαρμογή σταμάτησε απρόσκοπτα. Παρακαλώ στείλτε αυτό το μήνυμα για να διορθώσουμε το πρόβλημα (δεν θα αποσταλούν προσωπικά σας δεδομένα).</string>
+    <string name="updated_waypoint">Ενημερώθηκε το Σημείο Διέλευσης</string>
+    <string name="new_destination">Νέος προορισμός: </string>
+    <string name="waypoint_created">Το Σημείο Διέλευσης δημιουργήθηκε</string>
+    <string name="can_not_add_waypoint_still_waiting_for_gps_fix">Δεν μπορεί να προστεθεί το Σημείο Διέλευσης
+Δεν έχει ακόμη προσδιοριστεί το σήμα του GPS</string>
+    <string name="delete">Διαγραφή</string>
+    <string name="cancel">Ακύρωση</string>
+    <string name="are_you_sure">Είσαι σίγουρος(ρη);</string>
+    <string name="delete_waypoints">Διαγραφή Σημείων Διέλευσης</string>
+    <string name="import_failed">Η εισαγωγή απέτυχε</string>
+    <string name="uploading">"Ανέβασμα"</string>
+    <string name="flight_">πτήση_</string>
+    <string name="tracklogs">Καταγραφές πορείας</string>
+    <string name="file_folder">Gaggle</string>
+    <string name="waypoints">Σημεία Διέλευσης</string>
+    <string name="sd_card_not_found">Δεν βρέθηκε SD κάρτα μνήμης</string>
+    <string name="file_write_failed">Η εγγραφή του αρχείου απέτυχε</string>
+    <string name="please_set_your_leonardo_account_information">Παρακαλώ ορίστε τις πληροφορίες του Leonardo λογαριασμού σας</string>
+    <string name="upload_failed">Το "Ανέβασμα" απέτυχε</string>
+    <string name="igc_stream_write_failed">Η ροή εγγραφής του IGC απέτυχε</string>
+    <string name="writing_file">Έγγραφή αρχείου</string>
+    <string name="topo_us_relief">Τοπογραφικό (US relief)</string>
+    <string name="topo_us_contour">Τοπογραφικό (US contour)</string>
+    <string name="topo_europe">Τοπογραφικό (Europe)</string>
+    <string name="street_map">OpenStreetMap</string>
+    <string name="openhikingmap">Hiking map (Europe)</string>
+    <string name="opencyclemap">Opencyclemap</string>
+    <string name="distance_s_s_glide_s">Απόσταση: %1$s %2$s
+Ολίσθηση: %3$s:1</string>
+    <string name="off">Ανενεργό</string>
+    <string name="acquiring_gps_fix">Λήψη σήματος GPS</string>
+    <string name="landed">Προσγείωση</string>
+    <string name="in_flight_d_pts">Σε πτήση (%d pts)</string>
+    <string name="waiting_for_launch_d_pts">Αναμονή για απογείωση (%d pts)</string>
+    <string name="please_wait">Περιμένετε…</string>
+    <string name="importing_waypoints">Εισάγει τα Σημεία Διέλευσης</string>
+    <string name="imported_d_waypoints">Εισήχθησαν %d Σημεία Διέλευσης</string>
+    <string name="beta_text">Το Gaggle είναι ένα εργαλείο για πιλότους ανεμόπτερων όλων των τύπων με δυνατότητες όπως, καταγραφή πτήσης, 
+απεικόνιση σε χάρτη, και υπολογισμό κατολίσθησης. Εάν θέλεις να συμμετάσχεις στην ομάδα δοκιμών αυτής της εφαρμογής, 
+στείλε μήνυμα στο kevinh@geeksville.com.</string>
+    <string name="app_name">Gaggle</string>
+	<string name="LiveLoggingPrompt">"Ζωντανή" Καταγραφή</string>
+	<string name="app_description">Ένα εργαλείο για πιλότους ανεμόπτερων</string>
+	<string name="competition_class">Κατηγορία Αγώνων</string>
+	<string name="competition_class_summary">Leonardo Κατηγορία Αγώνων</string>
+	<string name="upload_failed_bad_url">Το "Ανέβασμα" απέτυχε. Παρακαλούμε ελέγξτε το URL υποβολής του Leonardo server.</string>
+	<string name="leonardo_connection_timeout">Τέλος χρόνου σύνδεσης</string>
+	<string name="leonardo_connection_timeout_summary">Τέλος χρόνου σε δευτερόλεπτα</string>
+	<string name="live2_connection_timeout_summary">Τέλος χρόνου σε δευτερόλεπτα - δεν είναι έτοιμο ακόμο.</string>
+	<string name="leonardo_operation_timeout">Τέλος χρόνου λειτουργίας</string>
+	<string name="leonardo_operation_timeout_summary">Τέλος χρόνου λειτουργίας σε δευτερόλεπτα</string>
+	<string name="live2_operation_timeout_summary">Τέλος χρόνου λειτουργίας σε δευτερόλεπτα - δεν είναι έτοιμο ακόμο.</string>
+	<string name="vehicle_type">Τύπος αιωρόπτερου.</string>
+	<string name="vehicle_type_summary">Leonardo Live server τύπος αιωρόπτερου.</string>
+
+	<string name="send_csv_file">Αποστολή αρχείου CSV</string>
+	<string name="g_meter_label">Δύναμη G (βαρύτητα)</string>
+	<string name="g_meter_caption">παρούσα (μέγιστη)</string>
+	<string name="confirm_delete_">Επιβεβαίωση διαγραφής;</string>
+	<string name="yes">Ναι</string>
+	<string name="no">Οχι</string>
+	<string name="barometer">Βαρόμετρο</string>
+ 
+	<string name="start">Έναρξη</string>
+	<string name="end">Τερματισμός</string>
+	<string name="duration">Διάρκεια</string>
+	<string name="start_altitude">Ύψος απογείωσης</string>
+	<string name="max_altitude_after_launch">Μέγιστο ύψος από την απογείωση</string>
+	<string name="max_ground_speed">Μέγιστη ταχύτητα εδάφους</string>
+	<string name="average_ground_speed">Μέση ταχύτητα εδάφους</string>
+	<string name="total_ground_distance_traveled">Τελική απόσταση εδάφους που διανύθηκε</string>
+	<string name="total_vertical_distance_traveled">Τελική κάθετη απόσταση που διανύθηκε</string>
+	<string name="max_distance_from_launch">Μέγιστη απόσταση από την απογείωση</string>
+	
+	<string name="only_for_devices_with_barometer_hardware">Μόνο για συσκευές με εσωτερικό βαρόμετρο</string>
+	<string name="use_audible_vario">Βαρόμετρο με ήχο</string>
+	<string name="averaging_percentage">Μέσος όρος ποσοστού</string>
+	<string name="for_our_iir_filter_recommended_0_17_">Για το φίλτρο IIR (προτείνεται 0.10)</string>
+	<string name="integration_period">περίοδο ενσωμάτωσης</string>
+	<string name="number_of_seconds_for_vario_integration_1_0_recommended_">Αριθμός δευτερολέπτων για ενσωμάτωση του Βαρόμτερου (προτείνεται 0.7)</string>
+	<string name="min_sink_threshold">Κατώφλι μικρότερης βύθισης</string>
+	<string name="minimum_sink_tone_threshold_m_s_">Κατώφλι τόνου μικρότερης βύθισης (μ/δ)</string>
+	<string name="min_lift_threshold">Κατώφλι μικρότερης ανύψωσης</string>
+	<string name="minimum_lift_tone_threshold_m_s_">Κατώφλι τόνου μικρότερης ανύψωσης (μ/δ)</string>
+	<string name="max_sink_threshold">Κατώφλι μέγιστης βύθισης</string>
+	<string name="maximum_sink_tone_threshold_m_s_">Κατώφλι τόνου μέγιστης βύθισης (μ/δ)</string>
+	<string name="max_lift_threshold">Κατώφλι μέγιστης ανύψωσης</string>
+	<string name="maximum_lift_tone_threshold_m_s_">Κατώφλι τόνου μέγιστης ανύψωσης (μ/δ)</string>
+	<string name="min_sink_beep_rate">Ποσοστό τόνου "μπιπ" μικρότερης βύθισης</string>
+	<string name="minimum_beep_rate_in_sink_hz_">Μικρότερο ποσοστό τόνου "μπιπ" σε βύθιση (Hz)</string>
+	<string name="max_sink_beep_rate">Ποσοστό τόνου "μπιπ" μέγιστης βύθισης</string>
+	<string name="maximum_beep_rate_in_sink_hz_">Μέγιστο ποσοστό τόνου "μπιπ" σε βύθιση (Hz)</string>
+	<string name="min_lift_beep_rate">Ποσοστό τόνου "μπιπ" μικρότερης ανύψωσης</string>
+	<string name="minimum_beep_rate_in_lift_hz_">Μικρότερο ποσοστό τόνου "μπιπ" σε ανύψωση (Hz)</string>
+	<string name="max_lift_beep_rate">Ποσοστό τόνου "μπιπ" μέγιστης ανύψωσης</string>
+	<string name="maximum_beep_rate_in_lift_hz_">Μέγιστο ποσοστό τόνου "μπιπ" σε ανύψωση (Hz)</string>
+	<string name="lift_tone">Τόνος ανύψωσης</string>
+	<string name="lift_tone_frequency_hz_">Συχνότητα τόνου ανύψωσης (Hz)</string>
+	<string name="sink_tone_frequency_hz_">Συχνότητα τόνου βύθισης (Hz)</string>
+	<string name="sink_tone">Τόνος βύθισης</string>
+	<string name="vertical_speed">Κάθετη ταχύτητα</string>
+	<string name="vspd">ΚαθΤαχ</string>
+	
+	<string name="should_prompt_to_donate">true</string> <!-- Only set to true if we've localized the donation text  -->
+    <string name="donate_text">Η ανάπτυξη αυτής της δωρεάν εφαρμογής χρηματοδοτείται εξ ολοκλήρου από δωρεές (όσο μια μπύρα).  
+        Αν θέλατε να κάνετε δωρεά, παρακαλούμε κάντε κλικ στο Ναι 
+        και το Google θα σας προτείνει ένα μικρό ποσό. Πιστεύουμε ότι ένα μικρό ποσό είναι ασήμαντο σε  
+        σύγκριση με τα άλλα έξοδα που κάνουμε για τις πτήσεις μας.\n\nΕάν επιλέξετε να μην δώρήσετε, όλα τα χαρακτηριστικά της εφαρμογής θα είναι και πάλι διαθέσιμα.\n\nΌπως πάντα, αν έχετε ερωτήσεις, επιλέξτε από το μενού την Βοήθεια και επισκεφθείτε το φόρουμ των εθελοντών μας.
+    </string>	
+    <string name="restoring_transactions">Έλεγχος για δωρεές</string>
+    <!-- The following are reserved skus defined by Market for testing. -->
+    <string name="donation">Δωρεά</string>
+    <string name="yes_i_d_like_to_donate">Ναι, θέλω να κάνω δωρεά</string>
+    <string name="no_not_right_now">Όχι, αυτή την στιγμή</string>	 
+    
+    <string name="view_summary">Σύνολο</string>
+	<string name="donate">Δωρεά</string> 
+	<string name="vario_preferences">Προτιμήσεις Βαρόμετρου</string>   
+	<string name="advanced">Προηγμένες</string>
+</resources>
+  
