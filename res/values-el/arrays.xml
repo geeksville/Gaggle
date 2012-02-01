@@ -14,24 +14,25 @@
 	<string-array name="delayed_server_names">
 		<item>Hanggliding Forum</item>
 		<item>DHV</item> 
-		<item>Paragliding Forum</item>
+		<item>Sky.gr  - Παραπέντε</item>
 	</string-array>
  
 	<string-array name="delayed_server_urls">
 		<item>http://www.hang-gliding.eu/modules/leonardo/flight_submit.php</item>
 		<item>http://xc.dhv.de/xc/modules/leonardo/flight_submit.php</item>
 		<item>http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</item>
+		<item>www.sky.gr/leonardo/flight_submit.php</item>
 	</string-array>
 	
 	<!-- The following strings should probably be localized -->	
 	<string-array name="log_interval_names">
-		<item>ακαθόριστο (ταχύτερo)</item>
-		<item>1 δευτερόλεπτο</item>
-		<item>3 δευτερόλεπτα</item>
-		<item>5 δευτερόλεπτα</item>
-		<item>10 δευτερόλεπτα</item>
-		<item>15 δευτερόλεπτα</item>
-		<item>20 δευτερόλεπτα</item>			
+		<item>Ακαθόριστο (ταχύτερo)</item>
+		<item>1 δεύτερο</item>
+		<item>3 δεύτερα</item>
+		<item>5 δεύτερα</item>
+		<item>10 δεύτερα</item>
+		<item>15 δεύτερα</item>
+		<item>20 δεύτερα</item>			
 		<item>1 λεπτό</item>
 		<item>2 λεπτά</item>
 		<item>5 λεπτά</item>									
@@ -52,7 +53,7 @@
 	
 	<!-- The following strings should probably be localized -->	    
 	<string-array name="log_distance_interval_names">
-		<item>ακαθόριστο (ταχύτερo)</item>
+		<item>Ακαθόριστο (ταχύτερo)</item>
 		<item>1 μέρο</item>
 		<item>5 μέτρα</item>
 		<item>10 μέτρα</item>
@@ -61,7 +62,7 @@
 		<item>30 μέτρα</item>			
 		<item>50 μέτρα</item>
 		<item>100 μέτρα</item>
-		<item>200 μέτρα</item>									
+		<item>200 μέτρα</item>								
 	</string-array>
 	
 	<string-array name="log_distance_interval_vals">
@@ -79,10 +80,10 @@
 							
 	<!-- The following strings should probably be localized -->	    
 	<string-array name="waypoint_type_names">
-		<item>Άγνωστη</item>
-		<item>Ζώνη Προσγείωσης</item>
+		<item>Ακαθόριστος</item>
+		<item>Προσγείωση</item>
 		<item>Απογείωση</item>	
-		<item>Σημείο Στροφής</item>							
+		<item>Στροφή</item>						
 	</string-array>
 	
 	<string-array name="waypoint_type_vals">
@@ -95,7 +96,7 @@
 	<!-- The following strings should probably be localized -->	    
 	<string-array name="altunits_enum_names">
 		<item>Πόδια</item>
-		<item>Μέτρα</item>					
+		<item>Μέτρα</item>				
 	</string-array>
 	
 	<!-- The following strings should _not_ be localized - they map to enum names -->	    
