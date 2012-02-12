@@ -24,8 +24,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.geeksville.android.PreferenceUtil;
@@ -33,7 +35,8 @@ import com.geeksville.android.TonePlayer;
 import com.geeksville.location.BarometerClient;
 import com.geeksville.location.IBarometerClient;
 
-public class AudioVario implements Observer, Runnable {
+public class AudioVario implements Observer, Runnable,
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
   private static final String TAG = "AudioVario";
 
@@ -41,7 +44,7 @@ public class AudioVario implements Observer, Runnable {
   private TonePlayer sinkTone;
   private TonePlayer curTone;
 
-	private IBarometerClient baro;
+  private IBarometerClient baro;
   Handler handler;
 
   /** Or <0 for disabled */
@@ -56,41 +59,54 @@ public class AudioVario implements Observer, Runnable {
   float maxLiftThreshold = 4.0f;
   float minLiftHz = 1f, maxLiftHz = 10f;
 
+  private Context context;
+
   /**
    * @see com.geeksville.info.InfoField#onCreate(android.app.Activity)
    */
   public void onCreate(Context context, Looper looper) {
+    this.context = context;
+
     if (context != null) {
 
-      if (PreferenceUtil.getBoolean(context, "use_audible_vario", true)) {
+      handler = new Handler(looper);
 
-        liftTone = new TonePlayer(PreferenceUtil.getFloat(context, "liftTone2",
-            1100f));
-        sinkTone = new TonePlayer(PreferenceUtil.getFloat(context, "sinkTone",
-            220f));
+      PreferenceManager.getDefaultSharedPreferences(context)
+          .registerOnSharedPreferenceChangeListener(this);
 
-        minSinkThreshold = PreferenceUtil.getFloat(context, "minSinkThreshold",
-            2.0f);
-        maxSinkThreshold = PreferenceUtil.getFloat(context, "maxSinkThreshold",
-            4.0f);
-        minSinkHz = PreferenceUtil.getFloat(context, "minSinkHz", 1f);
-        maxSinkHz = PreferenceUtil.getFloat(context, "maxSinkHz", 10f);
+      createFromPreferences();
+    }
+  }
 
-        minLiftThreshold = PreferenceUtil.getFloat(context, "minLiftThreshold",
-            0.5f);
-        maxLiftThreshold = PreferenceUtil.getFloat(context, "maxLiftThreshold",
-            4.0f);
-        minLiftHz = PreferenceUtil.getFloat(context, "minLiftHz", 1f);
-        maxLiftHz = PreferenceUtil.getFloat(context, "maxLiftHz", 10f);
+  private void createFromPreferences() {
+    onDestroy(); // Tear down old devices
 
-        handler = new Handler(looper);
+    if (PreferenceUtil.getBoolean(context, "use_audible_vario", true)) {
 
-        baro = BarometerClient.create(context);
-        if (baro != null)
-          baro.addObserver(this);
+      liftTone = new TonePlayer(PreferenceUtil.getFloat(context, "liftTone2",
+          1100f));
+      sinkTone = new TonePlayer(PreferenceUtil.getFloat(context, "sinkTone",
+          220f));
 
-        // testTones();
-      }
+      minSinkThreshold = PreferenceUtil.getFloat(context, "minSinkThreshold",
+          2.0f);
+      maxSinkThreshold = PreferenceUtil.getFloat(context, "maxSinkThreshold",
+          4.0f);
+      minSinkHz = PreferenceUtil.getFloat(context, "minSinkHz", 1f);
+      maxSinkHz = PreferenceUtil.getFloat(context, "maxSinkHz", 10f);
+
+      minLiftThreshold = PreferenceUtil.getFloat(context, "minLiftThreshold",
+          0.5f);
+      maxLiftThreshold = PreferenceUtil.getFloat(context, "maxLiftThreshold",
+          4.0f);
+      minLiftHz = PreferenceUtil.getFloat(context, "minLiftHz", 1f);
+      maxLiftHz = PreferenceUtil.getFloat(context, "maxLiftHz", 10f);
+
+      baro = BarometerClient.create(context);
+      if (baro != null)
+        baro.addObserver(this);
+
+      // testTones();
     }
   }
 
@@ -181,6 +197,12 @@ public class AudioVario implements Observer, Runnable {
     // Queue up the next event
     isPlaying = false;
     startTone();
+  }
+
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+      String key) {
+    createFromPreferences();
   }
 
 }
