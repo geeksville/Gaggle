@@ -27,17 +27,23 @@ public class BarometerClient {
 
   private static final String TAG = "BarometerClient";
 
-	private static IBarometerClient instance = null;
+  private static IBarometerClient instance = null;
 
   /**
    * All users of barometer share the same (expensive) instance
    * 
    * @return null for if not available
    */
-	public static IBarometerClient create(Context context) {
+  public static IBarometerClient create(Context context) {
 
-		if (instance == null && AndroidBarometerClient.isAvailable())
-			instance = new AndroidBarometerClient(context);
+    SensorClient.initManager(context);
+
+    // Prefer to use external bluetooth device
+    if (instance == null && BluetoothBarometerClient.isAvailable())
+      instance = new BluetoothBarometerClient(context);
+
+    if (instance == null && AndroidBarometerClient.isAvailable())
+      instance = new AndroidBarometerClient(context);
 
     return instance;
   }
