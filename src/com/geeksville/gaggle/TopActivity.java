@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.widget.TabHost;
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.GeeksvilleExceptionHandler;
 import com.geeksville.android.PostMortemReportExceptionHandler;
+import com.geeksville.android.PreferenceUtil;
 import com.geeksville.billing.Donate;
 import com.geeksville.info.Units;
 import com.geeksville.location.LocationLogDbAdapter;
@@ -36,11 +38,18 @@ public class TopActivity extends TabActivity {
    */
   private static final String TAG = "TopActivity";
 
+  // An activity request code
+  private static final int SHOW_PREFS = 1;
+
   protected PostMortemReportExceptionHandler damageReport = new GeeksvilleExceptionHandler(
       this);
 
+  private boolean isLightTheme;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
+
+    setThemeFromPrefs();
     super.onCreate(savedInstanceState);
 
     damageReport.perhapsInstall();
@@ -179,6 +188,16 @@ public class TopActivity extends TabActivity {
       Bundle extras = intent.getExtras();
     }
 
+    if (requestCode == SHOW_PREFS) {
+      boolean newLight = PreferenceUtil.getBoolean(this, "use_light_theme",
+          true);
+
+      if (newLight != isLightTheme) {
+        // Restart our app with the new theme
+        finish();
+        startActivity(new Intent(this, TopActivity.class));
+      }
+    }
     BetaSplashActivity.handleActivityResult(this, requestCode, resultCode);
   }
 
@@ -204,11 +223,20 @@ public class TopActivity extends TabActivity {
     ((GaggleApplication) getApplication()).stopGPSClient();
   }
 
+  private void setThemeFromPrefs() {
+    // Set light theme if the user wants a mostly white GUI
+    isLightTheme = PreferenceUtil.getBoolean(this, "use_light_theme", false);
+    int t = isLightTheme ? android.R.style.Theme_Light_NoTitleBar
+        : android.R.style.Theme_NoTitleBar;
+    setTheme(t);
+  }
+
   /**
    * @see android.app.ActivityGroup#onPause()
    */
   @Override
   protected void onResume() {
+
     super.onResume();
 
     Units.instance.setFromPrefs(this); // This should take care of making
@@ -234,10 +262,7 @@ public class TopActivity extends TabActivity {
 
     getMenuInflater().inflate(R.menu.shared_options, menu);
 
-    MenuItem menuItem = menu.findItem(R.id.preferences_menu);
-    menuItem.setIntent(new Intent(this, MyPreferences.class));
-
-    menuItem = menu.findItem(R.id.about_menu);
+    MenuItem menuItem = menu.findItem(R.id.about_menu);
     menuItem.setIntent(new Intent(this, AboutActivity.class));
 
     // No need to show this for now...
@@ -255,6 +280,10 @@ public class TopActivity extends TabActivity {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
+    case R.id.preferences_menu:
+      startActivityForResult(new Intent(this, MyPreferences.class), SHOW_PREFS);
+      return true;
+
     case R.id.donate_menu:
       Donate d = new Donate(this);
       d.splash();

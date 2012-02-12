@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    		
 	<PreferenceCategory android:title="General settings">
 
+	    <CheckBoxPreference android:key="use_light_theme"
+			android:title="Use light theme" android:summary="For better sunlight visibility (on some phones)" android:defaultValue="false" />
+	        
 		<com.geeksville.view.EditTextPreferenceWithValue
 			android:key="pilot_name_pref" android:title="@string/pilot_name"
 			android:summary="@string/used_in_flight_reports" android:capitalize="words"
