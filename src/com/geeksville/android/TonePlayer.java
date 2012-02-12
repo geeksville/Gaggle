@@ -45,7 +45,8 @@ public class TonePlayer {
   }
 
   public void close() {
-    audioTrack.stop();
+    if (audioTrack.getState() == AudioTrack.PLAYSTATE_PLAYING)
+      audioTrack.stop();
     audioTrack.release();
   }
 
