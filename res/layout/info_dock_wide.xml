@@ -16,7 +16,7 @@
 	<TextView android:text="1234.1" android:id="@+id/infodock_text"
 		android:layout_gravity="right" android:gravity="right"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:layout_weight="5" android:textColor="@color/info_field_text" android:textSize="20dip"></TextView>
+		android:layout_weight="5" android:textSize="20dip"></TextView>
 
 	<TextView android:text="kts" android:id="@+id/infodock_units"
 		android:textAppearance="?android:attr/textAppearanceSmall"

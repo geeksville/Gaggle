@@ -81,6 +81,8 @@ public class InfoDock extends LinearLayout implements
    */
   private boolean isInflated = false;
 
+  private int defaultTextColor;
+
   /**
    * Constructor
    * 
@@ -143,6 +145,8 @@ public class InfoDock extends LinearLayout implements
     text = (TextView) findViewById(R.id.infodock_text);
     units = (TextView) findViewById(R.id.infodock_units);
     image = (ImageView) findViewById(R.id.infodock_image);
+
+    defaultTextColor = text.getTextColors().getDefaultColor();
 
     // If we already have contents, fill fields and invalidate as needed
     setContents(contents);
@@ -312,7 +316,7 @@ public class InfoDock extends LinearLayout implements
 
   private void drawInfoContents() {
     int color = contents.getTextColor();
-    text.setTextColor(color);
+    text.setTextColor(color != -1 ? color : defaultTextColor);
 
     text.setText(oldText);
 

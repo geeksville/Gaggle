@@ -47,139 +47,133 @@ import com.geeksville.gaggle.R;
  */
 public abstract class InfoField {
 
-	private OnChangedListener listener;
+  private OnChangedListener listener;
 
-	protected Activity context;
+  protected Activity context;
 
-	private static int textColor = 0xffffff;
+  private static int textColor = -1;
 
-	/**
-	 * Used with setOnChanged to find out about changes in this info field
-	 * 
-	 * @author kevinh
-	 * 
-	 */
-	public interface OnChangedListener {
-		/**
-		 * Called when our info field has changed contents
-		 * 
-		 * @param source
-		 */
-		public void onInfoChanged(InfoField source);
-	}
+  /**
+   * Used with setOnChanged to find out about changes in this info field
+   * 
+   * @author kevinh
+   * 
+   */
+  public interface OnChangedListener {
+    /**
+     * Called when our info field has changed contents
+     * 
+     * @param source
+     */
+    public void onInfoChanged(InfoField source);
+  }
 
-	/**
-	 * Used to get the application context to find globals etc...
-	 * 
-	 * @param context
-	 *            null if running inside eclipse
-	 */
-	public void onCreate(Activity context) {
-		this.context = context;
+  /**
+   * Used to get the application context to find globals etc...
+   * 
+   * @param context
+   *          null if running inside eclipse
+   */
+  public void onCreate(Activity context) {
+    this.context = context;
+  }
 
-		// The following check is necessary to work in the IDE (FIXME - remove
-		// in onStop?
-		if (context != null) {
-			textColor = context.getResources().getColor(R.color.info_field_text);
-		}
-	}
+  /**
+   * Subclasses should override if they have text contents
+   * 
+   * @return
+   */
+  public String getText() {
+    return "";
+  }
 
-	/**
-	 * Subclasses should override if they have text contents
-	 * 
-	 * @return
-	 */
-	public String getText() {
-		return "";
-	}
+  /**
+   * Return the android id of the color for this text field
+   * 
+   * @return a default color (or -1 to use the color specified by the style)
+   */
+  public int getTextColor() {
+    return textColor;
+  }
 
-	/**
-	 * Return the android id of the color for this text field
-	 * 
-	 * @return a default color
-	 */
-	public int getTextColor() {
-		return textColor;
-	}
+  /**
+   * A units suffix that may be displayed at the end of any text display (likely
+   * in a small font)
+   * 
+   * @return
+   */
+  public String getUnits() {
+    return "";
+  }
 
-	/**
-	 * A units suffix that may be displayed at the end of any text display
-	 * (likely in a small font)
-	 * 
-	 * @return
-	 */
-	public String getUnits() {
-		return "";
-	}
+  /**
+   * Subclasses must override
+   * 
+   * @return
+   */
+  public abstract String getLabel();
 
-	/**
-	 * Subclasses must override
-	 * 
-	 * @return
-	 */
-	public abstract String getLabel();
+  /**
+   * A very short label string. Subclasses may override
+   * 
+   * @return
+   */
+  public String getShortLabel() {
+    return getLabel();
+  }
 
-	/**
-	 * A very short label string. Subclasses may override
-	 * 
-	 * @return
-	 */
-	public String getShortLabel() {
-		return getLabel();
-	}
+  /**
+   * Get the image to be shown by this info field
+   * 
+   * @return null for no images supported
+   * 
+   *         Note: the dock will only call this method once, we presume that if
+   *         we redraw the ImageView that will be containing this drawable that
+   *         the drawable will do the right thing
+   */
+  public Drawable getImage() {
+    return null;
+  }
 
-	/**
-	 * Get the image to be shown by this info field
-	 * 
-	 * @return null for no images supported
-	 * 
-	 *         Note: the dock will only call this method once, we presume that
-	 *         if we redraw the ImageView that will be containing this drawable
-	 *         that the drawable will do the right thing
-	 */
-	public Drawable getImage() {
-		return null;
-	}
+  /**
+   * Called when this infofield is now visible (somewhere) Used to start
+   * listening to GPS etc...
+   */
+  void onShown() {
 
-	/**
-	 * Called when this infofield is now visible (somewhere) Used to start
-	 * listening to GPS etc...
-	 */
-	void onShown() {
+  }
 
-	}
+  /**
+   * Called when this infofield is now invisible (everywhere) Used to stop
+   * listening to GPS etc...
+   */
+  void onHidden() {
 
-	/**
-	 * Called when this infofield is now invisible (everywhere) Used to stop
-	 * listening to GPS etc...
-	 */
-	void onHidden() {
+  }
 
-	}
+  /**
+   * The GUI wants to know when we change
+   * 
+   * @param listener
+   */
+  public void setOnChanged(OnChangedListener listener) {
+    // fixme-when set to null unsubscribe from our info sources
+    // also set to null when our containing infodock gets destroyed
+    // have the dock be the lifecycle listener, add onVisible() and
+    // onHidden()
 
-	/**
-	 * The GUI wants to know when we change
-	 * 
-	 * @param listener
-	 */
-	public void setOnChanged(OnChangedListener listener) {
-		// fixme-when set to null unsubscribe from our info sources
-		// also set to null when our containing infodock gets destroyed
-		// have the dock be the lifecycle listener, add onVisible() and
-		// onHidden()
+    this.listener = listener;
 
-		this.listener = listener;
+    // Send any updates to get our new container in sync
+    onChanged();
+  }
 
-		// Send any updates to get our new container in sync
-		onChanged();
-	}
-
-	/**
-	 * Call this to tell the GUI we have new info
-	 */
-	protected void onChanged() {
-		if (listener != null)
-			listener.onInfoChanged(this);
-	}
+  /**
+   * Call this to tell the GUI we have new info
+   */
+  protected void onChanged() {
+    if (listener != null)
+      listener.onInfoChanged(this);
+  }
 
 }

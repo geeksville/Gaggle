@@ -2,4 +2,5 @@
 <resources>
 <style name="MainThemeSelector" parent="@android:style/Theme.NoTitleBar">
 </style>
+
 </resources>
