@@ -27,6 +27,7 @@ import android.app.Activity;
 
 import com.geeksville.gaggle.R;
 import com.geeksville.location.BarometerClient;
+import com.geeksville.location.IBarometerClient;
 
 /**
  * A simple barometer display
@@ -38,7 +39,7 @@ public class InfoBarometer extends InfoField implements Observer {
 
 	private float pressure;
 
-	private BarometerClient baro;
+	private IBarometerClient baro;
 
 	@Override
 	public String getLabel() {

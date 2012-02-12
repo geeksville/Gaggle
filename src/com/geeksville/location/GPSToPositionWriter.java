@@ -75,7 +75,7 @@ public class GPSToPositionWriter extends AbstractLocationListener implements
   ChangeHandler myObserver;
 
   AccelerometerClient accel = null;
-  BarometerClient baro = null;
+	IBarometerClient baro = null;
 
   public void setObserver(ChangeHandler obs) {
     myObserver = obs;

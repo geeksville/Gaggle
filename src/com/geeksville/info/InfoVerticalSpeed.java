@@ -27,6 +27,7 @@ import android.app.Activity;
 
 import com.geeksville.gaggle.R;
 import com.geeksville.location.BarometerClient;
+import com.geeksville.location.IBarometerClient;
 
 /**
  * A simple vario vertical speed display
@@ -38,7 +39,7 @@ public class InfoVerticalSpeed extends InfoField implements Observer {
 
   private float vspd = Float.NaN;
 
-  private BarometerClient baro;
+	private IBarometerClient baro;
 
   @Override
   public String getLabel() {

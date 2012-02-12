@@ -28,11 +28,12 @@ import android.location.Location;
 
 import com.geeksville.gaggle.R;
 import com.geeksville.location.BarometerClient;
+import com.geeksville.location.IBarometerClient;
 
 /// FIXME - show either baro or GPS based altitude?
 public class InfoAltitude extends GPSField implements Observer {
 
-	private BarometerClient baro;
+	private IBarometerClient baro;
 
 	public InfoAltitude() {
 		// minDistMeters = 0; // We want updates even if horizontal pos hasn't

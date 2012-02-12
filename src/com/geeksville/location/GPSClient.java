@@ -91,7 +91,7 @@ public class GPSClient extends Service implements IGPSClient {
 
   // / Once we get a GPS altitude we will fixup the barometer
   private boolean hasSetBarometer = false;
-  private BarometerClient baro = null;
+	private IBarometerClient baro = null;
   private AudioVario vario;
 
   /**

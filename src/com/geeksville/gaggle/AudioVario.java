@@ -24,8 +24,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import android.content.Context;
-import android.media.AudioTrack;
-import android.media.AudioTrack.OnPlaybackPositionUpdateListener;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -33,6 +31,7 @@ import android.util.Log;
 import com.geeksville.android.PreferenceUtil;
 import com.geeksville.android.TonePlayer;
 import com.geeksville.location.BarometerClient;
+import com.geeksville.location.IBarometerClient;
 
 public class AudioVario implements Observer, Runnable {
 
@@ -42,7 +41,7 @@ public class AudioVario implements Observer, Runnable {
   private TonePlayer sinkTone;
   private TonePlayer curTone;
 
-  private BarometerClient baro;
+	private IBarometerClient baro;
   Handler handler;
 
   /** Or <0 for disabled */
@@ -86,7 +85,6 @@ public class AudioVario implements Observer, Runnable {
 
         handler = new Handler(looper);
 
-        // FIXME - we should share one compass client object
         baro = BarometerClient.create(context);
         if (baro != null)
           baro.addObserver(this);
