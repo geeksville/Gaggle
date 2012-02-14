@@ -611,7 +611,9 @@ public class ListFlightsActivity extends DBListActivity {
           // Keep stats on # of emails sent
           Map<String, String> map = new HashMap<String, String>();
           map.put("Time", (new Date()).toGMTString());
-          FlurryAgent.onEvent("EmailFlight", map);
+          GagglePrefs prefs = new GagglePrefs(context);
+  		  if (prefs.isFlurryEnabled())
+            FlurryAgent.onEvent("EmailFlight", map);
         }
       }
 
@@ -664,7 +666,9 @@ public class ListFlightsActivity extends DBListActivity {
           // Keep stats on # of emails sent
           Map<String, String> map = new HashMap<String, String>();
           map.put("Time", (new Date()).toGMTString());
-          FlurryAgent.onEvent("GEarthView", map);
+          GagglePrefs prefs = new GagglePrefs(context);
+  		  if (prefs.isFlurryEnabled())
+            FlurryAgent.onEvent("GEarthView", map);
         }
       }
 

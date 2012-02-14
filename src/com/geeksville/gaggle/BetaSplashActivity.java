@@ -75,8 +75,10 @@ public class BetaSplashActivity extends Activity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-
-		FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
+		
+		GagglePrefs prefs = new GagglePrefs(this);
+	    if (prefs.isFlurryEnabled())
+		  FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
 	}
 
 	/**
@@ -89,7 +91,9 @@ public class BetaSplashActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStop();
 
-		FlurryAgent.onEndSession(this);
+		GagglePrefs prefs = new GagglePrefs(this);
+	    if (prefs.isFlurryEnabled())
+		  FlurryAgent.onEndSession(this);
 	}
 
 	private OnKeyListener klisten = new OnKeyListener() {

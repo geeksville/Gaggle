@@ -123,5 +123,7 @@ public class GagglePrefs {
 		return prefs.getString("pilot_name_pref", "").trim();
 	}
 
-
+	public boolean isFlurryEnabled() {
+		return prefs.getBoolean("use_flurry_conf", false);
+	}
 }

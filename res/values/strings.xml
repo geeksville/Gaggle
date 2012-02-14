@@ -281,5 +281,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="donate">Donate</string> 
 	<string name="vario_preferences">Vario Preferences</string>   
 	<string name="advanced">Advanced</string>
+	<string name="flurry_logging_conf">Flurry report</string>
+	<string name="enables_reporting_dev_data_to_flurry">Enables reporting to Flurry</string>
 </resources>
   

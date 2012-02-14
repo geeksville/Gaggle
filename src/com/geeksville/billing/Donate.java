@@ -32,6 +32,7 @@ import com.geeksville.billing.BillingService.RequestPurchase;
 import com.geeksville.billing.BillingService.RestoreTransactions;
 import com.geeksville.billing.Consts.PurchaseState;
 import com.geeksville.billing.Consts.ResponseCode;
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 
 /**
@@ -184,7 +185,9 @@ public class Donate {
         .setPositiveButton(R.string.yes_i_d_like_to_donate,
             new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                FlurryAgent.onEvent("DonateYes");
+          	    GagglePrefs prefs = new GagglePrefs(context);
+        	    if (prefs.isFlurryEnabled())
+                  FlurryAgent.onEvent("DonateYes");
                 String sku = "donate_basic";
                 Log.d(TAG, "buying: " + sku);
                 dialog.cancel();
@@ -196,7 +199,9 @@ public class Donate {
         .setNegativeButton(R.string.no_not_right_now,
             new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                FlurryAgent.onEvent("DonateNo");
+            	GagglePrefs prefs = new GagglePrefs(context);
+          	    if (prefs.isFlurryEnabled())
+                  FlurryAgent.onEvent("DonateNo");
                 close();
                 dialog.cancel();
               }
@@ -297,13 +302,17 @@ public class Donate {
 
     // Keep stats on # of emails sent
     if (isDonated(context)) {
-      FlurryAgent.onEvent("DonateStart");
+	  GagglePrefs prefs = new GagglePrefs(context);
+	  if (prefs.isFlurryEnabled())
+	    FlurryAgent.onEvent("DonateStart");
       thanksForDonating();
       close();
     } else if (isPromptToUpdate())
       promptToDonate();
     else {
-      FlurryAgent.onEvent("NonDonateStart");
+	  GagglePrefs prefs = new GagglePrefs(context);
+	  if (prefs.isFlurryEnabled())
+        FlurryAgent.onEvent("NonDonateStart");
       close(); // Not bothering the user this time
     }
   }

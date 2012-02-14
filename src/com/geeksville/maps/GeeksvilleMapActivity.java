@@ -39,6 +39,7 @@ import com.flurry.android.FlurryAgent;
 import com.geeksville.android.LifeCycleHandler;
 import com.geeksville.android.LifeCyclePublisher;
 import com.geeksville.android.LifeCyclePublisherImpl;
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 
 /**
@@ -228,7 +229,9 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 	 * If isLive is set, then add an overlay showing where user is
 	 */
 	protected void showCurrentPosition(boolean zoomToUser) {
-		FlurryAgent.onEvent("View live position");
+		GagglePrefs prefs = new GagglePrefs(this);
+		if (prefs.isFlurryEnabled())
+		  FlurryAgent.onEvent("View live position");
 
 		myLocationOverlay = createLocationOverlay();
 

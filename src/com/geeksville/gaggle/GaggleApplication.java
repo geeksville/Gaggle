@@ -81,9 +81,12 @@ public class GaggleApplication extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-
-		FlurryAgent.setCaptureUncaughtExceptions(false);
-		FlurryAgent.setReportLocation(true);
+		
+		GagglePrefs prefs = new GagglePrefs(this);
+		if (prefs.isFlurryEnabled()){
+		  FlurryAgent.setCaptureUncaughtExceptions(false);
+		  FlurryAgent.setReportLocation(true);
+		}
 	}
 
 	/**

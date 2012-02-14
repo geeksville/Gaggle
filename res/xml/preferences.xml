@@ -168,7 +168,7 @@
 
 		<CheckBoxPreference android:key="force_screen_on"
 			android:title="@string/screen_on_in_flight" android:defaultValue="false"
-			android:summary="@string/keeps_the_display_from_going_to_sleep" />
+			android:summary="@string/keeps_the_display_from_going_to_sleep" /><CheckBoxPreference android:key="use_flurry_conf" android:title="@string/flurry_logging_conf" android:summary="@string/enables_reporting_dev_data_to_flurry"/>
 
 		<PreferenceScreen android:key="advanced"
 			android:title="@string/advanced" android:summary="@string/options_for_advanced_users">

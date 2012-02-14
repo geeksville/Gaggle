@@ -23,6 +23,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
+import com.geeksville.gaggle.GagglePrefs;
 
 /**
  * Writes tracks to the Paragliding (or other) Lenoardo Live server
@@ -82,6 +83,9 @@ public class LeonardoLiveWriter implements PositionWriter {
 
 	private int packetNum = 1;
 
+	
+	private Context context;
+	
 	/**
 	 * Constructor
 	 * 
@@ -117,7 +121,8 @@ public class LeonardoLiveWriter implements PositionWriter {
 		this.vehicleType = vehicleType;
 		this.vehicleName = vehicleName;
 		expectedIntervalSecs = expectedInterval;
-
+		
+		this.context = context;
 		doLogin(); // Login here, so we can find out about bad passwords ASAP
 	}
 
@@ -257,7 +262,10 @@ public class LeonardoLiveWriter implements PositionWriter {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("User", userName);
 			map.put("Time", (new Date()).toGMTString());
-			FlurryAgent.onEvent("LiveUpload", map);
+			
+			GagglePrefs prefs = new GagglePrefs(context);
+			if (prefs.isFlurryEnabled())
+			  FlurryAgent.onEvent("LiveUpload", map);
 
 		} catch (IOException ex) {
 			System.out.println("FIXME, rethrow on connect failed " + ex);

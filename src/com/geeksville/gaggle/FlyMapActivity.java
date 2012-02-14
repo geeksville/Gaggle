@@ -112,8 +112,10 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-
-		FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
+		
+		GagglePrefs prefs = new GagglePrefs(this);
+	    if (prefs.isFlurryEnabled())
+		  FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
 	}
 
 	/**
@@ -125,8 +127,10 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-
-		FlurryAgent.onEndSession(this);
+		
+		GagglePrefs prefs = new GagglePrefs(this);
+	    if (prefs.isFlurryEnabled())
+    	  FlurryAgent.onEndSession(this);
 	}
 
 	/** Called when the activity is first created. */
@@ -166,21 +170,26 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		if (uri != null && action != null && action.equals(Intent.ACTION_VIEW)) {
 			// See if we can read the file
 			try {
-				FlurryAgent.onEvent("IGC view start");
+				GagglePrefs prefs = new GagglePrefs(this);
+			    if (prefs.isFlurryEnabled())
+				  FlurryAgent.onEvent("IGC view start");
 
 				InputStream s = AndroidUtil.getFromURI(this, uri);
 
 				IGCReader iread = new IGCReader("gps", s);
 				LocationList loclist = iread.toLocationList();
 				iread.close();
-
-				FlurryAgent.onEvent("IGC view success");
+				
+			    if (prefs.isFlurryEnabled())
+				  FlurryAgent.onEvent("IGC view success");
 
 				// Show the points
 				altitudeView.setLocs(loclist);
 				mapView.getOverlays().add(createTracklogOverlay(loclist));
 			} catch (IOException ex) {
-				FlurryAgent.onEvent("IGC view fail");
+				GagglePrefs prefs = new GagglePrefs(this);
+				if (prefs.isFlurryEnabled())
+				  FlurryAgent.onEvent("IGC view fail");
 
 				// FIXME - move this alert goo into a standard localized utility
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -204,8 +213,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	 * If a tracklog was added to our intent, then show it
 	 */
 	private void perhapsAddExtraTracklog() {
-
-		FlurryAgent.onEvent("View delayed");
+		GagglePrefs prefs = new GagglePrefs(this);
+		if (prefs.isFlurryEnabled())
+		  FlurryAgent.onEvent("View delayed");
 
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();

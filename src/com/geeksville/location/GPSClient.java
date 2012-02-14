@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.gaggle.AudioVario;
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 import com.geeksville.gaggle.TopActivity;
 
@@ -260,8 +261,10 @@ public class GPSClient extends Service implements IGPSClient {
   @Override
   public void onCreate() {
     super.onCreate();
-
-    FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
+    
+    GagglePrefs prefs = new GagglePrefs(this);
+	if (prefs.isFlurryEnabled())
+      FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
 
     instance = this;
     manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -347,8 +350,10 @@ public class GPSClient extends Service implements IGPSClient {
     }
 
     thread.getLooper().quit();
-
-    FlurryAgent.onEndSession(this);
+    
+    GagglePrefs prefs = new GagglePrefs(this);
+	if (prefs.isFlurryEnabled())
+      FlurryAgent.onEndSession(this);
 
     instance = null;
     super.onDestroy();

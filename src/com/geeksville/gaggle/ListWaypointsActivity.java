@@ -209,8 +209,9 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 					getString(R.string.please_wait)) {
 				@Override
 				protected void doInBackground() {
-
-					FlurryAgent.onEvent("WPT import start");
+					GagglePrefs prefs = new GagglePrefs(context);
+					if (prefs.isFlurryEnabled())
+					  FlurryAgent.onEvent("WPT import start");
 
 					// See if we can read the file
 					try {
@@ -229,10 +230,11 @@ public class ListWaypointsActivity extends DBListActivity implements Observer {
 								numadded);
 
 						showCompletionToast(msg);
-
-						FlurryAgent.onEvent("WPT import success");
+						if (prefs.isFlurryEnabled())
+						  FlurryAgent.onEvent("WPT import success");
 					} catch (Exception ex) {
-						FlurryAgent.onEvent("WPT import failed");
+						if (prefs.isFlurryEnabled())
+						  FlurryAgent.onEvent("WPT import failed");
 
 						showCompletionDialog(getString(R.string.import_failed),
 								ex.getLocalizedMessage());

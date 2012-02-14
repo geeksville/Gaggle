@@ -112,8 +112,10 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
     // Log.d(TAG, "onStart() called");
 
     super.onStart();
-
-    FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
+    
+    GagglePrefs prefs = new GagglePrefs(this);
+	if (prefs.isFlurryEnabled())
+      FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
     lifePublish.onStart();
   }
 
@@ -127,8 +129,10 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
     // Log.d(TAG, "onStop() called");
 
     super.onStop();
-
-    FlurryAgent.onEndSession(this);
+    
+    GagglePrefs prefs = new GagglePrefs(this);
+	if (prefs.isFlurryEnabled())
+      FlurryAgent.onEndSession(this);
     lifePublish.onStop();
   }
 

@@ -109,8 +109,10 @@ public class TopActivity extends TabActivity {
     Log.d(TAG, "onStart() called");
 
     super.onStart();
-
-    FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
+    
+    GagglePrefs prefs = new GagglePrefs(this);
+	if (prefs.isFlurryEnabled())
+      FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
 
     BetaSplashActivity.perhapsSplash(this);
 
@@ -211,8 +213,10 @@ public class TopActivity extends TabActivity {
     Log.d(TAG, "onStop() called");
 
     super.onStop();
-
-    FlurryAgent.onEndSession(this);
+    
+    GagglePrefs prefs = new GagglePrefs(this);
+	if (prefs.isFlurryEnabled())
+      FlurryAgent.onEndSession(this);
   }
 
   @Override
