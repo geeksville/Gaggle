@@ -24,14 +24,16 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.andnav.osm.DefaultResourceProxyImpl;
-import org.andnav.osm.views.OpenStreetMapView;
-import org.andnav.osm.views.overlay.OpenStreetMapViewItemizedOverlay;
+import org.osmdroid.DefaultResourceProxyImpl;
+import org.osmdroid.api.IMapView;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedOverlay;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
@@ -42,7 +44,7 @@ import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.WaypointCursor;
 import com.geeksville.location.WaypointDB;
 
-public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointItem>
+public class WaypointOverlay extends ItemizedOverlay<WaypointItem>
 		implements
 		Observer {
 
@@ -50,15 +52,17 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 
 	private WaypointDB db;
 	private WaypointCursor cursor;
-	private OpenStreetMapView view;
+	private MapView view;
 	private Activity context;
 
-	public WaypointOverlay(Activity context, OpenStreetMapView view) {
+	private ArrayList<WaypointItem> mItemList;
+
+	public WaypointOverlay(Activity context, MapView view) {
 		// per example, we want the bounds to be centered just below this
 		// drawable. We use a alpha channel to not obscure terrain too much...
 		// super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
-		super(context, new ArrayList<WaypointItem>(), context.getResources().getDrawable(
-				R.drawable.flag), null, null, new DefaultResourceProxyImpl(context));
+		super(context.getResources().getDrawable(R.drawable.flag), new DefaultResourceProxyImpl(context));
+		mItemList = new ArrayList<WaypointItem>();
 
 		this.context = context;
 		this.view = view;
@@ -153,19 +157,37 @@ public class WaypointOverlay extends OpenStreetMapViewItemizedOverlay<WaypointIt
 		if (needRedraw)
 			view.postInvalidate();
 	}
+//
+//	@Override
+	// FIXME where has this been moved to ?
+//	protected boolean onTap(int i) {
+//		WaypointItem item = mItemList.get(i);
+//
+//		// first click - just highlight and show basic info
+//		// if (!item.equals(getFocus())) {
+//		view.getController().animateTo(item.mGeoPoint);
+//		// setFocus(item);
+//		item.handleTap(context);
+//		// }
+//
+//		return true;
+//	}
 
 	@Override
-	protected boolean onTap(int i) {
-		WaypointItem item = mItemList.get(i);
+	public boolean onSnapToItem(int arg0, int arg1, Point arg2, IMapView arg3) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-		// first click - just highlight and show basic info
-		// if (!item.equals(getFocus())) {
-		view.getController().animateTo(item.mGeoPoint);
-		// setFocus(item);
-		item.handleTap(context);
-		// }
+	@Override
+	protected WaypointItem createItem(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		return true;
+	@Override
+	public int size() {
+		return mItemList.size();
 	}
 
 	// /**

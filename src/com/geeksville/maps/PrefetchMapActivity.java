@@ -3,21 +3,23 @@ package com.geeksville.maps;
 import java.io.File;
 import java.io.InputStream;
 
-import org.andnav.osm.tileprovider.CloudmadeException;
-import org.andnav.osm.tileprovider.IOpenStreetMapTileProviderCallback;
-import org.andnav.osm.tileprovider.IRegisterReceiver;
-import org.andnav.osm.tileprovider.OpenStreetMapTile;
-import org.andnav.osm.tileprovider.OpenStreetMapTileFilesystemProvider;
-import org.andnav.osm.tileprovider.constants.OpenStreetMapTileProviderConstants;
-import org.andnav.osm.tileprovider.util.CloudmadeUtil;
-import org.andnav.osm.util.GeoPoint;
-import org.andnav.osm.views.util.IOpenStreetMapRendererInfo;
-import org.andnav.osm.views.util.OpenStreetMapRendererFactory;
+import org.osmdroid.tileprovider.IMapTileProviderCallback;
+import org.osmdroid.tileprovider.IRegisterReceiver;
+import org.osmdroid.tileprovider.MapTile;
+import org.osmdroid.tileprovider.MapTileRequestState;
+import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
+import org.osmdroid.tileprovider.modules.MapTileFilesystemProvider;
+import org.osmdroid.tileprovider.modules.MapTileModuleProviderBase;
+import org.osmdroid.tileprovider.tilesource.ITileSource;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,7 +55,7 @@ public class PrefetchMapActivity extends Activity {
 
 	private AsyncTask<Void, Integer, Void> background;
 
-	private IOpenStreetMapRendererInfo renderer;
+	private ITileSource renderer;
 
 	/*
 	 * The various tile counts generated from our current zoom level by
@@ -78,7 +80,7 @@ public class PrefetchMapActivity extends Activity {
 		center = new GeoPoint(extras.getInt(EXTRA_LATITUDE), extras.getInt(EXTRA_LONGITUDE));
 		zoomLevel = extras.getInt(EXTRA_ZOOMLEVEL);
 		source = extras.getString(EXTRA_TILESOURCE);
-		renderer = OpenStreetMapRendererFactory.getRenderer(source);
+		renderer = TileSourceFactory.getTileSource(source);
 
 		startButton = (Button) findViewById(R.id.start);
 		startButton.setOnClickListener(new OnClickListener() {
@@ -135,9 +137,9 @@ public class PrefetchMapActivity extends Activity {
 		double[] sePoint = LocationUtils.addDistance(center.getLatitudeE6() * 1e-6, center
 				.getLongitudeE6() * 1e-6, distMeters, Math.toRadians(180 + 45));
 
-		OpenStreetMapTile start = getMapTileFromCoordinates(renderer, zoom, nwPoint[0],
+		MapTile start = getMapTileFromCoordinates(zoom, nwPoint[0],
 				nwPoint[1]);
-		OpenStreetMapTile stop = getMapTileFromCoordinates(renderer, zoom, sePoint[0],
+		MapTile stop = getMapTileFromCoordinates(zoom, sePoint[0],
 				sePoint[1]);
 
 		tileStartX = start.getX();
@@ -184,15 +186,14 @@ public class PrefetchMapActivity extends Activity {
 	 * @return The {@link OSMTileInfo} providing 'x' 'y' and 'z'(oom) for the
 	 *         coordinates passed.
 	 */
-	public static OpenStreetMapTile getMapTileFromCoordinates(IOpenStreetMapRendererInfo renderer,
-			final int zoom, final double aLat, final double aLon) {
+	public static MapTile getMapTileFromCoordinates(final int zoom, final double aLat, final double aLon) {
 		final int y = (int) Math.floor((1 - Math.log(Math.tan(aLat * Math.PI / 180) + 1
 				/ Math.cos(aLat * Math.PI / 180))
 				/ Math.PI)
 				/ 2 * (1 << zoom));
 		final int x = (int) Math.floor((aLon + 180) / 360 * (1 << zoom));
 
-		return new OpenStreetMapTile(renderer, zoom, x, y);
+		return new MapTile(zoom, x, y);
 	}
 
 	private abstract class ProgressTask extends AsyncTask<Void, Integer, Void> {
@@ -277,13 +278,9 @@ public class PrefetchMapActivity extends Activity {
 	}
 
 	private class DownloadTilesTask extends ProgressTask implements
-			IOpenStreetMapTileProviderCallback {
+			IMapTileProviderCallback {
 
-		// Handler arrivalHandler = new TileArrivalHandler();
-
-		IOpenStreetMapRendererInfo renderer;
-		// OpenStreetMapTileProvider tilesource;
-		OpenStreetMapTileFilesystemProvider tilesource;
+		MapTileFilesystemProvider tilesource;
 
 		int numReceived = 0, numFailed = 0;
 
@@ -301,7 +298,7 @@ public class PrefetchMapActivity extends Activity {
 				}
 			};
 
-			tilesource = new OpenStreetMapTileFilesystemProvider(this, registerReceiver);
+			tilesource = new MapTileFilesystemProvider(registerReceiver);
 			// tilesource = new OpenStreetMapTileProviderDirect(arrivalHandler,
 			// CloudmadeUtil.getCloudmadeKey(PrefetchMapActivity.this));
 		}
@@ -316,7 +313,7 @@ public class PrefetchMapActivity extends Activity {
 			@Override
 			public void handleMessage(final Message msg) {
 				switch (msg.what) {
-				case OpenStreetMapTile.MAPTILE_SUCCESS_ID:
+				case MapTile.MAPTILE_SUCCESS_ID:
 					break;
 				}
 			}
@@ -336,9 +333,9 @@ public class PrefetchMapActivity extends Activity {
 						% numTilesFullWidth)
 					for (int tileX = tileStartX; tileX != tileStopX && !isCancelled(); tileX = (tileX + 1)
 							% numTilesFullWidth) {
-						final OpenStreetMapTile tile = new OpenStreetMapTile(renderer, zoom,
-								tileX, tileY);
-						tilesource.loadMapTileAsync(tile);
+						final MapTile tile = new MapTile(zoom, tileX, tileY);
+						MapTileRequestState mrs = new MapTileRequestState(tile, new MapTileModuleProviderBase[]{tilesource}, null);
+						tilesource.loadMapTileAsync(mrs);
 						numRequested++;
 
 						publishProgress(numRequested * 100 / numTiles);
@@ -347,29 +344,26 @@ public class PrefetchMapActivity extends Activity {
 
 			return null;
 		}
-
-		@Override
-		public String getCloudmadeKey() throws CloudmadeException {
-			return CloudmadeUtil.getCloudmadeKey(PrefetchMapActivity.this);
-		}
-
-		@Override
-		public void mapTileRequestCompleted(OpenStreetMapTile pTile, String aTilePath) {
-			numReceived++;
-		}
-
-		@Override
-		public void mapTileRequestCompleted(OpenStreetMapTile aTile) {
-			numFailed++;
-		}
-
-		@Override
-		public void mapTileRequestCompleted(OpenStreetMapTile aTile, InputStream aTileInputStream) {
-		}
+//
+//		@Override
+//		public String getCloudmadeKey() throws CloudmadeException {
+//			return CloudmadeUtil.getCloudmadeKey(PrefetchMapActivity.this);
+//		}
 
 		@Override
 		public boolean useDataConnection() {
 			return true;
+		}
+
+		@Override
+		public void mapTileRequestCompleted(MapTileRequestState aTile,
+				Drawable aDrawable) {
+			numReceived++;
+		}
+
+		@Override
+		public void mapTileRequestFailed(MapTileRequestState aTile) {
+			numFailed++;
 		}
 	}
 }

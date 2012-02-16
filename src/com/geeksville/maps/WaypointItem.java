@@ -20,7 +20,8 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
-import org.andnav.osm.views.overlay.OpenStreetMapViewOverlayItem;
+
+import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.Activity;
 import android.graphics.Paint;
@@ -33,7 +34,7 @@ import com.geeksville.info.Units;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.view.CaptionedDrawable;
 
-public class WaypointItem extends OpenStreetMapViewOverlayItem {
+public class WaypointItem extends OverlayItem {
 
 	private static final String TAG = "WaypointItem";
 
@@ -58,7 +59,7 @@ public class WaypointItem extends OpenStreetMapViewOverlayItem {
 				w.name);
 
 		setMarker(marker);
-		setMarkerHotspotPlace(HotspotPlace.BOTTOM_CENTER);
+		setMarkerHotspot(HotspotPlace.BOTTOM_CENTER);
 
 		width = marker.getIntrinsicWidth();
 		height = marker.getIntrinsicHeight();

@@ -20,16 +20,17 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
-import org.andnav.osm.ResourceProxy;
-import org.andnav.osm.util.GeoPoint;
-import org.andnav.osm.views.OpenStreetMapViewController;
-import org.andnav.osm.views.overlay.MyLocationOverlay;
-import org.andnav.osm.views.util.IOpenStreetMapRendererInfo;
-import org.andnav.osm.views.util.OpenStreetMapRendererFactory;
-import org.andnav.osm.views.util.XYRenderer;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.overlay.MyLocationOverlay;
 
 import android.app.Activity;
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -58,46 +59,45 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 	private LifeCyclePublisherImpl lifePublish = new LifeCyclePublisherImpl();
 
 	// There is also TopOSM features, but we don't bother to show that
-	private static final IOpenStreetMapRendererInfo TopOSMRelief =
-			new XYRenderer("Topo Relief (USA)", ResourceProxy.string.unknown, 4, 15, 8, ".jpg",
-					"http://tile1.toposm.com/us/color-relief/",
-					"http://tile2.toposm.com/us/color-relief/",
-					"http://tile3.toposm.com/us/color-relief/");
-
-	private static final IOpenStreetMapRendererInfo TopOSMContours =
-		new XYRenderer("Topo Contours (USA)", ResourceProxy.string.unknown, 12, 15, 8, ".png",
-				"http://tile1.toposm.com/us/contours/",
-				"http://tile2.toposm.com/us/contours/",
-				"http://tile3.toposm.com/us/contours/");
-
-	private static final IOpenStreetMapRendererInfo OpenCycleMap =
-		new XYRenderer("www.opencyclemap.org", ResourceProxy.string.unknown, 1, 18, 8, ".png",
-				"http://a.tile.opencyclemap.org/cycle/",
-				"http://b.tile.opencyclemap.org/cycle/",
-				"http://c.tile.opencyclemap.org/cycle/"
-				);
-
-	private static final IOpenStreetMapRendererInfo OpenHikingMap =
-		new XYRenderer("maps.refuges.info", ResourceProxy.string.unknown, 1, 18, 8, ".jpeg",
-				"http://maps.refuges.info/tiles/renderer.py/hiking/");
+//	private static final XYTileSource TopOSMRelief =
+//			new XYTileSource("Topo Relief (USA)", ResourceProxy.string.unknown, 4, 15, 8, ".jpg",
+//					"http://tile1.toposm.com/us/color-relief/",
+//					"http://tile2.toposm.com/us/color-relief/",
+//					"http://tile3.toposm.com/us/color-relief/");
+//
+//	private static final XYTileSource TopOSMContours =
+//		new XYTileSource("Topo Contours (USA)", ResourceProxy.string.unknown, 12, 15, 8, ".png",
+//				"http://tile1.toposm.com/us/contours/",
+//				"http://tile2.toposm.com/us/contours/",
+//				"http://tile3.toposm.com/us/contours/");
+//
+//	private static final XYTileSource OpenCycleMap =
+//		new XYTileSource("www.opencyclemap.org", ResourceProxy.string.unknown, 1, 18, 8, ".png",
+//				"http://a.tile.opencyclemap.org/cycle/",
+//				"http://b.tile.opencyclemap.org/cycle/",
+//				"http://c.tile.opencyclemap.org/cycle/"
+//				);
+//	private static final XYTileSource OpenHikingMap =
+//		new XYTileSource("maps.refuges.info", ResourceProxy.string.unknown, 1, 18, 8, ".jpeg",
+//				"http://maps.refuges.info/tiles/renderer.py/hiking/");
 	
-	private static IOpenStreetMapRendererInfo supportedRenderers[] = {
-			OpenStreetMapRendererFactory.OSMARENDER,
-			OpenCycleMap,
-			OpenHikingMap,
-			OpenStreetMapRendererFactory.TOPO,
-			TopOSMContours,
-			TopOSMRelief
+	private static OnlineTileSourceBase supportedRenderers[] = {
+			TileSourceFactory.OSMARENDER,
+			TileSourceFactory.CYCLEMAP,
+			TileSourceFactory.MAPNIK,
+			TileSourceFactory.TOPO,
+//			TopOSMContours,
+//			TopOSMRelief
 	};
 
 	private String supportedRendererNames[];
 
 	public GeeksvilleMapActivity() {
 		// FIXME - do this someplace better
-		OpenStreetMapRendererFactory.addRenderer(TopOSMContours);
-		OpenStreetMapRendererFactory.addRenderer(TopOSMRelief);
-		OpenStreetMapRendererFactory.addRenderer(OpenCycleMap);
-		OpenStreetMapRendererFactory.addRenderer(OpenHikingMap);
+//		TileSourceFactory.addTileSource(TopOSMContours);
+//		TileSourceFactory.addTileSource(TopOSMRelief);
+//		TileSourceFactory.addTileSource(OpenCycleMap);
+//		TileSourceFactory.addTileSource(OpenHikingMap);
 	}
 
 	/** Called when the activity is first created. */
@@ -107,10 +107,12 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		supportedRendererNames = new String[] {
 				getString(R.string.street_map),
 				getString(R.string.opencyclemap),
-				getString(R.string.openhikingmap),
-				getString(R.string.topo_europe),
-				getString(R.string.topo_us_contour),
-				getString(R.string.topo_us_relief)
+				getString(R.string.mapnik_map),
+				getString(R.string.toposm_map),
+//				getString(R.string.openhikingmap),
+//				getString(R.string.topo_europe),
+//				getString(R.string.topo_us_contour),
+//				getString(R.string.topo_us_relief)
 		};
 
 		// Our license key is different for the emulator, otherwise these files
@@ -121,7 +123,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		mapView.setBuiltInZoomControls(true);
 		// Set default map view
-		mapView.setRenderer(OpenStreetMapRendererFactory.OSMARENDER);
+		mapView.setTileSource(TileSourceFactory.OSMARENDER);
 
 		// Default to sat view
 		// mapView.setSatellite(true);
@@ -178,19 +180,18 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		MenuItem toCheck = null;
 		for (int i = 0; i < supportedRenderers.length; i++) {
-			final IOpenStreetMapRendererInfo info = supportedRenderers[i];
+			final OnlineTileSourceBase info = supportedRenderers[i];
 			String name = supportedRendererNames[i];
 
 			MenuItem item = children.add(1, i, Menu.NONE, name);
-
-			if (mapView.getRenderer().name().equals(info.name()))
+			if (mapView.getTileProvider().getTileSource().name().equals(info.name()))
 				toCheck = item;
 
 			item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
-					mapView.setRenderer(info);
+					mapView.setTileSource(info);
 					item.setChecked(true);
 					return true;
 				}
@@ -252,7 +253,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 	private void zoomToLocation() {
 		// Center on where the user is
-		OpenStreetMapViewController control = mapView.getController();
+		MapController control = mapView.getController();
 
 		GeoPoint loc;
 		if (myLocationOverlay != null && (loc = myLocationOverlay.getMyLocation()) != null)

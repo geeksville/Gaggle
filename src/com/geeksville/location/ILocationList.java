@@ -20,7 +20,8 @@
  ******************************************************************************/
 package com.geeksville.location;
 
-import org.andnav.osm.util.GeoPoint;
+import org.osmdroid.util.GeoPoint;
+
 
 public interface ILocationList extends Iterable<GeoPoint> {
 

@@ -283,5 +283,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="advanced">Advanced</string>
 	<string name="flurry_logging_conf">Flurry report</string>
 	<string name="enables_reporting_dev_data_to_flurry">Enables reporting to Flurry</string>
+	<string name="mapnik_map">Mapnik</string>
+	<string name="toposm_map">OpenStreetMap Topo</string>
 </resources>
   

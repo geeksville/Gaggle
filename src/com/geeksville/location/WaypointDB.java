@@ -26,7 +26,7 @@ import java.util.Observer;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.andnav.osm.util.GeoPoint;
+import org.osmdroid.util.GeoPoint;
 
 import android.content.ComponentName;
 import android.content.Context;

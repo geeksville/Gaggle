@@ -25,8 +25,8 @@ import java.io.InputStream;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.andnav.osm.views.OpenStreetMapViewController;
-import org.andnav.osm.views.overlay.MyLocationOverlay;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.overlay.MyLocationOverlay;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -293,7 +293,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 
 				@Override
 				public void run() {
-					OpenStreetMapViewController control = mapView.getController();
+					MapController control = mapView.getController();
 
 					control.setCenter(locs.getGeoPoint(0));
 
@@ -339,5 +339,4 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		mapView.postInvalidateDelayed(1000);
 
 	}
-
 }

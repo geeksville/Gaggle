@@ -3,10 +3,10 @@
  */
 package com.geeksville.maps;
 
-import org.andnav.osm.util.GeoPoint;
-import org.andnav.osm.views.OpenStreetMapView;
-import org.andnav.osm.views.OpenStreetMapView.OpenStreetMapViewProjection;
-import org.andnav.osm.views.overlay.OpenStreetMapViewPathOverlay;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.overlay.PathOverlay;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -23,7 +23,7 @@ import com.geeksville.location.LocationList;
  * @author kevinh
  * 
  */
-public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
+public class TracklogOverlay extends PathOverlay {
 
 	LocationList tracklog;
 
@@ -68,9 +68,9 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 	 * 
 	 * @see Overlay#draw(android.graphics.Canvas, boolean)
 	 */
-	public void fixmeBustedOnOSM(Canvas canvas, OpenStreetMapView mapView) {
+	public void fixmeBustedOnOSM(Canvas canvas, MapView mapView) {
 
-		OpenStreetMapViewProjection proj = mapView.getProjection();
+		Projection proj = mapView.getProjection();
 
 		Point p = new Point();
 		int prevZ = 0, prevTime = 0;
@@ -171,11 +171,10 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 	 *      org.andnav.osm.views.OpenStreetMapView)
 	 */
 	@Override
-	protected void onDraw(Canvas canvas, OpenStreetMapView mapView) {
-
+	protected void draw(Canvas canvas, MapView mapView, boolean shadow) {
 		convertToOSM();
 
-		super.onDraw(canvas, mapView);
+		super.draw(canvas, mapView, shadow);
 	}
 
 }

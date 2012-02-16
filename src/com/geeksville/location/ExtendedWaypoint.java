@@ -20,7 +20,7 @@
  ******************************************************************************/
 package com.geeksville.location;
 
-import org.andnav.osm.util.GeoPoint;
+import org.osmdroid.util.GeoPoint;
 
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;

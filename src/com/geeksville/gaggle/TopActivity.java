@@ -5,7 +5,8 @@ package com.geeksville.gaggle;
 
 import java.io.File;
 
-import org.andnav.osm.tileprovider.constants.OpenStreetMapTileProviderConstants;
+import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
+
 
 import android.app.TabActivity;
 import android.content.Intent;
