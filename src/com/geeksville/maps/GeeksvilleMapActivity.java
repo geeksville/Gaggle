@@ -20,6 +20,8 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -27,10 +29,7 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.MyLocationOverlay;
 
 import android.app.Activity;
-import android.content.Context;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -42,6 +41,7 @@ import com.geeksville.android.LifeCyclePublisher;
 import com.geeksville.android.LifeCyclePublisherImpl;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
+import com.geeksville.util.GaggleUncaughtExceptionHandler;
 
 /**
  * 
@@ -93,6 +93,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 	private String supportedRendererNames[];
 
 	public GeeksvilleMapActivity() {
+		initExceptionHandler();
 		// FIXME - do this someplace better
 //		TileSourceFactory.addTileSource(TopOSMContours);
 //		TileSourceFactory.addTileSource(TopOSMRelief);
@@ -100,6 +101,22 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 //		TileSourceFactory.addTileSource(OpenHikingMap);
 	}
 
+	
+	  public static GaggleUncaughtExceptionHandler initExceptionHandler()
+	  {
+	    GaggleUncaughtExceptionHandler exceptionHandler;
+	    final UncaughtExceptionHandler ueh = Thread.getDefaultUncaughtExceptionHandler();
+
+	    if ((ueh != null) && GaggleUncaughtExceptionHandler.class.isAssignableFrom(ueh.getClass())) {
+	      exceptionHandler = (GaggleUncaughtExceptionHandler)ueh;
+	    } else {
+	      exceptionHandler = new GaggleUncaughtExceptionHandler(ueh);
+	      Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);
+	    }
+
+	    return exceptionHandler;
+	  }
+	
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState, int layoutId, int mapViewId) {
 		super.onCreate(savedInstanceState);

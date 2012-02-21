@@ -27,6 +27,7 @@ import java.util.Observer;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.api.IMapView;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 
 import android.app.Activity;
@@ -44,7 +45,7 @@ import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.WaypointCursor;
 import com.geeksville.location.WaypointDB;
 
-public class WaypointOverlay extends ItemizedOverlay<WaypointItem>
+public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 		implements
 		Observer {
 
@@ -55,14 +56,30 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem>
 	private MapView view;
 	private Activity context;
 
-	private ArrayList<WaypointItem> mItemList;
+//	private ArrayList<WaypointItem> mItemList;
 
-	public WaypointOverlay(Activity context, MapView view) {
+	public WaypointOverlay(final Activity context, final MapView view) {
 		// per example, we want the bounds to be centered just below this
 		// drawable. We use a alpha channel to not obscure terrain too much...
 		// super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
-		super(context.getResources().getDrawable(R.drawable.flag), new DefaultResourceProxyImpl(context));
-		mItemList = new ArrayList<WaypointItem>();
+		super(new ArrayList<WaypointItem>(), context.getResources()
+				.getDrawable(R.drawable.flag), new OnItemGestureListener<WaypointItem>() {
+
+					@Override
+					public boolean onItemLongPress(int arg0, WaypointItem arg1) {
+						// TODO Auto-generated method stub
+						return false;
+					}
+
+					@Override
+					public boolean onItemSingleTapUp(int index, WaypointItem item) {
+						// TODO Auto-generated method stub
+						view.getController().animateTo(item.mGeoPoint);
+						item.handleTap(context);
+						return true;
+					}
+				}, new DefaultResourceProxyImpl(context));
+//		mItemList = new ArrayList<WaypointItem>();
 
 		this.context = context;
 		this.view = view;
@@ -127,13 +144,14 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem>
 	private void fillFromDB(Activity context) {
 
 		cursor = db.fetchWaypointsByDistance();
-
-		mItemList.clear();
+		removeAllItems(false);
+		
+		//mItemList.clear();
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToPosition(i);
 			ExtendedWaypoint w = cursor.getWaypoint();
 			WaypointItem item = new WaypointItem(w, captionPaint);
-			mItemList.add(item);
+			addItem(item);
 		}
 
 		// FIXME, handle the addition of waypoints after the map is already up
@@ -142,11 +160,10 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem>
 
 	@Override
 	public void update(Observable observable, Object data) {
-		// Our waypoints may have changed, refresh our WaypointItems
-		// we just change the
-		// contents of the CaptionedDrawables
-		// and then invalidate only if needed
-
+//		// Our waypoints may have changed, refresh our WaypointItems
+//		// we just change the
+//		// contents of the CaptionedDrawables
+//		// and then invalidate only if needed
 		boolean needRedraw = false;
 		for (int i = 0; i < mItemList.size(); i++) {
 			WaypointItem item = mItemList.get(i);
@@ -157,6 +174,8 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem>
 		if (needRedraw)
 			view.postInvalidate();
 	}
+	
+	
 //
 //	@Override
 	// FIXME where has this been moved to ?
@@ -173,22 +192,22 @@ public class WaypointOverlay extends ItemizedOverlay<WaypointItem>
 //		return true;
 //	}
 
-	@Override
-	public boolean onSnapToItem(int arg0, int arg1, Point arg2, IMapView arg3) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean onSnapToItem(int arg0, int arg1, Point arg2, IMapView arg3) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 
-	@Override
-	protected WaypointItem createItem(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	protected WaypointItem createItem(int arg0) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	@Override
-	public int size() {
-		return mItemList.size();
-	}
+//	@Override
+//	public int size() {
+//		return mItemList.size();
+//	}
 
 	// /**
 	// * Overriden for debugging
