@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.MyLocationOverlay;
 
@@ -41,8 +42,10 @@ import com.geeksville.location.IGCReader;
 import com.geeksville.location.LocationList;
 import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.GeeksvilleMapActivity;
+import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
+import com.geeksville.maps.PolygonOverlay.GeoPolygon;
 
 public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 
@@ -62,7 +65,8 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	 */
 	private boolean isLive = false;
 
-	private WaypointOverlay over;
+	private WaypointOverlay wptOver;
+	private PolygonOverlay polyOver;
 
 	private AltitudeView altitudeView;
 
@@ -153,6 +157,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		altitudeView = (AltitudeView) findViewById(R.id.altitude_view);
 
 		addWaypoints();
+		addPolyoverlay();
 		perhapsAddFromUri();
 		perhapsAddExtraTracklog();
 
@@ -204,11 +209,33 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	}
 
 	private void addWaypoints() {
-		over = new WaypointOverlay(this, mapView);
+		wptOver = new WaypointOverlay(this, mapView);
 
-		mapView.getOverlays().add(over);
+		mapView.getOverlays().add(wptOver);
 	}
 
+	private void addPolyoverlay() {
+		polyOver = new PolygonOverlay(this);
+		
+		/*
+		 * Test data: add poly in the overlay
+		 * It should be visible above Grenoble(FRA)
+		 */
+		GeoPolygon gp = new PolygonOverlay.GeoPolygon();
+		gp.mPoints.add(new GeoPoint(45.2475, 5.669167)); 
+		gp.mPoints.add(new GeoPoint(45.275, 5.896389));
+		gp.mPoints.add(new GeoPoint( 45.106667,5.773611)); 
+		gp.mPoints.add(new GeoPoint(45.049722, 5.638056)); 
+		gp.mPoints.add(new GeoPoint(45.208333, 5.641111)); 
+		gp.mPoints.add(new GeoPoint(45.216667, 5.65));
+		gp.mPoints.add(new GeoPoint( 45.2475,5.669167));
+		polyOver.addPolygon(gp);
+		/*
+		 * End of test data
+		 */
+		
+		mapView.getOverlays().add(polyOver);
+	}
 	/**
 	 * If a tracklog was added to our intent, then show it
 	 */
@@ -239,7 +266,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	protected void onPause() {
 		super.onPause();
 
-		over.onPause();
+		wptOver.onPause();
 
 		// Remove any live tracklog (in case the next instance doesn't want it -
 		// YUCK)
@@ -261,7 +288,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		super.onResume();
 
 		Units.instance.setFromPrefs(this);
-		over.onResume();
+		wptOver.onResume();
 
 		// Show our latest live tracklog
 		if (liveList != null && isLive) {
