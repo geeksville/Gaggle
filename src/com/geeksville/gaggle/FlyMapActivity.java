@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.flurry.android.FlurryAgent;
+import com.geeksville.airspace.AirspaceClient;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.info.Units;
 import com.geeksville.location.IGCReader;
@@ -217,6 +218,8 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	private void addPolyoverlay() {
 		polyOver = new PolygonOverlay(this);
 		
+		AirspaceClient ac = new AirspaceClient();
+		ac.getAirspace(new int[]{905});
 		/*
 		 * Test data: add poly in the overlay
 		 * It should be visible above Grenoble(FRA)
