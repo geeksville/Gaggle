@@ -47,6 +47,7 @@ public class PolygonOverlay extends Overlay {
 
 	public void addPolygon(final GeoPolygon poly){
 		final Polygon new_p = new Polygon();
+
 		for (GeoPoint gp : poly.mPoints){
 			new_p.mPoints.add(new Point(gp.getLatitudeE6(), gp.getLongitudeE6()));
 		}
@@ -104,12 +105,14 @@ public class PolygonOverlay extends Overlay {
 			projectedPoint1 = points.get(i);
 			poly.mLineBounds.union(projectedPoint1.x, projectedPoint1.y);
 
-			if (!Rect.intersects(clipBounds, poly.mLineBounds)) {
-				// skip this line, move to next point
-				projectedPoint0 = projectedPoint1;
-				screenPoint0 = null;
-				continue;
-			}
+// FIXME: this opt only works for linestring.
+// It should be modified for polys (f-e: compute poly bbox beforehand)
+//			if (!Rect.intersects(clipBounds, poly.mLineBounds)) {
+//				// skip this line, move to next point
+//				projectedPoint0 = projectedPoint1;
+//				screenPoint0 = null;
+//				continue;
+//			}
 
 			// the starting point may be not calculated, because previous segment was out of clip
 			// bounds

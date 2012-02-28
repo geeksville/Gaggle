@@ -22,10 +22,11 @@ package com.geeksville.gaggle;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.MyLocationOverlay;
 
@@ -33,6 +34,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.flurry.android.FlurryAgent;
@@ -215,30 +217,37 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		mapView.getOverlays().add(wptOver);
 	}
 
+	private class AirspaceLoader extends AsyncTask<Void, Void, ArrayList<GeoPolygon>> {
+		private BoundingBoxE6 screenBbox;
+
+		@Override
+		protected void onPreExecute(){
+			screenBbox = mapView.getProjection().getBoundingBox();
+		}
+
+		@Override
+		protected ArrayList<GeoPolygon> doInBackground(Void... params) {
+			AirspaceClient ac = new AirspaceClient();
+			final ArrayList<GeoPolygon> ret = ac.getAirspaces(screenBbox.getLatNorthE6()/1E6, screenBbox.getLonWestE6()/1E6,
+					screenBbox.getLatSouthE6()/1E6, screenBbox.getLonEastE6()/1E6);
+			return ret;
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<GeoPolygon> polygons){
+			polyOver.clearPolys();
+			for (GeoPolygon poly: polygons){
+				polyOver.addPolygon(poly);
+			}
+			mapView.invalidate();
+		}
+	}
+
 	private void addPolyoverlay() {
 		polyOver = new PolygonOverlay(this);
-		
-		AirspaceClient ac = new AirspaceClient();
-		ac.getAirspace(new int[]{905});
-		/*
-		 * Test data: add poly in the overlay
-		 * It should be visible above Grenoble(FRA)
-		 */
-		GeoPolygon gp = new PolygonOverlay.GeoPolygon();
-		gp.mPoints.add(new GeoPoint(45.2475, 5.669167)); 
-		gp.mPoints.add(new GeoPoint(45.275, 5.896389));
-		gp.mPoints.add(new GeoPoint( 45.106667,5.773611)); 
-		gp.mPoints.add(new GeoPoint(45.049722, 5.638056)); 
-		gp.mPoints.add(new GeoPoint(45.208333, 5.641111)); 
-		gp.mPoints.add(new GeoPoint(45.216667, 5.65));
-		gp.mPoints.add(new GeoPoint( 45.2475,5.669167));
-		polyOver.addPolygon(gp);
-		/*
-		 * End of test data
-		 */
-		
 		mapView.getOverlays().add(polyOver);
 	}
+
 	/**
 	 * If a tracklog was added to our intent, then show it
 	 */
@@ -304,6 +313,8 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 			liveTracklogOverlay = new TracklogOverlay(this, locs);
 			mapView.getOverlays().add(liveTracklogOverlay);
 		}
+
+		new AirspaceLoader().execute();
 	}
 
 	/**
