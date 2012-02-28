@@ -141,7 +141,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		mapView.setBuiltInZoomControls(true);
 		// Set default map view
 		mapView.setTileSource(TileSourceFactory.OSMARENDER);
-
+		mapView.setMultiTouchControls(true);
 		// Default to sat view
 		// mapView.setSatellite(true);
 	}
