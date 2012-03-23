@@ -189,6 +189,8 @@ Still waiting for GPS fix</string>
     <string name="street_map">OpenStreetMap</string>
     <string name="openhikingmap">Hiking map (Europe)</string>
     <string name="opencyclemap">Opencyclemap</string>
+    <string name="openmapquest">OpenMapQuest</string>
+    <string name="openmapquestaerial">Aerial Photos</string>
     <string name="distance_s_s_glide_s">Distance: %1$s %2$s
 Glide: %3$s:1</string>
     <string name="off">Off</string>
