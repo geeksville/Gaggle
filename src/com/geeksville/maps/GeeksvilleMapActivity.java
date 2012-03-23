@@ -44,8 +44,11 @@ import com.geeksville.gaggle.R;
 /**
  * 
  * @author kevinh FIXME, add the following sources: http://toposm.com/usw/ Great
- *         topos here: http://openpistemap.org/?lat=41&lon=-100&zoom=12
- * 
+ *         topos here: http://openpistemap.org/?lat=41&lon=-100&zoom=12 - we should check the author allow such a usage
+ * 			FIXME : Most of the tiles here use openstreetmapdata, the licence needs that we attribute their work, but have no idea how to show that,
+ * 			so, at least, I'm doing it here : Copyright : openstreetmap.org & contributors CC-BY-SA. - sly
+ * 				
+ * 			FIXME : This should better be changed into a config setting and generic way to add map providers instead of hardcoded here - sly
  */
 public class GeeksvilleMapActivity extends Activity implements LifeCyclePublisher {
 
@@ -76,15 +79,28 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 				"http://c.tile.opencyclemap.org/cycle/"
 				);
 
+	// I know the operator of this renderer allows us to use it, because it's me ;-) (sly)
 	private static final IOpenStreetMapRendererInfo OpenHikingMap =
-		new XYRenderer("maps.refuges.info", ResourceProxy.string.unknown, 1, 18, 8, ".jpeg",
+		new XYRenderer("maps.refuges.info", ResourceProxy.string.unknown, 1, 17, 8, ".jpeg",
 				"http://maps.refuges.info/tiles/renderer.py/hiking/");
+
+	// Tiles Courtesy of MapQuest : http://www.mapquest.com/" 
+	private static final IOpenStreetMapRendererInfo OpenMapQuest =
+		new XYRenderer("www.mapquest.com", ResourceProxy.string.unknown, 1, 18, 8, ".png",
+				"http://otile1.mqcdn.com/tiles/1.0.0/osm/");
+
+	// Tiles Courtesy of MapQuest : http://www.mapquest.com/" 
+	private static final IOpenStreetMapRendererInfo OpenMapQuestAerial =
+		new XYRenderer("www.mapquest.com-aerial", ResourceProxy.string.unknown, 1, 18, 8, ".jpg",
+				"http://oatile1.mqcdn.com/naip/");
+
 	
 	private static IOpenStreetMapRendererInfo supportedRenderers[] = {
-			OpenStreetMapRendererFactory.OSMARENDER,
+			OpenMapQuest,
+			OpenMapQuestAerial,
 			OpenCycleMap,
 			OpenHikingMap,
-			OpenStreetMapRendererFactory.TOPO,
+			//OpenStreetMapRendererFactory.TOPO, This one is not working anymore, might need so update to osmdroid
 			TopOSMContours,
 			TopOSMRelief
 	};
@@ -97,6 +113,8 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		OpenStreetMapRendererFactory.addRenderer(TopOSMRelief);
 		OpenStreetMapRendererFactory.addRenderer(OpenCycleMap);
 		OpenStreetMapRendererFactory.addRenderer(OpenHikingMap);
+		OpenStreetMapRendererFactory.addRenderer(OpenMapQuest);
+		OpenStreetMapRendererFactory.addRenderer(OpenMapQuestAerial);
 	}
 
 	/** Called when the activity is first created. */
@@ -104,10 +122,11 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		super.onCreate(savedInstanceState);
 
 		supportedRendererNames = new String[] {
-				getString(R.string.street_map),
+				getString(R.string.openmapquest),
+				getString(R.string.openmapquestaerial),
 				getString(R.string.opencyclemap),
 				getString(R.string.openhikingmap),
-				getString(R.string.topo_europe),
+				//getString(R.string.topo_europe),
 				getString(R.string.topo_us_contour),
 				getString(R.string.topo_us_relief)
 		};
@@ -120,7 +139,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		mapView.setBuiltInZoomControls(true);
 		// Set default map view
-		mapView.setRenderer(OpenStreetMapRendererFactory.OSMARENDER);
+		mapView.setRenderer(OpenMapQuest);
 
 		// Default to sat view
 		// mapView.setSatellite(true);
