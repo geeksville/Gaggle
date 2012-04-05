@@ -23,10 +23,23 @@ package com.geeksville.location;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
+import com.geeksville.gaggle.R;
+import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
 
 import com.geeksville.io.LineEndingStream;
 
@@ -45,8 +58,9 @@ import com.geeksville.io.LineEndingStream;
  *         // Contents // CR/LF at end of each line
  */
 public class IGCWriter implements PositionWriter {
-
 	private PrintStream out;
+	private Signature sig;
+
 	private boolean didProlog = false;
 
 	private String pilotName;
@@ -57,9 +71,72 @@ public class IGCWriter implements PositionWriter {
 
 	private Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 
+	public class SignatureOutputStream extends OutputStream {
+
+		private OutputStream target;
+		private Signature sig;
+
+		/**
+		 * creates a new SignatureOutputStream which writes to
+		 * a target OutputStream and updates the Signature object.
+		 */
+		public SignatureOutputStream(OutputStream target, Signature sig) {
+			this.target = target;
+			this.sig = sig;
+		}
+
+		public void write(int b) throws IOException {
+			write(new byte[] { (byte) b });
+		}
+
+		public void write(byte[] b) throws IOException {
+			write(b, 0, b.length);
+		}
+
+		public void write(byte[] b, int offset, int len) throws IOException {
+			target.write(b, offset, len);
+			try {
+				sig.update(b, offset, len);
+			} catch (SignatureException ex) {
+				throw new IOException(ex);
+			}
+		}
+
+		public void flush() throws IOException {
+			target.flush();
+		}
+
+		public void close() throws IOException {
+			target.close();
+		}
+	}
+
+	private PrivateKey getPrivateKey(Context context) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		final String private_key = context.getString(R.string.igc_private_key);
+		KeyFactory fac = KeyFactory.getInstance("RSA");
+		EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(Base64.decode(private_key, Base64.DEFAULT));
+		return fac.generatePrivate(privKeySpec);
+	}
+
 	public IGCWriter(OutputStream dest, String pilotName, String flightDesc,
-			String gliderType, String pilotId) throws IOException {
-		out = new PrintStream(new LineEndingStream(dest));
+			String gliderType, String pilotId, Context context) throws IOException {
+		try {
+			sig = Signature.getInstance("SHA1withRSA");
+			PrivateKey pk = getPrivateKey(context);
+			sig.initSign(pk);
+			OutputStream dOut = new PrintStream(new SignatureOutputStream(
+					new LineEndingStream(dest), sig));
+			out = new PrintStream(dOut);
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("IGCWriter", "No such algo");
+			out = new PrintStream(new LineEndingStream(dest));
+		} catch (InvalidKeyException e) {
+			Log.e("IGCWriter", "Invalid key");
+			out = new PrintStream(new LineEndingStream(dest));
+		} catch (InvalidKeySpecException e) {
+			Log.e("IGCWriter", "Invalid key spec");
+			out = new PrintStream(new LineEndingStream(dest));
+		}
 
 		this.gliderType = gliderType;
 		this.pilotId = pilotId;
@@ -73,11 +150,14 @@ public class IGCWriter implements PositionWriter {
 	@Override
 	public void emitEpilog() {
 		// sect 3.2, G=security record
-		// Generate fake G records
-		out.println("GGaggleDoesntDoGRecordsYet");
-
-		// out.println("G03C15AF3BC8A4A288FAB70442A567DEB");
-
+		try {
+			final byte[] signature = sig.sign();
+			final String sigStr = Base64.encodeToString(signature, Base64.DEFAULT);
+			out.println("G" + sigStr);
+		} catch (SignatureException e) {
+			Log.e("IGCWriter", "Error when signing...");
+			out.println("GGaggleFailedToSign");
+		}
 		out.close();
 	}
 
