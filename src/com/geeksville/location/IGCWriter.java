@@ -124,8 +124,7 @@ public class IGCWriter implements PositionWriter {
 			sig = Signature.getInstance("SHA1withRSA");
 			PrivateKey pk = getPrivateKey(context);
 			sig.initSign(pk);
-			OutputStream dOut = new PrintStream(new SignatureOutputStream(
-					new LineEndingStream(dest), sig));
+			OutputStream dOut = new PrintStream(new LineEndingStream(new SignatureOutputStream(dest, sig)));
 			out = new PrintStream(dOut);
 		} catch (NoSuchAlgorithmException e) {
 			Log.e("IGCWriter", "No such algo");
