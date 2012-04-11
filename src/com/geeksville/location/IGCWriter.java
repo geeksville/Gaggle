@@ -151,8 +151,14 @@ public class IGCWriter implements PositionWriter {
 		// sect 3.2, G=security record
 		try {
 			final byte[] signature = sig.sign();
-			final String sigStr = Base64.encodeToString(signature, Base64.DEFAULT);
-			out.println("G" + sigStr);
+			final String sigStr = Base64.encodeToString(signature, Base64.DEFAULT).replaceAll("[\\r\\n]", "");
+
+			for (int i=0; i < sigStr.length() / 75 ; i++){
+				out.println("G" + sigStr.substring(i*75, i*75+75));
+			}
+			if (sigStr.length() % 75 > 0){
+				out.println("G" + sigStr.substring(((int)(sigStr.length() / 75))*75));
+			}
 		} catch (SignatureException e) {
 			Log.e("IGCWriter", "Error when signing...");
 			out.println("GGaggleFailedToSign");
