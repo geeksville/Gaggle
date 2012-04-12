@@ -38,6 +38,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import com.geeksville.gaggle.R;
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Base64;
 import android.util.Log;
 
@@ -62,6 +63,7 @@ public class IGCWriter implements PositionWriter {
 	private Signature sig;
 
 	private boolean didProlog = false;
+	private final String versionString;
 
 	private String pilotName;
 	private String flightDesc;
@@ -120,6 +122,14 @@ public class IGCWriter implements PositionWriter {
 
 	public IGCWriter(OutputStream dest, String pilotName, String flightDesc,
 			String gliderType, String pilotId, Context context) throws IOException {
+		String tmp_version;
+		try {
+			tmp_version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e1) {
+			tmp_version = "UNKNOWN";
+		}
+		versionString = tmp_version;
+
 		try {
 			sig = Signature.getInstance("SHA1withRSA");
 			PrivateKey pk = getPrivateKey(context);
@@ -256,7 +266,7 @@ public class IGCWriter implements PositionWriter {
 	 */
 	private void emitProlog(Calendar cal) {
 
-		out.println("AXXXGaggle"); // AFLY06122 - sect 3.1, A=mfgr info,
+		out.println("AXGG"+versionString); // AFLY06122 - sect 3.1, A=mfgr info,
 		// mfgr=FLY, serial num=06122
 
 		// sect 3.3.1, H=file header
@@ -272,10 +282,10 @@ public class IGCWriter implements PositionWriter {
 		out.println("HFGIDGLIDERID:" + pilotId); // glider ID required
 		out.println("HFDTM100GPSDATUM:WGS84"); // datum required - must be wgs84
 		out.println("HFGPSGPS:" + android.os.Build.MODEL); // info on gps
-		// manufactuer
-		out.println("HFRFWFIRMWAREVERSION:0.10"); // sw version of app
-		out.println("HFRHWHARDWAREVERSION:1.00"); // hw version
-		out.println("HFFTYFRTYPE:Geeksville,Gaggle"); // required: manufacture
+		// manufacturer
+		out.println("HFRFWFIRMWAREVERSION:" + versionString); // sw version of app
+		out.println("HFRHWHARDWAREVERSION:" + versionString); // hw version
+		out.println("HFFTYFRTYPE:Geeksville,Gaggle"); // required: manufacturer
 		// (me) and model num
 
 		// sect 3.4, I=fix extension list
