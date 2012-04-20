@@ -1,0 +1,21 @@
+This directory contains a single C file used to check the digital signature created by Gaggle.
+
+
+/!\
+/!\ BEFORE ANYTHING ELSE, YOU SHOULD ADD THE PUBLIC KEY OF GAGGLE
+/!\ AT THE BEGINING OF THE FILE.
+/!\
+
+The public key is expected to be in PEM format.
+
+
+On *nix with gcc and lib openssl installed, you can compile it like this:
+
+$ CFLAGS=-Wall LDFLAGS=-lssl make
+
+Then running it is as simple as:
+
+$ ./verify flight_1.igc
+
+Return status is 0 when signature is verified, !=0 if not.
+
