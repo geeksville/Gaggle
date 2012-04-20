@@ -28,15 +28,20 @@
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
 
-static const char VERIF_OK[] = "Signature verification OK\n";
-static const char VERIF_FAIL[] = "Signature verification FAILED\n";
+static const char VERIF_OK[] = "passed\n";
+static const char VERIF_FAIL[] = "failed\n";
 
 /*
  * The **PUBLIC** key in PEM format
  */
 unsigned char pkey_b64[] = "-----BEGIN PUBLIC KEY-----\n"
-  ".....\n"
-  ".....\n"
+  "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuW+YomPV6bMbkN+NGTJ5\n"
+  "JGv52KIImuDc9aJVtdx9l5kioo0JMHcHeuh6RfQ0cUPKL6OyKjiHU37/biGVRcqS\n"
+  "jQ5axp1vBxTTeR5SOhj5qdbyXtivPETkYTA1E5e3hrrlFQc0k0j9pzfjajZ+p8TX\n"
+  "X/y80P01aEK1ZpgHtOFahwfERRFuzAPs+LPTN44lngYS4yyM1wVKLXmEFvQDCSDR\n"
+  "gt5OEVvt1iY5XxQd3tY1+VZaZIeoDNJlol0rx9oJxjGUBwXSds0aKpq2U6x9Xp4H\n"
+  "WaveqnVbq41xSNeNhBn+riVhJ6SOvredg2Z+jM8tymj1jTHEtYqKSZVIjDvXZmPF\n"
+  "LQIDAQAB\n"
   "-----END PUBLIC KEY-----\n";
 
 
@@ -47,13 +52,15 @@ unsigned char sig[1024];
 int sig_len;
 
 void bailOut(const char* err, int ssl){
+#ifdef DEBUG
   if (err){
     fprintf(stderr, "ERROR: %s\n", err);
   }
 
   if (ssl)
     fprintf(stderr, "OpenSSL error: %s\n", ERR_error_string(ERR_get_error(), NULL));
-
+#endif
+  printf(VERIF_FAIL);
   exit (-1);
 }
 
@@ -152,7 +159,7 @@ int verify_data(const char* igcfile) {
   if (NULL != r) RSA_free(r);
   if (NULL != b) BIO_free(b);
 
-  return (rc == 1);
+  return (rc == 1 ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 int main(int argc, char **argv){
@@ -162,7 +169,7 @@ int main(int argc, char **argv){
   }
 
   r =  verify_data(argv[1]);
-  if (r){
+  if (r == EXIT_SUCCESS){
     printf(VERIF_OK);
   } else {
     printf(VERIF_FAIL);
