@@ -28,8 +28,8 @@
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
 
-static const char VERIF_OK[] = "passed\n";
-static const char VERIF_FAIL[] = "failed\n";
+static const char VERIF_OK[] = "PASSED\n";
+static const char VERIF_FAIL[] = "FAILED\n";
 
 /*
  * The **PUBLIC** key in PEM format
@@ -80,9 +80,18 @@ int unbase64(unsigned char *input, int input_len, unsigned char*output, int outp
   return size;
 }
 
+enum state {
+  newline,
+  fillsig,
+  skipline,
+  fillbuffer
+};
+
 int verify_data(const char* igcfile) {
   BIO *b = NULL;
   RSA *r = NULL;
+
+  enum state aut_state = newline;
 
   int rc = 1; /* OpenSSL return code */ 
 
@@ -100,42 +109,49 @@ int verify_data(const char* igcfile) {
   if (!f) bailOut("Can't open igc file", 0);
 
   int c;
-  int new_line = 1;
-  int fill_sig = 0;
-  int skip_line = 0;
 
   while ( (c = fgetc(f)) != EOF){
-    if (new_line) {
-      if (c == 'G') {
-        fill_sig = 1;
-        // fill b64 sig
-      } else if (c == 'L'){
-	// comment, skip line, do not fill sig buffer
-	skip_line = 1;
-	fill_sig = 0;
+    switch (aut_state){
+    case newline:
+      if (c == 'G'){
+	aut_state = fillsig;
+      } else if (c == 'L') {
+	aut_state = skipline;
       } else {
-        // fill buffer
-        buf[buf_len] = c;
+	aut_state = fillbuffer;
+	buf[buf_len] = c;
         buf_len++;
       }
-      new_line = 0;
-    } else {
-      if (c == '\n') {
-        new_line = 1;
-      }
-      if (fill_sig){
-        sig_b64[sig_b64_size] = c;
-        sig_b64_size++;
-      } else if (skip_line) {
-	// do nothing
+      break;
+    case fillsig:
+      sig_b64[sig_b64_size] = c;
+      sig_b64_size++;
+
+      if (c=='\n') {
+	aut_state = newline;
       } else {
-        // fill buffer
-        buf[buf_len] = c;
-        buf_len++;
+	aut_state = fillsig;
       }
+      break;
+    case fillbuffer:
+      buf[buf_len] = c;
+      buf_len++;
+      if (c=='\n') {
+	aut_state = newline;
+      } else {
+	aut_state = fillbuffer;
+      }
+      break;
+    case skipline:
+      if (c=='\n') {
+	aut_state = newline;
+      } else {
+	aut_state = skipline;
+      }
+      break;
     }
 
-    if (buf_len == sizeof(buf) || (buf_len && fill_sig)){
+    if (buf_len == sizeof(buf) || (buf_len && (aut_state == fillsig))){
       rc = SHA1_Update(&sha_ctx, buf, buf_len);
       if (1 != rc) { bailOut(NULL, 1); }
       buf_len = 0;
