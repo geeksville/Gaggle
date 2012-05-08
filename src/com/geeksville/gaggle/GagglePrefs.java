@@ -126,4 +126,8 @@ public class GagglePrefs {
 	public boolean isFlurryEnabled() {
 		return prefs.getBoolean("use_flurry_conf", false);
 	}
+	
+	public boolean isGalaxySLeapYearBugWorkaroundEnabled(){
+		return prefs.getBoolean("workaround_sgs_leap_bug", false);
+	}
 }
