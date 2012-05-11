@@ -7,4 +7,5 @@
 	</item>
 	<!--  <item android:id="@+id/prefetch_map" android:title="@string/download_map"
 	android:icon="@android:drawable/ic_menu_mapmode" /> -->
+	<item android:id="@+id/airspacemode_menu" android:title="@string/airspace_pref" android:icon="@android:drawable/ic_menu_mapmode"></item>
 </menu>

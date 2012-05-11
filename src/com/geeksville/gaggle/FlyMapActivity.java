@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.airspace.AirspaceClient;
@@ -273,7 +274,26 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 			}
 		}
 	}
+	
+	private void handleAirspaceTrigger(){
+		polyOver.clearPolys();
+		new AirspaceLoader().execute();
+	}
+	
+	/**
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
 
+		case R.id.airspacemode_menu:
+			handleAirspaceTrigger();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -314,7 +334,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 			mapView.getOverlays().add(liveTracklogOverlay);
 		}
 
-		new AirspaceLoader().execute();
+//		new AirspaceLoader().execute();
 	}
 
 	/**
