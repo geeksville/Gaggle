@@ -186,9 +186,7 @@ Still waiting for GPS fix</string>
     <string name="topo_us_relief">Topo (US relief)</string>
     <string name="topo_us_contour">Topo (US contour)</string>
     <string name="topo_europe">Topo (Europe)</string>
-    <string name="street_map">OpenStreetMap</string>
     <string name="openhikingmap">Hiking map (Europe)</string>
-    <string name="opencyclemap">Opencyclemap</string>
     <string name="distance_s_s_glide_s">Distance: %1$s %2$s
 Glide: %3$s:1</string>
     <string name="off">Off</string>
@@ -287,5 +285,6 @@ please email kevinh@geeksville.com.</string>
 	<string name="toposm_map">OpenStreetMap Topo</string>
 	<string name="workaround_sgs_leap_bug">Galaxy date fix</string>
 	<string name="compensate_1day_offset_bug">Compensate the 1 day offset bug</string>
+	<string name="mapquestaerial_map">Mapquest Aerial</string>
 </resources>
   

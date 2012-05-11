@@ -82,10 +82,9 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 //				"http://maps.refuges.info/tiles/renderer.py/hiking/");
 	
 	private static OnlineTileSourceBase supportedRenderers[] = {
-			TileSourceFactory.OSMARENDER,
-			TileSourceFactory.CYCLEMAP,
-			TileSourceFactory.MAPNIK,
-			TileSourceFactory.TOPO,
+		TileSourceFactory.MAPQUESTAERIAL,
+		TileSourceFactory.MAPNIK,
+		TileSourceFactory.TOPO,
 //			TopOSMContours,
 //			TopOSMRelief
 	};
@@ -122,8 +121,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		super.onCreate(savedInstanceState);
 
 		supportedRendererNames = new String[] {
-				getString(R.string.street_map),
-				getString(R.string.opencyclemap),
+				getString(R.string.mapquestaerial_map),
 				getString(R.string.mapnik_map),
 				getString(R.string.toposm_map),
 //				getString(R.string.openhikingmap),
@@ -140,7 +138,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		mapView.setBuiltInZoomControls(true);
 		// Set default map view
-		mapView.setTileSource(TileSourceFactory.OSMARENDER);
+		mapView.setTileSource(TileSourceFactory.MAPNIK);
 		mapView.setMultiTouchControls(true);
 		// Default to sat view
 		// mapView.setSatellite(true);
