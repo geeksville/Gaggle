@@ -263,6 +263,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 				}
 			};
 			myLocationOverlay.runOnFirstFix(runnable);
+			
 		}
 
 		mapView.getOverlays().add(myLocationOverlay);
@@ -273,8 +274,12 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		MapController control = mapView.getController();
 
 		GeoPoint loc;
-		if (myLocationOverlay != null && (loc = myLocationOverlay.getMyLocation()) != null)
+		if (myLocationOverlay != null && (loc = myLocationOverlay.getMyLocation()) != null){
 			control.animateTo(loc);
+			// try to span (will depend on the layer capabilities) something reasonable...
+			control.zoomToSpan(1, 1);
+			myLocationOverlay.enableFollowLocation();
+		}
 	}
 
 	@Override
@@ -283,6 +288,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		if (myLocationOverlay != null) {
 			myLocationOverlay.disableMyLocation();
+			myLocationOverlay.disableFollowLocation();
 			// myLocationOverlay.disableCompass();
 		}
 
