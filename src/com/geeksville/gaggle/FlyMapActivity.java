@@ -27,6 +27,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.osmdroid.util.BoundingBoxE6;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.MyLocationOverlay;
 
@@ -135,10 +136,15 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		
+
 		GagglePrefs prefs = new GagglePrefs(this);
-	    if (prefs.isFlurryEnabled())
-    	  FlurryAgent.onEndSession(this);
+		if (prefs.isFlurryEnabled())
+			FlurryAgent.onEndSession(this);
+
+		// Save current map position
+		prefs.setMapCenterZoom(mapView.getMapCenter().getLatitudeE6(),
+				mapView.getMapCenter().getLongitudeE6(),
+				mapView.getZoomLevel());
 	}
 
 	/** Called when the activity is first created. */
@@ -165,8 +171,22 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		perhapsAddFromUri();
 		perhapsAddExtraTracklog();
 
-		if (isLive)
+		// get the last center/zoom
+		// This may trigger a small flickering if 
+		// current user location is available (GeeksvilleMapA will
+		// zoom on this location immediately)
+		GagglePrefs prefs = new GagglePrefs(this);
+		final int latE6 = prefs.getMapCenterZoom_Lat();
+		final int lonE6 = prefs.getMapCenterZoom_Lon();
+		final int zoom = prefs.getMapCenterZoom_Zoom();
+		if (latE6 != -1 && lonE6 != -1 && zoom != -1) {
+			final GeoPoint center = new GeoPoint(latE6,  lonE6);
+			mapView.getController().setCenter(center);
+			mapView.getController().setZoom(zoom);
+		}
+		if (isLive){
 			showCurrentPosition(true);
+		}
 	}
 
 	/**

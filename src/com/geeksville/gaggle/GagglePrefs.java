@@ -32,15 +32,20 @@ import android.preference.PreferenceManager;
  */
 public class GagglePrefs {
 
+	public final static String mapZoomCenterPref_LAT = "MAP_ZOOM_CENTER_PREF_LAT";
+	public final static String mapZoomCenterPref_LON = "MAP_ZOOM_CENTER_PREF_LON";
+	public final static String mapZoomCenterPref_ZOOM = "MAP_ZOOM_CENTER_PREF_ZOOM";
 	/**
 	 * my preferences DB
 	 */
 	SharedPreferences prefs;
+	SharedPreferences.Editor editor;
 	
 	public GagglePrefs(Context c) {
-
 		prefs = PreferenceManager.getDefaultSharedPreferences(c);
+		editor = prefs.edit();
 	}
+
 	public int getCompetitionClass() {
 		String val = prefs.getString("competition_class_pref", "3").trim();
 		return Integer.parseInt(val);
@@ -67,12 +72,12 @@ public class GagglePrefs {
 		String val = prefs.getString("livelog_update_freq_pref", "5");
 		return Integer.parseInt(val);
 	}
-	
+
 	public int getLogTimeInterval() {
 		String val = prefs.getString("tracklog_update_freq_pref", "5");
 		return Integer.parseInt(val);
 	}
-	
+
 	public float getLogDistanceInterval() {
 		String val = prefs.getString("tracklog_update_dist_pref", "100");
 		return Float.parseFloat(val);
@@ -93,8 +98,8 @@ public class GagglePrefs {
 		String val = prefs.getString("gps_update_dist_pref", "100");
 		return Float.parseFloat(val);
 	}
-	
-	
+
+
 	public int getLaunchDistX() {
 		String val = prefs.getString("launch_dist_x", "40");
 		if (val.length() == 0)
@@ -126,8 +131,27 @@ public class GagglePrefs {
 	public boolean isFlurryEnabled() {
 		return prefs.getBoolean("use_flurry_conf", false);
 	}
-	
+
 	public boolean isGalaxySLeapYearBugWorkaroundEnabled(){
 		return prefs.getBoolean("workaround_sgs_leap_bug", false);
+	}
+
+	public int getMapCenterZoom_Lon() {
+		return prefs.getInt(mapZoomCenterPref_LON, -1);
+	}
+
+	public int getMapCenterZoom_Lat() {
+		return prefs.getInt(mapZoomCenterPref_LAT, -1);
+	}
+
+	public int getMapCenterZoom_Zoom() {
+		return prefs.getInt(mapZoomCenterPref_ZOOM, -1);
+	}
+
+	public void setMapCenterZoom(final int lat, final int lon, final int zoom) {
+		editor.putInt(mapZoomCenterPref_LAT, lat);
+		editor.putInt(mapZoomCenterPref_LON, lon);
+		editor.putInt(mapZoomCenterPref_ZOOM, zoom);
+		editor.commit();
 	}
 }
