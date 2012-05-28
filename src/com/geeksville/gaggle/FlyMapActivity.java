@@ -22,11 +22,9 @@ package com.geeksville.gaggle;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.MyLocationOverlay;
@@ -35,12 +33,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.flurry.android.FlurryAgent;
-import com.geeksville.airspace.AirspaceClient;
+import com.geeksville.airspace.AirspaceScrollListener;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.info.Units;
 import com.geeksville.location.IGCReader;
@@ -50,7 +47,6 @@ import com.geeksville.maps.GeeksvilleMapActivity;
 import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
-import com.geeksville.maps.PolygonOverlay.GeoPolygon;
 
 public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 
@@ -238,32 +234,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		mapView.getOverlays().add(wptOver);
 	}
 
-	private class AirspaceLoader extends AsyncTask<Void, Void, ArrayList<GeoPolygon>> {
-		private BoundingBoxE6 screenBbox;
+	
 
-		@Override
-		protected void onPreExecute(){
-			screenBbox = mapView.getProjection().getBoundingBox();
-		}
-
-		@Override
-		protected ArrayList<GeoPolygon> doInBackground(Void... params) {
-			AirspaceClient ac = new AirspaceClient();
-			final ArrayList<GeoPolygon> ret = ac.getAirspaces(screenBbox.getLatNorthE6()/1E6, screenBbox.getLonWestE6()/1E6,
-					screenBbox.getLatSouthE6()/1E6, screenBbox.getLonEastE6()/1E6);
-			return ret;
-		}
-
-		@Override
-		protected void onPostExecute(ArrayList<GeoPolygon> polygons){
-			polyOver.clearPolys();
-			for (GeoPolygon poly: polygons){
-				polyOver.addPolygon(poly);
-			}
-			mapView.invalidate();
-		}
-	}
-
+	
 	private void addPolyoverlay() {
 		polyOver = new PolygonOverlay(this);
 		mapView.getOverlays().add(polyOver);
@@ -296,8 +269,11 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	}
 	
 	private void handleAirspaceTrigger(){
-		polyOver.clearPolys();
-		new AirspaceLoader().execute();
+		if (mapView.getOnScrollChangeListener() == null){
+			mapView.setOnScrollChangeListener(new AirspaceScrollListener(polyOver));
+		} else {
+			mapView.setOnScrollChangeListener(null);
+		}
 	}
 	
 	/**
