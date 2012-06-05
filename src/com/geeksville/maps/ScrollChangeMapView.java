@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.osmdroid.api.IGeoPoint;
+import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 
 import android.content.Context;
@@ -41,6 +42,76 @@ public class ScrollChangeMapView extends MapView {
 		mLastCenterPosition = this.getMapCenter();
 		mLastZoomLevel = this.getZoomLevel();
 	}
+
+	private class ScrollChangeMapController extends MapController {
+
+		public ScrollChangeMapController(MapView mapview){
+			super(mapview);
+		}
+
+		@Override
+		public void setCenter(IGeoPoint point) {
+			super.setCenter(point);
+			notifyListeners();
+		}
+
+		@Override
+		public int setZoom(int zoomlevel) {
+			final int z = super.setZoom(zoomlevel);
+			notifyListeners();
+			return z;
+		}
+
+		@Override
+		public boolean zoomIn() {
+			final boolean z = super.zoomIn();
+			notifyListeners();
+			return z;
+		}
+
+		@Override
+		public boolean zoomInFixing(int xPixel, int yPixel) {
+			final boolean z = super.zoomInFixing(xPixel, yPixel);
+			notifyListeners();
+			return z;
+		}
+
+		@Override
+		public boolean zoomOut() {
+			final boolean z = super.zoomOut();
+			notifyListeners();
+			return z;
+		}
+
+		@Override
+		public boolean zoomOutFixing(int xPixel, int yPixel) {
+			final boolean z = super.zoomOutFixing(xPixel, yPixel);
+			notifyListeners();
+			return z;
+		}
+
+		@Override
+		public void zoomToSpan(int reqLatSpan, int reqLonSpan) {
+			super.zoomToSpan(reqLatSpan, reqLonSpan);
+			notifyListeners();
+		}
+
+		@Override
+		public void animateTo(IGeoPoint point) {
+			super.animateTo(point);
+			notifyListeners();
+		}
+	}
+
+	private MapController singletonCtrl;
+
+	@Override
+	public MapController getController(){
+		if (singletonCtrl == null)
+			singletonCtrl = new ScrollChangeMapController(this);
+		return singletonCtrl;
+	}
+
 	// ------------------------------------------------------------------------
 	// GETTERS / SETTERS
 	// ------------------------------------------------------------------------
@@ -87,6 +158,13 @@ public class ScrollChangeMapView extends MapView {
 	// TIMER RESETS
 	// ------------------------------------------------------------------------
 
+	public void notifyListeners(){
+		if (mChangeListener != null){
+			mChangeListener.onChange(mThis, getMapCenter(), 
+					mLastCenterPosition, getZoomLevel(), mLastZoomLevel);
+		}
+	}
+
 	private void resetMapChangeTimer()
 	{
 		mChangeDelayTimer.cancel();
@@ -96,11 +174,9 @@ public class ScrollChangeMapView extends MapView {
 			@Override
 			public void run()
 			{
-				if (mChangeListener != null){
-					Log.d("ScrollMap", "dispatching scroll");
-					mChangeListener.onChange(mThis, getMapCenter(), 
-							mLastCenterPosition, getZoomLevel(), mLastZoomLevel);
-				}
+
+				notifyListeners();
+
 				mLastCenterPosition = getMapCenter();
 				mLastZoomLevel = getZoomLevel();
 			}
