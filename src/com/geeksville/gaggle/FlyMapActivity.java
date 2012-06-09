@@ -32,8 +32,11 @@ import org.osmdroid.views.overlay.MyLocationOverlay;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.flurry.android.FlurryAgent;
@@ -48,7 +51,7 @@ import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
 
-public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
+public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, OnSharedPreferenceChangeListener {
 
 	/**
 	 * Extra data we look for in our Intent. If specified it will be a Bundle
@@ -69,6 +72,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	private WaypointOverlay wptOver;
 	private PolygonOverlay polyOver;
 
+	private AirspaceScrollListener airspace_scroll_lst;
 	private AltitudeView altitudeView;
 
 	/**
@@ -183,6 +187,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 		if (isLive){
 			showCurrentPosition(true);
 		}
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("airspace_enable", false)){
+			enableAirspaceManagement();
+		}
 	}
 
 	/**
@@ -267,28 +274,46 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 			}
 		}
 	}
-	
-	private void handleAirspaceTrigger(){
+//	
+//	private void handleAirspaceTrigger(){
+//		if (mapView.getOnScrollChangeListener() == null){
+//			mapView.setOnScrollChangeListener(new AirspaceScrollListener(polyOver));
+//		} else {
+//			mapView.setOnScrollChangeListener(null);
+//		}
+//	}
+
+	private void enableAirspaceManagement(){
 		if (mapView.getOnScrollChangeListener() == null){
-			mapView.setOnScrollChangeListener(new AirspaceScrollListener(polyOver));
-		} else {
-			mapView.setOnScrollChangeListener(null);
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			String host = prefs.getString("airspace_server_host", "http://airspace.kataplop.net:8888/api/v1");
+			airspace_scroll_lst = new AirspaceScrollListener(polyOver, host);
+			mapView.setOnScrollChangeListener(airspace_scroll_lst);
 		}
+		// else { error } => should not get enable if already enabled
 	}
+	private void disableAirspaceManagement(){
+		if (mapView.getOnScrollChangeListener() != null){
+			mapView.setOnScrollChangeListener(null);
+			airspace_scroll_lst = null;
+		}
+		// else { error } => should not get disable if already disabled
+	}
+
 	
 	/**
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-		case R.id.airspacemode_menu:
-			handleAirspaceTrigger();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//
+//		case R.id.airspacemode_menu:
+////			handleAirspaceTrigger();
+//			return true;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 	
 	@Override
 	protected void onPause() {
@@ -395,5 +420,20 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	public void update(Observable observable, Object data) {
 		mapView.postInvalidateDelayed(1000);
 
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		if(key.equals("airspace_enable")){
+			if (sharedPreferences.getBoolean(key, false)){
+				enableAirspaceManagement();
+			} else {
+				disableAirspaceManagement();
+			}
+		} else if (key.equals("airspace_server_host")){
+			if (airspace_scroll_lst != null)
+				airspace_scroll_lst.setHost(sharedPreferences.getString(key, ""));
+		}
 	}
 }

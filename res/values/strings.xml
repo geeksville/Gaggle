@@ -286,6 +286,8 @@ please email kevinh@geeksville.com.</string>
 	<string name="workaround_sgs_leap_bug">Galaxy date fix</string>
 	<string name="compensate_1day_offset_bug">Compensate the 1 day offset bug</string>
 	<string name="mapquestaerial_map">Mapquest Aerial</string>
-	<string name="airspace_pref">Airspace Prefs.</string>
+	<string name="airspace_prefs">Airspace Prefs.</string>
+	<string name="airspace_enable">Enable airspace management</string>
+	<string name="airspace_server_host">Server for getting airspace data</string>
 </resources>
   

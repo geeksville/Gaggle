@@ -142,6 +142,10 @@
 				android:entries="@array/coordinate_set_enum_names" android:entryValues="@array/coordinate_set_enum_vals" />
 				  
 		</PreferenceScreen>
+		<PreferenceScreen android:title="@string/airspace_prefs" android:key="airspace_prefs">
+			<CheckBoxPreference android:key="airspace_enable" android:title="@string/airspace_enable"/>
+			<EditTextPreference android:key="airspace_server_host" android:title="@string/airspace_server_host" android:defaultValue="http://airspace.kataplop.net/api/v1/"/>
+		</PreferenceScreen>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/logging_settings">

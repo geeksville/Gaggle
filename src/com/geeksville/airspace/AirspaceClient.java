@@ -13,16 +13,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.PolygonOverlay.GeoPolygon;
 
 public class AirspaceClient {
-	final String base_url = "http://airspace.kataplop.net:8888/api/v1/";
+	final String base_url;
 	final HttpClient httpclient = new DefaultHttpClient();
 
-	public AirspaceClient(){
+	public AirspaceClient(final String host){
+		this.base_url = host;
 	}
 	
 	private ArrayList<GeoPolygon> unpackPolyFromFeatureCollection(String json){

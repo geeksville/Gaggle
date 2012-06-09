@@ -14,10 +14,12 @@ public class AirspaceLoader extends AsyncTask<Void, Void, ArrayList<GeoPolygon>>
 	private BoundingBoxE6 screenBbox;
 	private final MapView mapView;
 	private final PolygonOverlay mPolys;
+	private final String host;
 	
-	public AirspaceLoader(MapView mapView, PolygonOverlay polys){
+	public AirspaceLoader(MapView mapView, PolygonOverlay polys, final String host){
 		this.mapView = mapView;
 		this.mPolys = polys;
+		this.host = host;
 	}
 	
 	@Override
@@ -27,7 +29,7 @@ public class AirspaceLoader extends AsyncTask<Void, Void, ArrayList<GeoPolygon>>
 
 	@Override
 	protected ArrayList<GeoPolygon> doInBackground(Void... params) {
-		AirspaceClient ac = new AirspaceClient();
+		AirspaceClient ac = new AirspaceClient(host);
 		final ArrayList<GeoPolygon> ret = ac.getAirspaces(screenBbox.getLatNorthE6()/1E6, screenBbox.getLonWestE6()/1E6,
 				screenBbox.getLatSouthE6()/1E6, screenBbox.getLonEastE6()/1E6);
 		return ret;
@@ -41,5 +43,4 @@ public class AirspaceLoader extends AsyncTask<Void, Void, ArrayList<GeoPolygon>>
 		}
 		mapView.invalidate();
 	}
-
 }
