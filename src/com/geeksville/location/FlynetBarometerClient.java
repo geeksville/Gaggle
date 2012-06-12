@@ -11,59 +11,53 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.geeksville.android.PreferenceUtil;
+import com.geeksville.util.LinearRegression;
+
 /**
- * A client for scott@cnes.com bluetooth vario
+ * A client for the FlyNet bluetooth vario
  * 
- * @author kevinh
- * 
- *         On Mon, Feb 6, 2012 at 11:47 AM, Scott Jepson <scott@cnes.com> wrote:
- * 
- *         Hi Kevin, So here's the output from the bluetooth barometer:
- *         printf("V%06ld A%07ld P%06ld B%03ld\r\n",Vspd,Alt,Pressure,**Battery)
- * 
- *         Vspd=CM/S and looks like 000005 or -00005 Alt=CM and looks like
- *         0038002 which would be 380.02 Meters Pressure=Pa and looks like
- *         096840 Battery=Volts and looks like 032 which would be 3.2 volts
- * 
- *         So the whole output looks like: V000005 A0038002 P096840 B032
- * 
- *         How fast do you want the data samples sent? So far I can do 25
- *         samples a second.
- * 
- * 
- *         -Scott
+ * @author relet
  */
-public class BluetoothBarometerClient extends Observable implements
+
+public class FlynetBarometerClient extends Observable implements
     IBarometerClient, Runnable {
 
-  private static final String TAG = "BluetoothBarometerClient";
+  private static final String TAG = "FlynetBarometerClient";
 
   // / What device name do we look for?
-  private static final String myName = "BlueBaro";
+  private static final String myName = "FlyNet";
 
-  // private static final int myClass = 0xa01; // See
-  // http://developer.android.com/reference/android/bluetooth/BluetoothClass.Device.html,
-  // for now I'm guessing at a
-  // value
+  // Commands recognized by the FlyNet device
+  private final String CMD_PRESSURE    = "_PRS";
+  private final String CMD_BATTERY     = "_BAT";
+  @SuppressWarnings("unused")
+  private final String CMD_DEVICENAME  = "_USR";
 
   /** A unique ID for our app */
-  private UUID uuid = UUID.fromString("b00d0c47-899b-4484-810a-5b27a514e906");
+  private UUID uuid = UUID.fromString("b00d0c47-899b-4484-810a-5b47a516e906");
 
   private BluetoothDevice device;
   private Thread thread;
 
-  private float altitude, vspd, batVoltage, pressure;
+  private float batPercentage, pressure, altitude;
+  private boolean isCharging = false;
 
   // / true if we've been set based on the GPS
   private boolean isCalibrated = false;
 
+  // / Defaults to 1013.25 hPa
+  private float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
+  LinearRegression regression = new LinearRegression();
+
   private Context context;
 
-  public BluetoothBarometerClient(Context context) {
+  public FlynetBarometerClient(Context context) {
     this.context = context;
     this.device = findDevice();
 
@@ -75,13 +69,19 @@ public class BluetoothBarometerClient extends Observable implements
     // shut it down gracefully when the number of observers drops to zero. This
     // will have the nice effect of only talking
     // to the bluetooth baro when we actually need its data.
-    thread = new Thread(this, "BluetoothBaro");
+    thread = new Thread(this, "FlyNet");
     thread.setDaemon(true);
     thread.start();
+    
+    long xspan = (long) (PreferenceUtil.getFloat(context,
+        "integration_period2", 0.7f) * 1000);
+    regression.setXspan(xspan);
   }
 
   static boolean isAvailable() {
-    return findDevice() != null;
+    BluetoothDevice found = findDevice();
+    Log.d(TAG, "Found devices: " + found);
+    return found != null;
   }
 
   private static BluetoothDevice findDevice() {
@@ -106,7 +106,15 @@ public class BluetoothBarometerClient extends Observable implements
 
   @Override
   public void setAltitude(float meters) {
-    // FIXME - apply correction from GPS based altitude
+    // float p0 = 1013.25f; // Pressure at sea level (hPa)
+    // float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
+    float p0 = pressure / (float) Math.pow((1 - meters / 44330), 5.255);
+
+    reference = p0;
+    altitude = SensorManager.getAltitude(reference, pressure);
+
+    Log.w(TAG, "Setting baro reference to " + reference + " alt=" + meters);
+    isCalibrated = true;
   }
 
   @Override
@@ -114,9 +122,23 @@ public class BluetoothBarometerClient extends Observable implements
     return altitude;
   }
 
+  public float getPressure() {
+    return pressure;
+  }
+  public float getBattery() {
+    return Float.NaN;
+    // FIXME - if we know the battery size, we can calculate this from the percentage.
+  }
+  public float getBatteryPercent() {
+    return batPercentage;
+  }
+  public boolean isCharging() {
+    return isCharging;
+  }
+
   @Override
   public float getVerticalSpeed() {
-    return vspd;
+    return regression.getSlope() * 1000;
   }
 
   @Override
@@ -124,29 +146,28 @@ public class BluetoothBarometerClient extends Observable implements
     if (isCalibrated)
       l.setAltitude(altitude);
   }
-
+  
   private void handleMessage(String m) {
-    /**
-     * Hi Kevin, So here's the output from the bluetooth barometer:
-     * printf("V%06ld A%07ld P%06ld B%03ld\r\n",Vspd,Alt,Pressure,**Battery)
-     * 
-     * Vspd=CM/S and looks like 000005 or -00005 Alt=CM and looks like 0038002
-     * which would be 380.02 Meters Pressure=Pa and looks like 096840
-     * Battery=Volts and looks like 032 which would be 3.2 volts
-     * 
-     * So the whole output looks like: V000005 A0038002 P096840 B032
-     */
-    vspd = Integer.parseInt(m.substring(1, 1 + 6)) / 100.0f; // avoid using
-                                                             // split,
-    // because it generates
-    // lots of allocs
-    altitude = Integer.parseInt(m.substring(9, 9 + 7)) / 100.f;
-
-    // convert pressure from Pa to hPa
-    pressure = Integer.parseInt(m.substring(18, 18 + 6)) / 100.f;
-
-    batVoltage = Integer.parseInt(m.substring(26, 26 + 3)) / 10.0f;
-
+    String cmd = m.substring(0,4);
+    if (cmd.equals(CMD_PRESSURE)) {
+      // "_PRS 17CBA\n" corresponds to 0x17CBA Pa
+      pressure = Integer.parseInt(m.substring(6,10), 16) / 100.f;
+      altitude = SensorManager.getAltitude(reference, pressure);
+      regression.addSample(System.currentTimeMillis(), altitude);
+    } else 
+    if (cmd.equals(CMD_BATTERY)) {
+      // "_BAT 9\n" corresponds to 90%
+      // "_BAT *\n" signals charging status
+      if (m.charAt(6) == '*') {
+        isCharging = true;
+      } else {
+        batPercentage = (m.charAt(6) - '0') / 10.f;
+        isCharging = false; // FIXME - may need a timeout if it actually alternates with the * message when charging
+      }
+    } 
+    
+    // TODO: calculate altitude and vertical speed if an initial altitude is given
+      
     // Tell the GUI/audio vario we have new state
     setChanged();
     notifyObservers(pressure);
