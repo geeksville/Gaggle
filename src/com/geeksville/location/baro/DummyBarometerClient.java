@@ -49,4 +49,22 @@ public class DummyBarometerClient implements IBarometerClient {
 
 	}
 
+	@Override
+	public float getPressure() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getBattery() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getBatteryPercent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

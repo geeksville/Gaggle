@@ -52,7 +52,7 @@ public class AndroidBarometerClient extends SensorClient implements
 
 	private Context context;
 
-	private static BarometerClient instance = null;
+	//private static BarometerClient instance = null;
 
 	public AndroidBarometerClient(Context context) {
 		super(context, Sensor.TYPE_PRESSURE);
@@ -124,6 +124,16 @@ public class AndroidBarometerClient extends SensorClient implements
 	public float getAltitude() {
 		return altitude;
 	}
+
+  public float getPressure() {
+    return pressure;
+  }
+  public float getBattery() {
+    return Float.NaN;
+  }
+  public float getBatteryPercent() {
+    return Float.NaN;
+  }
 
 	// / In m/s
 	/*

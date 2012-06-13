@@ -46,8 +46,11 @@ import com.geeksville.util.GaggleUncaughtExceptionHandler;
 /**
  * 
  * @author kevinh FIXME, add the following sources: http://toposm.com/usw/ Great
- *         topos here: http://openpistemap.org/?lat=41&lon=-100&zoom=12
- * 
+ *         topos here: http://openpistemap.org/?lat=41&lon=-100&zoom=12 - we should check the author allow such a usage
+ * 			FIXME : Most of the tiles here use openstreetmapdata, the licence needs that we attribute their work, but have no idea how to show that,
+ * 			so, at least, I'm doing it here : Copyright : openstreetmap.org & contributors CC-BY-SA. - sly
+ * 				
+ * 			FIXME : This should better be changed into a config setting and generic way to add map providers instead of hardcoded here - sly
  */
 public class GeeksvilleMapActivity extends Activity implements LifeCyclePublisher {
 

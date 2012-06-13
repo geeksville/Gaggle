@@ -30,6 +30,7 @@ import android.preference.PreferenceManager;
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient {
 
+  @SuppressWarnings("unused")
   private static final String TAG = "BarometerClient";
 
   private static IBarometerClient instance = null;
@@ -61,11 +62,13 @@ public class BarometerClient {
 				instance = new AndroidBarometerClient(context);
 			break;
 		case 1: //CNES
-			if (BluetoothBarometerClient.isAvailable())
-				instance = new BluetoothBarometerClient(context);
+			if (CNESBarometerClient.isAvailable())
+				instance = new CNESBarometerClient(context);
 			break;
 		case 3:
 			// FlyNet
+			if (FlynetBarometerClient.isAvailable())
+				instance = new FlynetBarometerClient(context);
 			break;
 		case 4:
 			// Test BT
