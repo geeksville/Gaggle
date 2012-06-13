@@ -204,5 +204,19 @@
 		<item>DMS</item>
 		<item>DM</item>
 		<item>D</item>
+	</string-array>
+	<string-array name="vario_sources_avail">
+		<item >internal</item>
+		<item >CNES (bluetooth)</item>
+		
+		<item >FlyNet (bluetooth)</item><item >Test (bluetooth)</item><item>dummy</item>
+		
+	</string-array>
+	<string-array name="vario_sources_avail_vals">
+		<item >0</item>
+		<item >1</item>
+		<item >2</item>
+		<item >3</item>
+		<item >5</item>
 	</string-array>													
 </resources>

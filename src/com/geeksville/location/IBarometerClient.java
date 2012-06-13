@@ -22,7 +22,7 @@ public interface IBarometerClient {
 	public abstract float getVerticalSpeed();
 
 	// / If we've been calibrated, override the GPS provided altitude with our
-	// aro based alt
+	// baro based alt
 	public void improveLocation(Location l);
 
 }

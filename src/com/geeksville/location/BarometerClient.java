@@ -20,7 +20,12 @@
  ******************************************************************************/
 package com.geeksville.location;
 
+import com.geeksville.gaggle.R;
+import com.geeksville.location.baro.DummyBarometerClient;
+
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient {
@@ -38,14 +43,38 @@ public class BarometerClient {
 
     SensorClient.initManager(context);
 
-    // Prefer to use external bluetooth device
-    if (instance == null && BluetoothBarometerClient.isAvailable())
-      instance = new BluetoothBarometerClient(context);
+	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-    if (instance == null && AndroidBarometerClient.isAvailable())
-      instance = new AndroidBarometerClient(context);
-
-    return instance;
+	final String vario_source = prefs.getString("vario_source", null);
+	int vario_src;
+	
+	if (vario_source == null){
+		return null;
+	} else {
+		vario_src = Integer.parseInt(vario_source);
+	}
+	
+	if (instance == null){
+		switch (vario_src){
+		case 0:
+			if (AndroidBarometerClient.isAvailable())
+				instance = new AndroidBarometerClient(context);
+			break;
+		case 1: //CNES
+			if (BluetoothBarometerClient.isAvailable())
+				instance = new BluetoothBarometerClient(context);
+			break;
+		case 3:
+			// FlyNet
+			break;
+		case 4:
+			// Test BT
+			break;
+		case 5:
+			instance = new DummyBarometerClient(context);
+			break;
+		}
+	}
+	return instance;
   }
-
 }

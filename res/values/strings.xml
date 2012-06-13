@@ -287,7 +287,11 @@ please email kevinh@geeksville.com.</string>
 	<string name="compensate_1day_offset_bug">Compensate the 1 day offset bug</string>
 	<string name="mapquestaerial_map">Mapquest Aerial</string>
 	<string name="airspace_prefs">Airspace Prefs.</string>
+	<string name="vario_source">Vario device</string>
+	<string name="vario_source_menu">Select vario device</string>
 	<string name="airspace_enable">Enable airspace management</string>
 	<string name="airspace_server_host">Server for getting airspace data</string>
+	<string name="use_baro">Use barometer</string>
+	<string name="use_audible_vario_descr">Beep with Vz</string>
 </resources>
   

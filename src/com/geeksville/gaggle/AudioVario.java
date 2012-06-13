@@ -80,9 +80,15 @@ public class AudioVario implements Observer, Runnable,
 
   private void createFromPreferences() {
     onDestroy(); // Tear down old devices
-
-    if (PreferenceUtil.getBoolean(context, "use_audible_vario", true)) {
-
+    final boolean use_baro = PreferenceUtil.getBoolean(context, "use_baro", false);
+    final boolean use_audio_vario = PreferenceUtil.getBoolean(context, "use_audible_vario", true); 
+    if (use_baro){
+        baro = BarometerClient.create(context);
+        if (baro != null)
+          baro.addObserver(this);
+    }
+    
+    if (use_audio_vario) {
       liftTone = new TonePlayer(PreferenceUtil.getFloat(context, "liftTone2",
           1100f));
       sinkTone = new TonePlayer(PreferenceUtil.getFloat(context, "sinkTone",
@@ -101,10 +107,6 @@ public class AudioVario implements Observer, Runnable,
           4.0f);
       minLiftHz = PreferenceUtil.getFloat(context, "minLiftHz", 1f);
       maxLiftHz = PreferenceUtil.getFloat(context, "maxLiftHz", 10f);
-
-      baro = BarometerClient.create(context);
-      if (baro != null)
-        baro.addObserver(this);
 
       // testTones();
     }

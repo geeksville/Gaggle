@@ -53,8 +53,7 @@
 		<PreferenceScreen android:key="vario_prefs"
 			android:title="@string/vario_preferences" android:summary="@string/only_for_devices_with_barometer_hardware" >
 
-			<CheckBoxPreference android:key="use_audible_vario" android:defaultValue="true"
-				android:title="@string/use_audible_vario" android:summary="@string/only_for_devices_with_barometer_hardware" />
+			<CheckBoxPreference android:summary="@string/only_for_devices_with_barometer_hardware" android:title="@string/use_baro" android:key="use_baro_device"/><CheckBoxPreference android:key="use_audible_vario" android:defaultValue="true" android:title="@string/use_audible_vario" android:summary="@string/use_audible_vario_descr" /><ListPreference android:summary="@string/vario_source_menu" android:title="@string/vario_source" android:key="vario_source" android:entries="@array/vario_sources_avail" android:entryValues="@array/vario_sources_avail_vals"/>
 					    
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="averaging_percentage2" android:title="@string/averaging_percentage"
@@ -114,7 +113,9 @@
 			<com.geeksville.view.EditTextPreferenceWithValue
 				android:key="sinkTone" android:title="@string/sink_tone"
 				android:summary="@string/sink_tone_frequency_hz_"
-				android:defaultValue="220" android:inputType="numberDecimal" />																
+				android:defaultValue="220" android:inputType="numberDecimal" />
+			
+																			
         		
 		</PreferenceScreen>
 				
