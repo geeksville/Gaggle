@@ -170,7 +170,7 @@ public class FlynetBarometerClient extends Observable implements
         if (m.charAt(5) == '*') {
           isCharging = true;
         } else {
-          batPercentage = (m.charAt(5) - '0') / 16.f;
+          batPercentage = Integer.parseInt(m.substring(5,6), 16) / 16.f;
           isCharging = false; // FIXME - may need a timeout if it actually alternates with the * message when charging
         }
       } 
