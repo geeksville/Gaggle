@@ -3,6 +3,8 @@ package com.geeksville.location;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Observable;
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,7 +34,9 @@ public class FlynetBarometerClient extends Observable implements
   private static final String TAG = "FlynetBarometerClient";
 
   // / What device name do we look for?
-  private static final String myName = "FlyNet";
+  // private static final String myName = "FlyNet";
+  // / What device type
+  private static final int myClass = 7936;
 
   // Commands recognized by the FlyNet device
   private final String CMD_PRESSURE    = "_PRS";
@@ -40,7 +45,7 @@ public class FlynetBarometerClient extends Observable implements
   private final String CMD_DEVICENAME  = "_USR";
 
   /** A unique ID for our app */
-  private UUID uuid = UUID.fromString("b00d0c47-899b-4484-810a-5b47a516e906");
+  private UUID uuid = UUID.fromString("b00d0c47-899b-4484-810a-5b27a514e906");
 
   private BluetoothDevice device;
   private Thread thread;
@@ -90,14 +95,12 @@ public class FlynetBarometerClient extends Observable implements
       Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
 
       for (BluetoothDevice device : pairedDevices) {
-
-        Log.d(TAG,
-            "Considering " + device.getName() + "@" + device.getAddress());
-
-        // if (device.getBluetoothClass().getDeviceClass() == myClass) return
-        // device;
-        if (device.getName().startsWith(myName))
+        if ((device.getBluetoothClass().getDeviceClass() == myClass)) {
+          Log.d(TAG,
+              "Connected to " + device.getName() + "@" + device.getAddress() + " which has device ID " + device.getBluetoothClass().getDeviceClass());
+          //if (device.getName().startsWith(myName))
           return device;
+        }
       }
     }
 
@@ -138,7 +141,11 @@ public class FlynetBarometerClient extends Observable implements
 
   @Override
   public float getVerticalSpeed() {
-    return regression.getSlope() * 1000;
+    try {
+      return regression.getSlope() * 1000;
+    } catch (ArithmeticException divByZero) {
+      return Float.NaN;
+    }
   }
 
   @Override
@@ -148,65 +155,81 @@ public class FlynetBarometerClient extends Observable implements
   }
   
   private void handleMessage(String m) {
-    String cmd = m.substring(0,4);
-    if (cmd.equals(CMD_PRESSURE)) {
-      // "_PRS 17CBA\n" corresponds to 0x17CBA Pa
-      pressure = Integer.parseInt(m.substring(6,10), 16) / 100.f;
-      altitude = SensorManager.getAltitude(reference, pressure);
-      regression.addSample(System.currentTimeMillis(), altitude);
-    } else 
-    if (cmd.equals(CMD_BATTERY)) {
-      // "_BAT 9\n" corresponds to 90%
-      // "_BAT *\n" signals charging status
-      if (m.charAt(6) == '*') {
-        isCharging = true;
-      } else {
-        batPercentage = (m.charAt(6) - '0') / 10.f;
-        isCharging = false; // FIXME - may need a timeout if it actually alternates with the * message when charging
-      }
-    } 
-    
-    // TODO: calculate altitude and vertical speed if an initial altitude is given
+    if (m.length()>4) {
+      String cmd = m.substring(0,4);
+      if (cmd.equals(CMD_PRESSURE)) {
+        // "_PRS 17CBA\n" corresponds to 0x17CBA Pa
+        pressure = Integer.parseInt(m.substring(5,10), 16) / 100.f;
+        altitude = SensorManager.getAltitude(reference, pressure);
+        regression.addSample(System.currentTimeMillis(), altitude);
+        //Log.d(TAG, "-> pressure = " + pressure + "\t altitude = "+altitude);
+      } else 
+      if (cmd.equals(CMD_BATTERY)) {
+        // "_BAT 9\n" corresponds to 90%
+        // "_BAT *\n" signals charging status
+        if (m.charAt(5) == '*') {
+          isCharging = true;
+        } else {
+          batPercentage = (m.charAt(5) - '0') / 16.f;
+          isCharging = false; // FIXME - may need a timeout if it actually alternates with the * message when charging
+        }
+      } 
       
-    // Tell the GUI/audio vario we have new state
-    setChanged();
-    notifyObservers(pressure);
+      // Tell the GUI/audio vario we have new state
+      setChanged();
+      notifyObservers(pressure);
+    }
   }
 
   /** The background thread that talks to device */
   @Override
   public void run() {
     BluetoothSocket socket = null;
-    try {
-      Toast.makeText(context, "Using Bluetooth Vario", Toast.LENGTH_LONG)
-          .show();
-
-      // FIXME, add outer loop to reconnect if bluetooth device is rebooted
-      socket = device.createRfcommSocketToServiceRecord(uuid);
-
-      // Connect the device through the socket. This will block
-      // until it succeeds or throws an exception
-      socket.connect();
-
-      // Read messages
-      BufferedReader reader = new BufferedReader(new InputStreamReader(
-          socket.getInputStream()));
-
-      String line;
-      while ((line = reader.readLine()) != null)
-        handleMessage(line);
-
-      reader.close();
-
-      socket.close();
-      socket = null;
-    } catch (IOException connectException) {
-      // close the socket and get out
+    Log.d(TAG, "Using FlyNet Vario");
+    //Toast.makeText(context, "Using FlyNet Vario", Toast.LENGTH_LONG) /* FIXME - can't create handler inside thread */
+    //    .show();
+      
+    while (true) {
+      Log.d(TAG, "Reconnecting to FlyNet Vario");
       try {
-        if (socket != null)
-          socket.close();
-      } catch (IOException closeException) {
-        // Ignore errors on close
+        //socket = device.createRfcommSocketToServiceRecord(uuid); /* NOTE - does not work in Android 2.1/2.2 */
+        BluetoothDevice hxm = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(device.getAddress());
+        Method m;
+        try {
+          m = hxm.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+          socket = (BluetoothSocket)m.invoke(hxm, Integer.valueOf(1));
+        } catch (Exception e) {
+          Log.d(TAG, "Error while creating socket", e);
+        }
+      
+        
+        // Connect the device through the socket. This will block
+        // until it succeeds or throws an exception
+        socket.connect();
+  
+        // Read messages
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+            socket.getInputStream()));
+  
+        String line;
+        while ((line = reader.readLine()) != null)
+          handleMessage(line);
+  
+        reader.close();
+  
+        Log.d(TAG, "Disconnected from FlyNet Vario");
+  
+        socket.close();
+        socket = null;
+      } catch (IOException connectException) {
+        // close the socket and get out
+        Log.d(TAG, "Error while connecting", connectException);
+        try {
+          if (socket != null)
+            socket.close();
+        } catch (IOException closeException) {
+          // Ignore errors on close
+        }
       }
     }
   }
