@@ -37,7 +37,7 @@ import android.widget.Toast;
  * 
  *         -Scott
  */
-public class BluetoothBarometerClient extends Observable implements
+public class CNESBarometerClient extends Observable implements
     IBarometerClient, Runnable {
 
   private static final String TAG = "BluetoothBarometerClient";
@@ -63,7 +63,7 @@ public class BluetoothBarometerClient extends Observable implements
 
   private Context context;
 
-  public BluetoothBarometerClient(Context context) {
+  public CNESBarometerClient(Context context) {
     this.context = context;
     this.device = findDevice();
 
@@ -109,6 +109,10 @@ public class BluetoothBarometerClient extends Observable implements
     // FIXME - apply correction from GPS based altitude
   }
 
+  public float getPressure() {
+    return pressure;
+  }
+
   @Override
   public float getAltitude() {
     return altitude;
@@ -117,6 +121,14 @@ public class BluetoothBarometerClient extends Observable implements
   @Override
   public float getVerticalSpeed() {
     return vspd;
+  }
+
+  public float getBattery() {
+    return batVoltage;
+  }
+
+  public float getBatteryPercent() {
+    return Float.NaN; //FIXME
   }
 
   @Override
