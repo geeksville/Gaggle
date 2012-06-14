@@ -86,6 +86,11 @@ public class AudioVario implements Observer, Runnable,
         baro = BarometerClient.create(context);
         if (baro != null)
           baro.addObserver(this);
+    } else {
+    	if (baro != null){
+    		baro.deleteObserver(this);
+    		baro = null;
+    	}
     }
     
     if (use_audio_vario) {

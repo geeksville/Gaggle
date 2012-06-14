@@ -20,7 +20,6 @@
  ******************************************************************************/
 package com.geeksville.location;
 
-import com.geeksville.gaggle.R;
 import com.geeksville.location.baro.DummyBarometerClient;
 
 import android.content.Context;
@@ -34,7 +33,7 @@ public class BarometerClient {
   private static final String TAG = "BarometerClient";
 
   private static IBarometerClient instance = null;
-
+  
   /**
    * All users of barometer share the same (expensive) instance
    * 
@@ -55,20 +54,28 @@ public class BarometerClient {
 		vario_src = Integer.parseInt(vario_source);
 	}
 	
+	/*
+	 * if you've changed this pref after having created an instance
+	 * then you'll have to stick to this instance until you restart.
+	 * Else, we should transfer observers from one observable to the new one.
+	 */
 	if (instance == null){
 		switch (vario_src){
 		case 0:
-			if (AndroidBarometerClient.isAvailable())
+			if (AndroidBarometerClient.isAvailable()){
 				instance = new AndroidBarometerClient(context);
+			}
 			break;
 		case 1: //CNES
-			if (CNESBarometerClient.isAvailable())
+			if (CNESBarometerClient.isAvailable()){
 				instance = new CNESBarometerClient(context);
+			}
 			break;
 		case 3:
 			// FlyNet
-			if (FlynetBarometerClient.isAvailable())
+			if (FlynetBarometerClient.isAvailable()){
 				instance = new FlynetBarometerClient(context);
+			}
 			break;
 		case 4:
 			// Test BT
