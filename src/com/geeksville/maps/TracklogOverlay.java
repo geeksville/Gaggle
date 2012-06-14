@@ -32,6 +32,8 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 
 	LocationList tracklog;
 
+  public final int DETAIL_THRESHOLD = 1000; //the last n points that are drawn with full color detail 
+
 	/**
 	 * Max up/down millimeter/sec -- FIXME: set according to vario limits
 	 */
@@ -45,7 +47,7 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
   private ArrayList<Point> mPoints;
 	private ArrayList<Paint> mColors;
 
-  static final int POINT_BUFFER_SIZE = 4; //should be a multiple of 4
+  static final int POINT_BUFFER_SIZE = 256; //should be a multiple of 4
   private float[] mPointBuffer = new float[POINT_BUFFER_SIZE];
   private final Point mTempPoint1 = new Point();
   private final Point mTempPoint2 = new Point();
@@ -155,10 +157,13 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
                   buffer[bufferCount + 3] = screenPoint1.y;
                   bufferCount += 4;
                   
-                  if (bufferCount == POINT_BUFFER_SIZE)
-                  {
-                          canvas.drawLines(buffer, this.mColors.get(i));
-                          bufferCount = 0;
+                  if (i > size - DETAIL_THRESHOLD) {                // if we are in the detailed range 
+                    canvas.drawLines(buffer, this.mColors.get(i));  // paint with accurate colors
+                    bufferCount = 0;
+                  } else 
+                  if (bufferCount == POINT_BUFFER_SIZE) {           // else just paint in red
+                    canvas.drawLines(buffer, this.trackPaints[127]);
+                    bufferCount = 0;
                   }                               
                   
                   //update starting point to next position 
