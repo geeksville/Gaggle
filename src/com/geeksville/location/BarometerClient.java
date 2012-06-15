@@ -20,11 +20,13 @@
  ******************************************************************************/
 package com.geeksville.location;
 
+import com.geeksville.gaggle.R;
 import com.geeksville.location.baro.DummyBarometerClient;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient {
@@ -33,7 +35,8 @@ public class BarometerClient {
   private static final String TAG = "BarometerClient";
 
   private static IBarometerClient instance = null;
-  
+  private static int instance_type;
+
   /**
    * All users of barometer share the same (expensive) instance
    * 
@@ -64,17 +67,20 @@ public class BarometerClient {
 		case 0:
 			if (AndroidBarometerClient.isAvailable()){
 				instance = new AndroidBarometerClient(context);
+				instance_type = vario_src;
 			}
 			break;
 		case 1: //CNES
 			if (CNESBarometerClient.isAvailable()){
 				instance = new CNESBarometerClient(context);
+				instance_type = vario_src;
 			}
 			break;
 		case 3:
 			// FlyNet
 			if (FlynetBarometerClient.isAvailable()){
 				instance = new FlynetBarometerClient(context);
+				instance_type = vario_src;
 			}
 			break;
 		case 4:
@@ -82,8 +88,16 @@ public class BarometerClient {
 			break;
 		case 5:
 			instance = new DummyBarometerClient(context);
+			instance_type = vario_src;
 			break;
 		}
+	} else  if (instance != null && instance_type != vario_src){
+		// trying to create the baro again from a different source
+		CharSequence text = context.getString(R.string.baro_change_need_restart);
+		int duration = Toast.LENGTH_SHORT;
+
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
 	}
 	return instance;
   }
