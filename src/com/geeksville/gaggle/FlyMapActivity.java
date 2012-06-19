@@ -284,19 +284,21 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 //	}
 
 	private void enableAirspaceManagement(){
-		if (mapView.getOnScrollChangeListener() == null){
+//		if (mapView.getOnScrollChangeListener() == null){
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String host = prefs.getString("airspace_server_host", "http://airspace.kataplop.net:8888/api/v1");
-			airspace_scroll_lst = new AirspaceScrollListener(polyOver, host);
-			mapView.setOnScrollChangeListener(airspace_scroll_lst);
-		}
+			airspace_scroll_lst = new AirspaceScrollListener(mapView, polyOver, host);
+			mapView.setMapListener(airspace_scroll_lst);
+//			mapView.setOnScrollChangeListener(airspace_scroll_lst);
+//		}
 		// else { error } => should not get enable if already enabled
 	}
 	private void disableAirspaceManagement(){
-		if (mapView.getOnScrollChangeListener() != null){
-			mapView.setOnScrollChangeListener(null);
+//		if (mapView.getOnScrollChangeListener() != null){
+			//mapView.setOnScrollChangeListener(null);
+		mapView.setMapListener(null);
 			airspace_scroll_lst = null;
-		}
+//		}
 		// else { error } => should not get disable if already disabled
 	}
 
