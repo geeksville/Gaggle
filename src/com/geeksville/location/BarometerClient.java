@@ -26,6 +26,7 @@ import com.geeksville.location.baro.DummyBarometerClient;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
@@ -50,7 +51,7 @@ public class BarometerClient {
 
 	final String vario_source = prefs.getString("vario_source", null);
 	int vario_src;
-	
+
 	if (vario_source == null){
 		return null;
 	} else {
