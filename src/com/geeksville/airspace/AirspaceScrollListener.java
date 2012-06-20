@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.geeksville.maps.PolygonOverlay;
 
-//public class AirspaceScrollListener implements ScrollChangeMapView.OnChangeListener {
 public class AirspaceScrollListener implements MapListener {
 
 	private long mEventsTimeout = 250L; // Set this variable to your preferred timeout
@@ -37,7 +36,6 @@ public class AirspaceScrollListener implements MapListener {
 		mLastZoomLevel = mapView.getZoomLevel();
 	}
 
-
 	public void update() {
 		if (previous != null){
 			if (previous.getStatus().equals(AsyncTask.Status.PENDING) ||
@@ -53,7 +51,7 @@ public class AirspaceScrollListener implements MapListener {
 
 	@Override
 	public boolean onScroll(ScrollEvent scroll) {
-		if (mapView.getMapCenter().equals(mLastCenterPosition)){
+		if (! mapView.getMapCenter().equals(mLastCenterPosition)){
 			resetMapChangeTimer();
 		}
 		return true;
