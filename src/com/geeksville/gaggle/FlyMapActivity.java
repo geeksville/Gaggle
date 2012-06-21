@@ -37,7 +37,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.airspace.AirspaceScrollListener;
@@ -241,9 +240,6 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 		mapView.getOverlays().add(wptOver);
 	}
 
-	
-
-	
 	private void addPolyoverlay() {
 		polyOver = new PolygonOverlay(this);
 		mapView.getOverlays().add(polyOver);
@@ -286,9 +282,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 	private void enableAirspaceManagement(){
 //		if (mapView.getOnScrollChangeListener() == null){
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			String host = prefs.getString("airspace_server_host", "http://airspace.kataplop.net:8888/api/v1");
-			airspace_scroll_lst = new AirspaceScrollListener(mapView, polyOver, host);
+			airspace_scroll_lst = new AirspaceScrollListener(mapView, polyOver, prefs);
 			mapView.setMapListener(airspace_scroll_lst);
+			airspace_scroll_lst.update();
 //			mapView.setOnScrollChangeListener(airspace_scroll_lst);
 //		}
 		// else { error } => should not get enable if already enabled
@@ -433,9 +429,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 			} else {
 				disableAirspaceManagement();
 			}
-		} else if (key.equals("airspace_server_host")){
+		} else {
 			if (airspace_scroll_lst != null)
-				airspace_scroll_lst.setHost(sharedPreferences.getString(key, ""));
+				airspace_scroll_lst.refresh(sharedPreferences, key);
 		}
 	}
 }

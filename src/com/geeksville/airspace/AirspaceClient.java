@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
 
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.geeksville.maps.PolygonOverlay;
@@ -22,9 +21,13 @@ import com.geeksville.maps.PolygonOverlay.GeoPolygon;
 public class AirspaceClient {
 	final String base_url;
 	final HttpClient httpclient = new DefaultHttpClient();
-
-	public AirspaceClient(final String host){
+	final String []classes;
+	final int maxfloor;
+	
+	public AirspaceClient(final String host, final String[] classes, final int maxfloor){
 		this.base_url = host;
+		this.classes = classes;
+		this.maxfloor = maxfloor;
 	}
 	
 	private ArrayList<GeoPolygon> unpackPolyFromFeatureCollection(String json){
@@ -53,11 +56,22 @@ public class AirspaceClient {
 	}
 
 	public ArrayList<GeoPolygon> getAirspaces(double latN, double lonW, double latS, double lonE){
-		final String req = base_url + "airspaces/bbox/?format=json&q=" +
+		String req = base_url + "airspaces/bbox/?format=json&q=" +
 				lonW + "," + latS + "," + 
 				lonE + "," + latN;
 		// "?q=5.102019,44.937484,6.337981,45.421488"
 
+		if (this.classes.length > 0){
+			req+="&clazz=";
+			for (int i=0; i<this.classes.length; i++){
+				if (i>0) req+=",";
+				req+=this.classes[i];
+			}
+		}
+//		if (this.maxfloor != 0){
+//			req += "&limit=" + maxfloor;
+//		}
+		
 		HttpGet get = new HttpGet(req);
 
 		try {
@@ -88,6 +102,7 @@ public class AirspaceClient {
 			req += ";" + id[i];
 		}
 		req += "/?format=json";
+		
 		final HttpGet get = new HttpGet(req);
 
 		try {

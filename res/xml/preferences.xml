@@ -146,6 +146,8 @@
 		<PreferenceScreen android:title="@string/airspace_prefs" android:key="airspace_prefs">
 			<CheckBoxPreference android:key="airspace_enable" android:title="@string/airspace_enable"/>
 			<EditTextPreference android:key="airspace_server_host" android:title="@string/airspace_server_host" android:defaultValue="http://airspace.kataplop.net/api/v1/"/>
+			<MultiSelectListPreference android:entries="@array/airspace_classes" android:key="airspace_filter_class_pref" android:title="@string/airspace_filter_class" android:entryValues="@array/airspace_classes" android:defaultValue="@array/airspace_classes"/>
+			<EditTextPreference android:key="airspace_filter_max_floor_pref" android:title="@string/airspace_filter_max_floor" android:defaultValue="3000"/>
 		</PreferenceScreen>
 	</PreferenceCategory>
 
