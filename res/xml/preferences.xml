@@ -149,6 +149,9 @@
 			<MultiSelectListPreference android:entries="@array/airspace_classes" android:key="airspace_filter_class_pref" android:title="@string/airspace_filter_class" android:entryValues="@array/airspace_classes" android:defaultValue="@array/airspace_classes"/>
 			<EditTextPreference android:key="airspace_filter_max_floor_pref" android:title="@string/airspace_filter_max_floor" android:defaultValue="3000"/>
 		</PreferenceScreen>
+		<PreferenceScreen android:key="weather_prefs" android:title="@string/weather_prefs">
+			<CheckBoxPreference android:key="weather_stations_enable" android:title="@string/weather_enable"/>
+		</PreferenceScreen>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/logging_settings">

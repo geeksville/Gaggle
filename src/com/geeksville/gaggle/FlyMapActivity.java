@@ -49,6 +49,9 @@ import com.geeksville.maps.GeeksvilleMapActivity;
 import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
+import com.geeksville.weather.StationProviderable;
+import com.geeksville.weather.ffvl.FFVLStationProvider;
+import com.geeksville.weather.overlay.WeatherStationsOverlay;
 
 public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, OnSharedPreferenceChangeListener {
 
@@ -70,6 +73,8 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 
 	private WaypointOverlay wptOver;
 	private PolygonOverlay polyOver;
+
+	private WeatherStationsOverlay weather_overlay;
 
 	private AirspaceScrollListener airspace_scroll_lst;
 	private AltitudeView altitudeView;
@@ -189,6 +194,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("airspace_enable", false)){
 			enableAirspaceManagement();
 		}
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("weather_stations_enable", false)){
+			enableWeatherStations();
+		}
 	}
 
 	/**
@@ -236,7 +244,6 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 
 	private void addWaypoints() {
 		wptOver = new WaypointOverlay(this, mapView);
-
 		mapView.getOverlays().add(wptOver);
 	}
 
@@ -298,7 +305,16 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 		// else { error } => should not get disable if already disabled
 	}
 
-	
+	private void enableWeatherStations(){
+		StationProviderable provider = new FFVLStationProvider();
+		weather_overlay = new WeatherStationsOverlay(this, provider, null);
+		mapView.getOverlays().add(weather_overlay);
+	}
+
+	private void disableWeatherStations(){
+		mapView.getOverlays().remove(weather_overlay);
+	}
+
 	/**
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
@@ -428,6 +444,12 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 				enableAirspaceManagement();
 			} else {
 				disableAirspaceManagement();
+			}
+		} else if (key.equals("weather_stations_enable")) {
+			if (sharedPreferences.getBoolean(key, false)){
+				enableWeatherStations();
+			} else {
+				disableWeatherStations();
 			}
 		} else {
 			if (airspace_scroll_lst != null)
