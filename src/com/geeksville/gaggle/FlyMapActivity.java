@@ -37,6 +37,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.airspace.AirspaceScrollListener;
@@ -195,6 +196,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 			enableAirspaceManagement();
 		}
 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("weather_stations_enable", false)){
+			Log.d("FMA", "weather enabled on start");
 			enableWeatherStations();
 		}
 	}
@@ -307,11 +309,13 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 
 	private void enableWeatherStations(){
 		StationProviderable provider = new FFVLStationProvider();
+		Log.d("FMA", "Enabling weather");
 		weather_overlay = new WeatherStationsOverlay(this, provider, null);
 		mapView.getOverlays().add(weather_overlay);
 	}
 
 	private void disableWeatherStations(){
+		Log.d("FMA", "Disabling weather");
 		mapView.getOverlays().remove(weather_overlay);
 	}
 

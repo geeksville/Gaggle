@@ -4,43 +4,34 @@ import java.util.Map;
 
 import org.osmdroid.util.GeoPoint;
 
+import android.util.Log;
+
 import com.geeksville.weather.Station;
 
 public class FFVLStation extends Station {
+	private final Map<String,String> extra;
+	private final boolean enabled;
 
-	public FFVLStation(String aTitle, String aDescription, GeoPoint aGeoPoint) {
-		super(aTitle, aDescription, aGeoPoint);
-		// TODO Auto-generated constructor stub
+	public FFVLStation(String id, String name, GeoPoint location, Map<String,String> extra, boolean enabled) {
+		super(name, name, location);
+		this.extra = extra;
+		this.enabled = enabled;
+		Log.d("FFVLStation", "Created station: \n" +
+				"- " + id + "\n" +
+				"- " + name + "\n" +
+				"- lat: " + location.getLatitudeE6() + "\n" +
+				"- lon: " + location.getLongitudeE6() + "\n");
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public float getAltitude() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public final GeoPoint getLocation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public final Map<String, String> getExtraInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		return extra;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return enabled;
 	}
 
 	@Override

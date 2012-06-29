@@ -15,24 +15,8 @@ public class DummyStation extends Station {
 		// TODO Auto-generated constructor stub
 	}
 
-	private final static String name = "Dummy Station";
-	private final static GeoPoint location = new GeoPoint(45.194277, 5.731634);
+	private final static GeoPoint location = new GeoPoint(45.194277, 5.731634, 1000);
 	private final static HashMap<String,String> extra = new HashMap<String,String>();
-	
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public float getAltitude() {
-		return 1000F;
-	}
-
-	@Override
-	public final GeoPoint getLocation() {
-		return location;
-	}
 
 	@Override
 	public final Map<String, String> getExtraInfo() {
