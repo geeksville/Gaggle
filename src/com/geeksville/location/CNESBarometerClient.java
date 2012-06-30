@@ -83,6 +83,10 @@ public class CNESBarometerClient extends Observable implements
   static boolean isAvailable() {
     return findDevice() != null;
   }
+  
+  public String getStatus() {
+    return "CNES";
+  }
 
   private static BluetoothDevice findDevice() {
     BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();

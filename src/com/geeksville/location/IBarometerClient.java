@@ -27,6 +27,9 @@ public interface IBarometerClient {
   // / Return battery charging status in Percent
   public abstract float getBatteryPercent();
 
+  // / Return a status messsage
+  public abstract String getStatus();
+
 	// / In m/s
 	public abstract float getVerticalSpeed();
 

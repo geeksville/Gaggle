@@ -22,6 +22,7 @@ package com.geeksville.location;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient {
@@ -47,6 +48,11 @@ public class BarometerClient {
       instance = new CNESBarometerClient(context);
     if (instance == null && AndroidBarometerClient.isAvailable())
       instance = new AndroidBarometerClient(context);
+    
+    /*if (instance != null)
+      Toast.makeText(context, "Discovered: "+instance.getStatus(), 1000);
+    else
+      Toast.makeText(context, "No barometer available.", 1000);*/
 
     return instance;
   }
