@@ -17,10 +17,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.geeksville.weather.Station;
 import com.geeksville.weather.StationProviderable;
+import com.geeksville.weather.overlay.WeatherStationsOverlay;
 
 public class FFVLStationProvider implements StationProviderable {
 
@@ -44,8 +47,30 @@ public class FFVLStationProvider implements StationProviderable {
 	private final String ACTIVE = "active";
 	private final String FORKYTE = "forKyte";
 
-	private void getStationsList(){
+	protected WeatherStationsOverlay overlay;
+	
+	private class DataLoader extends AsyncTask<Context, Void, ArrayList<Station>> {
+
+		@Override
+		protected ArrayList<Station> doInBackground(Context... params) {
+			return getStationsList(params[0]);
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<Station> fstations){
+			Log.d(TAG, "post execute");
+			stations.clear();
+			overlay.removeAllItems(false);
+			overlay.addItems(fstations);
+			
+			stations.addAll(fstations);
+		}
+	}
+
+	private ArrayList<Station> getStationsList(Context context){
 		InputStream xmlin = null;
+		final ArrayList<Station> mstations = new ArrayList<Station>();
+
 		try {
 			URL req = new URL(http_url);
 			xmlin = req.openConnection().getInputStream();
@@ -103,20 +128,20 @@ public class FFVLStationProvider implements StationProviderable {
                     	blon = Double.parseDouble(property.getAttribute(P_COORD_LON));
                     }
                 }
-                
+
                 blocation = new GeoPoint(blat, blon, balt);
-                Station s = new FFVLStation(bid, bname, blocation, bextra, benabled);
-                stations.add(s);
+                Station s = new FFVLStation(bid, bname, blocation, bextra, benabled, context);
+                mstations.add(s);
             }
         } catch (Exception e) {
         	Log.d(TAG, "Exception when reading XML...",e);
         }
+        Log.d(TAG, "Got " + mstations.size() + " weather stations");
+        return mstations;
 	}
 
-
-	public FFVLStationProvider(){
-		// do this as an AsyncTask
-		getStationsList();
+	public FFVLStationProvider(Context context){
+		new DataLoader().execute(context);
 	}
 
 	@Override
@@ -129,4 +154,13 @@ public class FFVLStationProvider implements StationProviderable {
 		return stations;
 	}
 
+	@Override
+	public WeatherStationsOverlay getOverlay() {
+		return this.overlay;
+	}
+
+	@Override
+	public void setOverlay(WeatherStationsOverlay overlay){
+		this.overlay = overlay;
+	}
 }

@@ -1,22 +1,25 @@
 package com.geeksville.weather;
 
+import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
 
-public abstract class Station extends OverlayItem implements Stationable {
+import com.geeksville.gaggle.R;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
+public abstract class Station extends ExtendedOverlayItem implements Stationable {
+
 	final protected GeoPoint location;
 	final protected String name;
 
-	public Station(String aUid, String aTitle, String aDescription,
-			GeoPoint aGeoPoint) {
-		super(aUid, aTitle, aDescription, aGeoPoint);
-		location = aGeoPoint;
-		name = aTitle;
-	}
-
-	public Station(String aTitle, String aDescription,
-			GeoPoint aGeoPoint) {
-		super(aTitle, aDescription, aGeoPoint);
+	public Station(String aTitle, String aDescription, GeoPoint aGeoPoint,
+			Context context) {
+		super(aTitle, aDescription, aGeoPoint, context);
+		Drawable marker = context.getResources().getDrawable(R.drawable.marker_node);
+		setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
+		setMarker(marker);
 		location = aGeoPoint;
 		name = aTitle;
 	}

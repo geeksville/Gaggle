@@ -6,13 +6,15 @@ import java.util.Map;
 
 import org.osmdroid.util.GeoPoint;
 
+import android.content.Context;
+
 import com.geeksville.weather.Station;
 
 public class DummyStation extends Station {
 
-	public DummyStation(String aTitle, String aDescription, GeoPoint aGeoPoint) {
-		super(aTitle, aDescription, aGeoPoint);
-		// TODO Auto-generated constructor stub
+	public DummyStation(String aTitle, String aDescription, GeoPoint aGeoPoint,
+			Context context) {
+		super(aTitle, aDescription, aGeoPoint, context);
 	}
 
 	private final static GeoPoint location = new GeoPoint(45.194277, 5.731634, 1000);

@@ -308,9 +308,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 	}
 
 	private void enableWeatherStations(){
-		StationProviderable provider = new FFVLStationProvider();
+		StationProviderable provider = new FFVLStationProvider(this);
 		Log.d("FMA", "Enabling weather");
-		weather_overlay = new WeatherStationsOverlay(this, provider, null);
+		weather_overlay = new WeatherStationsOverlay(this, mapView, provider);
 		mapView.getOverlays().add(weather_overlay);
 	}
 
