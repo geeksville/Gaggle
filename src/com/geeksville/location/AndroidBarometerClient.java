@@ -59,6 +59,10 @@ public class AndroidBarometerClient extends SensorClient implements
 		this.context = context;
 	}
 
+	public String getStatus() {
+    return "int.";
+  }
+
 	/*
 	 * (non-Javadoc)
 	 * 
