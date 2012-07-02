@@ -50,9 +50,12 @@ public class InfoBarometer extends InfoField implements Observer {
 	 * 
 	 * @see com.geeksville.info.InfoField#getText()
 	 */
+	private String status;
+	
 	@Override
-	public String getText() {
-		return String.format("%.2f", pressure);
+  public String getText() {
+	  status = (baro == null)?"(none)":baro.getStatus();
+		return String.format("%s %.2f", status, pressure);
 	}
 
 	/**
