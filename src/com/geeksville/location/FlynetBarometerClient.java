@@ -60,11 +60,7 @@ public class FlynetBarometerClient extends Observable implements
   private float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
   LinearRegression regression = new LinearRegression();
 
-  @SuppressWarnings("unused")
-  private Context context;
-  
   public FlynetBarometerClient(Context context) {
-    this.context = context;
     this.device = findDevice();
 
     long xspan = (long) (PreferenceUtil.getFloat(context,

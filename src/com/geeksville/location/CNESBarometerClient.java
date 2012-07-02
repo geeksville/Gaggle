@@ -61,10 +61,7 @@ public class CNESBarometerClient extends Observable implements
   // / true if we've been set based on the GPS
   private boolean isCalibrated = false;
 
-  private Context context;
-
   public CNESBarometerClient(Context context) {
-    this.context = context;
     this.device = findDevice();
 
     // We do all the real work in a background thread, so we don't stall and can
@@ -173,9 +170,6 @@ public class CNESBarometerClient extends Observable implements
   public void run() {
     BluetoothSocket socket = null;
     try {
-      Toast.makeText(context, "Using Bluetooth Vario", Toast.LENGTH_LONG)
-          .show();
-
       // FIXME, add outer loop to reconnect if bluetooth device is rebooted
       socket = device.createRfcommSocketToServiceRecord(uuid);
 

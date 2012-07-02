@@ -49,11 +49,6 @@ public class BarometerClient {
     if (instance == null && AndroidBarometerClient.isAvailable())
       instance = new AndroidBarometerClient(context);
     
-    /*if (instance != null)
-      Toast.makeText(context, "Discovered: "+instance.getStatus(), 1000);
-    else
-      Toast.makeText(context, "No barometer available.", 1000);*/
-
     return instance;
   }
 
