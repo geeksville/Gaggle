@@ -30,47 +30,47 @@ public class DummyMeasure implements Measure {
 	}
 
 	@Override
-	public float getWindSpeedAvg() {
+	public Float getWindSpeedAvg() {
 		return wavg;
 	}
 
 	@Override
-	public float getWindSpeedMax() {
+	public Float getWindSpeedMax() {
 		return wmax;
 	}
 
 	@Override
-	public float getWindSpeedMin() {
+	public Float getWindSpeedMin() {
 		return wmin;
 	}
 
 	@Override
-	public int getWindDirectionAvg() {
+	public Integer getWindDirectionAvg() {
 		return wdiravg;
 	}
 
 	@Override
-	public int getWindDirectionInst() {
+	public Integer getWindDirectionInst() {
 		return wdir;
 	}
 
 	@Override
-	public float getTemperature() {
+	public Float getTemperature() {
 		return temp;
 	}
 
 	@Override
-	public float getHumidity() {
+	public Float getHumidity() {
 		return humidity;
 	}
 
 	@Override
-	public float getPressure() {
+	public Float getPressure() {
 		return ps;
 	}
 
 	@Override
-	public float getLuminosity() {
+	public Float getLuminosity() {
 		return lumi;
 	}
 }

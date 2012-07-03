@@ -10,9 +10,12 @@ import com.geeksville.weather.Station;
 public class FFVLStation extends Station {
 	private final Map<String,String> extra;
 	private final boolean enabled;
-	
-	public FFVLStation(String id, String name, GeoPoint location, Map<String,String> extra, boolean enabled, Context context) {
+	private FFVLMeasure mMeasure;
+	public final int id;
+
+	public FFVLStation(int id, String name, GeoPoint location, Map<String,String> extra, boolean enabled, Context context) {
 		super(name, name, location, context);
+		this.id = id;
 		this.extra = extra;
 		this.enabled = enabled;
 	}
@@ -29,7 +32,12 @@ public class FFVLStation extends Station {
 
 	@Override
 	public final FFVLMeasure getMeasure() {
-		// TODO Auto-generated method stub
-		return null;
+		return mMeasure;
+	}
+
+	public void setFFVLMeasure(final FFVLMeasure measure){
+		this.mMeasure = measure;
+		this.setSubDescription("Max:" + mMeasure.getWindSpeedMax() + "\n" +
+				"Avg:" + mMeasure.getWindSpeedAvg());
 	}
 }

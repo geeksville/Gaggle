@@ -5,65 +5,73 @@ import java.util.Date;
 import com.geeksville.weather.Measure;
 
 public class FFVLMeasure implements Measure {
+	private final Date date;
+	private final Float wmin, wmax, wavg;
+	private final Integer wdirinst, wdiravg;
+	private final Float temp, hydro, press, lumi;
+
+	public FFVLMeasure(Date date, Float wind_min, Float wind_max, Float wind_avg,
+		Integer wind_dir, Integer wind_diravg,
+		Float temp, Float hydro, Float press, Float lumi){
+		this.date = date;
+		this.wmin = wind_min;
+		this.wmax = wind_max;
+		this.wavg = wind_avg;
+		this.wdirinst = wind_dir;
+		this.wdiravg = wind_diravg;
+		this.temp = temp;
+		this.hydro = hydro;
+		this.press = press;
+		this.lumi = lumi;
+	}
 
 	@Override
 	public Date getDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return date;
 	}
 
 	@Override
-	public float getWindSpeedAvg() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float getWindSpeedAvg() {
+		return wavg;
 	}
 
 	@Override
-	public float getWindSpeedMax() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float getWindSpeedMax() {
+		return wmax;
 	}
 
 	@Override
-	public float getWindSpeedMin() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float getWindSpeedMin() {
+		return wmin;
 	}
 
 	@Override
-	public int getWindDirectionAvg() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Integer getWindDirectionAvg() {
+		return wdiravg;
 	}
 
 	@Override
-	public int getWindDirectionInst() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Integer getWindDirectionInst() {
+		return wdirinst;
 	}
 
 	@Override
-	public float getTemperature() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float getTemperature() {
+		return temp;
 	}
 
 	@Override
-	public float getHumidity() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float getHumidity() {
+		return hydro;
 	}
 
 	@Override
-	public float getPressure() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float getPressure() {
+		return press;
 	}
 
 	@Override
-	public float getLuminosity() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float getLuminosity() {
+		return lumi;
 	}
-
 }
