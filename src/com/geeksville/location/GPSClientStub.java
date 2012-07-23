@@ -37,7 +37,7 @@ public class GPSClientStub implements ServiceConnection {
 	Context context;
 
 	public GPSClientStub(Context context) {
-		this.context = context;
+		this.context = context.getApplicationContext();
 
 		GPSClient.bindTo(context, this);
 	}
