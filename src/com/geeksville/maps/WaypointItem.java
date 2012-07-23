@@ -21,9 +21,11 @@
 package com.geeksville.maps;
 
 
+import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.widget.TextView;
@@ -34,7 +36,7 @@ import com.geeksville.info.Units;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.view.CaptionedDrawable;
 
-public class WaypointItem extends OverlayItem {
+public class WaypointItem extends ExtendedOverlayItem {
 
 	private static final String TAG = "WaypointItem";
 
@@ -47,8 +49,8 @@ public class WaypointItem extends OverlayItem {
 	 */
 	Drawable curIcon;
 
-	public WaypointItem(ExtendedWaypoint w, Paint captionPaint) {
-		super(w.name, "snippet", w.geoPoint);
+	public WaypointItem(ExtendedWaypoint w, Paint captionPaint, Context context) {
+		super(w.name, w.description, w.geoPoint, context);
 
 		this.w = w;
 		curIcon = w.getIcon();

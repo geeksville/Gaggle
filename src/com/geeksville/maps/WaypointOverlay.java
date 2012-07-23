@@ -25,12 +25,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.osmdroid.DefaultResourceProxyImpl;
+import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
@@ -48,7 +50,7 @@ import com.geeksville.location.Waypoint;
 import com.geeksville.location.WaypointCursor;
 import com.geeksville.location.WaypointDB;
 
-public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
+public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 		implements
 		Observer {
 
@@ -59,28 +61,31 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 	private WaypointDB db;
 	private WaypointCursor cursor;
 	private MapView view;
+	private Context context;
 
 	public WaypointOverlay(final Activity context, final MapView view) {
 		// per example, we want the bounds to be centered just below this
 		// drawable. We use a alpha channel to not obscure terrain too much...
 		// super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
-		super(new ArrayList<WaypointItem>(), context.getResources()
-				.getDrawable(R.drawable.flag), new OnItemGestureListener<WaypointItem>() {
+//		super(new ArrayList<WaypointItem>(), context.getResources()
+//				.getDrawable(R.drawable.flag), new OnItemGestureListener<WaypointItem>() {
+//
+//					@Override
+//					public boolean onItemLongPress(int arg0, WaypointItem arg1) {
+//						// TODO Auto-generated method stub
+//						return false;
+//					}
+//
+//					@Override
+//					public boolean onItemSingleTapUp(int index, WaypointItem item) {
+//						// TODO Auto-generated method stub
+//						view.getController().animateTo(item.mGeoPoint);
+//						item.handleTap(context);
+//						return true;
+//					}
+//				}, new DefaultResourceProxyImpl(context));
+		super(context, new ArrayList<WaypointItem>(), view, R.layout.bonuspack_bubble);
 
-					@Override
-					public boolean onItemLongPress(int arg0, WaypointItem arg1) {
-						// TODO Auto-generated method stub
-						return false;
-					}
-
-					@Override
-					public boolean onItemSingleTapUp(int index, WaypointItem item) {
-						// TODO Auto-generated method stub
-						view.getController().animateTo(item.mGeoPoint);
-						item.handleTap(context);
-						return true;
-					}
-				}, new DefaultResourceProxyImpl(context));
 //		mItemList = new ArrayList<WaypointItem>();
 
 		this.view = view;
@@ -97,6 +102,7 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 		// FIXME, close the backing DB when the waypoint cache is done with it
 		db = ((GaggleApplication) context.getApplication()).getWaypoints();
 
+		this.context = context.getApplicationContext();
 		fillFromDB(context);
 	}
 
@@ -121,7 +127,7 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 					mGeoPoint.getAltitude(), 0,
 					Waypoint.Type.Unknown.ordinal());
 			db.add(w);
-			WaypointItem item = new WaypointItem(w, captionPaint);
+			WaypointItem item = new WaypointItem(w, captionPaint, context);
 			addItem(item);
 			populate();
 			view.postInvalidate();
@@ -179,7 +185,7 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToPosition(i);
 			ExtendedWaypoint w = cursor.getWaypoint();
-			WaypointItem item = new WaypointItem(w, captionPaint);
+			WaypointItem item = new WaypointItem(w, captionPaint, context);
 			addItem(item);
 		}
 
