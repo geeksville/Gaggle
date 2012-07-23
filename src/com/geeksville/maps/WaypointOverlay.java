@@ -25,23 +25,26 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.api.IMapView;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.MapView.Projection;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.MotionEvent;
 
 import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.R;
 import com.geeksville.location.ExtendedWaypoint;
+import com.geeksville.location.Waypoint;
 import com.geeksville.location.WaypointCursor;
 import com.geeksville.location.WaypointDB;
 
@@ -49,14 +52,13 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 		implements
 		Observer {
 
+	private static final String TAG = "WaypointOverlay";
+
 	private final Paint captionPaint = new TextPaint();
 
 	private WaypointDB db;
 	private WaypointCursor cursor;
 	private MapView view;
-	private Activity context;
-
-//	private ArrayList<WaypointItem> mItemList;
 
 	public WaypointOverlay(final Activity context, final MapView view) {
 		// per example, we want the bounds to be centered just below this
@@ -81,12 +83,9 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 				}, new DefaultResourceProxyImpl(context));
 //		mItemList = new ArrayList<WaypointItem>();
 
-		this.context = context;
 		this.view = view;
-		captionPaint.setTextSize(captionPaint.getTextSize() + 3); // A bit
-		// bigger
-		// than the
-		// default
+		captionPaint.setTextSize(captionPaint.getTextSize() + 3); 
+		// A bit bigger than the default
 		captionPaint.setTextAlign(Align.CENTER);
 		captionPaint.setColor(Color.WHITE);
 		captionPaint.setShadowLayer(3, 1, 1, Color.BLACK);
@@ -99,6 +98,36 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 		db = ((GaggleApplication) context.getApplication()).getWaypoints();
 
 		fillFromDB(context);
+	}
+
+	@Override
+	public boolean onLongPress(MotionEvent event, MapView mapView) {
+		// Adapted from
+		// https://groups.google.com/forum/?fromgroups#!topic/osmdroid/HQrwVil-W6w
+		if (!super.onLongPress(event, mapView)) {
+			/* So we did not get an icon */
+			final Projection pj = mapView.getProjection();
+			final int eventX = (int) event.getX();
+			final int eventY = (int) event.getY();
+
+			GeoPoint mGeoPoint = (GeoPoint) pj.fromPixels(eventX, eventY);
+
+			java.util.Date now = new java.util.Date();
+			String name = DateFormat.format("yy/MM/dd kk:mm:ss", now)
+					.toString();
+
+			ExtendedWaypoint w = new ExtendedWaypoint(name,
+					mGeoPoint.getLatitudeE6()/1E6, mGeoPoint.getLongitudeE6()/1E6,
+					mGeoPoint.getAltitude(), 0,
+					Waypoint.Type.Unknown.ordinal());
+			db.add(w);
+			WaypointItem item = new WaypointItem(w, captionPaint);
+			addItem(item);
+			populate();
+			view.postInvalidate();
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -155,7 +184,8 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 		}
 
 		// FIXME, handle the addition of waypoints after the map is already up
-		// populate();
+		populate();
+		view.postInvalidate();
 	}
 
 	@Override
@@ -165,9 +195,7 @@ public class WaypointOverlay extends ItemizedIconOverlay<WaypointItem>
 //		// contents of the CaptionedDrawables
 //		// and then invalidate only if needed
 		boolean needRedraw = false;
-		for (int i = 0; i < mItemList.size(); i++) {
-			WaypointItem item = mItemList.get(i);
-
+		for (WaypointItem item : mItemList) {
 			needRedraw |= item.updateIcon();
 		}
 
