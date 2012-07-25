@@ -291,7 +291,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer, O
 	private void enableAirspaceManagement(){
 //		if (mapView.getOnScrollChangeListener() == null){
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			airspace_scroll_lst = new AirspaceScrollListener(mapView, polyOver, prefs);
+			airspace_scroll_lst = new AirspaceScrollListener(mapView, polyOver, prefs, this);
 			mapView.setMapListener(airspace_scroll_lst);
 			airspace_scroll_lst.update();
 //			mapView.setOnScrollChangeListener(airspace_scroll_lst);

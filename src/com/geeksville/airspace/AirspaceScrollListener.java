@@ -10,9 +10,12 @@ import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.views.MapView;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.geeksville.gaggle.R;
 import com.geeksville.maps.PolygonOverlay;
 
 public class AirspaceScrollListener implements MapListener {
@@ -28,13 +31,27 @@ public class AirspaceScrollListener implements MapListener {
 	
 	private String host;
 	private String[] classes;
+	private final String[] known_classes;
+	
 	private int maxfloor;
 	
-	public AirspaceScrollListener(MapView mapView, PolygonOverlay polys, SharedPreferences prefs){
+	public AirspaceScrollListener(MapView mapView, PolygonOverlay polys, SharedPreferences prefs, Context context){
 		this.mPolys = polys;
 		
 		this.host = prefs.getString("airspace_server_host", "http://airspace.kataplop.net:8888/api/v1");
-		this.classes = prefs.getStringSet("airspace_filter_class_pref", new HashSet<String>()).toArray(new String[0]);
+
+		this.known_classes = context.getResources().getStringArray(R.array.airspace_classes);
+		// If we could use MultiCheckbox from android >=3 ...
+		HashSet<String> checked = new HashSet<String>();
+		for (String clazz : known_classes){
+			if (prefs.getBoolean("airspace_filter_class_" + clazz, true)){
+				checked.add(clazz);
+			}
+		}
+		this.classes = checked.toArray(new String[0]);
+
+		// for multicheckbox... disabled for the moment.
+		//this.classes = prefs.getStringSet("airspace_filter_class_pref", new HashSet<String>()).toArray(new String[0]);
 		this.maxfloor = Integer.parseInt(prefs.getString("airspace_filter_max_floor_pref", "3000"));
 		
 		this.mapView = mapView;
@@ -90,9 +107,17 @@ public class AirspaceScrollListener implements MapListener {
 	public void refresh(final SharedPreferences prefs, final String key) {
 		if (key.equals("airspace_server_host")){
 			this.host = prefs.getString("airspace_server_host", "http://airspace.kataplop.net:8888/api/v1");
-		} else if (key.equals("airspace_filter_class_pref")){
-			this.classes = prefs.getStringSet("airspace_filter_class_pref",
-					new HashSet<String>()).toArray(new String[0]);
+		} else if (key.startsWith("airspace_filter_class_")){
+			// If we could use MultiCheckbox from android >=3 ...
+			HashSet<String> checked = new HashSet<String>();
+			for (String clazz : this.known_classes){
+				if (prefs.getBoolean("airspace_filter_class_" + clazz, true)){
+					checked.add(clazz);
+				}
+			}
+			this.classes = checked.toArray(new String[0]);
+//			this.classes = prefs.getStringSet("airspace_filter_class_pref",
+//					new HashSet<String>()).toArray(new String[0]);
 		} else if (key.equals("airspace_filter_max_floor_pref")){
 			this.maxfloor = Integer.parseInt(prefs.getString("airspace_filter_max_floor_pref", "3000"));
 		}

@@ -143,15 +143,7 @@
 				android:entries="@array/coordinate_set_enum_names" android:entryValues="@array/coordinate_set_enum_vals" />
 				  
 		</PreferenceScreen>
-		<PreferenceScreen android:title="@string/airspace_prefs" android:key="airspace_prefs">
-			<CheckBoxPreference android:key="airspace_enable" android:title="@string/airspace_enable"/>
-			<EditTextPreference android:key="airspace_server_host" android:title="@string/airspace_server_host" android:defaultValue="http://airspace.kataplop.net/api/v1/"/>
-			<MultiSelectListPreference android:entries="@array/airspace_classes" android:key="airspace_filter_class_pref" android:title="@string/airspace_filter_class" android:entryValues="@array/airspace_classes" android:defaultValue="@array/airspace_classes"/>
-			<EditTextPreference android:key="airspace_filter_max_floor_pref" android:title="@string/airspace_filter_max_floor" android:defaultValue="3000"/>
-		</PreferenceScreen>
-		<PreferenceScreen android:key="weather_prefs" android:title="@string/weather_prefs">
-			<CheckBoxPreference android:key="weather_stations_enable" android:title="@string/weather_enable"/>
-		</PreferenceScreen>
+		
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/logging_settings">
@@ -307,4 +299,51 @@
 		<CheckBoxPreference android:key="workaround_sgs_leap_bug" android:summary="@string/compensate_1day_offset_bug" android:title="@string/workaround_sgs_leap_bug"/>
 
 	</PreferenceCategory>
+	<PreferenceScreen android:title="@string/testing_pref_categ"><PreferenceScreen android:key="weather_prefs" android:title="@string/weather_prefs">
+			<CheckBoxPreference android:key="weather_stations_enable" android:title="@string/weather_enable" />
+		</PreferenceScreen><PreferenceScreen android:title="@string/airspace_prefs" android:key="airspace_prefs">
+			<CheckBoxPreference android:key="airspace_enable" android:title="@string/airspace_enable" />
+			<EditTextPreference android:key="airspace_server_host" android:title="@string/airspace_server_host" android:defaultValue="http://airspace.kataplop.net/api/v1/" />
+			<!-- <MultiSelectListPreference
+			     android:entries="@array/airspace_classes"
+			     android:key="airspace_filter_class_pref"
+			     android:title="@string/airspace_filter_class"
+			     android:entryValues="@array/airspace_classes"
+			     android:defaultValue="@array/airspace_classes" />
+			-->
+			<EditTextPreference android:key="airspace_filter_max_floor_pref" android:title="@string/airspace_filter_max_floor" android:defaultValue="3000" />
+			
+			<PreferenceScreen android:title="@string/airspace_filter_class" >
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_A"
+			        android:title="A" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_B"
+			        android:title="B" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_C"
+			        android:title="D" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_D"
+			        android:title="D" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_E"
+			        android:title="E" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_F"
+			        android:title="F" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_G"
+			        android:title="G" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_P"
+			        android:title="P" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_W"
+			        android:title="W" />
+			    <CheckBoxPreference
+			        android:key="airspace_filter_class_Q"
+			        android:title="Q" />
+</PreferenceScreen>
+		</PreferenceScreen></PreferenceScreen>
 </PreferenceScreen>
