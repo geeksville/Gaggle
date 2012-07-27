@@ -15,6 +15,7 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package com.geeksville.weather.ffvl;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -139,7 +140,7 @@ public class FFVLStationProvider implements StationProviderable {
 
 		try {
 			final URL req = new URL(measure_url);
-			final InputStream xmlin = req.openConnection().getInputStream();
+			final InputStream xmlin = new BufferedInputStream(req.openConnection().getInputStream());
 			DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
 
@@ -231,7 +232,7 @@ public class FFVLStationProvider implements StationProviderable {
 
 		try {
 			URL req = new URL(station_list_url);
-			xmlin = req.openConnection().getInputStream();
+			xmlin = new BufferedInputStream(req.openConnection().getInputStream());
 		} catch (MalformedURLException e) {
 			Log.e(TAG, "Error in URL for stations list", e);
 		} catch (IOException e) {
@@ -302,8 +303,8 @@ public class FFVLStationProvider implements StationProviderable {
 		final Handler handler = new Handler();
 		final Context appContext = context.getApplicationContext();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		final long measure_rrate = prefs.getLong("weather_ffvl_measures_refresh_rate", 2);
-		final long stationlist_rrate = prefs.getLong("weather_ffvl_station_refresh_rate", 10);
+		final long measure_rrate = Long.parseLong(prefs.getString("weather_ffvl_measures_refresh_rate", "2"));
+		final long stationlist_rrate = Long.parseLong(prefs.getString("weather_ffvl_station_refresh_rate", "10"));
 
 		/*
 		 * FIXME should save last update time
