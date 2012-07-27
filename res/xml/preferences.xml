@@ -301,6 +301,8 @@
 	</PreferenceCategory>
 	<PreferenceScreen android:title="@string/testing_pref_categ"><PreferenceScreen android:key="weather_prefs" android:title="@string/weather_prefs">
 			<CheckBoxPreference android:key="weather_stations_enable" android:title="@string/weather_enable" />
+			<EditTextPreference android:summary="@string/weather_ffvl_measures_refresh_rate_descr" android:title="@string/weather_ffvl_measures_refresh_rate" android:defaultValue="2" android:key="weather_ffvl_measures_refresh_rate"/>
+			<EditTextPreference android:summary="@string/weather_ffvl_station_refresh_rate_descr" android:title="@string/weather_ffvl_station_refresh_rate" android:defaultValue="10" android:key="weather_ffvl_station_refresh_rate"/>
 		</PreferenceScreen><PreferenceScreen android:title="@string/airspace_prefs" android:key="airspace_prefs">
 			<CheckBoxPreference android:key="airspace_enable" android:title="@string/airspace_enable" />
 			<EditTextPreference android:key="airspace_server_host" android:title="@string/airspace_server_host" android:defaultValue="http://airspace.kataplop.net/api/v1/" />

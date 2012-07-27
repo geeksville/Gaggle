@@ -35,7 +35,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.geeksville.weather.Station;
@@ -295,8 +298,43 @@ public class FFVLStationProvider implements StationProviderable {
         return mstations;
 	}
 
-	public FFVLStationProvider(Context context){
-		new StationListLoader().execute(context); // this will trigger a refesh for measure data
+	public FFVLStationProvider(final Context context){
+		final Handler handler = new Handler();
+		final Context appContext = context.getApplicationContext();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		final long measure_rrate = prefs.getLong("weather_ffvl_measures_refresh_rate", 2);
+		final long stationlist_rrate = prefs.getLong("weather_ffvl_station_refresh_rate", 10);
+
+		/*
+		 * FIXME should save last update time
+		 */
+		final Runnable stationsListUpdater = new Runnable() {
+			public void run() {
+				Log.d(TAG, "Requesting stations list update");
+				new StationListLoader().execute(appContext);
+				Log.d(TAG, "Delaying next request for stations list update in " + stationlist_rrate);
+				handler.postDelayed(this, stationlist_rrate * 3600 * 1000);
+			}
+		};
+
+		final Runnable measuresUpdater = new Runnable() {
+			public void run() {
+				if (!stations.isEmpty()){
+					Log.d(TAG, "Requesting measure update");
+					new MeasureLoader().execute();
+					Log.d(TAG, "Delaying next request for measure update in " + measure_rrate);
+					handler.postDelayed(this, measure_rrate * 1000 * 60);
+				} else {
+					// no stations ? Maybe the station list is not ready yet.
+					// backoff a little, do not hammer the CPU...
+					Log.d(TAG, "No station, backing off for measure update");
+					handler.postDelayed(this, 10);
+				}
+			}
+		};
+		handler.postDelayed(stationsListUpdater, 10);
+		// start slow, let the station list arrive :)
+		handler.postDelayed(measuresUpdater, 500);
 	}
 
 	@Override
