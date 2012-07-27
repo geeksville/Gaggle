@@ -15,8 +15,20 @@ public interface IBarometerClient {
 	// pressure is
 	public abstract void setAltitude(float meters);
 
-	// / Return altitude in meters
-	public abstract float getAltitude();
+  // / Return altitude in meters
+  public abstract float getAltitude();
+
+  // / Return pressure in hectoPascal
+  public abstract float getPressure();
+
+  // / Return battery charging status in Volt
+  public abstract float getBattery();
+
+  // / Return battery charging status in Percent
+  public abstract float getBatteryPercent();
+
+  // / Return a status messsage
+  public abstract String getStatus();
 
 	// / In m/s
 	public abstract float getVerticalSpeed();

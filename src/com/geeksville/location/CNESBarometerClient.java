@@ -37,7 +37,7 @@ import android.widget.Toast;
  * 
  *         -Scott
  */
-public class BluetoothBarometerClient extends Observable implements
+public class CNESBarometerClient extends Observable implements
     IBarometerClient, Runnable {
 
   private static final String TAG = "BluetoothBarometerClient";
@@ -61,10 +61,7 @@ public class BluetoothBarometerClient extends Observable implements
   // / true if we've been set based on the GPS
   private boolean isCalibrated = false;
 
-  private Context context;
-
-  public BluetoothBarometerClient(Context context) {
-    this.context = context;
+  public CNESBarometerClient(Context context) {
     this.device = findDevice();
 
     // We do all the real work in a background thread, so we don't stall and can
@@ -82,6 +79,10 @@ public class BluetoothBarometerClient extends Observable implements
 
   static boolean isAvailable() {
     return findDevice() != null;
+  }
+  
+  public String getStatus() {
+    return "CNES";
   }
 
   private static BluetoothDevice findDevice() {
@@ -109,6 +110,10 @@ public class BluetoothBarometerClient extends Observable implements
     // FIXME - apply correction from GPS based altitude
   }
 
+  public float getPressure() {
+    return pressure;
+  }
+
   @Override
   public float getAltitude() {
     return altitude;
@@ -117,6 +122,14 @@ public class BluetoothBarometerClient extends Observable implements
   @Override
   public float getVerticalSpeed() {
     return vspd;
+  }
+
+  public float getBattery() {
+    return batVoltage;
+  }
+
+  public float getBatteryPercent() {
+    return Float.NaN; //FIXME
   }
 
   @Override
@@ -157,9 +170,6 @@ public class BluetoothBarometerClient extends Observable implements
   public void run() {
     BluetoothSocket socket = null;
     try {
-      Toast.makeText(context, "Using Bluetooth Vario", Toast.LENGTH_LONG)
-          .show();
-
       // FIXME, add outer loop to reconnect if bluetooth device is rebooted
       socket = device.createRfcommSocketToServiceRecord(uuid);
 
