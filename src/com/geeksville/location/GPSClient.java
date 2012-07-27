@@ -102,6 +102,8 @@ public class GPSClient extends Service implements IGPSClient {
 
   private static Map<Context, Republisher> clients = new HashMap<Context, Republisher>();
 
+  private boolean galaxys_leap_year_fix;
+
   public GPSClient() {
     try {
       vario = new AudioVario();
@@ -262,6 +264,8 @@ public class GPSClient extends Service implements IGPSClient {
     super.onCreate();
 
     FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
+
+	galaxys_leap_year_fix = prefs.isGalaxySLeapYearBugWorkaroundEnabled();
 
     instance = this;
     manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -502,7 +506,7 @@ public class GPSClient extends Service implements IGPSClient {
   }
 
   /**
-   * We are no long interested in updates
+   * We are no longer interested in updates
    * 
    * @param l
    */
@@ -523,7 +527,6 @@ public class GPSClient extends Service implements IGPSClient {
   public Location getLastKnownLocation() {
     String provider = (simData != null) ? simData.getProvider()
         : LocationManager.GPS_PROVIDER;
-
     return manager.getLastKnownLocation(provider);
   }
 
@@ -557,6 +560,15 @@ public class GPSClient extends Service implements IGPSClient {
 
     @Override
     public synchronized void onLocationChanged(Location location) {
+
+    	// http://code.google.com/p/android/issues/detail?id=23937
+    	// Some Samsung phone have a bug that cause
+    	// the date from GPS to be offset by 1 day
+    	if (galaxys_leap_year_fix){
+    		Log.d("GPSClient", "time before:" + location.getTime());
+    		location.setTime(location.getTime() - 3600*24*1000);
+    		Log.d("GPSClient", "time after:" + location.getTime());
+    	}
 
       // If we receive a position update, assume the GPS is working
       currentStatus = AVAILABLE;
