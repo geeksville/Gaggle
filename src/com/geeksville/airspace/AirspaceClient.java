@@ -1,13 +1,10 @@
 package com.geeksville.airspace;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -71,24 +68,15 @@ public class AirspaceClient {
 //		if (this.maxfloor != 0){
 //			req += "&limit=" + maxfloor;
 //		}
-		
-		HttpGet get = new HttpGet(req);
 
 		try {
-			HttpResponse response = httpclient.execute(get);
-			StatusLine statusLine = response.getStatusLine();
-
-			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				response.getEntity().writeTo(out);
-				out.close();
-				String responseString = out.toString();
-				return unpackPolyFromFeatureCollection(responseString);
-			} else{
-				//Closes the connection.
-				response.getEntity().getContent().close();
-				//	        throw new IOException(statusLine.getReasonPhrase());
+			final BufferedReader r = new BufferedReader(new InputStreamReader(new URL(req).openConnection().getInputStream()));
+			final StringBuilder total = new StringBuilder();
+			String line;
+			while ((line = r.readLine()) != null) {
+			    total.append(line);
 			}
+			return unpackPolyFromFeatureCollection(total.toString());
 		} catch (Exception e){
 			Log.e("AirspaceC", "Something went wrong", e);
 		}
@@ -103,23 +91,14 @@ public class AirspaceClient {
 		}
 		req += "/?format=json";
 		
-		final HttpGet get = new HttpGet(req);
-
 		try {
-			HttpResponse response = httpclient.execute(get);
-			StatusLine statusLine = response.getStatusLine();
-			
-			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				response.getEntity().writeTo(out);
-				out.close();
-				String responseString = out.toString();
-				return unpackPolyFromFeatureCollection(responseString);
-			} else{
-				//Closes the connection.
-				response.getEntity().getContent().close();
-				//	        throw new IOException(statusLine.getReasonPhrase());
+			final BufferedReader r = new BufferedReader(new InputStreamReader(new URL(req).openConnection().getInputStream()));
+			final StringBuilder total = new StringBuilder();
+			String line;
+			while ((line = r.readLine()) != null) {
+			    total.append(line);
 			}
+			return unpackPolyFromFeatureCollection(total.toString());
 		} catch (Exception e){
 			Log.e("AirspaceC", "Something went wrong", e);
 		}
