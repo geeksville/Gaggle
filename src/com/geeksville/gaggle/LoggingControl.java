@@ -48,6 +48,7 @@ import com.geeksville.location.BarometerClient;
 import com.geeksville.location.GPSClient;
 import com.geeksville.location.GPSToPositionWriter;
 import com.geeksville.location.LeonardoLiveWriter;
+import com.geeksville.location.SkyLinesTrackingWriter;
 import com.geeksville.location.LocationDBWriter;
 import com.geeksville.location.LocationList;
 import com.geeksville.location.LocationListWriter;
@@ -411,6 +412,26 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
         // If we haven't already connected to the live server
         if (selected == null)
           selected = new PositionWriter[] { dbwriter, ramwriter };
+
+	if (prefs.isSkyLinesTrackingEnabled()) {
+		try {
+			long key = prefs.getSkyLinesKey();
+			if (key != 0) {
+				PositionWriter liveWriter =
+					new SkyLinesTrackingWriter(key,
+								   prefs.getSkyLinesTrackingInterval());
+
+				PositionWriter[] n =
+					new PositionWriter[selected.length + 1];
+				System.arraycopy(selected, 0, n, 0, selected.length);
+				n[selected.length] = liveWriter;
+				selected = n;
+			}
+		} catch (Exception ex) {
+			showCompletionDialog(LoggingControl.this.getString(R.string.skylines_problem),
+					     ex.getMessage());
+		}
+	}
 
         PositionWriter writer = new PositionWriterSet(selected);
 
