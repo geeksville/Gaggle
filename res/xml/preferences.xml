@@ -149,6 +149,10 @@
 		<CheckBoxPreference android:key="live_logging_pref"
 			android:title="@string/live_logging" android:summary="@string/using_a_leonardo_live_server" />
 
+		<CheckBoxPreference android:key="skylines_tracking"
+			android:title="@string/skylines_tracking"
+			android:summary="@string/skylines_tracking_summary" />
+
 		<CheckBoxPreference android:key="delayed_logging_pref"
 			android:title="@string/automatic_upload" android:summary="@string/using_a_leonardo_server" />
 
@@ -288,6 +292,21 @@
 				android:title="@string/leonardo_operation_timeout"
 				android:inputType="number" android:summary="@string/leonardo_operation_timeout_summary" 
 				android:defaultValue="30"/>
+		</PreferenceScreen>
+
+		<PreferenceScreen android:key="skylines_prefs"
+			android:title="@string/skylines_server" android:summary="@string/skylines_server_settings">
+
+			<EditTextPreference
+				android:key="skylines_key" android:title="@string/skylines_key"
+				android:inputType="text" />
+
+			<ListPreference
+				android:key="skylines_tracking_interval"
+				android:title="@string/interval"
+				android:summary="@string/live_time_between_each_position_update"
+				android:defaultValue="3" android:entries="@array/log_interval_names"
+				android:entryValues="@array/log_interval_vals" />
 		</PreferenceScreen>
 	</PreferenceCategory>
 

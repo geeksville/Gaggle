@@ -20,6 +20,7 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
+import java.math.BigInteger;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -65,6 +66,20 @@ public class GagglePrefs {
 
 		public int getLiveLogTimeInterval(){
 		String val = prefs.getString("livelog_update_freq_pref", "5");
+		return Integer.parseInt(val);
+	}
+
+	public long getSkyLinesKey() {
+		String val = prefs.getString("skylines_key", "0");
+		return new BigInteger(val, 16).longValue();
+	}
+
+	public boolean isSkyLinesTrackingEnabled() {
+		return prefs.getBoolean("skylines_tracking", false);
+	}
+
+	public int getSkyLinesTrackingInterval() {
+		String val = prefs.getString("skylines_tracking_interval", "5");
 		return Integer.parseInt(val);
 	}
 	

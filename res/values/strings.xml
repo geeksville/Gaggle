@@ -283,7 +283,14 @@ please email kevinh@geeksville.com.</string>
 	<string name="donate">Donate</string> 
 	<string name="vario_preferences">Vario Preferences</string>   
 	<string name="advanced">Advanced</string>
-	<string name="workaround_sgs_leap_bug">Galaxy date fix</string>
+    <string name="workaround_sgs_leap_bug">Galaxy date fix</string>
 	<string name="compensate_1day_offset_bug">Compensate the 1 day offset bug</string>
+
+	<string name="skylines_tracking">SkyLines live tracking</string>
+	<string name="skylines_tracking_summary">Enable SkyLines live tracking</string>
+	<string name="skylines_server">SkyLines server</string>
+	<string name="skylines_server_settings">SkyLines server settings</string>
+	<string name="skylines_key">SkyLines key</string>
+	<string name="skylines_problem">SkyLines problem</string>
 </resources>
   
