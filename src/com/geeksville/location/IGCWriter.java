@@ -87,27 +87,34 @@ public class IGCWriter implements PositionWriter {
 			this.sig = sig;
 		}
 
+		@Override
 		public void write(int b) throws IOException {
 			write(new byte[] { (byte) b });
 		}
 
+		@Override
 		public void write(byte[] b) throws IOException {
 			write(b, 0, b.length);
 		}
 
+		@Override
 		public void write(byte[] b, int offset, int len) throws IOException {
 			target.write(b, offset, len);
 			try {
-				sig.update(b, offset, len);
+				for (int i = 0; i < len; i++)
+					if (b[offset+i] != '\r' && b[offset+i] != '\n')
+						sig.update(b, offset + i, 1);
 			} catch (SignatureException ex) {
 				throw new IOException(ex);
 			}
 		}
 
+		@Override
 		public void flush() throws IOException {
 			target.flush();
 		}
 
+		@Override
 		public void close() throws IOException {
 			target.close();
 		}
@@ -134,7 +141,7 @@ public class IGCWriter implements PositionWriter {
 			sig = Signature.getInstance("SHA1withRSA");
 			PrivateKey pk = getPrivateKey(context);
 			sig.initSign(pk);
-			OutputStream dOut = new PrintStream(new SignatureOutputStream(dest, sig));
+			OutputStream dOut = new PrintStream(new LineEndingStream(new SignatureOutputStream(dest, sig)));
 			out = new PrintStream(dOut);
 		} catch (NoSuchAlgorithmException e) {
 			Log.e("IGCWriter", "No such algo");
