@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res/com.geeksville.gaggle"
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent" android:orientation="vertical">
-
-	<com.geeksville.info.InfoListView android:id="@id/android:list" app:row_layout_id="@layout/infodock_bigfont_row"
-		android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="10"/>
-
-	<LinearLayout android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:orientation="horizontal" android:layout_weight="1" android:layout_gravity="center" android:paddingBottom="5dip" android:paddingTop="5dip">
-
-		<Button android:id="@+id/LoggingOnOffButton"
-			android:layout_height="wrap_content" android:layout_width="wrap_content"
-			android:text="@string/start_flight" />
-
-		<TextView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:id="@+id/LabelLiveFlight"
-			android:text="@string/_status_" />
-	</LinearLayout>
-	
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <fragment android:name="com.geeksville.gaggle.fragments.LoggingControlFragment"
+            android:id="@+id/list"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 </LinearLayout>
-
-
