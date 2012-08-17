@@ -24,12 +24,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
 
 import android.app.Activity;
 import android.content.Context;

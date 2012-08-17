@@ -23,6 +23,8 @@ package com.geeksville.location;
 import java.util.Arrays;
 import java.util.Collection;
 
+import android.util.Log;
+
 import com.geeksville.android.InMemoryCursor;
 
 /**
@@ -36,6 +38,8 @@ public class WaypointCursor extends InMemoryCursor {
 
 	public static final String KEY_DIST_PILOTX = "distx";
 	public static final String KEY_DIST_PILOTY = "disty";
+
+	private static final String TAG = "WaypointCursor";
 
 	private static final String[] colNames = {
 			LocationLogDbAdapter.KEY_ROWID, // must be first to support updates
@@ -87,7 +91,6 @@ public class WaypointCursor extends InMemoryCursor {
 
 	@Override
 	protected boolean updateCurRow(int oldPosition, int newPosition, Object[] curRow) {
-
 		ExtendedWaypoint w = current[newPosition];
 
 		int colNum = 0;

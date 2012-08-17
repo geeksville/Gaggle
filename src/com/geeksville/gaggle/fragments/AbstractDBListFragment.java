@@ -19,7 +19,18 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 // FIXME use new Loader API (from v4 support)
-public abstract class AbstractDBListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
+// implements LoaderCallbacks<Cursor> ...
+//@Override
+//public void onLoadFinished(Loader<Cursor> loader, Cursor cursor){
+//	myCursor = cursor;
+//}
+//
+//@Override
+//public void onLoaderReset(Loader<Cursor> loader){
+//	myCursor = null;
+//}
+
+public abstract class AbstractDBListFragment extends ListFragment  {
 
 	protected Cursor myCursor;
 	// / Should the user be shown a confirming dialog
@@ -32,8 +43,8 @@ public abstract class AbstractDBListFragment extends ListFragment implements Loa
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-//		myCursor = createCursor();
-//		startManagingCursor(myCursor);
+		myCursor = createCursor();
+		getActivity().startManagingCursor(myCursor);
 
 		adapter = createListAdapter();
 		setListAdapter(adapter);
@@ -72,15 +83,7 @@ public abstract class AbstractDBListFragment extends ListFragment implements Loa
 //	    	FlurryAgent.onEndSession(this);
 	}
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor){
-		myCursor = cursor;
-	}
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader){
-		myCursor = null;
-	}
 	
 	private void doDelete(MenuItem item) {
 		if (handleDeleteItem(item)) {

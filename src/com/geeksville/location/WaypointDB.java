@@ -149,7 +149,6 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	 */
 	@Override
 	public synchronized void deleteObserver(Observer observer) {
-		// TODO Auto-generated method stub
 		super.deleteObserver(observer);
 
 		if (countObservers() == 0) {
@@ -236,6 +235,12 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 		w.id = db.addWaypoint(w.name, w.description, w.latitude, w.longitude, w.altitude, w.type
 				.ordinal());
 		addToCache(w);
+
+		// notify all observers that a waypoint has been added
+		// can be a problem when the adding component is also an observer (may get 
+		// notified for nothing)
+		setChanged();
+		notifyObservers();
 
 		return w.id;
 	}

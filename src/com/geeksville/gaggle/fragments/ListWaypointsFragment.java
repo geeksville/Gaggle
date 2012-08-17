@@ -131,10 +131,10 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 		db.addObserver(this);
 	}
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return null;
-	}
+//	@Override
+//	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//		return null;
+//	}
 
 	/**
 	 * Create our options menu
@@ -543,7 +543,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 
 	@Override
 	public void update(Observable observable, Object data) {
-		// myCursor.requery(); // FIXME - don't do this if the user is moving
+		myCursor.requery(); // FIXME - don't do this if the user is moving
 		// around?
 	}
 

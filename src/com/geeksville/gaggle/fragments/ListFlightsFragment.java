@@ -97,10 +97,10 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return null;
-	}
+//	@Override
+//	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//		return null;
+//	}
 
 	/**
 	 * Handle our context menu
