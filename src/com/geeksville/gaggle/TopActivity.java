@@ -138,7 +138,7 @@ public class TopActivity extends Activity implements
 			FragmentTransaction ft = this.getFragmentManager().beginTransaction();
             if (mLastTab != null) {
                 if (mLastTab.fragment != null) {
-                	ft.detach(mLastTab.fragment);
+                    ft.hide(mLastTab.fragment);
                 }
             }
             if (newTab != null) {
@@ -148,7 +148,7 @@ public class TopActivity extends Activity implements
                             newTab.clss.getName(), newTab.args);
                     ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
                 } else {
-                    ft.attach(newTab.fragment);
+                    ft.show(newTab.fragment);
                 }
             }
 
