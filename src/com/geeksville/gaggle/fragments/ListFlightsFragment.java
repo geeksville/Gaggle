@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
+import android.content.Loader;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -86,14 +87,19 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
-		coder = new Geocoder(activityHolder);
-		datefmt = DateFormat.getDateFormat(activityHolder);
-		timefmt = DateFormat.getTimeFormat(activityHolder);
+		coder = new Geocoder(getActivity());
+		datefmt = DateFormat.getDateFormat(getActivity());
+		timefmt = DateFormat.getTimeFormat(getActivity());
 
 		// Fill our table
-		db = new LocationLogDbAdapter(activityHolder);
+		db = new LocationLogDbAdapter(getActivity());
 		// must be called at the end, as super.onCreate() will call abstract methods.
 		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		return null;
 	}
 
 	/**
@@ -155,7 +161,7 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 
-		activityHolder.getMenuInflater().inflate(R.menu.logged_flight_context, menu);
+		getActivity().getMenuInflater().inflate(R.menu.logged_flight_context, menu);
 	}
 
 	@Override
@@ -256,7 +262,7 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		int[] to = new int[] { R.id.flightTitle, R.id.date, R.id.duration };
 
 		// Now create a simple cursor adapter and set it to display
-		SimpleCursorAdapter a = new SimpleCursorAdapter(activityHolder,
+		SimpleCursorAdapter a = new SimpleCursorAdapter(getActivity(),
 				R.layout.flights_row, myCursor, from, to);
 
 		final int idcol = myCursor
@@ -364,7 +370,7 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		LocationUtils.dbToWriter(db, locsWriter, flightid);
 
 		// FIXME this should not call activity but a fragment
-		Intent i = FlyMapActivity.createIntentLogView(activityHolder, locs);
+		Intent i = FlyMapFragment.createIntentLogView(getActivity(), locs);
 		startActivity(i);
 	}
 
@@ -378,7 +384,7 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		SummaryWriter summaryWriter = new SummaryWriter(summary);
 		LocationUtils.dbToWriter(db, summaryWriter, flightId);
 		// FIXME this should not call activity but a fragment
-		Intent i = new Intent(activityHolder, SummaryListActivity.class);
+		Intent i = new Intent(getActivity(), SummaryListActivity.class);
 		summary.addDataToIntent(i);
 		startActivity(i);
 	}
@@ -400,13 +406,13 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		// This will close the file descriptor once done writing
 		PositionWriter writer;
 
-		GagglePrefs prefs = new GagglePrefs(activityHolder);
+		GagglePrefs prefs = new GagglePrefs(getActivity());
 
 		writer = new IGCWriter(s, prefs.getPilotName(), null, // FIXME - not
 																// quite
 				// right, we should
 				// get this from DB
-				prefs.getWingModel(), prefs.getPilotId(), activityHolder);
+				prefs.getWingModel(), prefs.getPilotId(), getActivity());
 
 		LocationUtils.dbToWriter(db, writer, flightid);
 
@@ -462,11 +468,11 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		// This will close the file descriptor once done writing
 		PositionWriter writer;
 
-		GagglePrefs prefs = new GagglePrefs(activityHolder);
+		GagglePrefs prefs = new GagglePrefs(getActivity());
 
 		if (filetype.equals("igc"))
 			writer = new IGCWriter(s, prefs.getPilotName(), null,
-					prefs.getWingModel(), prefs.getPilotId(), activityHolder);
+					prefs.getWingModel(), prefs.getPilotId(), getActivity());
 		else if (filetype.equals("csv"))
 			writer = new CSVWriter(s, prefs.getPilotName(), null,
 					prefs.getWingModel(), prefs.getPilotId());
@@ -485,11 +491,11 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 
 	private void leonardoUpload(final long flightid) {
 
-		final Account acct = new Account(activityHolder, "delayed");
-		final GagglePrefs gprefs = new GagglePrefs(activityHolder);
+		final Account acct = new Account(getActivity(), "delayed");
+		final GagglePrefs gprefs = new GagglePrefs(getActivity());
 
 		if (acct.isValid()) {
-			AsyncProgressDialog progress = new AsyncProgressDialog(activityHolder,
+			AsyncProgressDialog progress = new AsyncProgressDialog(getActivity(),
 					getString(R.string.uploading),
 					getString(R.string.please_wait)) {
 				@Override
@@ -529,10 +535,10 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 
 			progress.execute();
 		} else {
-			Toast.makeText(activityHolder,
+			Toast.makeText(getActivity(),
 					R.string.please_set_your_leonardo_account_information,
 					Toast.LENGTH_LONG).show();
-			startActivity(new Intent(activityHolder, MyPreferences.class));
+			startActivity(new Intent(getActivity(), MyPreferences.class));
 		}
 	}
 
@@ -542,7 +548,7 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		String filetype;
 
 		public AsyncFileWriter(final long flightid, final String filetype) {
-			super(activityHolder, getString(R.string.writing_file),
+			super(getActivity(), getString(R.string.writing_file),
 					getString(R.string.please_wait));
 
 			this.flightid = flightid;

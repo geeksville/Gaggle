@@ -4,26 +4,33 @@
 package com.geeksville.gaggle;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 
-import android.app.TabActivity;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TabHost;
+import android.widget.TabHost.TabContentFactory;
 
 import com.flurry.android.FlurryAgent;
-import com.geeksville.android.GeeksvilleExceptionHandler;
-import com.geeksville.android.PostMortemReportExceptionHandler;
 import com.geeksville.android.PreferenceUtil;
 import com.geeksville.billing.Donate;
+import com.geeksville.gaggle.fragments.FlyMapFragment;
+import com.geeksville.gaggle.fragments.ListFlightsFragment;
+import com.geeksville.gaggle.fragments.ListWaypointsFragment;
+import com.geeksville.gaggle.fragments.LoggingControlFragment;
 import com.geeksville.info.Units;
 import com.geeksville.location.LocationLogDbAdapter;
 import com.geeksville.view.AsyncProgressDialog;
@@ -32,7 +39,8 @@ import com.geeksville.view.AsyncProgressDialog;
  * @author kevinh
  * 
  */
-public class TopActivity extends TabActivity {
+public class TopActivity extends Activity implements
+		TabHost.OnTabChangeListener {
 
   /**
    * Debugging tag
@@ -42,64 +50,195 @@ public class TopActivity extends TabActivity {
   // An activity request code
   private static final int SHOW_PREFS = 1;
 
-  protected PostMortemReportExceptionHandler damageReport = new GeeksvilleExceptionHandler(
-      this);
-
   private boolean isLightTheme;
+
+  
+	private TabHost mTabHost;
+	private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabInfo>();
+	private TabInfo mLastTab = null;
+
+	private class TabInfo {
+		private String tag;
+		private Class clss;
+		private Bundle args;
+		private Fragment fragment;
+
+		TabInfo(String tag, Class clazz, Bundle args) {
+			this.tag = tag;
+			this.clss = clazz;
+			this.args = args;
+		}
+	}
+
+	class TabFactory implements TabContentFactory {
+
+		private final Context mContext;
+
+		/**
+		 * @param context
+		 */
+		public TabFactory(Context context) {
+			mContext = context;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see android.widget.TabHost.TabContentFactory#createTabContent(java.lang.String)
+		 */
+		public View createTabContent(String tag) {
+			View v = new View(mContext);
+			v.setMinimumWidth(0);
+			v.setMinimumHeight(0);
+			return v;
+		}
+
+	}
+
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString("tab", mTabHost.getCurrentTabTag());
+		super.onSaveInstanceState(outState);
+	}
+
+	private void initialiseTabHost(Bundle args) {
+		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+		mTabHost.setup();
+		TabInfo tabInfo = null;
+		
+		TopActivity.addTab(this, this.mTabHost, this.mTabHost
+				.newTabSpec("FlightInst").setIndicator("Tab 1"),
+				(tabInfo = new TabInfo("FlightInst", LoggingControlFragment.class, args)));
+		this.mapTabInfo.put(tabInfo.tag, tabInfo);
+		
+		TopActivity.addTab(this, this.mTabHost, this.mTabHost
+				.newTabSpec("Logs").setIndicator("Tab 2"),
+				(tabInfo = new TabInfo("Logs", ListFlightsFragment.class, args)));
+		this.mapTabInfo.put(tabInfo.tag, tabInfo);
+		
+		TopActivity.addTab(this, this.mTabHost, this.mTabHost
+				.newTabSpec("Waypoints").setIndicator("Tab 3"),
+				(tabInfo = new TabInfo("Waypoints", ListWaypointsFragment.class, args)));
+		this.mapTabInfo.put(tabInfo.tag, tabInfo);
+		
+		TopActivity.addTab(this, this.mTabHost, this.mTabHost
+				.newTabSpec("LiveMap").setIndicator("Tab 4"),
+				(tabInfo = new TabInfo("LiveMap", FlyMapFragment.class, args)));
+		this.mapTabInfo.put(tabInfo.tag, tabInfo);
+		
+		// Default to first tab
+		this.onTabChanged("FlightInst");
+		//
+		mTabHost.setOnTabChangedListener(this);
+	}
+
+	@Override
+	public void onTabChanged(String tag) {
+		TabInfo newTab = this.mapTabInfo.get(tag);
+		if (mLastTab != newTab) {
+			FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+            if (mLastTab != null) {
+                if (mLastTab.fragment != null) {
+                	ft.detach(mLastTab.fragment);
+                }
+            }
+            if (newTab != null) {
+            	Log.d(TAG, "new tab: " + newTab.tag);
+                if (newTab.fragment == null) {
+                    newTab.fragment = Fragment.instantiate(this,
+                            newTab.clss.getName(), newTab.args);
+                    ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
+                } else {
+                    ft.attach(newTab.fragment);
+                }
+            }
+
+            mLastTab = newTab;
+            ft.commit();
+            this.getFragmentManager().executePendingTransactions();
+		}
+    }
+
+	private static void addTab(TopActivity activity, TabHost tabHost,
+			TabHost.TabSpec tabSpec, TabInfo tabInfo) {
+		// Attach a Tab view factory to the spec
+		tabSpec.setContent(activity.new TabFactory(activity));
+		String tag = tabSpec.getTag();
+
+		// Check to see if we already have a fragment for this tab, probably
+		// from a previously saved state. If so, deactivate it, because our
+		// initial state is that a tab isn't shown.
+		tabInfo.fragment = activity.getFragmentManager()
+				.findFragmentByTag(tag);
+		if (tabInfo.fragment != null && !tabInfo.fragment.isDetached()) {
+			FragmentTransaction ft = activity.getFragmentManager()
+					.beginTransaction();
+			ft.detach(tabInfo.fragment);
+			ft.commit();
+			activity.getFragmentManager().executePendingTransactions();
+		}
+
+		tabHost.addTab(tabSpec);
+	}
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+	  Log.d(TAG, "creating topactivity!");
 
-    setThemeFromPrefs();
+//    setThemeFromPrefs();
     super.onCreate(savedInstanceState);
+	setContentView(R.layout.maintabs);
+	initialiseTabHost(savedInstanceState);
+	if (savedInstanceState != null) {
+        mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+	}
+        //set the tab as per the saved state
+//    damageReport.perhapsInstall();
+//
+//    // FIXME, localize these strings
+//    TabHost tabHost = getTabHost();
+//
+//    TabHost.TabSpec spec = tabHost.newTabSpec("FlightInst");
+//    // FIXME - need real art
+//    spec.setIndicator(null, getResources().getDrawable(R.drawable.icon));
+//    spec.setContent(new Intent(this, LoggingControl.class));
+//    tabHost.addTab(spec);
+//
+//    spec = tabHost.newTabSpec("Logs");
+//    spec.setIndicator(null,
+//        getResources().getDrawable(android.R.drawable.ic_menu_slideshow));
+//    spec.setContent(new Intent(this, ListFlightsActivity.class));
+//    tabHost.addTab(spec);
+//
+//    spec = tabHost.newTabSpec("Waypoints");
+//    spec.setIndicator(null,
+//        getResources().getDrawable(android.R.drawable.ic_menu_myplaces));
+//    spec.setContent(new Intent(this, ListWaypointsActivity.class));
+//    tabHost.addTab(spec);
+//
+//    spec = tabHost.newTabSpec("LiveMap");
+//    spec.setIndicator(null,
+//        getResources().getDrawable(android.R.drawable.ic_menu_mapmode));
+//    spec.setContent(FlyMapFragment.createIntentLive(this));
+//    tabHost.addTab(spec);
+	}
 
-    damageReport.perhapsInstall();
+	/**
+	 * Do we have any flights in our logbook?
+	 * 
+	 * @return
+	 */
+	private boolean isFlightsLogged() {
+		LocationLogDbAdapter db = new LocationLogDbAdapter(this);
+		Cursor flights = db.fetchAllFlights();
 
-    // FIXME, localize these strings
-    TabHost tabHost = getTabHost();
+		int numflights = flights.getCount();
 
-    TabHost.TabSpec spec = tabHost.newTabSpec("FlightInst");
-    // FIXME - need real art
-    spec.setIndicator(null, getResources().getDrawable(R.drawable.icon));
-    spec.setContent(new Intent(this, LoggingControl.class));
-    tabHost.addTab(spec);
+		flights.close();
+		db.close();
 
-    spec = tabHost.newTabSpec("Logs");
-    spec.setIndicator(null,
-        getResources().getDrawable(android.R.drawable.ic_menu_slideshow));
-    spec.setContent(new Intent(this, ListFlightsActivity.class));
-    tabHost.addTab(spec);
-
-    spec = tabHost.newTabSpec("Waypoints");
-    spec.setIndicator(null,
-        getResources().getDrawable(android.R.drawable.ic_menu_myplaces));
-    spec.setContent(new Intent(this, ListWaypointsActivity.class));
-    tabHost.addTab(spec);
-
-    spec = tabHost.newTabSpec("LiveMap");
-    spec.setIndicator(null,
-        getResources().getDrawable(android.R.drawable.ic_menu_mapmode));
-    spec.setContent(FlyMapActivity.createIntentLive(this));
-    tabHost.addTab(spec);
-  }
-
-  /**
-   * Do we have any flights in our logbook?
-   * 
-   * @return
-   */
-  private boolean isFlightsLogged() {
-    LocationLogDbAdapter db = new LocationLogDbAdapter(this);
-    Cursor flights = db.fetchAllFlights();
-
-    int numflights = flights.getCount();
-
-    flights.close();
-    db.close();
-
-    return numflights != 0;
-  }
-
+		return numflights != 0;
+	}
+	
   /**
    * Collect app metrics on Flurry
    * 
@@ -123,7 +262,7 @@ public class TopActivity extends TabActivity {
     updateFromOld();
 
     if (!isFlightsLogged()) {
-      getTabHost().setCurrentTabByTag("Logs");
+      mTabHost.setCurrentTabByTag("Logs");
     }
   }
 
@@ -251,9 +390,8 @@ public class TopActivity extends TabActivity {
 
     // Figure out if the user wants to force the screen on (FIXME, only
     // force on while flying)
-    TabHost tabHost = getTabHost();
     GagglePrefs prefs = new GagglePrefs(this);
-    tabHost.setKeepScreenOn(prefs.isKeepScreenOn());
+    mTabHost.setKeepScreenOn(prefs.isKeepScreenOn());
   }
 
   /**

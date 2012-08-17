@@ -32,6 +32,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
@@ -96,7 +97,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 		isConfirmDeletes = false; // Deleting a waypoint isn't such a big deal -
 									// don't require confirm
 
-		db = ((GaggleApplication) activityHolder.getApplication()).getWaypoints();
+		db = ((GaggleApplication) getActivity().getApplication()).getWaypoints();
 
 		super.onCreate(savedInstanceState);
 		perhapsAddFromUri();
@@ -122,12 +123,17 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	public void onResume() {
 		super.onResume();
 
-		Units.instance.setFromPrefs(activityHolder);
+		Units.instance.setFromPrefs(getActivity());
 
-		gps = new GPSClientStub(activityHolder);
+		gps = new GPSClientStub(getActivity());
 
 		// FIXME, close the backing DB when the waypoint cache is done with it
 		db.addObserver(this);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		return null;
 	}
 
 	/**
@@ -170,7 +176,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 
-		activityHolder.getMenuInflater().inflate(R.menu.waypoint_context, menu);
+		getActivity().getMenuInflater().inflate(R.menu.waypoint_context, menu);
 	}
 
 	/**
@@ -208,25 +214,25 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	 */
 	private void perhapsAddFromUri() {
 		// FIXME check this is correct !
-		Intent intent = activityHolder.getIntent();
+		Intent intent = getActivity().getIntent();
 		String typ = intent.getType();
 		final Uri uri = intent.getData();
 		String action = intent.getAction();
 		if (uri != null && action != null && action.equals(Intent.ACTION_VIEW)) {
 			Log.d("ListWaypointsActivity", "Considering " + typ);
-			AsyncProgressDialog progress = new AsyncProgressDialog(activityHolder,
+			AsyncProgressDialog progress = new AsyncProgressDialog(getActivity(),
 					getString(R.string.importing_waypoints),
 					getString(R.string.please_wait)) {
 				@Override
 				protected void doInBackground() {
-					GagglePrefs prefs = new GagglePrefs(activityHolder);
+					GagglePrefs prefs = new GagglePrefs(getActivity());
 					if (prefs.isFlurryEnabled())
 					  FlurryAgent.onEvent("WPT import start");
 
 					// See if we can read the file
 					try {
 						InputStream s = AndroidUtil.getFromURI(
-								activityHolder, uri);
+								getActivity(), uri);
 
 						WPTImporter imp = new WPTImporter(db);
 						int numadded = imp.addFromStream(s);
@@ -319,7 +325,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 		if (c.getCount() > 0)
 			// If we have any points, encourage the user to turn on the GPS so
 			// we can show distance
-			((GaggleApplication) activityHolder.getApplication()).enableGPS(activityHolder);
+			((GaggleApplication) getActivity().getApplication()).enableGPS(getActivity());
 
 		return c;
 	}
@@ -344,7 +350,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 				R.id.image, R.id.units };
 
 		// Now create a simple cursor adapter and set it to display
-		SimpleCursorAdapter a = new SimpleCursorAdapter(activityHolder,
+		SimpleCursorAdapter a = new SimpleCursorAdapter(getActivity(),
 				R.layout.waypoint_row, myCursor, from, to);
 
 		final int distcol = myCursor
@@ -425,7 +431,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	 */
 	private void handleDeleteMenu() {
 		// Is the user sure?
-		AlertDialog.Builder builder = new AlertDialog.Builder(activityHolder);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.delete_waypoints);
 		builder.setMessage(R.string.are_you_sure);
 		builder.setNegativeButton(R.string.cancel, null);
@@ -445,14 +451,14 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 
 	private void handleAddWaypoint() {
 
-		GaggleApplication app = ((GaggleApplication) activityHolder.getApplication());
+		GaggleApplication app = ((GaggleApplication) getActivity().getApplication());
 		Location myloc = null;
 
 		if (gps != null && gps.get() != null)
 			myloc = gps.get().getLastKnownLocation();
 
 		if (myloc == null)
-			Toast.makeText(activityHolder,
+			Toast.makeText(getActivity(),
 					R.string.can_not_add_waypoint_still_waiting_for_gps_fix,
 					Toast.LENGTH_LONG).show();
 		else {
@@ -469,7 +475,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 			myCursor.requery();
 
 			// FIXME - then select it in the cursor/GUI
-			Toast.makeText(activityHolder,
+			Toast.makeText(getActivity(),
 					R.string.waypoint_created, Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -483,9 +489,9 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 
 		final ExtendedWaypoint w = ((WaypointCursor) myCursor).getWaypoint();
 
-		((GaggleApplication) activityHolder.getApplication()).currentDestination = w;
+		((GaggleApplication) getActivity().getApplication()).currentDestination = w;
 
-		Toast.makeText(activityHolder,
+		Toast.makeText(getActivity(),
 				getString(R.string.new_destination) + w.name,
 				Toast.LENGTH_SHORT).show();
 	}
@@ -514,7 +520,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 				w.commit();
 				myCursor.requery();
 
-				Toast.makeText(activityHolder,
+				Toast.makeText(getActivity(),
 						R.string.updated_waypoint, Toast.LENGTH_SHORT).show();
 			}
 		};
@@ -531,7 +537,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 			}
 		};
 
-		WaypointDialog d = new WaypointDialog(activityHolder, w, onOkay, onGoto);
+		WaypointDialog d = new WaypointDialog(getActivity(), w, onOkay, onGoto);
 		d.show();
 	}
 

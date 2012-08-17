@@ -7,7 +7,7 @@
 		android:normalScreens="true" android:largeScreens="true"
 		android:anyDensity="true" />  
 
-	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="11" />
+	<uses-sdk android:minSdkVersion="13" android:targetSdkVersion="13" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 		
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
@@ -32,67 +32,13 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
- 
-		<activity android:name=".LoggingControl"
-			android:screenOrientation="portrait">
-		</activity>
 
 		<activity android:name="com.geeksville.maps.PrefetchMapActivity"></activity>
-		<activity android:name=".ListFlightsActivity"></activity>
 		<activity android:name="com.geeksville.info.SelectInfoFieldsActivity"
 			android:label="Select fields">
 		</activity>
 		<activity android:name=".AboutActivity"></activity>
-		<activity android:name=".SummaryListActivity"></activity>		
-		<activity android:name=".ListWaypointsActivity">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-
-				<!--
-					Frequently gmail attachments have this as the only known mime type
-				-->
-				<data android:scheme="content" android:mimeType="application/octet-stream" />
-
-			</intent-filter>
-			
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				
-				<data android:scheme="http" />
-				<data android:scheme="https" />
-				<data android:host="*" />
-				<data android:pathPattern=".*\\.WPT" />
-				<data android:pathPattern=".*\\.wpt" />
-				<data android:pathPattern=".*\\.DAT" />
-				<data android:pathPattern=".*\\.dat" />
-				<data android:pathPattern=".*\\.CUP" />
-				<data android:pathPattern=".*\\.cup" />
-			</intent-filter>
-			<!-- 
-				We're using separate intent-filters for download (http/s) and local files (file/content) as they require
-				different settings for mimeType to each other.
-			  -->
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				
-				<data android:scheme="file" />
-				<data android:scheme="content" /> 
-				<data android:host="*" />
-				<data android:pathPattern=".*\\.WPT" />
-				<data android:pathPattern=".*\\.wpt" />
-				<data android:pathPattern=".*\\.DAT" />
-				<data android:pathPattern=".*\\.dat" />
-				<data android:pathPattern=".*\\.CUP" />
-				<data android:pathPattern=".*\\.cup" />
-				<data android:mimeType="*/*" />
-			</intent-filter>
-		</activity>
+		<activity android:name=".SummaryListActivity"></activity>
 
 		<activity android:name=".MyPreferences">
 			<intent-filter>
@@ -101,37 +47,6 @@
 		</activity>
 
 		<activity android:name=".BetaSplashActivity"></activity>
-
-		<activity android:name="com.geeksville.gaggle.FlyMapActivity"
-			android:screenOrientation="portrait">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				
-				<data android:scheme="http" />
-				<data android:scheme="https" />
-				<data android:host="*" />
-				<data android:pathPattern=".*\\.IGC" />
-				<data android:pathPattern=".*\\.igc" />
-			</intent-filter>
-			<!-- 
-				We're using separate intent-filters for download (http/s) and local files (file/content) as they require
-				different settings for mimeType to each other.
-			  -->
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				
-				<data android:scheme="file" />
-				<data android:scheme="content" /> 
-				<data android:host="*" />
-				<data android:pathPattern=".*\\.IGC" />
-				<data android:pathPattern=".*\\.igc" />
-				<data android:mimeType="*/*" />
-			</intent-filter>
-		</activity>
 		<!--   <uses-library android:name="com.google.android.maps" /> -->
 
 		<service android:name="com.geeksville.location.GPSClient">

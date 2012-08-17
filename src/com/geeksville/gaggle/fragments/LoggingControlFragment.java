@@ -3,7 +3,6 @@ package com.geeksville.gaggle.fragments;
 import android.app.Activity;
 import android.app.ListFragment;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -54,8 +53,6 @@ public class LoggingControlFragment extends ListFragment implements
 	private Button loggingButton;
 	private TextView loggingLabel;
 
-	private Activity activityHolder;
-
 	/**
 	 * my preferences DB
 	 */
@@ -76,7 +73,6 @@ public class LoggingControlFragment extends ListFragment implements
 
 	@Override
 	public void onAttach(Activity activity) {
-		this.activityHolder = activity;
 		prefs = new GagglePrefs(activity);
 		super.onAttach(activity);
 	}
@@ -154,7 +150,7 @@ public class LoggingControlFragment extends ListFragment implements
 		super.onPause();
 
 		saveInfoFields();
-		((GaggleApplication) activityHolder.getApplication()).getGpsLogger()
+		((GaggleApplication) getActivity().getApplication()).getGpsLogger()
 				.setObserver(null);
 
 		// Log.d(TAG, "onPause() called");
@@ -166,7 +162,7 @@ public class LoggingControlFragment extends ListFragment implements
 		// system
 		try {
 			ObjectOutputStream stream = AndroidUtil.writeObjectStream(
-					activityHolder, "infofields");
+					getActivity(), "infofields");
 			InfoListView infoView = (InfoListView) getListView();
 
 			stream.writeObject(infoView.getChecked());
@@ -180,7 +176,7 @@ public class LoggingControlFragment extends ListFragment implements
 		try {
 			// FIXME - use correct android system
 			ObjectInputStream stream = AndroidUtil.readObjectStream(
-					activityHolder, "infofields");
+					getActivity(), "infofields");
 			InfoListView infoView = (InfoListView) getListView();
 
 			infoView.setChecked((String[]) stream.readObject());
@@ -215,7 +211,7 @@ public class LoggingControlFragment extends ListFragment implements
 		// Log.d(TAG, "onResume() called");
 		lifePublish.onResume();
 
-		((GaggleApplication) activityHolder.getApplication()).getGpsLogger()
+		((GaggleApplication) getActivity().getApplication()).getGpsLogger()
 				.setObserver(this);
 
 		// Restore the toggle to the correct state. FIXME, why doesn't this
@@ -237,7 +233,7 @@ public class LoggingControlFragment extends ListFragment implements
 	// }
 
 	private void showLoggingStatus() {
-		GPSToPositionWriter gpsToPos = ((GaggleApplication) activityHolder
+		GPSToPositionWriter gpsToPos = ((GaggleApplication) getActivity()
 				.getApplication()).getGpsLogger();
 
 		loggingLabel.setText(gpsToPos.getStatusString());
@@ -265,12 +261,12 @@ public class LoggingControlFragment extends ListFragment implements
 
 		@Override
 		public void onClick(View arg0) {
-			GPSToPositionWriter gpsToPos = ((GaggleApplication) activityHolder
+			GPSToPositionWriter gpsToPos = ((GaggleApplication) getActivity()
 					.getApplication()).getGpsLogger();
 
 			if (!gpsToPos.isLogging()) {
-				if (((GaggleApplication) activityHolder.getApplication())
-						.enableGPS(LoggingControlFragment.this.activityHolder)) {
+				if (((GaggleApplication) getActivity().getApplication())
+						.enableGPS(LoggingControlFragment.this.getActivity())) {
 
 					startLogging();
 				}
@@ -290,7 +286,7 @@ public class LoggingControlFragment extends ListFragment implements
 
 		boolean showAltButton = false;
 		try {
-			showAltButton = BarometerClient.create(activityHolder) != null
+			showAltButton = BarometerClient.create(getActivity()) != null
 					&& GPSClient.instance != null
 					&& GPSClient.instance.getLastKnownLocation() != null
 					&& GPSClient.instance.getLastKnownLocation().hasAltitude();
@@ -317,7 +313,7 @@ public class LoggingControlFragment extends ListFragment implements
 	// case R.id.setAltFromGPS:
 	// // FIXME - http://blueflyvario.blogspot.com/2011_05_01_archive.html
 	// Location loc = GPSClient.instance.getLastKnownLocation();
-	// BarometerClient.create(activityHolder).setAltitude((float)
+	// BarometerClient.create(getActivity()).setAltitude((float)
 	// loc.getAltitude());
 	// return true;
 	// }
@@ -378,23 +374,23 @@ public class LoggingControlFragment extends ListFragment implements
 
 	private void startLogging() {
 
-		final Account acct = new Account(activityHolder, "live2");
+		final Account acct = new Account(getActivity(), "live2");
 
 		// We always log to the DB
-		final PositionWriter dbwriter = new LocationDBWriter(activityHolder,
+		final PositionWriter dbwriter = new LocationDBWriter(getActivity(),
 				prefs.isDelayedUpload(), prefs.getPilotName(), null);
 
 		// Also always keep the the current live track
 		// FIXME - skanky way we pass live tracks to the map
 		LocationList loclist = new LocationList();
-		FlyMapActivity.liveList = loclist;
+		FlyMapFragment.liveList = loclist;
 
 		final PositionWriter ramwriter = new LocationListWriter(loclist);
 
 		loggingButton.setEnabled(false); // Turn off the button until our
 		// background thread finishes
 
-		AsyncProgressDialog progress = new AsyncProgressDialog(activityHolder,
+		AsyncProgressDialog progress = new AsyncProgressDialog(getActivity(),
 				getString(R.string.starting_logging),
 				getString(R.string.please_wait)) {
 
@@ -411,7 +407,7 @@ public class LoggingControlFragment extends ListFragment implements
 
 						// FIXME - do this in an async dialog helper
 						PositionWriter liveWriter = new LeonardoLiveWriter(
-								LoggingControlFragment.this.activityHolder,
+								LoggingControlFragment.this.getActivity(),
 								acct.serverURL, acct.username, acct.password,
 								prefs.getWingModel(),
 								prefs.getLeonardoLiveVehicleType(),
@@ -422,7 +418,7 @@ public class LoggingControlFragment extends ListFragment implements
 					} catch (Exception ex) {
 						// Bad password or connection problems
 						showCompletionDialog(
-								LoggingControlFragment.this.activityHolder
+								LoggingControlFragment.this.getActivity()
 										.getString(R.string.leonardolive_problem),
 								ex.getMessage());
 					}
@@ -435,10 +431,10 @@ public class LoggingControlFragment extends ListFragment implements
 				PositionWriter writer = new PositionWriterSet(selected);
 
 				// Start up our logger service
-				GPSToPositionWriter gpsToPos = ((GaggleApplication) activityHolder
+				GPSToPositionWriter gpsToPos = ((GaggleApplication) getActivity()
 						.getApplication()).getGpsLogger();
 
-				gpsToPos.startLogging(activityHolder.getApplication(), writer,
+				gpsToPos.startLogging(getActivity().getApplication(), writer,
 						prefs.getLogTimeInterval(), prefs.getLaunchDistX(),
 						prefs.getLaunchDistY());
 			}

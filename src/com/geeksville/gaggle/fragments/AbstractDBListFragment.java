@@ -3,10 +3,11 @@ package com.geeksville.gaggle.fragments;
 import com.geeksville.gaggle.R;
 import com.geeksville.location.LocationLogDbAdapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.DialogInterface;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -18,28 +19,20 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 // FIXME use new Loader API (from v4 support)
-public abstract class AbstractDBListFragment extends ListFragment {
+public abstract class AbstractDBListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
 
 	protected Cursor myCursor;
-
 	// / Should the user be shown a confirming dialog
 	protected Boolean isConfirmDeletes = true;
 
 	BaseAdapter adapter;
-
-	protected Activity activityHolder;
 	
-	public void onAttach(Activity activity){
-		super.onAttach(activity);
-		this.activityHolder = activity;
-	}
-
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		myCursor = createCursor();
+//		myCursor = createCursor();
 //		startManagingCursor(myCursor);
 
 		adapter = createListAdapter();
@@ -79,13 +72,23 @@ public abstract class AbstractDBListFragment extends ListFragment {
 //	    	FlurryAgent.onEndSession(this);
 	}
 
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor){
+		myCursor = cursor;
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader){
+		myCursor = null;
+	}
+	
 	private void doDelete(MenuItem item) {
 		if (handleDeleteItem(item)) {
-			myCursor.requery(); // We just deleted a
+//			myCursor.requery(); // We just deleted a
 								// row, it seems we need
 			// to manually refetch the cursor
 
-			Toast.makeText(activityHolder, R.string.deleted, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.deleted, Toast.LENGTH_SHORT).show();
 		}
 
 		// adapter.notifyDataSetChanged(); // this
@@ -94,7 +97,7 @@ public abstract class AbstractDBListFragment extends ListFragment {
 	}
 
 	private void confirmDelete(final MenuItem item) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(activityHolder);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage(R.string.confirm_delete_)
 				.setPositiveButton(R.string.yes,
 						new DialogInterface.OnClickListener() {
@@ -146,7 +149,7 @@ public abstract class AbstractDBListFragment extends ListFragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-		activityHolder.getMenuInflater().inflate(R.menu.db_list_activity_context, menu);
+		getActivity().getMenuInflater().inflate(R.menu.db_list_activity_context, menu);
 	}
 
 //	/**
