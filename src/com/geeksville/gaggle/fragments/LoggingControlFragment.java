@@ -24,7 +24,6 @@ import com.geeksville.android.LifeCycleHandler;
 import com.geeksville.android.LifeCyclePublisher;
 import com.geeksville.android.LifeCyclePublisherImpl;
 import com.geeksville.gaggle.Account;
-import com.geeksville.gaggle.FlyMapActivity;
 import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
@@ -86,6 +85,7 @@ public class LoggingControlFragment extends ListFragment implements
 		View v = inflater.inflate(R.layout.loggingcontrol_fragment, container, false);
 
 		loggingButton = (Button) v.findViewById(R.id.LoggingOnOffButton);
+		loggingButton.setOnClickListener(loggingToggle);
 		loggingLabel = (TextView) v.findViewById(R.id.LabelLiveFlight);
 
 		// Log.d(TAG, "onCreate() called");
