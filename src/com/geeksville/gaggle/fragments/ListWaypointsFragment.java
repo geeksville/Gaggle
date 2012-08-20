@@ -80,11 +80,6 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	private GPSClientStub gps;
 	private static final String TAG = "ListWaypointsFragment";
 
-	@Override
-	public void onActivityCreated(final Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		registerForContextMenu(getListView());
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

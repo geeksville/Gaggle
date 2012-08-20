@@ -74,12 +74,6 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 	private Geocoder coder;
 
 	@Override
-	public void onActivityCreated(final Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		registerForContextMenu(getListView());
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.listflights_fragment, container, false);

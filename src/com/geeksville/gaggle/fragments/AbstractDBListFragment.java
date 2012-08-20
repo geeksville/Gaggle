@@ -38,19 +38,21 @@ public abstract class AbstractDBListFragment extends ListFragment  {
 
 	BaseAdapter adapter;
 	
-	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
+	public void onActivityCreated(final Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		registerForContextMenu(getListView());
 		myCursor = createCursor();
 		getActivity().startManagingCursor(myCursor);
 
 		adapter = createListAdapter();
 		setListAdapter(adapter);
+	}
 
-		// Turn on the context menu
-//		registerForContextMenu(getListView());
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 	}
 
 	/**
@@ -87,7 +89,7 @@ public abstract class AbstractDBListFragment extends ListFragment  {
 	
 	private void doDelete(MenuItem item) {
 		if (handleDeleteItem(item)) {
-//			myCursor.requery(); // We just deleted a
+			myCursor.requery(); // We just deleted a
 								// row, it seems we need
 			// to manually refetch the cursor
 
