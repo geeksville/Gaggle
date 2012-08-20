@@ -81,6 +81,12 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	private static final String TAG = "ListWaypointsFragment";
 
 	@Override
+	public void onActivityCreated(final Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		registerForContextMenu(getListView());
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.listwaypoints_fragment, container, false);
