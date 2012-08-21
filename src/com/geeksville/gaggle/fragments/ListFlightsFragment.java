@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.gaggle.Account;
-import com.geeksville.gaggle.FlyMapActivity;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.MyPreferences;
 import com.geeksville.gaggle.R;
@@ -72,6 +71,10 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 	private java.text.DateFormat datefmt;
 	private java.text.DateFormat timefmt;
 	private Geocoder coder;
+
+	public interface OnFlightSelectedListener {
+		public void onFlightSelected(LocationList locs);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -369,9 +372,10 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		PositionWriter locsWriter = new LocationListWriter(locs);
 		LocationUtils.dbToWriter(db, locsWriter, flightid);
 
+		((OnFlightSelectedListener)getActivity()).onFlightSelected(locs);
 		// FIXME this should not call activity but a fragment
-		Intent i = FlyMapFragment.createIntentLogView(getActivity(), locs);
-		startActivity(i);
+//		Intent i = FlyMapFragment.createIntentLogView(getActivity(), locs);
+//		startActivity(i);
 	}
 
 	/**

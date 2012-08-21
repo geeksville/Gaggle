@@ -27,6 +27,7 @@ import org.osmdroid.util.GeoPoint;
 
 import android.os.Bundle;
 
+import com.geeksville.gaggle.fragments.FlyMapFragment;
 import com.geeksville.util.IntArray;
 
 /**
@@ -140,6 +141,7 @@ public class LocationList extends Observable implements ILocationList {
 	 * @param bundle
 	 */
 	public void writeTo(Bundle bundle) {
+		bundle.putBoolean(FlyMapFragment.EXTRA_TRACKLOG, true);
 		bundle.putIntArray("latitudes", latitudeE6.toArray());
 		bundle.putIntArray("longitudes", longitudeE6.toArray());
 		bundle.putIntArray("altitudes", altitudeMM.toArray());

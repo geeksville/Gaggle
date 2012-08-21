@@ -32,6 +32,7 @@ import com.geeksville.gaggle.fragments.ListFlightsFragment;
 import com.geeksville.gaggle.fragments.ListWaypointsFragment;
 import com.geeksville.gaggle.fragments.LoggingControlFragment;
 import com.geeksville.info.Units;
+import com.geeksville.location.LocationList;
 import com.geeksville.location.LocationLogDbAdapter;
 import com.geeksville.view.AsyncProgressDialog;
 
@@ -40,7 +41,8 @@ import com.geeksville.view.AsyncProgressDialog;
  * 
  */
 public class TopActivity extends Activity implements
-		TabHost.OnTabChangeListener {
+		TabHost.OnTabChangeListener,
+		ListFlightsFragment.OnFlightSelectedListener {
 
   /**
    * Debugging tag
@@ -92,7 +94,6 @@ public class TopActivity extends Activity implements
 			v.setMinimumHeight(0);
 			return v;
 		}
-
 	}
 
 	protected void onSaveInstanceState(Bundle outState) {
@@ -135,28 +136,36 @@ public class TopActivity extends Activity implements
 	public void onTabChanged(String tag) {
 		TabInfo newTab = this.mapTabInfo.get(tag);
 		if (mLastTab != newTab) {
-			FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-            if (mLastTab != null) {
-                if (mLastTab.fragment != null) {
-                    ft.hide(mLastTab.fragment);
-                }
-            }
-            if (newTab != null) {
-            	Log.d(TAG, "new tab: " + newTab.tag);
-                if (newTab.fragment == null) {
-                    newTab.fragment = Fragment.instantiate(this,
-                            newTab.clss.getName(), newTab.args);
-                    ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
-                } else {
-                    ft.show(newTab.fragment);
-                }
-            }
+			FragmentTransaction ft = this.getFragmentManager()
+					.beginTransaction();
 
-            mLastTab = newTab;
-            ft.commit();
-            this.getFragmentManager().executePendingTransactions();
+			if (newTab != null) {
+				Log.d(TAG, "new tab: " + newTab.tag);
+				if (newTab.fragment == null) {
+					newTab.fragment = Fragment.instantiate(this,
+							newTab.clss.getName(), newTab.args);
+				}
+				ft.replace(R.id.realtabcontent, newTab.fragment, newTab.tag);
+			}
+			mLastTab = newTab;
+			ft.commit();
+			this.getFragmentManager().executePendingTransactions();
 		}
-    }
+	}
+
+	@Override
+	public void onFlightSelected(LocationList locs) {
+		Log.d(TAG, "received onFlightSelect event");
+		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+		FlyMapFragment fmf = new FlyMapFragment();
+		Bundle locbundle = new Bundle();
+		locs.writeTo(locbundle);
+		fmf.setArguments(locbundle);
+		ft.replace(R.id.realtabcontent, fmf);
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.addToBackStack(null);
+		ft.commit();
+	}
 
 	private static void addTab(TopActivity activity, TabHost tabHost,
 			TabHost.TabSpec tabSpec, TabInfo tabInfo) {
@@ -180,46 +189,17 @@ public class TopActivity extends Activity implements
 		tabHost.addTab(tabSpec);
 	}
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-	  Log.d(TAG, "creating topactivity!");
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "creating topactivity!");
 
-//    setThemeFromPrefs();
-    super.onCreate(savedInstanceState);
-	setContentView(R.layout.maintabs);
-	initialiseTabHost(savedInstanceState);
-	if (savedInstanceState != null) {
-        mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-	}
-        //set the tab as per the saved state
-//    damageReport.perhapsInstall();
-//
-//    // FIXME, localize these strings
-//    TabHost tabHost = getTabHost();
-//
-//    TabHost.TabSpec spec = tabHost.newTabSpec("FlightInst");
-//    // FIXME - need real art
-//    spec.setIndicator(null, getResources().getDrawable(R.drawable.icon));
-//    spec.setContent(new Intent(this, LoggingControl.class));
-//    tabHost.addTab(spec);
-//
-//    spec = tabHost.newTabSpec("Logs");
-//    spec.setIndicator(null,
-//        getResources().getDrawable(android.R.drawable.ic_menu_slideshow));
-//    spec.setContent(new Intent(this, ListFlightsActivity.class));
-//    tabHost.addTab(spec);
-//
-//    spec = tabHost.newTabSpec("Waypoints");
-//    spec.setIndicator(null,
-//        getResources().getDrawable(android.R.drawable.ic_menu_myplaces));
-//    spec.setContent(new Intent(this, ListWaypointsActivity.class));
-//    tabHost.addTab(spec);
-//
-//    spec = tabHost.newTabSpec("LiveMap");
-//    spec.setIndicator(null,
-//        getResources().getDrawable(android.R.drawable.ic_menu_mapmode));
-//    spec.setContent(FlyMapFragment.createIntentLive(this));
-//    tabHost.addTab(spec);
+		// setThemeFromPrefs();
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.maintabs);
+		initialiseTabHost(savedInstanceState);
+		if (savedInstanceState != null) {
+			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+		}
 	}
 
 	/**
