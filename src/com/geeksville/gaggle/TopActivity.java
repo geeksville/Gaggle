@@ -135,17 +135,25 @@ public class TopActivity extends Activity implements
 	@Override
 	public void onTabChanged(String tag) {
 		TabInfo newTab = this.mapTabInfo.get(tag);
+
 		if (mLastTab != newTab) {
 			FragmentTransaction ft = this.getFragmentManager()
 					.beginTransaction();
+			if (mLastTab != null) {
+				if (mLastTab.fragment != null) {
+					ft.hide(mLastTab.fragment);
+				}
+			}
 
 			if (newTab != null) {
 				Log.d(TAG, "new tab: " + newTab.tag);
 				if (newTab.fragment == null) {
 					newTab.fragment = Fragment.instantiate(this,
 							newTab.clss.getName(), newTab.args);
+					ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
+				} else {
+					ft.show(newTab.fragment);
 				}
-				ft.replace(R.id.realtabcontent, newTab.fragment, newTab.tag);
 			}
 			mLastTab = newTab;
 			ft.commit();
@@ -155,16 +163,13 @@ public class TopActivity extends Activity implements
 
 	@Override
 	public void onFlightSelected(LocationList locs) {
-		Log.d(TAG, "received onFlightSelect event");
-		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-		FlyMapFragment fmf = new FlyMapFragment();
+		Log.d(TAG, "received onFlightSelect event, prepare new activity");
+
 		Bundle locbundle = new Bundle();
 		locs.writeTo(locbundle);
-		fmf.setArguments(locbundle);
-		ft.replace(R.id.realtabcontent, fmf);
-		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		ft.addToBackStack(null);
-		ft.commit();
+		Intent i = new Intent(this, FlyMapActivity.class);
+		i.putExtra(FlyMapFragment.EXTRA_TRACKLOG, locbundle);
+		startActivity(i);
 	}
 
 	private static void addTab(TopActivity activity, TabHost tabHost,

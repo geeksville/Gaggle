@@ -54,6 +54,7 @@
 				<action android:name="com.geeksville.gaggle.location.LOG_SERVICE"></action>
 			</intent-filter>
 		</service>
+		<activity android:name="FlyMapActivity"></activity>
 
 	</application>
 

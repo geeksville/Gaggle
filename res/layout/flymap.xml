@@ -4,11 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <fragment
-        android:id="@+id/flymap_frag"
-        android:name="com.geeksville.gaggle.fragments.FlyMapFragment"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/flymap"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
 </LinearLayout>

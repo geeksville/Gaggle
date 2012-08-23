@@ -20,14 +20,35 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
+import com.geeksville.gaggle.fragments.FlyMapFragment;
+
 import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 public class FlyMapActivity extends Activity {
+	private static String TAG = "FlyMapActivity";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
 
-	    setContentView(R.layout.flymap);
+		setContentView(R.layout.flymap);
+
+		Intent intent = getIntent();
+
+		Bundle extras = intent.getExtras();
+		Bundle trackbundle = extras.getBundle(FlyMapFragment.EXTRA_TRACKLOG);
+
+		Log.d(TAG, "Creating TopActivity");
+		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+		FlyMapFragment fmf = new FlyMapFragment();
+
+		fmf.setArguments(trackbundle);
+
+		ft.add(R.id.flymap, fmf);
+		ft.commit();
 	}
 }
