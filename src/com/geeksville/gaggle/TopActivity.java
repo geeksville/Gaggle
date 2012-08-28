@@ -49,6 +49,11 @@ public class TopActivity extends Activity implements
    */
   private static final String TAG = "TopActivity";
 
+  private static final String FLIGHT_CLTR_TAB = "FlightCtrl";
+  private static final String FLIGHT_LOGS_TAB = "Logs";
+  private static final String WAYPOINTS_TAB = "Waypoints";
+  private static final String FLYMAP_TAB = "FLyMap";
+
   // An activity request code
   private static final int SHOW_PREFS = 1;
 
@@ -58,6 +63,7 @@ public class TopActivity extends Activity implements
 	private TabHost mTabHost;
 	private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabInfo>();
 	private TabInfo mLastTab = null;
+	private int mTabIndexForPause;
 
 	private class TabInfo {
 		private String tag;
@@ -107,29 +113,25 @@ public class TopActivity extends Activity implements
 		TabInfo tabInfo = null;
 		
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("FlightInst").setIndicator("Tab 1"),
-				(tabInfo = new TabInfo("FlightInst", LoggingControlFragment.class, args)));
+				.newTabSpec(FLIGHT_CLTR_TAB).setIndicator("Tab 1"),
+				(tabInfo = new TabInfo(FLIGHT_CLTR_TAB, LoggingControlFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("Logs").setIndicator("Tab 2"),
-				(tabInfo = new TabInfo("Logs", ListFlightsFragment.class, args)));
+				.newTabSpec(FLIGHT_LOGS_TAB).setIndicator("Tab 2"),
+				(tabInfo = new TabInfo(FLIGHT_LOGS_TAB, ListFlightsFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("Waypoints").setIndicator("Tab 3"),
-				(tabInfo = new TabInfo("Waypoints", ListWaypointsFragment.class, args)));
+				.newTabSpec(WAYPOINTS_TAB).setIndicator("Tab 3"),
+				(tabInfo = new TabInfo(WAYPOINTS_TAB, ListWaypointsFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("LiveMap").setIndicator("Tab 4"),
-				(tabInfo = new TabInfo("LiveMap", FlyMapFragment.class, args)));
+				.newTabSpec(FLYMAP_TAB).setIndicator("Tab 4"),
+				(tabInfo = new TabInfo(FLYMAP_TAB, FlyMapFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
-		
-		// Default to first tab
-		this.onTabChanged("FlightInst");
-		//
-		mTabHost.setOnTabChangedListener(this);
+				mTabHost.setOnTabChangedListener(this);
 	}
 
 	@Override
@@ -202,9 +204,9 @@ public class TopActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.maintabs);
 		initialiseTabHost(savedInstanceState);
-		if (savedInstanceState != null) {
-			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-		}
+//		if (savedInstanceState != null) {
+//			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+//		}
 	}
 
 	/**
@@ -246,9 +248,9 @@ public class TopActivity extends Activity implements
 
     updateFromOld();
 
-    if (!isFlightsLogged()) {
-      mTabHost.setCurrentTabByTag("Logs");
-    }
+    // always start in first tab
+    mTabHost.setCurrentTab(0);
+    onTabChanged(FLIGHT_CLTR_TAB);
   }
 
   private static final int MIN_GOOD_VERSION = 1;
@@ -365,7 +367,6 @@ public class TopActivity extends Activity implements
    */
   @Override
   protected void onResume() {
-
     super.onResume();
 
     Units.instance.setFromPrefs(this); // This should take care of making
@@ -377,6 +378,13 @@ public class TopActivity extends Activity implements
     // force on while flying)
     GagglePrefs prefs = new GagglePrefs(this);
     mTabHost.setKeepScreenOn(prefs.isKeepScreenOn());
+    mTabHost.setCurrentTab(mTabIndexForPause);
+  }
+
+  @Override
+  protected void onPause(){
+	  mTabIndexForPause = mTabHost.getCurrentTab();
+	  super.onPause();
   }
 
   /**

@@ -149,6 +149,12 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 		lifePublish.onStop();
 	}
 
+	@Override
+	public void onActivityCreated(final Bundle savedInstanceState){
+		super.onActivityCreated(savedInstanceState);
+		this.setHasOptionsMenu(true);
+	}
+
 	/**
 	 * Create our options menu
 	 * 

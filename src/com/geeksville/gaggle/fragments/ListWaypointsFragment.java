@@ -58,7 +58,6 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.AndroidUtil;
-import com.geeksville.android.DBListActivity;
 import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
@@ -112,7 +111,8 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 		if (db != null)
 			db.deleteObserver(this);
 
-		gps.close();
+		if (gps != null)
+			gps.close();
 
 		super.onPause();
 	}
@@ -126,7 +126,8 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 
 		Units.instance.setFromPrefs(getActivity());
 
-		gps = new GPSClientStub(getActivity());
+		// requiring GPS for listing waypoints is annoying
+//		gps = new GPSClientStub(getActivity());
 
 		// FIXME, close the backing DB when the waypoint cache is done with it
 		db.addObserver(this);
@@ -323,10 +324,11 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	protected Cursor createCursor() {
 		Cursor c = db.fetchWaypointsByDistance();
 
-		if (c.getCount() > 0)
-			// If we have any points, encourage the user to turn on the GPS so
-			// we can show distance
-			((GaggleApplication) getActivity().getApplication()).enableGPS(getActivity());
+		// asking for GPS is annoying
+//		if (c.getCount() > 0)
+//			// If we have any points, encourage the user to turn on the GPS so
+//			// we can show distance
+//			((GaggleApplication) getActivity().getApplication()).enableGPS(getActivity());
 
 		return c;
 	}
@@ -454,6 +456,8 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 
 		GaggleApplication app = ((GaggleApplication) getActivity().getApplication());
 		Location myloc = null;
+
+		if (gps == null) gps = new GPSClientStub(getActivity());
 
 		if (gps != null && gps.get() != null)
 			myloc = gps.get().getLastKnownLocation();

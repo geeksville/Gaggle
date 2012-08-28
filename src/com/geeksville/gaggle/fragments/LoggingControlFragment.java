@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 import com.geeksville.info.InfoListView;
+import com.geeksville.info.SelectInfoFieldsActivity;
 import com.geeksville.location.BarometerClient;
 import com.geeksville.location.GPSClient;
 import com.geeksville.location.GPSToPositionWriter;
@@ -100,26 +102,9 @@ public class LoggingControlFragment extends ListFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		// Log.d(TAG, "onStart() called");
-
-		// Attach to our views
-
-//		infoView = (InfoListView) this.getListView();
-//		loggingButton = (Button) getView()
-//				.findViewById(R.id.LoggingOnOffButton);
-//		loggingButton.setOnClickListener(loggingToggle);
-//
-//		loggingLabel = (TextView) getView().findViewById(R.id.LabelLiveFlight);
-
 		validateAccounts();
 
 		restoreInfoFields();
-
-
-		// GagglePrefs prefs = new GagglePrefs(this);
-		// if (prefs.isFlurryEnabled())
-		// FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
 		lifePublish.onStart();
 	}
 
@@ -130,13 +115,8 @@ public class LoggingControlFragment extends ListFragment implements
 	 */
 	@Override
 	public void onStop() {
-		// Log.d(TAG, "onStop() called");
-
 		super.onStop();
 
-		// GagglePrefs prefs = new GagglePrefs(this);
-		// if (prefs.isFlurryEnabled())
-		// FlurryAgent.onEndSession(this);
 		lifePublish.onStop();
 	}
 
@@ -152,8 +132,6 @@ public class LoggingControlFragment extends ListFragment implements
 		saveInfoFields();
 		((GaggleApplication) getActivity().getApplication()).getGpsLogger()
 				.setObserver(null);
-
-		// Log.d(TAG, "onPause() called");
 		lifePublish.onPause();
 	}
 
@@ -189,18 +167,6 @@ public class LoggingControlFragment extends ListFragment implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see android.app.Activity#onRestart()
-	 */
-	// @Override
-	// protected void onRestart() {
-	// super.onRestart();
-	//
-	// // Log.d(TAG, "onRestart() called");
-	// }
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see android.app.Activity#onResume()
 	 */
 	@Override
@@ -219,18 +185,6 @@ public class LoggingControlFragment extends ListFragment implements
 		// Super skanky way to find our possibly not yet existing service
 		showLoggingStatus();
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onDestroy()
-	 */
-	// @Override
-	// public void onDestroy() {
-	// Log.d(TAG, "onDestroy() called");
-	//
-	// super.onDestroy();
-	// }
 
 	private void showLoggingStatus() {
 		GPSToPositionWriter gpsToPos = ((GaggleApplication) getActivity()
@@ -298,29 +252,6 @@ public class LoggingControlFragment extends ListFragment implements
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	// /**
-	// * @see android.app.Activity#onMenuItemSelected(int,
-	// android.view.MenuItem)
-	// */
-	// @Override
-	// public boolean onMenuItemSelected(int featureId, MenuItem item) {
-	// switch (item.getItemId()) {
-	// case R.id.customfields:
-	// Intent intent = new Intent(this, SelectInfoFieldsActivity.class);
-	// intent.putExtra("checked", infoView.getChecked());
-	// startActivityForResult(intent, INFOSELECT_REQUEST);
-	// return true;
-	// case R.id.setAltFromGPS:
-	// // FIXME - http://blueflyvario.blogspot.com/2011_05_01_archive.html
-	// Location loc = GPSClient.instance.getLastKnownLocation();
-	// BarometerClient.create(getActivity()).setAltitude((float)
-	// loc.getAltitude());
-	// return true;
-	// }
-	//
-	// return super.onMenuItemSelected(featureId, item);
-	// }
-
 	/**
 	 * @see android.app.Activity#onActivityResult(int, int,
 	 *      android.content.Intent)
@@ -364,10 +295,21 @@ public class LoggingControlFragment extends ListFragment implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-
-		/*
-		 * case R.id.accounts_menu: editAccounts(0); return true;
-		 */
+		case R.id.customfields:
+			Intent intent = new Intent(getActivity(), SelectInfoFieldsActivity.class);
+			InfoListView infoView = (InfoListView) getListView();
+			intent.putExtra("checked", infoView.getChecked());
+			startActivityForResult(intent, INFOSELECT_REQUEST);
+			return true;
+		case R.id.setAltFromGPS:
+			// FIXME - http://blueflyvario.blogspot.com/2011_05_01_archive.html
+			Location loc = GPSClient.instance.getLastKnownLocation();
+			BarometerClient.create(getActivity()).setAltitude(
+					(float) loc.getAltitude());
+			return true;
+			/*
+			 * case R.id.accounts_menu: editAccounts(0); return true;
+			 */
 		}
 		return super.onOptionsItemSelected(item);
 	}
