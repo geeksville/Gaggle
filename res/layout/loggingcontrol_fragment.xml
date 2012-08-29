@@ -8,6 +8,9 @@
 
     <com.geeksville.info.InfoListView
         android:id="@id/android:list"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:choiceMode="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="10"

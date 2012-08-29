@@ -78,7 +78,6 @@ public class InfoListView extends ListView {
     rowLayoutId = arr.getResourceId(R.styleable.InfoListView_row_layout_id,
         R.layout.infodock_list_row);
 
-    setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     setAdapter(adapter = new CheckedDockAdapter(context));
 
     // Unless we know otherwise assume we want all selected
