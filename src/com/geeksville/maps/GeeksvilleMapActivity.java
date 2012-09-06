@@ -82,7 +82,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 	// I know the operator of this renderer allows us to use it, because it's me ;-) (sly)
 	private static final IOpenStreetMapRendererInfo OpenHikingMap =
 		new XYRenderer("maps.refuges.info", ResourceProxy.string.unknown, 1, 17, 8, ".jpeg",
-				"http://maps.refuges.info/tiles/renderer.py/hiking/");
+				"http://maps.refuges.info/hiking/");
 
 	// Tiles Courtesy of MapQuest : http://www.mapquest.com/" 
 	private static final IOpenStreetMapRendererInfo OpenMapQuest =
