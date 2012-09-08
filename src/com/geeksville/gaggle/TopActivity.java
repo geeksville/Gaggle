@@ -34,6 +34,7 @@ import com.geeksville.gaggle.fragments.LoggingControlFragment;
 import com.geeksville.info.Units;
 import com.geeksville.location.LocationList;
 import com.geeksville.location.LocationLogDbAdapter;
+import com.geeksville.location.Waypoint;
 import com.geeksville.view.AsyncProgressDialog;
 
 /**
@@ -42,7 +43,8 @@ import com.geeksville.view.AsyncProgressDialog;
  */
 public class TopActivity extends Activity implements
 		TabHost.OnTabChangeListener,
-		ListFlightsFragment.OnFlightSelectedListener {
+		ListFlightsFragment.OnFlightSelectedListener,
+		ListWaypointsFragment.OnWaypointSelectedListener {
 
   /**
    * Debugging tag
@@ -165,13 +167,25 @@ public class TopActivity extends Activity implements
 
 	@Override
 	public void onFlightSelected(LocationList locs) {
-		Log.d(TAG, "received onFlightSelect event, prepare new activity");
+		Log.d(TAG, "received onFlightSelect event");
 
 		Bundle locbundle = new Bundle();
 		locs.writeTo(locbundle);
 		Intent i = new Intent(this, FlyMapActivity.class);
 		i.putExtra(FlyMapFragment.EXTRA_TRACKLOG, locbundle);
 		startActivity(i);
+	}
+
+	@Override
+	public void onWaypointSelected(Waypoint wpt){
+		Log.d(TAG, "received onWaypointSelect event");
+		onTabChanged(FLYMAP_TAB);
+		TabInfo newTab = this.mapTabInfo.get(FLYMAP_TAB);
+
+		FlyMapFragment fmfrag = (FlyMapFragment) newTab.fragment;
+
+		mTabHost.setCurrentTabByTag(FLYMAP_TAB);
+		fmfrag.setCenterOnWaypoint(wpt);
 	}
 
 	private static void addTab(TopActivity activity, TabHost tabHost,

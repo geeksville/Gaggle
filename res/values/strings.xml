@@ -311,6 +311,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="weather_prefs">Weather Stations</string>
 	<string name="weather_enable">Enable weather stations</string>
 	<string name="weather_ffvl_measures_refresh_rate">Refresh rate for weather measures</string><string name="weather_ffvl_measures_refresh_rate_descr">How often to retrieve data for weather stations (minutes)</string><string name="weather_ffvl_station_refresh_rate_descr">How often to refresh station list (hours)</string><string name="weather_ffvl_station_refresh_rate">Refresh rate for weather stations list</string><string name="testing_pref_categ">Features in test</string>
+	<string name="show_wpt_on_map">Show on map</string>
 	
 	
 	

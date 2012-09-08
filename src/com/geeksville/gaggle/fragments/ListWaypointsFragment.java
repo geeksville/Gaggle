@@ -61,6 +61,7 @@ import com.geeksville.android.AndroidUtil;
 import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
+import com.geeksville.gaggle.TopActivity;
 import com.geeksville.gaggle.WaypointDialog;
 import com.geeksville.info.Units;
 import com.geeksville.io.LineEndingStream;
@@ -79,6 +80,9 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	private GPSClientStub gps;
 	private static final String TAG = "ListWaypointsFragment";
 
+	public interface OnWaypointSelectedListener {
+		public void onWaypointSelected(Waypoint wpt);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -193,7 +197,9 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 		case R.id.goto_menu:
 			handleGotoWaypoint(item);
 			return true;
-
+		case R.id.show_on_map:
+			handleShowOnMapWaypoint(item);
+			return true;
 		default:
 			break;
 		}
@@ -483,6 +489,13 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 			Toast.makeText(getActivity(),
 					R.string.waypoint_created, Toast.LENGTH_SHORT).show();
 		}
+	}
+	private void handleShowOnMapWaypoint(MenuItem item){
+		myCursor.moveToPosition(itemToRowNum(item));
+
+		final ExtendedWaypoint w = ((WaypointCursor) myCursor).getWaypoint();
+		TopActivity ta = (TopActivity)getActivity();
+		ta.onWaypointSelected(w);
 	}
 
 	private void handleGotoWaypoint(MenuItem item) {

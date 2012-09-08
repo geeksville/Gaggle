@@ -13,15 +13,13 @@ import com.flurry.android.FlurryAgent;
 import com.geeksville.airspace.AirspaceScrollListener;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.gaggle.AltitudeView;
-import com.geeksville.gaggle.FlyMapActivity;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
-import com.geeksville.gaggle.TopActivity;
 import com.geeksville.info.Units;
 import com.geeksville.location.IGCReader;
 import com.geeksville.location.LocationList;
+import com.geeksville.location.Waypoint;
 import com.geeksville.maps.CenteredMyLocationOverlay;
-import com.geeksville.maps.GeeksvilleMapActivity;
 import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
@@ -30,8 +28,6 @@ import com.geeksville.weather.ffvl.FFVLStationProvider;
 import com.geeksville.weather.overlay.WeatherStationsOverlay;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -43,7 +39,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FlyMapFragment  extends AbstractGeeksvilleMapFragment implements Observer, OnSharedPreferenceChangeListener {
+public class FlyMapFragment  extends AbstractGeeksvilleMapFragment 
+	implements Observer, OnSharedPreferenceChangeListener {
 
 	private static final String TAG = "FlyMapFragment";
 	/**
@@ -148,6 +145,15 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment implements Ob
 	@Override
 	public void onCreate(Bundle args){
 		super.onCreate(args);
+	}
+
+	/*
+	 * 
+	 */
+	public void setCenterOnWaypoint(Waypoint wpt){
+		final GeoPoint center = new GeoPoint(wpt.latitude, wpt.longitude);
+		mapView.getController().setCenter(center);
+//		mapView.getController().setZoom(zoom);
 	}
 
 	/** Called when the activity is first created. */
