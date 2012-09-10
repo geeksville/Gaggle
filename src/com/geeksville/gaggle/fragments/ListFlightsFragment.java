@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -76,6 +77,12 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		public void onFlightSelected(LocationList locs);
 	}
 
+	/*
+	 * This is used to workaround a bug in sub context menu
+	 * where menuinfo gets null.
+	 */
+	private Integer mSavedMenuIndexForSubMenu;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -112,10 +119,25 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info;
+		try {
+			info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+			if (info != null)
+				mSavedMenuIndexForSubMenu = null;
+		} catch (ClassCastException e) {
+			return false;
+		}
+
 		switch (item.getItemId()) {
 		case R.id.logged_upload_menu:
 			// FIXME - show a progress dialog
 			leonardoUpload(itemToRowId(item));
+			return true;
+		case R.id.write_to_file_igc:
+			writeToFileFlight(mSavedMenuIndexForSubMenu, "igc");
+			return true;
+		case R.id.write_to_file_kml:
+			writeToFileFlight(mSavedMenuIndexForSubMenu, "kml");
 			return true;
 		case R.id.send_igc:
 			emailFlight(itemToRowId(item), "igc");
@@ -136,6 +158,7 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 			viewFlightSummary(itemToRowId(item));
 			return true;
 		default:
+			mSavedMenuIndexForSubMenu = info.position;
 			break;
 		}
 
@@ -570,6 +593,12 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 			}
 		}
 	}
+
+	private void writeToFileFlight(final long flightid, final String filetype){
+		AsyncProgressDialog progress = new AsyncFileWriter(flightid, filetype);
+		progress.execute();
+	}
+
 
 	/**
 	 * email a flight

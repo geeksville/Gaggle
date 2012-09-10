@@ -9,5 +9,11 @@
 	<item android:id="@+id/send_csv" android:title="@string/send_csv_file" android:icon="@android:drawable/ic_menu_send" />
 	<!-- <item android:id="@+id/view_kml" android:title="View KML file" android:icon="@android:drawable/ic_menu_view" />
 	  -->
+	<item android:id="@+id/write_to_file" android:title="@string/write_to_file">
+		<menu>
+			<item android:id="@+id/write_to_file_igc" android:title="@string/write_to_file_igc" android:icon="@android:drawable/ic_menu_send"/>
+			<item android:id="@+id/write_to_file_kml" android:title="@string/write_to_file_kml" android:icon="@android:drawable/ic_menu_send"/>
+		</menu>
+	</item>
 	
 </menu>
