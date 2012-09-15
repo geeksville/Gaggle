@@ -91,7 +91,7 @@ public class LoggingControlFragment extends ListFragment implements
 		loggingButton.setOnClickListener(loggingToggle);
 		loggingLabel = (TextView) v.findViewById(R.id.LabelLiveFlight);
 
-		restoreInfoFields();
+//		restoreInfoFields();
 		// Log.d(TAG, "onCreate() called");
 		return v;
 	}
@@ -105,7 +105,7 @@ public class LoggingControlFragment extends ListFragment implements
 	public void onStart() {
 		super.onStart();
 		validateAccounts();
-//		restoreInfoFields();
+		restoreInfoFields();
 		lifePublish.onStart();
 	}
 
@@ -135,34 +135,26 @@ public class LoggingControlFragment extends ListFragment implements
 				.setObserver(null);
 		lifePublish.onPause();
 	}
-
+//
 	private void saveInfoFields() {
-		// Save our list of recipients - FIXME, use the correct android saving
-		// system
-		try {
-			ObjectOutputStream stream = AndroidUtil.writeObjectStream(
-					getActivity(), "infofields");
-			InfoListView infoView = (InfoListView) getListView();
-			
-			stream.writeObject(infoView.getChecked());
-			stream.close();
-		} catch (Exception e) {
-			Log.e(TAG, "Error saving info fields", e);
-		}
+		InfoListView infoView = (InfoListView) getListView();
+		prefs.setInfoFields(infoView.getChecked());
 	}
 
 	private void restoreInfoFields() {
-		try {
-			// FIXME - use correct android system
-			ObjectInputStream stream = AndroidUtil.readObjectStream(
-					getActivity(), "infofields");
+//		try {
+//			// FIXME - use correct android system
+//			ObjectInputStream stream = AndroidUtil.readObjectStream(
+//					getActivity(), "infofields");
+		final String[] ss = prefs.getInfoFields();
+		if (ss.length > 0){
 			InfoListView infoView = (InfoListView) getListView();
-
-			infoView.setChecked((String[]) stream.readObject());
-			stream.close();
-		} catch (Exception e) {
-			Log.e(TAG, "Error restoring info fields", e);
+			infoView.setChecked(ss);
 		}
+//			stream.close();
+//		} catch (Exception e) {
+//			Log.e(TAG, "Error restoring info fields", e);
+//		}
 	}
 
 	/*
@@ -265,6 +257,7 @@ public class LoggingControlFragment extends ListFragment implements
 				InfoListView infoView = (InfoListView) getListView();
 				infoView.setChecked(checked);
 			}
+			saveInfoFields();
 			return;
 		}
 

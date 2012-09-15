@@ -154,4 +154,21 @@ public class GagglePrefs {
 		editor.putInt(mapZoomCenterPref_ZOOM, zoom);
 		editor.commit();
 	}
+
+	public void setInfoFields(final String[] fields){
+		StringBuffer sb = new StringBuffer();
+		String sep = "";
+		for (String s : fields){
+			sb.append(sep + s);
+			sep=",";
+		}
+		editor.putString("saved_info_fields", sb.toString());
+		editor.commit();
+	}
+
+	public String[] getInfoFields(){
+		String s = prefs.getString("saved_info_fields", "");
+		if (s.equals("")) return new String[0];
+		return s.split(",");
+	}
 }
