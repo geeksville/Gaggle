@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.android.ChangeHandler;
@@ -90,6 +91,7 @@ public class LoggingControlFragment extends ListFragment implements
 		loggingButton.setOnClickListener(loggingToggle);
 		loggingLabel = (TextView) v.findViewById(R.id.LabelLiveFlight);
 
+		restoreInfoFields();
 		// Log.d(TAG, "onCreate() called");
 		return v;
 	}
@@ -103,8 +105,7 @@ public class LoggingControlFragment extends ListFragment implements
 	public void onStart() {
 		super.onStart();
 		validateAccounts();
-
-		restoreInfoFields();
+//		restoreInfoFields();
 		lifePublish.onStart();
 	}
 
@@ -142,7 +143,7 @@ public class LoggingControlFragment extends ListFragment implements
 			ObjectOutputStream stream = AndroidUtil.writeObjectStream(
 					getActivity(), "infofields");
 			InfoListView infoView = (InfoListView) getListView();
-
+			
 			stream.writeObject(infoView.getChecked());
 			stream.close();
 		} catch (Exception e) {
@@ -313,6 +314,14 @@ public class LoggingControlFragment extends ListFragment implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+//	/**
+//	 * Handle clicks on an individual waypoint
+//	 */
+//	@Override
+//	public void onListItemClick(ListView l, View v, int position, long id) {
+//		//super.onListItemClick(l, v, position, id);
+//	}
 
 	private void startLogging() {
 

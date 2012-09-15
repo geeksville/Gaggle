@@ -185,6 +185,8 @@ public class InfoListView extends ListView {
         if (!isValid)
           checkedNames.remove(name);
         CheckBox checkbox = (CheckBox) row.findViewById(R.id.checkbox);
+        checkbox.setOnCheckedChangeListener(null);
+
         checkbox.setEnabled(isValid);
         checkbox.setChecked(isValid && isChecked);
         checkbox.setVisibility(isShowCheckmarks() ? VISIBLE : GONE);
