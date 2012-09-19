@@ -113,25 +113,28 @@ public class TopActivity extends Activity implements
 		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup();
 		TabInfo tabInfo = null;
-		
+
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec(FLIGHT_CLTR_TAB).setIndicator("Tab 1"),
+				.newTabSpec(FLIGHT_CLTR_TAB).setIndicator(null, getResources().getDrawable(R.drawable.icon)),
 				(tabInfo = new TabInfo(FLIGHT_CLTR_TAB, LoggingControlFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec(FLIGHT_LOGS_TAB).setIndicator("Tab 2"),
-				(tabInfo = new TabInfo(FLIGHT_LOGS_TAB, ListFlightsFragment.class, args)));
+				.newTabSpec(FLIGHT_LOGS_TAB).setIndicator(null,
+						getResources().getDrawable(android.R.drawable.ic_menu_slideshow)),
+						(tabInfo = new TabInfo(FLIGHT_LOGS_TAB, ListFlightsFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
-		
+
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec(WAYPOINTS_TAB).setIndicator("Tab 3"),
-				(tabInfo = new TabInfo(WAYPOINTS_TAB, ListWaypointsFragment.class, args)));
+				.newTabSpec(WAYPOINTS_TAB).setIndicator(null,
+						getResources().getDrawable(android.R.drawable.ic_menu_myplaces)),
+						(tabInfo = new TabInfo(WAYPOINTS_TAB, ListWaypointsFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
-		
+
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec(FLYMAP_TAB).setIndicator("Tab 4"),
-				(tabInfo = new TabInfo(FLYMAP_TAB, FlyMapFragment.class, args)));
+				.newTabSpec(FLYMAP_TAB).setIndicator(null,
+						getResources().getDrawable(android.R.drawable.ic_menu_mapmode)),
+						(tabInfo = new TabInfo(FLYMAP_TAB, FlyMapFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 				mTabHost.setOnTabChangedListener(this);
 	}
