@@ -70,7 +70,7 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	/**
 	 * One row for each Waypoint type, one col for each WaypointColor
 	 */
-	private static final int[][] markerIds = {
+	public static final int[][] markerIds = {
 			{ R.drawable.blue, R.drawable.yellow, R.drawable.red },
 			{ R.drawable.lz_blue, R.drawable.lz_yellow, R.drawable.lz_red },
 			{ R.drawable.plane_blue, R.drawable.plane_yellow, R.drawable.plane_red },

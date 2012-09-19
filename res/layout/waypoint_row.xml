@@ -8,7 +8,8 @@
 		android:adjustViewBounds="true" android:scaleType="center"
 		android:minHeight="32dp" android:minWidth="32dp" android:maxHeight="32dp"
 		android:maxWidth="32dp" android:layout_gravity="left"
-		android:layout_marginRight="2dip"></ImageView>
+		android:layout_marginRight="2dip">
+	</ImageView>
 
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:orientation="horizontal"
@@ -35,7 +36,3 @@
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
 		android:gravity="left" android:layout_gravity="right" />
 </LinearLayout>
-
-	<!--  	
-
-		-->

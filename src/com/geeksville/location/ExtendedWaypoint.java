@@ -228,10 +228,13 @@ public class ExtendedWaypoint extends Waypoint implements Comparable<ExtendedWay
 	 */
 	private Drawable getIcon(Color color) {
 		Drawable marker = db.markers[type.ordinal()][color.ordinal()];
-
 		// FIXME - return a drawable that has been modified to show
 		// distance/glide ratio
 		return marker;
 	}
 
+	public int getIconId(){
+		final int id =  db.markerIds[type.ordinal()][color.ordinal()];
+		return id;
+	}
 }

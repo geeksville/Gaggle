@@ -370,6 +370,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 				.getColumnIndex(LocationLogDbAdapter.KEY_WAYPOINT_TYPE);
 
 		a.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+			@Override
 			public boolean setViewValue(View _view, Cursor cursor,
 					int columnIndex) {
 
@@ -404,7 +405,8 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 						ExtendedWaypoint w = ((WaypointCursor) cursor)
 								.getWaypoint();
 
-						view.setImageDrawable(w.getIcon());
+//						view.setImageDrawable(w.getIcon());
+						view.setImageDrawable(getResources().getDrawable(w.getIconId()));
 						return true;
 					}
 
@@ -416,6 +418,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 
 				return false;
 			}
+
 		});
 
 		return a;
