@@ -9,14 +9,14 @@ import java.util.HashMap;
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +41,7 @@ import com.geeksville.view.AsyncProgressDialog;
  * @author kevinh
  * 
  */
-public class TopActivity extends Activity implements
+public class TopActivity extends FragmentActivity implements
 		TabHost.OnTabChangeListener,
 		ListFlightsFragment.OnFlightSelectedListener,
 		ListWaypointsFragment.OnWaypointSelectedListener {
@@ -144,7 +144,7 @@ public class TopActivity extends Activity implements
 		TabInfo newTab = this.mapTabInfo.get(tag);
 
 		if (mLastTab != newTab) {
-			FragmentTransaction ft = this.getFragmentManager()
+			FragmentTransaction ft = this.getSupportFragmentManager()
 					.beginTransaction();
 			if (mLastTab != null) {
 				if (mLastTab.fragment != null) {
@@ -164,7 +164,7 @@ public class TopActivity extends Activity implements
 			}
 			mLastTab = newTab;
 			ft.commit();
-			this.getFragmentManager().executePendingTransactions();
+			this.getSupportFragmentManager().executePendingTransactions();
 		}
 	}
 
@@ -200,14 +200,14 @@ public class TopActivity extends Activity implements
 		// Check to see if we already have a fragment for this tab, probably
 		// from a previously saved state. If so, deactivate it, because our
 		// initial state is that a tab isn't shown.
-		tabInfo.fragment = activity.getFragmentManager()
+		tabInfo.fragment = activity.getSupportFragmentManager()
 				.findFragmentByTag(tag);
 		if (tabInfo.fragment != null && !tabInfo.fragment.isDetached()) {
-			FragmentTransaction ft = activity.getFragmentManager()
+			FragmentTransaction ft = activity.getSupportFragmentManager()
 					.beginTransaction();
 			ft.detach(tabInfo.fragment);
 			ft.commit();
-			activity.getFragmentManager().executePendingTransactions();
+			activity.getSupportFragmentManager().executePendingTransactions();
 		}
 
 		tabHost.addTab(tabSpec);

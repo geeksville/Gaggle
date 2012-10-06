@@ -22,13 +22,13 @@ package com.geeksville.gaggle;
 
 import com.geeksville.gaggle.fragments.FlyMapFragment;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-public class FlyMapActivity extends Activity {
+public class FlyMapActivity extends FragmentActivity {
 	private static String TAG = "FlyMapActivity";
 
 	@Override
@@ -43,7 +43,7 @@ public class FlyMapActivity extends Activity {
 		Bundle trackbundle = extras.getBundle(FlyMapFragment.EXTRA_TRACKLOG);
 
 		Log.d(TAG, "Creating TopActivity");
-		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+		FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
 		FlyMapFragment fmf = new FlyMapFragment();
 
 		fmf.setArguments(trackbundle);

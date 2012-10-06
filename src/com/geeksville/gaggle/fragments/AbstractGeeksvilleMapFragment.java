@@ -18,8 +18,8 @@ import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.GeeksvilleMapView;
 import com.geeksville.util.GaggleUncaughtExceptionHandler;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;

@@ -32,7 +32,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
@@ -405,7 +404,6 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 						ExtendedWaypoint w = ((WaypointCursor) cursor)
 								.getWaypoint();
 
-//						view.setImageDrawable(w.getIcon());
 						view.setImageDrawable(getResources().getDrawable(w.getIconId()));
 						return true;
 					}

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
-import android.content.Loader;
+//import android.content.Loader;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;

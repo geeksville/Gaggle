@@ -8,6 +8,7 @@ import java.util.Observer;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.MyLocationOverlay;
+import org.pedro.balises.ffvl.FfvlProvider;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.airspace.AirspaceScrollListener;
@@ -23,8 +24,6 @@ import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
-import com.geeksville.weather.StationProviderable;
-import com.geeksville.weather.ffvl.FFVLStationProvider;
 import com.geeksville.weather.overlay.WeatherStationsOverlay;
 
 import android.app.AlertDialog;
@@ -67,42 +66,10 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 	private AirspaceScrollListener airspace_scroll_lst;
 	private AltitudeView altitudeView;
 
-	/**
-	 * Generate an intent that can be used to play back a tracklog
-	 * 
-	 * @param parent
-	 * @param locs
-	 * @return
-	 */
-//	public static Intent createIntentLogView(Context parent, LocationList locs) {
-//		Bundle locbundle = new Bundle();
-//		locs.writeTo(locbundle);
-//
-//		Intent i = new Intent(parent, TopActivity.class);
-//
-//		i.putExtra(FlyMapFragment.EXTRA_TRACKLOG, locbundle);
-//
-//		return i;
-//	}
-
 	// FIXME - skanky, find a better way to pass in ptrs when we ain't
 	// crossing process boundaries
 	public static LocationList liveList;
 
-	/**
-	 * Generate an intent suitable for live flight tracking
-	 * 
-	 * @param parent
-	 * @return
-	 */
-//	public static Intent createIntentLive(Context parent) {
-//
-//		Intent i = new Intent(parent, TopActivity.class);
-//
-//		i.putExtra(FlyMapFragment.EXTRA_ISLIVE, true);
-//
-//		return i;
-//	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstance){
@@ -303,9 +270,9 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 	}
 
 	private void enableWeatherStations(){
-		StationProviderable provider = new FFVLStationProvider(getActivity());
 		Log.d("FMA", "Enabling weather");
-		weather_overlay = new WeatherStationsOverlay(getActivity(), mapView, provider);
+		weather_overlay = new WeatherStationsOverlay(getActivity(), mapView);
+
 		mapView.getOverlays().add(weather_overlay);
 	}
 

@@ -4,12 +4,10 @@ import com.geeksville.gaggle.R;
 import com.geeksville.location.LocationLogDbAdapter;
 
 import android.app.AlertDialog;
-import android.app.ListFragment;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.DialogInterface;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
@@ -18,8 +16,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-// FIXME use new Loader API (from v4 support)
-// implements LoaderCallbacks<Cursor> ...
+//implements LoaderCallbacks<Cursor>
 //@Override
 //public void onLoadFinished(Loader<Cursor> loader, Cursor cursor){
 //	myCursor = cursor;
@@ -29,15 +26,21 @@ import android.widget.Toast;
 //public void onLoaderReset(Loader<Cursor> loader){
 //	myCursor = null;
 //}
+//
+//@Override
+//public Loader<Cursor> onCreateLoader(int id, Bundle args){
+//	return null;
+//}
 
-public abstract class AbstractDBListFragment extends ListFragment  {
+public abstract class AbstractDBListFragment 
+extends ListFragment  {
 
 	protected Cursor myCursor;
 	// / Should the user be shown a confirming dialog
 	protected Boolean isConfirmDeletes = true;
 
 	BaseAdapter adapter;
-	
+
 	@Override
 	public void onActivityCreated(final Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -48,6 +51,7 @@ public abstract class AbstractDBListFragment extends ListFragment  {
 		adapter = createListAdapter();
 		setListAdapter(adapter);
 	}
+
 
 	/** Called when the activity is first created. */
 	@Override

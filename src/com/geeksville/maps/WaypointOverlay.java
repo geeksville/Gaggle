@@ -82,7 +82,7 @@ public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 //						return true;
 //					}
 //				}, new DefaultResourceProxyImpl(context));
-		super(context, new ArrayList<WaypointItem>(), view, R.layout.bonuspack_bubble);
+		super(context, new ArrayList<WaypointItem>(), view);
 
 //		mItemList = new ArrayList<WaypointItem>();
 

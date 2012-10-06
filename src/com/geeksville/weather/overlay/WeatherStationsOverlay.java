@@ -21,26 +21,91 @@ import java.util.List;
 
 import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.views.MapView;
+import org.pedro.balises.Balise;
+import org.pedro.balises.Releve;
 
-import com.geeksville.gaggle.R;
-import com.geeksville.weather.Station;
-import com.geeksville.weather.StationProviderable;
+import com.geeksville.weather.baliseslib.BaliseOverlayItem;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
-public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<Station> {
+public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOverlayItem> {
 	private final MapView mapView;
 	
+	private MobiBalisesBroadcastReceiver receiver = new MobiBalisesBroadcastReceiver();
+
+	/**
+	 *
+	 * @author Pedro M <pedro.pub@free.fr>
+	 * @author Marc Poulhiès <dkm@kataplop.net>
+	 */
+	private class MobiBalisesBroadcastReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(final Context context, final Intent intent) {
+
+			final String action = intent.getAction();
+			boolean refresh = false;
+
+			if ("mobibalises.balisesUpdate".equals(action)) {
+				final Object[] balises = (Object[])intent.getSerializableExtra("balises");
+
+				WeatherStationsOverlay.this.removeAllItems();
+				if (balises != null){
+					for (Object bo : balises){
+						final Balise b = (Balise)bo;
+
+						BaliseOverlayItem boi = new BaliseOverlayItem(null, b, context);
+						WeatherStationsOverlay.this.addItem(boi);
+					}
+					refresh = true;
+				}
+			} else if ("mobibalises.relevesUpdate".equals(action)) {
+				final Object[] releves = (Object[])intent.getSerializableExtra("releves");
+				if (releves != null) {
+					for (Object ro : releves){
+						final Releve r = (Releve) ro;
+						for (BaliseOverlayItem b : WeatherStationsOverlay.this.mItemsList){
+							if (r.id.equals(b.bid)){
+								b.updateReleve(r);
+							}
+						}
+					}
+				}
+			}
+			if (refresh){
+				WeatherStationsOverlay.this.mapView.invalidate();
+			}
+		}
+	}
+
 	public WeatherStationsOverlay(
-			Context pContext, MapView mapView,
-			StationProviderable provider) {
-		super(pContext, new ArrayList<Station>(), mapView, R.layout.bonuspack_bubble);
-		provider.setOverlay(this);
+			Context pContext, MapView mapView) {
+		super(pContext, new ArrayList<BaliseOverlayItem>(), mapView);
 		this.mapView = mapView;
+
+	    final IntentFilter filter = new IntentFilter("mobibalises.relevesUpdate");
+	    filter.addAction("mobibalises.balisesUpdate");
+	    pContext.registerReceiver(receiver, filter);
+
+	    // Ask Mobibalise to start sending updates
+	    final Intent intent = new Intent("mobibalises.start");
+	    intent.putExtra("client", "gaggle");
+	    pContext.sendOrderedBroadcast(intent, null);
+	}
+
+	public void tearDown(Context pContext){
+		pContext.unregisterReceiver(receiver);
+
+		// Ask Mobibalise to stop sending updates 
+	    final Intent intent = new Intent("mobibalises.stop");
+	    intent.putExtra("client", "gaggle");
+	    pContext.sendOrderedBroadcast(intent, null);
 	}
 
 	@Override
-	public boolean addItems(List<Station> items){
+	public boolean addItems(List<BaliseOverlayItem> items){
 		final boolean r = super.addItems(items);
 		// FIXME this should not be needed, as populate() called
 		// in and by ItemizedIconOverlay should do the job.
