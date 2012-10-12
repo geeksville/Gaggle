@@ -1,0 +1,19 @@
+This is the github repository for the Gaggle Android application for glider projects.
+
+Includes XC server integration.
+
+
+Developers should start here: https://github.com/geeksville/Gaggle/wiki/Developers-page
+
+This page describes how to set up your development environment in order to start contributing.
+
+It shows how to install git (under windows and linux), how to get the Android SDK, Eclipse (if required), and retrieving the source code and associated shared module. It also contains the links to the developer list.
+
+To contribute to a project, you need to fork the repo. You can find more information about this here:
+
+https://help.github.com/articles/fork-a-repo
+
+A list of issues is available here:
+
+https://github.com/geeksville/Gaggle/issues?page=1&state=open
+
