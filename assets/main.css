@@ -1,20 +1,65 @@
 @CHARSET "UTF-8";
 
 a:link {
-COLOR: #0080FF;
+COLOR: green;
 }
 a:visited {
-COLOR: #800080;
+color: #FFD700; // gold
 }
 a:hover {
-COLOR: #FF0000;
+color: #FF0000;
 }
 a:active {
-COLOR: #00FF00;
+color: #00FF00;
 }
-
+.pacifist li {
+	list-style-type: none;
+}
+li {
+	padding: 3px;
+}
+.warning {
+	color: red;
+}
+.warning_box {
+	font-size:smaller;
+	color: red;
+	border: 2px solid;
+	border-color: red;
+	padding: 10px;
+}
+th {
+	text-align: left;
+}
 body {
     font-family: Verdana, Helvetica, sans-serif;
     background-color: #111111;
     color: #eeeeee;
+}
+h1 {
+	font-size: 1.8em;
+}
+.nav_button {
+	font-size: smaller;
+	color:white;
+	font-weight: bold;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.disabled {
+	color: grey;
+}
+.header_image {
+    background-color: transparent;
+    background-image: url('../paraglider.jpg');
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-attachment: scroll;
+    background-size: 100%;
+    width: 100%;
+    height: auto;
 }
