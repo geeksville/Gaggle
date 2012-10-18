@@ -18,49 +18,52 @@
  * All other distribution of Gaggle must conform to the terms of the GNU Public License, version 2.  The full
  * text of this license is included in the Gaggle source, see assets/manual/gpl-2.0.txt.
  ******************************************************************************/
-package com.geeksville.test;
+package com.geeksville.location;
 
-import com.geeksville.gaggle.R;
-import com.geeksville.gaggle.R.drawable;
-import com.geeksville.gaggle.R.id;
-import com.geeksville.gaggle.R.layout;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 
-import android.app.*;
-import android.os.Bundle;
-import android.widget.TabHost;
+import com.geeksville.android.AndroidUtil;
 
 /**
- * FIXME - delete or move - I was playing with tabs, but tabs look like ass on android
- * @author kevinh
- *
+ * Try to find location with GPS, but fall back to cell data if necessary
+ * 
+ * @author khester
+ * 
  */
-public class TabDemo extends TabActivity {
-	
+public class BestEffortLocation implements LocationProvider {
+	BasicLocation gps, cell;
 
-	
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	
-    	// FIXME - change to use a menu like the web browser app (instead of tabs)
-    	
-        setContentView(R.layout.tabs);
+	public BestEffortLocation(Context context, int updatePeriodMsecs) {
+		gps = new BasicLocation(context, LocationManager.GPS_PROVIDER, updatePeriodMsecs);
+		cell = new BasicLocation(context, LocationManager.NETWORK_PROVIDER, updatePeriodMsecs);
+	}
 
-        TabHost tabs = (TabHost)this.findViewById(android.R.id.tabhost);
-        tabs.setup();
+	public void close() {
+		gps.close();
+		cell.close();
+	}
 
-        TabHost.TabSpec one = tabs.newTabSpec("one");
-        one.setContent(R.id.content1);
-        one.setIndicator("labelone", this.getResources().getDrawable(R.drawable.icon));
-        // one.setIndicator("One");
-        tabs.addTab(one);
+	/**
+	 * @see com.geeksville.location.LocationProvider#getLocation()
+	 */
+	public Location getLocation() {
+		Location l = gps.getLocation();
+		if (l != null)
+			return l;
 
-        TabHost.TabSpec two = tabs.newTabSpec("two");
-        two.setContent(R.id.content2);
-        two.setIndicator("Two");
-        tabs.addTab(two);
+		l = cell.getLocation();
+		if (l != null)
+			return l;
 
-        tabs.setCurrentTab(0);
-    	}
+		if (AndroidUtil.isEmulator()) {
+			l = new Location("fake");
+			l.setLatitude(39.644403); // Lat:39.644403 Long:-106.386702
+			l.setLongitude(-106.386702);
+			l.setAltitude(1500);
+		}
+
+		return l;
+	}
 }

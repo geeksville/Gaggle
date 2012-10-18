@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="com/geeksville/test/" kind="src" path="src"/>
-	<classpathentry kind="src" path="shared"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/FlurryAgent.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-android-1.5.8.jar"/>

@@ -18,76 +18,61 @@
  * All other distribution of Gaggle must conform to the terms of the GNU Public License, version 2.  The full
  * text of this license is included in the Gaggle source, see assets/manual/gpl-2.0.txt.
  ******************************************************************************/
-package com.geeksville.test;
+package com.geeksville.location;
 
-import com.flurry.android.FlurryAgent;
-
-import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
+/**
+ * A simple class that infrequntly reads the android GPS or cell data to find
+ * our location
+ * 
+ * @author khester
+ * 
+ */
+public class BasicLocation implements LocationListener, LocationProvider {
 
-public class AccountsActivity extends Activity {
+	private Location curLoc = null;
+	private LocationManager manager;
 
-	/**
-	 * Extra data we look for in our Intent. Which subview should we select by
-	 * default
-	 */
-	public static final String EXTRA_ACCT_NUM = "acctnum";
+	public BasicLocation(Context context, String providerName, int updatePeriodMsecs) {
+		manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-	AccountView liveAccount, delayedAccount;
+		manager.requestLocationUpdates(providerName, updatePeriodMsecs, (float) 5.0, this);
+	}
 
-	/**
-	 * Collect app metrics on Flurry
-	 * 
-	 * @see android.app.Activity#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-
-		FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
+	public void close() {
+		manager.removeUpdates(this);
 	}
 
 	/**
-	 * Collect app metrics on Flurry
-	 * 
-	 * @see android.app.Activity#onStop()
+	 * @see com.geeksville.location.LocationProvider#getLocation()
 	 */
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-
-		FlurryAgent.onEndSession(this);
+	public Location getLocation() {
+		return curLoc;
 	}
 
-	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.account_activity);
-
-		liveAccount = (AccountView) findViewById(R.id.AccountViewLive);
-		delayedAccount = (AccountView) findViewById(R.id.AccountViewDelayedUpload);
-
-		Bundle extras = getIntent().getExtras();
-		int acctNum = extras.getInt(EXTRA_ACCT_NUM, 0);
-		if (acctNum != 0)
-			delayedAccount.requestFocus();
+	public void onLocationChanged(Location location) {
+		curLoc = location;
 	}
 
-	/**
-	 * Save our state
-	 * 
-	 * @see android.app.Activity#onPause()
-	 */
 	@Override
-	protected void onPause() {
-		// FIXME - save more state
-		super.onPause();
-
-		liveAccount.write();
-		delayedAccount.write();
+	public void onProviderDisabled(String provider) {
+		curLoc = null;
 	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// ignore
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// ignore
+	}
+
 }

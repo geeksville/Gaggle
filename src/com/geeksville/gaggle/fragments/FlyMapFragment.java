@@ -300,6 +300,9 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 		super.onPause();
 
 		wptOver.onPause();
+		if (weather_overlay != null){
+			weather_overlay.unregisterToWeatherUpdate(getActivity());
+		}
 
 		// Remove any live tracklog (in case the next instance doesn't want it -
 		// YUCK)
@@ -322,6 +325,10 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 
 		Units.instance.setFromPrefs(getActivity());
 		wptOver.onResume();
+
+		if (weather_overlay != null){
+			weather_overlay.registerToWeatherUpdate(getActivity());
+		}
 
 		// Show our latest live tracklog
 		if (liveList != null && isLive) {
