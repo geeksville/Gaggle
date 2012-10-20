@@ -2,6 +2,5 @@
 *.orig
 *~
 bin/
-shared/
 AndroidManifest.out.*
 gen/
