@@ -1,3 +1,6 @@
 /geeksville-release-key.keystore
 *.orig
 *~
+bin/
+AndroidManifest.out.*
+gen/
