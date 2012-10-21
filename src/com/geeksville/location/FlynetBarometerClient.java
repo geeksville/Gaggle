@@ -1,3 +1,19 @@
+/****************************************************************************************
+ * Gaggle is Copyright 2010, 2011, and 2012 by Kevin Hester of Geeksville Industries LLC,
+ * a California limited liability corporation. 
+ * 
+ * Gaggle is free software: you can redistribute it and/or modify it under the terms of 
+ * the GNU General Public License as published by the Free Software Foundation, either 
+ * version 3 of the License, or (at your option) any later version.
+ * 
+ * Gaggle is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License along with Gaggle 
+ * included in this distribution in the manual (assets/manual/gpl-v3.txt). If not, see  
+ * <http://www.gnu.org/licenses/> or at <http://gplv3.fsf.org>.
+ ****************************************************************************************/
 package com.geeksville.location;
 
 import java.io.BufferedReader;
@@ -85,6 +101,14 @@ public class FlynetBarometerClient extends Observable implements
     return found != null;
   }
 
+  /**
+   * Check device exists and is enabled.
+   * 
+   * - Is there a message elsewhere to say "Have you turned the device on?"
+   * - Is the option shown disabled or does it only appear if the device is found?
+   * 
+   * @return
+   */
   private static BluetoothDevice findDevice() {
     BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
     if (adapter != null && adapter.isEnabled()) {
@@ -102,10 +126,11 @@ public class FlynetBarometerClient extends Observable implements
     return null;
   }
 
+  /**
+   * Set the altitudes in meters above sea level
+   */
   @Override
   public void setAltitude(float meters) {
-    // float p0 = 1013.25f; // Pressure at sea level (hPa)
-    // float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
     float p0 = pressure / (float) Math.pow((1 - meters / 44330), 5.255);
 
     reference = p0;

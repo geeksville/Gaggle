@@ -2,6 +2,10 @@ This is the github repository for the Gaggle Android application for glider proj
 
 Includes XC server integration.
 
+This software is Copyright 2010, 2011, and 2012 by Kevin Hester of Geeksville Industries LLC and 
+is distributed under the terms of the GNU General Public License. The GPL v3 license is included 
+in this distribution in the /assets/manual/ folder or can be found at <http://www.gnu.org/licenses/> 
+or at <http://gplv3.fsf.org>.
 
 Developers should start here: https://github.com/geeksville/Gaggle/wiki/Developers-page
 
