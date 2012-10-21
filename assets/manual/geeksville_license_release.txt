@@ -1,0 +1,10 @@
+Hi ya'll,
+
+hereby authorizing changing the license to a standard GPL license.   Please
+leave the copyright in my name though (if only for historical karma ;-)).
+ If someone radically changes some file, of course I'm fine with them
+adding their name to the copyright.
+
+Kevin
+
+(taken from https://github.com/geeksville/Gaggle/pull/81)
