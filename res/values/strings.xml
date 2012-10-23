@@ -85,7 +85,7 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="units">Units</string>
     <string name="performance_and_model_information">Performance and model information</string>
     <string name="glider_information">Glider information</string>
-    <string name="testing_tools">Testing tools</string>
+    <string name="miscellaneous">Miscellaneous</string>
     <string name="type">Type</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
@@ -283,7 +283,9 @@ please email kevinh@geeksville.com.</string>
 	<string name="donate">Donate</string> 
 	<string name="vario_preferences">Vario Preferences</string>   
 	<string name="advanced">Advanced</string>
-
+    <string name="workaround_1day_offset_bug">Date bug adjustment</string>
+    <string name="compensate_1day_offset_bug">Deduct 1 day from GPS location date.</string>
+	
 	<string name="skylines_tracking">SkyLines live tracking</string>
 	<string name="skylines_tracking_summary">Enable SkyLines live tracking</string>
 	<string name="skylines_server">SkyLines server</string>

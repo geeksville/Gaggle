@@ -310,9 +310,10 @@
 		</PreferenceScreen>
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/testing_tools">
+	<PreferenceCategory android:title="@string/miscellaneous">
 		<CheckBoxPreference android:key="fake_gps_pref"
 			android:title="@string/simulate_gps_data" android:summary="@string/allows_testing_gaggle_at_home" />
 
+		<CheckBoxPreference android:key="workaround_1day_offset_bug" android:summary="@string/compensate_1day_offset_bug" android:title="@string/workaround_1day_offset_bug"/>
 	</PreferenceCategory>
 </PreferenceScreen>
