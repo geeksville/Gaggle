@@ -283,7 +283,10 @@ please email kevinh@geeksville.com.</string>
 	<string name="donate">Donate</string> 
 	<string name="vario_preferences">Vario Preferences</string>   
 	<string name="advanced">Advanced</string>
-
+	<string name="altitude_adjustment">Adjust Altitude</string>
+	<string name="altitude_adjustment_msg">Plus or minus, e.g. -12ft, 3.66m</string>
+	<string name="invalid_altitude_adjustment">Could not parse altitude adjustment value</string>
+	
 	<string name="skylines_tracking">SkyLines live tracking</string>
 	<string name="skylines_tracking_summary">Enable SkyLines live tracking</string>
 	<string name="skylines_server">SkyLines server</string>

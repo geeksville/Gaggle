@@ -284,6 +284,7 @@ public class Donate {
     // receive repays me for
     // the huge amount of time I have invested. -kevin
 
+      // TODO internationalise?
     Toast.makeText(context, "Thank you for donating!", Toast.LENGTH_LONG)
         .show();
   }

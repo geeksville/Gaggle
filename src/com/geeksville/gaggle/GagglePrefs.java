@@ -21,9 +21,12 @@
 package com.geeksville.gaggle;
 
 import java.math.BigInteger;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.geeksville.gaggle.prefs.AltitudeAdjustmentPref;
 
 /**
  * Provides structured access for reading our prefs
@@ -32,6 +35,8 @@ import android.preference.PreferenceManager;
  * 
  */
 public class GagglePrefs {
+    
+    static float altitudeAdjustmentMeters = 0.0f;
 
 	/**
 	 * my preferences DB
@@ -39,9 +44,27 @@ public class GagglePrefs {
 	SharedPreferences prefs;
 	
 	public GagglePrefs(Context c) {
-
+	    
 		prefs = PreferenceManager.getDefaultSharedPreferences(c);
+	    altitudeAdjustmentMeters = calculateAltitudeAdjustmentMeters(c);
 	}
+	
+	private float calculateAltitudeAdjustmentMeters(Context c) {
+	    String altSetting = prefs.getString("altitude_adjustment_pref", "0m").trim();
+	    return AltitudeAdjustmentPref.getAltitudeAdjustmentInMeters(c, altSetting);
+	}
+	
+	SharedPreferences.OnSharedPreferenceChangeListener changeListener = 
+	        new SharedPreferences.OnSharedPreferenceChangeListener() {
+	    
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    if(key.equals("altitude_adjustment")) {
+                        altitudeAdjustmentMeters = calculateAltitudeAdjustmentMeters(null);
+                    }
+                }
+            };
+	
 	public int getCompetitionClass() {
 		String val = prefs.getString("competition_class_pref", "3").trim();
 		return Integer.parseInt(val);
@@ -137,6 +160,8 @@ public class GagglePrefs {
 	public String getPilotName() {
 		return prefs.getString("pilot_name_pref", "").trim();
 	}
-
-
+	
+	public static float getAltitudeAdjustmentMeters() {
+	    return altitudeAdjustmentMeters;
+	}
 }
