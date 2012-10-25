@@ -158,13 +158,11 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-		case R.id.add_menu:
+		int itemId = item.getItemId();
+		if (itemId == R.id.add_menu) {
 			handleAddWaypoint();
 			return true;
-
-		case R.id.delete_menu:
+		} else if (itemId == R.id.delete_menu) {
 			handleDeleteMenu();
 			return true;
 		}
@@ -191,16 +189,14 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-		case R.id.goto_menu:
+		int itemId = item.getItemId();
+		if (itemId == R.id.goto_menu) {
 			handleGotoWaypoint(item);
 			return true;
-		case R.id.show_on_map:
+		} else if (itemId == R.id.show_on_map) {
 			handleShowOnMapWaypoint(item);
 			return true;
-		default:
-			break;
+		} else {
 		}
 
 		return super.onContextItemSelected(item);

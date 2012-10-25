@@ -128,38 +128,34 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 			return false;
 		}
 
-		switch (item.getItemId()) {
-		case R.id.logged_upload_menu:
+		int itemId = item.getItemId();
+		if (itemId == R.id.logged_upload_menu) {
 			// FIXME - show a progress dialog
 			leonardoUpload(itemToRowId(item));
 			return true;
-		case R.id.write_to_file_igc:
+		} else if (itemId == R.id.write_to_file_igc) {
 			writeToFileFlight(mSavedMenuIndexForSubMenu, "igc");
 			return true;
-		case R.id.write_to_file_kml:
+		} else if (itemId == R.id.write_to_file_kml) {
 			writeToFileFlight(mSavedMenuIndexForSubMenu, "kml");
 			return true;
-		case R.id.send_igc:
+		} else if (itemId == R.id.send_igc) {
 			emailFlight(itemToRowId(item), "igc");
 			return true;
-		case R.id.send_kml:
+		} else if (itemId == R.id.send_kml) {
 			emailFlight(itemToRowId(item), "kml");
 			return true;
-		case R.id.send_gpx:
+		} else if (itemId == R.id.send_gpx) {
 			emailFlight(itemToRowId(item), "gpx");
 			return true;
-		case R.id.send_csv:
+		} else if (itemId == R.id.send_csv) {
 			emailFlight(itemToRowId(item), "csv");
 			return true;
-			// case R.id.view_kml:
-			// externalViewFlight(itemToRowId(item), "kml");
-			// return true;
-		case R.id.view_summary:
+		} else if (itemId == R.id.view_summary) {
 			viewFlightSummary(itemToRowId(item));
 			return true;
-		default:
+		} else {
 			mSavedMenuIndexForSubMenu = info.position;
-			break;
 		}
 
 		return super.onContextItemSelected(item);

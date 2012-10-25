@@ -432,16 +432,15 @@ public class TopActivity extends FragmentActivity implements
    */
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-    case R.id.preferences_menu:
-      startActivityForResult(new Intent(this, MyPreferences.class), SHOW_PREFS);
-      return true;
-
-    case R.id.donate_menu:
-      Donate d = new Donate(this);
-      d.splash();
-      return true;
-    }
+    int itemId = item.getItemId();
+	if (itemId == R.id.preferences_menu) {
+		startActivityForResult(new Intent(this, MyPreferences.class), SHOW_PREFS);
+		return true;
+	} else if (itemId == R.id.donate_menu) {
+		Donate d = new Donate(this);
+		d.splash();
+		return true;
+	}
     return super.onOptionsItemSelected(item);
   }
 }

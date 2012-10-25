@@ -282,14 +282,14 @@ public class LoggingControlFragment extends ListFragment implements
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.customfields:
+		int itemId = item.getItemId();
+		if (itemId == R.id.customfields) {
 			Intent intent = new Intent(getActivity(), SelectInfoFieldsActivity.class);
 			InfoListView infoView = (InfoListView) getListView();
 			intent.putExtra("checked", infoView.getChecked());
 			startActivityForResult(intent, INFOSELECT_REQUEST);
 			return true;
-		case R.id.setAltFromGPS:
+		} else if (itemId == R.id.setAltFromGPS) {
 			// FIXME - http://blueflyvario.blogspot.com/2011_05_01_archive.html
 			Location loc = GPSClient.instance.getLastKnownLocation();
 			BarometerClient.create(getActivity()).setAltitude(

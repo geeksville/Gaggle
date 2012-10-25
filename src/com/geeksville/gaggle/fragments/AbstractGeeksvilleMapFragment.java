@@ -206,9 +206,8 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-		case R.id.myloc_menu:
+		int itemId = item.getItemId();
+		if (itemId == R.id.myloc_menu) {
 			zoomToLocation();
 			return true;
 		}

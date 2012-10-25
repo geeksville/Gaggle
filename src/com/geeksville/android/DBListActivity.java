@@ -133,21 +133,17 @@ public abstract class DBListActivity extends ListActivity {
 	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-		case R.id.delete_menu:
+		int itemId = item.getItemId();
+		if (itemId == R.id.delete_menu) {
 			if (isConfirmDeletes)
 				confirmDelete(item);
 			else
 				doDelete(item);
 			return true;
-
-		case R.id.view_menu:
+		} else if (itemId == R.id.view_menu) {
 			handleViewItem(item);
 			return true;
-
-		default:
-			break;
+		} else {
 		}
 
 		return super.onContextItemSelected(item);
