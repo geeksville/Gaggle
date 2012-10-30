@@ -22,6 +22,7 @@ package com.geeksville.location;
 
 import java.util.Observer;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -34,6 +35,7 @@ import com.geeksville.util.IIRFilter;
 import com.geeksville.util.LinearRegression;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
+@TargetApi(9)
 public class AndroidBarometerClient extends SensorClient implements
 		IBarometerClient {
 
@@ -72,7 +74,6 @@ public class AndroidBarometerClient extends SensorClient implements
 	 */
 	@Override
 	public synchronized void addObserver(Observer observer) {
-		// TODO Auto-generated method stub
 		super.addObserver(observer);
 
 		// 0.20 is a little too noisy,

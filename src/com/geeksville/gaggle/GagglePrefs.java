@@ -27,8 +27,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.geeksville.gaggle.prefs.AltitudeAdjustmentPref;
-
-/**
+ 
+/** 
  * Provides structured access for reading our prefs
  * 
  * @author kevinh
@@ -53,17 +53,6 @@ public class GagglePrefs {
 	    String altSetting = prefs.getString("altitude_adjustment_pref", "0m").trim();
 	    return AltitudeAdjustmentPref.getAltitudeAdjustmentInMeters(c, altSetting);
 	}
-	
-	SharedPreferences.OnSharedPreferenceChangeListener changeListener = 
-	        new SharedPreferences.OnSharedPreferenceChangeListener() {
-	    
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                    if(key.equals("altitude_adjustment")) {
-                        altitudeAdjustmentMeters = calculateAltitudeAdjustmentMeters(null);
-                    }
-                }
-            };
 	
 	public int getCompetitionClass() {
 		String val = prefs.getString("competition_class_pref", "3").trim();
