@@ -75,7 +75,7 @@ public class InfoBarometer extends InfoField implements Observer {
 		super.onCreate(context);
 
 		if (context != null) {
-			// FIXME - we should share one compass client object
+			// FIXME - we should share one compass client object (barometer = compass?)
 			baro = BarometerClient.create(context);
 		}
 	}

@@ -22,6 +22,7 @@ package com.geeksville.location;
 
 import java.util.Observer;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -29,10 +30,12 @@ import android.location.Location;
 import android.util.Log;
 
 import com.geeksville.android.PreferenceUtil;
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.util.IIRFilter;
 import com.geeksville.util.LinearRegression;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
+@TargetApi(9)
 public class AndroidBarometerClient extends SensorClient implements
 		IBarometerClient {
 
@@ -71,7 +74,6 @@ public class AndroidBarometerClient extends SensorClient implements
 	 */
 	@Override
 	public synchronized void addObserver(Observer observer) {
-		// TODO Auto-generated method stub
 		super.addObserver(observer);
 
 		// 0.20 is a little too noisy,
@@ -90,8 +92,14 @@ public class AndroidBarometerClient extends SensorClient implements
 	// / If we've been calibrated, override the GPS provided altitude with our
 	// baro based alt
 	public void improveLocation(Location l) {
-		if (isCalibrated)
+		if (isCalibrated) {
 			l.setAltitude(altitude);
+			
+		}
+	}
+	
+	public float getAltitudeAdjustment() {
+	    return GagglePrefs.getAltitudeAdjustmentMeters();
 	}
 
 	// / Given a GPS based altitude, reverse engineer what the correct reference
@@ -109,8 +117,9 @@ public class AndroidBarometerClient extends SensorClient implements
 
 		reference = p0;
 		altitude = SensorManager.getAltitude(reference, pressure);
-
-		Log.w(TAG, "Setting baro reference to " + reference + " alt=" + meters);
+		altitude+=getAltitudeAdjustment();
+		
+		Log.d(TAG, "Setting baro reference to " + reference + " alt=" + meters);
 		isCalibrated = true;
 	}
 

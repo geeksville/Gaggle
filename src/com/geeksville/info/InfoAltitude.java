@@ -26,6 +26,7 @@ import java.util.Observer;
 import android.app.Activity;
 import android.location.Location;
 
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 import com.geeksville.location.BarometerClient;
 import com.geeksville.location.IBarometerClient;
@@ -64,7 +65,6 @@ public class InfoAltitude extends GPSField implements Observer {
 	 */
 	@Override
 	public String getUnits() {
-		// TODO Auto-generated method stub
 		return Units.instance.getAltitudeUnits();
 	}
 
@@ -124,7 +124,7 @@ public class InfoAltitude extends GPSField implements Observer {
 
 		if (naltMeters != altMeters) {
 			altMeters = naltMeters;
-
+			altMeters+=GagglePrefs.getAltitudeAdjustmentMeters();
 			onChanged();
 		}
 	}

@@ -20,9 +20,9 @@
  ******************************************************************************/
 package com.geeksville.location;
 
+import com.geeksville.gaggle.GaggleConfig;
+
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient {
@@ -39,17 +39,20 @@ public class BarometerClient {
    */
   public static IBarometerClient create(Context context) {
 
-    SensorClient.initManager(context);
-
-    // Prefer to use external bluetooth device
-    if (instance == null && FlynetBarometerClient.isAvailable())
-      instance = new FlynetBarometerClient(context);
-    if (instance == null && CNESBarometerClient.isAvailable())
-      instance = new CNESBarometerClient(context);
-    if (instance == null && AndroidBarometerClient.isAvailable())
-      instance = new AndroidBarometerClient(context);
-    
-    return instance;
+	  if(GaggleConfig.isUseBarometer()) {
+	    SensorClient.initManager(context);
+	
+	    // Prefer to use external bluetooth device
+	    if (instance == null && FlynetBarometerClient.isAvailable())
+	      instance = new FlynetBarometerClient(context);
+	    if (instance == null && CNESBarometerClient.isAvailable())
+	      instance = new CNESBarometerClient(context);
+	    if (instance == null && AndroidBarometerClient.isAvailable())
+	      instance = new AndroidBarometerClient(context);
+	    
+	    return instance;
+	  } else {
+		  return null;
+	  }
   }
-
 }

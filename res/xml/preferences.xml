@@ -314,5 +314,9 @@
 		<CheckBoxPreference android:key="fake_gps_pref"
 			android:title="@string/simulate_gps_data" android:summary="@string/allows_testing_gaggle_at_home" />
 
+   		<com.geeksville.view.EditTextPreferenceWithValue
+			android:key="altitude_adjustment_pref" android:title="@string/altitude_adjustment"
+			android:summary="@string/altitude_adjustment_msg"
+			android:singleLine="true" />
 	</PreferenceCategory>
 </PreferenceScreen>
