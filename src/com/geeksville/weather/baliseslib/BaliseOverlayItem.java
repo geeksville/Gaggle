@@ -25,7 +25,12 @@ public class BaliseOverlayItem extends ExtendedOverlayItem {
 		
 		if (releve != null){
 			StringBuffer sb = new StringBuffer();
-			sb.append("min:" + releve.ventMini + "\n" + "max:" +releve.ventMaxi + "\n");
+			if (releve.ventMini.equals("null"))
+				sb.append("min:" + releve.ventMini + "\n");
+
+			if (releve.ventMaxi.equals("null"))
+				sb.append("max:" +releve.ventMaxi + "\n");
+
 			DateFormat df1 = new SimpleDateFormat("dd MMMM - HH:mm");
 
 			sb.append("@" + df1.format(releve.date));

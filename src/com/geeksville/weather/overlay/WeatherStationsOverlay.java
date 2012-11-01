@@ -17,7 +17,10 @@
 package com.geeksville.weather.overlay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.views.MapView;
@@ -30,12 +33,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOverlayItem> {
 	private final MapView mapView;
-	
+	private final static String TAG = "WeatherStationsOverlay";
+
 	private MobiBalisesBroadcastReceiver receiver = new MobiBalisesBroadcastReceiver();
 
+	private final HashMap<String, HashMap<String, BaliseOverlayItem>> itemsMap = new HashMap<String, HashMap<String, BaliseOverlayItem>>();
+	
 	/**
 	 *
 	 * @author Pedro M <pedro.pub@free.fr>
@@ -44,33 +51,65 @@ public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOver
 	private class MobiBalisesBroadcastReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-
 			final String action = intent.getAction();
 			boolean refresh = false;
+			Log.d(TAG, "Received bcast message from MWS");
 
 			if ("mobibalises.balisesUpdate".equals(action)) {
 				final Object[] balises = (Object[])intent.getSerializableExtra("balises");
+				final String key= (String)intent.getSerializableExtra("key");
+				Log.d(TAG, "Balise update for key: " + key);
 
-				WeatherStationsOverlay.this.removeAllItems();
+				if (!itemsMap.containsKey(key)){
+					Log.d(TAG, "First time, creating map");
+					itemsMap.put(key, new HashMap<String, BaliseOverlayItem>());
+				}
 				if (balises != null){
+					final HashSet<String> b_ids = new HashSet<String>();
+					final HashMap<String, BaliseOverlayItem> map = itemsMap.get(key);
+					
 					for (Object bo : balises){
 						final Balise b = (Balise)bo;
+						BaliseOverlayItem boi = map.get(b.id);
+						b_ids.add(b.id);
 
-						BaliseOverlayItem boi = new BaliseOverlayItem(null, b, context);
-						WeatherStationsOverlay.this.addItem(boi);
+						if (boi == null) {
+							boi = new BaliseOverlayItem(null, b, context);
+							WeatherStationsOverlay.this.addItem(boi);
+							Log.d(TAG, "create pin for " + b.nom);
+							map.put(b.id, boi);
+						} else {
+							Log.d(TAG, "pin for " + b.nom + " already here");
+						}
 					}
+					final HashSet<String> to_remove = new HashSet<String>();
+
+					for (Map.Entry<String, BaliseOverlayItem> e: map.entrySet()){
+						if (! b_ids.contains(e.getKey())){
+							WeatherStationsOverlay.this.removeItem(e.getValue());
+							Log.d(TAG, "Removing " + e.getValue().bid);
+							to_remove.add(e.getKey());
+						}
+					}
+					for (String s : to_remove){
+						map.remove(s);
+					}
+
 					refresh = true;
 				}
 			} else if ("mobibalises.relevesUpdate".equals(action)) {
 				final Object[] releves = (Object[])intent.getSerializableExtra("releves");
+				final String key= (String)intent.getSerializableExtra("key");
+				Log.d(TAG, "Releve update for key: " + key);
+
+				final HashMap<String, BaliseOverlayItem> map = itemsMap.get(key);
+
 				if (releves != null) {
 					for (Object ro : releves){
 						final Releve r = (Releve) ro;
-						for (BaliseOverlayItem b : WeatherStationsOverlay.this.mItemsList){
-							if (r.id.equals(b.bid)){
-								b.updateReleve(r);
-							}
-						}
+						BaliseOverlayItem boi = map.get(r.id);
+						if (boi != null)
+							boi.updateReleve(r);
 					}
 				}
 			}
@@ -84,18 +123,21 @@ public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOver
 			Context pContext, MapView mapView) {
 		super(pContext, new ArrayList<BaliseOverlayItem>(), mapView);
 		this.mapView = mapView;
+		registerToWeatherUpdate(pContext);
+	}
 
+	public void registerToWeatherUpdate(Context context){
 	    final IntentFilter filter = new IntentFilter("mobibalises.relevesUpdate");
 	    filter.addAction("mobibalises.balisesUpdate");
-	    pContext.registerReceiver(receiver, filter);
+	    context.registerReceiver(receiver, filter);
 
 	    // Ask Mobibalise to start sending updates
 	    final Intent intent = new Intent("mobibalises.start");
 	    intent.putExtra("client", "gaggle");
-	    pContext.sendOrderedBroadcast(intent, null);
+	    context.sendOrderedBroadcast(intent, null);
 	}
 
-	public void tearDown(Context pContext){
+	public void unregisterToWeatherUpdate(Context pContext){
 		pContext.unregisterReceiver(receiver);
 
 		// Ask Mobibalise to stop sending updates 
