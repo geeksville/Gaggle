@@ -129,11 +129,14 @@ public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOver
 	public void registerToWeatherUpdate(Context context){
 	    final IntentFilter filter = new IntentFilter("mobibalises.relevesUpdate");
 	    filter.addAction("mobibalises.balisesUpdate");
+	    Log.d(TAG, "Register filter for mobibalises.relevesUpdate");
+
 	    context.registerReceiver(receiver, filter);
 
 	    // Ask Mobibalise to start sending updates
 	    final Intent intent = new Intent("mobibalises.start");
 	    intent.putExtra("client", "gaggle");
+	    Log.d(TAG, "Send bcast for mobibalises.start");
 	    context.sendOrderedBroadcast(intent, null);
 	}
 
@@ -143,6 +146,7 @@ public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOver
 		// Ask Mobibalise to stop sending updates 
 	    final Intent intent = new Intent("mobibalises.stop");
 	    intent.putExtra("client", "gaggle");
+	    Log.d(TAG, "Send bcast for mobibalises.stop");
 	    pContext.sendOrderedBroadcast(intent, null);
 	}
 

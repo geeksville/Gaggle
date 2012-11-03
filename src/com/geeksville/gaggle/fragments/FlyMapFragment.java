@@ -8,7 +8,6 @@ import java.util.Observer;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.MyLocationOverlay;
-import org.pedro.balises.ffvl.FfvlProvider;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.airspace.AirspaceScrollListener;

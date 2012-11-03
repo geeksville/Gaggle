@@ -25,11 +25,15 @@ public class BaliseOverlayItem extends ExtendedOverlayItem {
 		
 		if (releve != null){
 			StringBuffer sb = new StringBuffer();
-			if (releve.ventMini.equals("null"))
+			if (!Double.isNaN(releve.ventMini))
 				sb.append("min:" + releve.ventMini + "\n");
+			else
+				sb.append("min: N/A\n");
 
-			if (releve.ventMaxi.equals("null"))
+			if (!Double.isNaN(releve.ventMaxi))
 				sb.append("max:" +releve.ventMaxi + "\n");
+			else
+				sb.append("max: N/A\n");
 
 			DateFormat df1 = new SimpleDateFormat("dd MMMM - HH:mm");
 
