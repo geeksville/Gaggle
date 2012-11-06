@@ -125,10 +125,7 @@ public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 					mGeoPoint.getAltitude(), 0,
 					Waypoint.Type.Unknown.ordinal());
 			db.add(w);
-			WaypointItem item = new WaypointItem(w, captionPaint, context);
-			addItem(item);
-			populate();
-			view.postInvalidate();
+			// item will be added when db update the overlay.
 			return true;
 		}
 		return false;
@@ -163,12 +160,12 @@ public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 		// return ItemizedOverlay.boundCenter(d);
 	}
 
-	public void onPause() {
-		db.deleteObserver(this);
+	public void onParentFragmentCreateView() {
+		db.addObserver(this);
 	}
 
-	public void onResume() {
-		db.addObserver(this);
+	public void onParentFragmentDestroyView(){
+		db.deleteObserver(this);
 	}
 
 	/**
@@ -199,6 +196,60 @@ public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 //		// contents of the CaptionedDrawables
 //		// and then invalidate only if needed
 		boolean needRedraw = false;
+
+		WaypointDB.UpdateData updatedata = (WaypointDB.UpdateData) data;
+
+		switch(updatedata.type){
+		case UPDATE_WPT:
+			WaypointItem f1 = null;
+			for(WaypointItem wi : mItemList){
+				if (wi.getExtendedWpt().id == updatedata.w.id){
+					Log.d(TAG, "found wpt to update");
+					f1 = wi;
+					break;
+				}
+			}
+			if (f1 == null){
+				Log.e(TAG, "Could not find waypoint to update");
+			} else {
+				removeItem(f1);
+				WaypointItem item = new WaypointItem(updatedata.w, captionPaint, context);
+				addItem(item);
+			}
+			needRedraw = true;
+			break;
+		case ADD_ONE:
+			WaypointItem item = new WaypointItem(updatedata.w, captionPaint, context);
+			addItem(item);
+			needRedraw = true;
+			break;
+		case DELETE_ONE:
+			Log.d(TAG, "delete one");
+			WaypointItem f2 = null;
+			for(WaypointItem wi : mItemList){
+				if (wi.getExtendedWpt().id == updatedata.id){
+					Log.d(TAG, "found wpt to remove");
+					f2 = wi;
+					break;
+				}
+			}
+			if (f2 != null){
+				if (!removeItem(f2)){
+					Log.e(TAG, "Could not removing item");
+				}
+			} else {
+				Log.e(TAG, "Could not find waypoint to remove");
+			}
+			needRedraw = true;
+			break;
+		case CLEAR_ALL:
+			removeAllItems();
+			needRedraw = true;
+			break;
+		case DISTANCE_CHANGE:	
+		}
+		
+		Log.d(TAG, "update from Observable");
 		for (WaypointItem item : mItemList) {
 			needRedraw |= item.updateIcon();
 		}

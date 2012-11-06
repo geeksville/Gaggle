@@ -40,7 +40,12 @@ public class WaypointItem extends ExtendedOverlayItem {
 
 	private static final String TAG = "WaypointItem";
 
-	private ExtendedWaypoint w;
+	private ExtendedWaypoint extendedWpt;
+
+	public ExtendedWaypoint getExtendedWpt() {
+		return extendedWpt;
+	}
+
 	private CaptionedDrawable marker;
 	private int width, height;
 
@@ -51,8 +56,7 @@ public class WaypointItem extends ExtendedOverlayItem {
 
 	public WaypointItem(ExtendedWaypoint w, Paint captionPaint, Context context) {
 		super(w.name, w.description, w.geoPoint, context);
-
-		this.w = w;
+		this.extendedWpt = w;
 		curIcon = w.getIcon();
 		// Note: be careful to call mutate here, because we'll be moving each
 		// drawable independently
@@ -73,20 +77,22 @@ public class WaypointItem extends ExtendedOverlayItem {
 	 * @return true if the icon changed
 	 */
 	boolean updateIcon() {
-		Drawable newIcon = w.getIcon();
-
+		final Drawable newIcon = extendedWpt.getIcon();
+		boolean refresh=false;
+		
 		if (curIcon != newIcon) {
 			curIcon = newIcon;
 			marker.setDrawable(newIcon);
-			return true;
+			refresh = true;
 		}
+		
 
-		return false;
+		return refresh;
 	}
 
 	public void handleTap(Activity context) {
 		String msg = String.format(context.getString(R.string.distance_s_s_glide_s), Units.instance
-				.metersToDistance(w.distanceFromPilotX), Units.instance.getDistanceUnits(), w
+				.metersToDistance(extendedWpt.distanceFromPilotX), Units.instance.getDistanceUnits(), extendedWpt
 				.glideRatioString());
 
 		Toast t = Toast.makeText(context, msg, Toast.LENGTH_LONG);

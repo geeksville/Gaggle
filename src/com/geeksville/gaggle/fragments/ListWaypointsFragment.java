@@ -79,7 +79,7 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 	private GPSClientStub gps;
 	private static final String TAG = "ListWaypointsFragment";
 
-	public interface OnWaypointSelectedListener {
+	public interface OnWaypointActionListener {
 		public void onWaypointSelected(Waypoint wpt);
 	}
 

@@ -142,6 +142,8 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 		altitudeView = (AltitudeView) v.findViewById(R.id.altitude_view);
 
 		addWaypoints();
+		wptOver.onParentFragmentCreateView();
+		
 		addPolyoverlay();
 		perhapsAddFromUri();
 		perhapsAddExtraTracklog();
@@ -155,7 +157,7 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 		final int lonE6 = prefs.getMapCenterZoom_Lon();
 		final int zoom = prefs.getMapCenterZoom_Zoom();
 		if (latE6 != -1 && lonE6 != -1 && zoom != -1) {
-			final GeoPoint center = new GeoPoint(latE6,  lonE6);
+			final GeoPoint center = new GeoPoint(latE6, lonE6);
 			mapView.getController().setCenter(center);
 			mapView.getController().setZoom(zoom);
 		}
@@ -170,6 +172,12 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 			enableWeatherStations();
 		}
 		return v;
+	}
+
+	@Override
+	public void onDestroyView(){
+		wptOver.onParentFragmentDestroyView();
+		super.onDestroyView();
 	}
 
 	/**
@@ -298,7 +306,7 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 	public void onPause() {
 		super.onPause();
 
-		wptOver.onPause();
+//		wptOver.onPause();
 		if (weather_overlay != null){
 			weather_overlay.unregisterToWeatherUpdate(getActivity());
 		}
@@ -323,7 +331,7 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 		super.onResume();
 
 		Units.instance.setFromPrefs(getActivity());
-		wptOver.onResume();
+//		wptOver.onResume();
 
 		if (weather_overlay != null){
 			weather_overlay.registerToWeatherUpdate(getActivity());

@@ -44,7 +44,7 @@ import com.geeksville.view.AsyncProgressDialog;
 public class TopActivity extends FragmentActivity implements
 		TabHost.OnTabChangeListener,
 		ListFlightsFragment.OnFlightSelectedListener,
-		ListWaypointsFragment.OnWaypointSelectedListener {
+		ListWaypointsFragment.OnWaypointActionListener {
 
   /**
    * Debugging tag

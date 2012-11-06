@@ -62,6 +62,33 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	private Context context;
 	private IGPSClient gps;
 
+	public static enum UpdateEnum{
+		DELETE_ONE,
+		ADD_ONE,
+		CLEAR_ALL,
+		UPDATE_WPT,
+		DISTANCE_CHANGE,
+	};
+	public static class UpdateData {
+		public UpdateData(UpdateEnum type, long id){
+			this(type, id, null);
+		}
+		public UpdateData(UpdateEnum type){
+			this(type, -1, null);
+		}
+		public UpdateData(UpdateEnum type, ExtendedWaypoint w){
+			this(type, -1, w);
+		}
+		public UpdateData(UpdateEnum type, long id, ExtendedWaypoint w) {
+			this.type = type;
+			this.w = w;
+			this.id = id;
+		}
+		public UpdateEnum type;
+		public long id;
+		public ExtendedWaypoint w;
+	}
+
 	/**
 	 * One row for each Waypoint type, one col for each WaypointColor
 	 */
@@ -204,7 +231,7 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 		// has been an appreciable change in
 		// position)
 		setChanged();
-		notifyObservers();
+		notifyObservers(new UpdateData(UpdateEnum.DISTANCE_CHANGE));
 	}
 
 	public ExtendedWaypoint getNearestLZ() {
@@ -240,7 +267,7 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 		// can be a problem when the adding component is also an observer (may get 
 		// notified for nothing)
 		setChanged();
-		notifyObservers();
+		notifyObservers(new UpdateData(UpdateEnum.ADD_ONE, w));
 
 		return w.id;
 	}
@@ -341,6 +368,8 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 		// FIXME - use proper thread safety prims for these containers
 		wptsById.clear();
 		wptsByName = null;
+
+		notifyObservers(new UpdateData(UpdateEnum.CLEAR_ALL));
 	}
 
 	public void deleteWaypoint(long id) {
@@ -349,6 +378,9 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 
 		wptsById.remove(id);
 		wptsByName = null;
+
+		setChanged();
+		notifyObservers(new UpdateData(UpdateEnum.DELETE_ONE, id));
 	}
 
 	/**
@@ -358,6 +390,9 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 	 */
 	void updateWaypoint(ExtendedWaypoint w) {
 		db.updateWaypoint(w.id, w.name, w.description, w.latitude, w.longitude, w.altitude, w.type.ordinal());
+
+		setChanged();
+		notifyObservers(new UpdateData(UpdateEnum.UPDATE_WPT, w));
 
 		wptsByName = null;
 	}

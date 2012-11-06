@@ -39,12 +39,14 @@ extends ListFragment  {
 	// / Should the user be shown a confirming dialog
 	protected Boolean isConfirmDeletes = true;
 
-	BaseAdapter adapter;
+	protected BaseAdapter adapter;
 
 	@Override
 	public void onActivityCreated(final Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		registerForContextMenu(getListView());
+		this.setHasOptionsMenu(true);
+
 		myCursor = createCursor();
 		getActivity().startManagingCursor(myCursor);
 
@@ -96,9 +98,9 @@ extends ListFragment  {
 			myCursor.requery(); // We just deleted a
 								// row, it seems we need
 			// to manually refetch the cursor
-
 			Toast.makeText(getActivity(), R.string.deleted, Toast.LENGTH_SHORT).show();
 		}
+		adapter.notifyDataSetChanged();
 
 		// adapter.notifyDataSetChanged(); // this
 		// doesn't seem to do

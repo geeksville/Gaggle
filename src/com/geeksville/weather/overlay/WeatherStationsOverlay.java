@@ -58,16 +58,15 @@ public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOver
 			if ("mobibalises.balisesUpdate".equals(action)) {
 				final Object[] balises = (Object[])intent.getSerializableExtra("balises");
 				final String key= (String)intent.getSerializableExtra("key");
-				Log.d(TAG, "Balise update for key: " + key);
 
 				if (!itemsMap.containsKey(key)){
-					Log.d(TAG, "First time, creating map");
 					itemsMap.put(key, new HashMap<String, BaliseOverlayItem>());
 				}
 				if (balises != null){
 					final HashSet<String> b_ids = new HashSet<String>();
 					final HashMap<String, BaliseOverlayItem> map = itemsMap.get(key);
-					
+					Log.d(TAG, "Balise update for key: " + key);
+
 					for (Object bo : balises){
 						final Balise b = (Balise)bo;
 						BaliseOverlayItem boi = map.get(b.id);
@@ -76,10 +75,7 @@ public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOver
 						if (boi == null) {
 							boi = new BaliseOverlayItem(null, b, context);
 							WeatherStationsOverlay.this.addItem(boi);
-							Log.d(TAG, "create pin for " + b.nom);
 							map.put(b.id, boi);
-						} else {
-							Log.d(TAG, "pin for " + b.nom + " already here");
 						}
 					}
 					final HashSet<String> to_remove = new HashSet<String>();
@@ -87,7 +83,6 @@ public class WeatherStationsOverlay extends ItemizedOverlayWithBubble<BaliseOver
 					for (Map.Entry<String, BaliseOverlayItem> e: map.entrySet()){
 						if (! b_ids.contains(e.getKey())){
 							WeatherStationsOverlay.this.removeItem(e.getValue());
-							Log.d(TAG, "Removing " + e.getValue().bid);
 							to_remove.add(e.getKey());
 						}
 					}
