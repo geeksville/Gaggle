@@ -40,11 +40,19 @@ public class GagglePrefs {
 	 */
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
-	
+    private static GagglePrefs instance;
+
 	public GagglePrefs(Context c) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(c);
 		editor = prefs.edit();
 	}
+
+    public static GagglePrefs getInstance() {
+        if (instance == null) {
+            instance = new GagglePrefs(GaggleApplication.getContext());
+        }
+        return instance;
+    }
 
 	public int getCompetitionClass() {
 		String val = prefs.getString("competition_class_pref", "3").trim();
