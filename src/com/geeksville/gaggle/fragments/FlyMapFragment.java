@@ -22,6 +22,7 @@ import com.geeksville.location.Waypoint;
 import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.PolygonOverlay;
 import com.geeksville.maps.TracklogOverlay;
+import com.geeksville.maps.TracklogOverlay2;
 import com.geeksville.maps.WaypointOverlay;
 import com.geeksville.weather.overlay.WeatherStationsOverlay;
 
@@ -325,7 +326,7 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 	/**
 	 * FIXME, move all the live map stuff into a subclass?
 	 */
-	private TracklogOverlay liveTracklogOverlay;
+	private TracklogOverlay2 liveTracklogOverlay;
 
 	@Override
 	public void onResume() {
@@ -346,7 +347,7 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 			liveList.addObserver(this);
 
 			altitudeView.setLocs(locs);
-			liveTracklogOverlay = new TracklogOverlay(getActivity(), locs);
+			liveTracklogOverlay = new TracklogOverlay2(getActivity(), locs);
 			mapView.getOverlays().add(liveTracklogOverlay);
 		} else {
 			perhapsAddExtraTracklog();
@@ -360,10 +361,10 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 	 * 
 	 * @param locBundle
 	 */
-	private TracklogOverlay createTracklogOverlay(final LocationList locs) {
+	private TracklogOverlay2 createTracklogOverlay(final LocationList locs) {
 		Log.d(TAG, "create Track log");
 		// Show a tracklog
-		TracklogOverlay tlog = new TracklogOverlay(getActivity(), locs);
+		TracklogOverlay2 tlog = new TracklogOverlay2(getActivity(), locs);
 
 		// Center on the tracklog (we do this in a callback, because OSM only
 		// works after the view has been layed out
