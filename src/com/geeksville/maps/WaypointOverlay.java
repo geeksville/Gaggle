@@ -36,6 +36,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextPaint;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -43,6 +44,7 @@ import android.view.MotionEvent;
 
 import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.R;
+import com.geeksville.gaggle.WaypointDialogFragment;
 import com.geeksville.location.ExtendedWaypoint;
 import com.geeksville.location.Waypoint;
 import com.geeksville.location.WaypointCursor;
@@ -60,8 +62,9 @@ public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 	private WaypointCursor cursor;
 	private MapView view;
 	private Context context;
+	private FragmentActivity activity;
 
-	public WaypointOverlay(final Activity context, final MapView view) {
+	public WaypointOverlay(final FragmentActivity context, final MapView view) {
 		// per example, we want the bounds to be centered just below this
 		// drawable. We use a alpha channel to not obscure terrain too much...
 		// super(boundCenterBottom(context.getResources().getDrawable(R.drawable.blue)));
@@ -101,6 +104,7 @@ public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 		db = ((GaggleApplication) context.getApplication()).getWaypoints();
 
 		this.context = context.getApplicationContext();
+		this.activity = context;
 		fillFromDB(context);
 	}
 
@@ -116,21 +120,27 @@ public class WaypointOverlay extends ItemizedOverlayWithBubble<WaypointItem>
 
 			GeoPoint mGeoPoint = (GeoPoint) pj.fromPixels(eventX, eventY);
 
-			java.util.Date now = new java.util.Date();
-			String name = DateFormat.format("yy/MM/dd kk:mm:ss", now)
-					.toString();
-
-			ExtendedWaypoint w = new ExtendedWaypoint(name,
-					mGeoPoint.getLatitudeE6()/1E6, mGeoPoint.getLongitudeE6()/1E6,
-					mGeoPoint.getAltitude(), 0,
-					Waypoint.Type.Unknown.ordinal());
-			db.add(w);
+			createWayPointDialog(mGeoPoint);
 			// item will be added when db update the overlay.
 			return true;
 		}
 		return false;
 	}
 
+	private void createWayPointDialog(GeoPoint mGeoPoint) {
+		java.util.Date now = new java.util.Date();
+		String name = DateFormat.format("yy/MM/dd kk:mm:ss", now)
+				.toString();
+
+		final ExtendedWaypoint wayPoint = new ExtendedWaypoint(name, mGeoPoint.getLatitudeE6()/1E6, mGeoPoint.getLongitudeE6()/1E6, mGeoPoint.getAltitude(), Waypoint.Type.Unknown);
+		new WaypointDialogFragment(activity,wayPoint,new Runnable() {
+			
+			@Override
+			public void run() {
+				db.add(wayPoint);
+			}
+		}, true).show(activity.getSupportFragmentManager(),"createwaypoint");
+	}
 	/**
 	 * Reset the bounds so the center of the drawable is at zero
 	 * 

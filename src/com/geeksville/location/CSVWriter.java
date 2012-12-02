@@ -71,7 +71,7 @@ public class CSVWriter implements PositionWriter {
 			int bearing, float groundSpeed, float[] accel, float vspd) {
 
 		// Use US format to ensure floats have dots not commas ;-)
-		out.format(Locale.US, "%d,%f,%f,%f,%f", time, latitude, longitude, altitude, groundSpeed);
+		out.format(Locale.US, "%d,%f,%f,%f,%d,%f,%f", time, latitude, longitude, altitude, bearing, groundSpeed, vspd);
 
 		if (accel == null)
 			accel = fakeAccel;
@@ -86,7 +86,7 @@ public class CSVWriter implements PositionWriter {
 
 	@Override
 	public void emitProlog() {
-		out.print("mSec,Latitude,Longitude,Altitude,Speed");
+		out.print("mSec,Latitude,Longitude,Altitude,Bearing,Speed,VertSpeed");
 		out.print(",AccelX,AccelY,AccelZ");
 		out.print(",Soc1,Soc2,Soc3,BDat1,BDat2,BDat3");
 		out.println();

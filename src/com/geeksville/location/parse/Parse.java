@@ -60,8 +60,7 @@ abstract public class Parse {
 				existingWaypoint.commit();
 			} else {
 				ExtendedWaypoint w = new ExtendedWaypoint(name, latitude, longitude,
-						(int) altitude, type
-								.ordinal());
+						(int) altitude, type);
 				if (!description.equals(name) && description.length() != 0)
 					w.description = description; // Optional
 				db.add(w);

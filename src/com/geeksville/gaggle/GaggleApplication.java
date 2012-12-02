@@ -20,11 +20,18 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
+import java.io.File;
+
+import org.acra.ACRA;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
@@ -53,6 +60,12 @@ public class GaggleApplication extends Application {
 
 	private GPSToPositionWriter gpsToPos;
 
+    private static GaggleApplication instance;
+
+    public static Context getContext() {
+        return instance;
+    }
+
 	public synchronized WaypointDB getWaypoints() {
 		// FIXME, close the backing DB when the waypoint cache is done with it
 
@@ -69,6 +82,7 @@ public class GaggleApplication extends Application {
 	}
 
 	public GaggleApplication() {
+	    instance = this;
 		gpsToPos = new GPSToPositionWriter(this);
 	}
 
@@ -80,16 +94,17 @@ public class GaggleApplication extends Application {
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
+	    ACRA.init(this);
 		super.onCreate();
-		
 		GagglePrefs prefs = new GagglePrefs(this);
 		if (prefs.isFlurryEnabled()){
-		  FlurryAgent.setCaptureUncaughtExceptions(false);
-		  FlurryAgent.setReportLocation(true);
+			FlurryAgent.setCaptureUncaughtExceptions(false);
+			FlurryAgent.setReportLocation(true);
 		}
 	}
 
-	/**
+
+    /**
 	 * Once our main GUI goes away, they call this, to ensure our service isn't
 	 * left needlessly running
 	 */

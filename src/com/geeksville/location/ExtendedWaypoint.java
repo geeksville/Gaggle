@@ -59,12 +59,12 @@ public class ExtendedWaypoint extends Waypoint implements Comparable<ExtendedWay
 		init();
 	}
 
-	public ExtendedWaypoint(String name, double latitude, double longitude, int altitude, int type) {
+	public ExtendedWaypoint(String name, double latitude, double longitude, int altitude, Waypoint.Type type) {
 		this(name, latitude, longitude, altitude, 0, type);
 	}
 
 	public ExtendedWaypoint(String name, double latitude, double longitude, int altitude,
-			int diameter, int type) {
+			int diameter, Type type) {
 		super(name, latitude, longitude, altitude, type);
 
 		this.diameter = diameter;

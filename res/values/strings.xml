@@ -27,7 +27,8 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="no_waypoints_url">file:///android_asset/no_waypoints.html</string>    
     <string name="no_flights_url">file:///android_asset/no_flights.html</string>
     <string name="default_leonardo_url">http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</string>
-        
+    <string name="crashToastText">Gaggle has crashed. a crashreport will be sent to the developers</string>
+    
     <string name="updating_from_a_prior_release">Updating from a prior release</string>
     <string name="starting_logging">Starting Logging</string>
     <!-- Initial release for localization below this line -->
@@ -315,6 +316,12 @@ please email kevinh@geeksville.com.</string>
 	<string name="write_to_file">Write to file</string>
 	<string name="write_to_file_igc">IGC</string>
 	<string name="write_to_file_kml">KML</string>
+	<string name="no_archives_available">Put mbtile or sqlite archives in your sdcard/osmdroid directory on your device.</string>
+	<string name="reading_file">Reading file</string>
+	<string name="waypoint_name">Waypoint Name</string>
+	<string name="waypoint_name_label">"Waypoint name: "</string>
+	<string name="create">Create</string>
+	<string name="create_waypoint">Create Waypoint?</string>
 	
 	
 	

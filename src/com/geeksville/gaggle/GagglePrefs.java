@@ -20,9 +20,16 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+
+import com.geeksville.gaggle.fragments.AbstractGeeksvilleMapFragment;
+import com.geeksville.maps.GeeksvilleMapActivity;
 
 /**
  * Provides structured access for reading our prefs
@@ -32,6 +39,8 @@ import android.preference.PreferenceManager;
  */
 public class GagglePrefs {
 
+    private static final String SELECTED_TILE_SOURCE_NAME = "selectedTileSourceName";
+    private static final String SELECTED_ARCHIVES = "selected_archives";
 	public final static String mapZoomCenterPref_LAT = "MAP_ZOOM_CENTER_PREF_LAT";
 	public final static String mapZoomCenterPref_LON = "MAP_ZOOM_CENTER_PREF_LON";
 	public final static String mapZoomCenterPref_ZOOM = "MAP_ZOOM_CENTER_PREF_ZOOM";
@@ -40,11 +49,19 @@ public class GagglePrefs {
 	 */
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
-	
+    private static GagglePrefs instance;
+
 	public GagglePrefs(Context c) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(c);
 		editor = prefs.edit();
 	}
+
+    public static GagglePrefs getInstance() {
+        if (instance == null) {
+            instance = new GagglePrefs(GaggleApplication.getContext());
+        }
+        return instance;
+    }
 
 	public int getCompetitionClass() {
 		String val = prefs.getString("competition_class_pref", "3").trim();
@@ -171,4 +188,41 @@ public class GagglePrefs {
 		if (s.equals("")) return new String[0];
 		return s.split(",");
 	}
+	
+	public Set<String> getSelectedArchiveFileNames() {
+        String archString = prefs.getString(SELECTED_ARCHIVES, "");
+        String[] archs = archString.split(",");
+        Set<String> returnValue = new HashSet<String>();
+        for (String string : archs) {
+            if (!string.equals("")) {
+                returnValue.add(string);
+            }
+        }
+        return returnValue;
+    }
+
+    public void setSelectedArchiveFileNames(Set<String> archiveFileNames) {
+        StringBuilder sb = new StringBuilder();
+        int counter = 0;
+        for (String string : archiveFileNames) {
+            sb.append(string);
+            if (counter < archiveFileNames.size()-1) {
+                sb.append(",");
+            }
+            counter++;
+        }
+        Editor edit = prefs.edit();
+        edit.putString(SELECTED_ARCHIVES, sb.toString());
+        edit.commit();
+    }
+
+    public void setSelectedTileSourceName(String name) {
+        Editor edit = prefs.edit();
+        edit.putString(SELECTED_TILE_SOURCE_NAME, name);
+        edit.commit();
+    }
+
+    public String getSelectedTileSourceName() {
+        return prefs.getString(SELECTED_TILE_SOURCE_NAME, AbstractGeeksvilleMapFragment.Archive.name());
+    }
 }
