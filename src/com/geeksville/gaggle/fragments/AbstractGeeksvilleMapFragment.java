@@ -153,7 +153,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 		// init tilesource selected in preferences:
         String tilesourceName = GagglePrefs.getInstance().getSelectedTileSourceName();
         tilesourceName = tilesourceName != null ? tilesourceName : "Archive";
-        ITileSource tileSource = supportedRendererMap.get("Archive");
+        ITileSource tileSource = supportedRendererMap.get(tilesourceName);
         // ITileSource tileSource = supportedRendererMap.get(tilesourceName);
         MapTileProviderBasic2 tileProvider = (MapTileProviderBasic2) mapView.getTileProvider();
         if (tileSource instanceof ArchiveTileSource) {
@@ -168,7 +168,6 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
         mapView.getController().setZoom(14);
 		mapView.setBuiltInZoomControls(true);
 		// Set default map view
-		mapView.setTileSource(TileSourceFactory.MAPNIK);
 		mapView.setMultiTouchControls(true);
 		// Default to sat view
 		// mapView.setSatellite(true);

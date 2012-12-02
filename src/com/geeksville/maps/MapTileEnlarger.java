@@ -101,9 +101,9 @@ public class MapTileEnlarger extends MapTileModuleProviderBase {
         return (mTileSource != null ? mTileSource.getMinimumZoomLevel() : MINIMUM_ZOOMLEVEL);
     }
 
-    @Override
+        @Override
     public int getMaximumZoomLevel() {
-        return (mTileSource != null ? mTileSource.getMaximumZoomLevel() : MAXIMUM_ZOOMLEVEL);
+        return mTileSource != null ? mTileSource.getMaximumZoomLevel() : MAXIMUM_ZOOMLEVEL;
     }
 
     @Override
