@@ -13,7 +13,9 @@ public class ArchiveTileSource extends TileSourceAdaptor{
     List<ArchiveInfo> archiveInfos = new ArrayList<ArchiveInfo>();
     
     public void addArchiveInfo(ArchiveInfo archiveInfo) {
-        this.archiveInfos.add(archiveInfo);
+		if (archiveInfo != null) {
+			this.archiveInfos.add(archiveInfo);
+		}
     }
 
     public List<ArchiveInfo> getArchiveInfos() {

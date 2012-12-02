@@ -23,6 +23,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -160,7 +161,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
             ArchiveTileSource archiveTileSource = (ArchiveTileSource) tileSource;
             Set<String> achiveNames = GagglePrefs.getInstance().getSelectedArchiveFileNames();
             for (String archiveName : achiveNames) {
-                archiveTileSource.addArchiveInfo(MapTileProviderBasic2.makeMBTilesArchiveInfo(archiveName));
+                archiveTileSource.addArchiveInfo(MapTileProviderBasic2.makeMBTilesArchiveInfo(archiveName, true));
             }
         }
         tileProvider.setTileSource(tileSource);
@@ -295,7 +296,8 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
                     mapView.getTileProvider().setTileSource(info);
 
                     if (item.getTitle().equals(ARCHIVEMENUNAME)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AbstractGeeksvilleMapFragment.this.getActivity());
+                    	FragmentActivity activity = AbstractGeeksvilleMapFragment.this.getActivity();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                         builder.setTitle("Select Archives");
                         File archiveLocation =
                             new File(Environment.getExternalStorageDirectory() + MapTileProviderBasic2.osmdroidTilesLocation);
@@ -308,8 +310,12 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
                         for (int i = 0; i < availableArchiveFiles.length; i++) {
                             checkedArchives[i] = selectedArchives.contains(availableArchiveFiles[i]);
                         }
-                        builder.setMultiChoiceItems(availableArchiveFiles, checkedArchives, archiveDialogListener);
-
+						if (availableArchiveFiles.length != 0) {
+							builder.setMultiChoiceItems(availableArchiveFiles,
+									checkedArchives, archiveDialogListener);
+						} else {
+							builder.setMessage(activity.getString(R.string.no_archives_available));
+						}
                         AlertDialog dialog = builder.create();
                         dialog.show();
                         // Intent intent = new Intent(GeeksvilleMapActivity.this, ArchiveFileListActivity.class);
@@ -375,7 +381,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
             }
             for (String fileName : selectedArchives) {
                 if (!isContainedIn(infos, fileName)) {
-                    infos.add(MapTileProviderBasic2.makeMBTilesArchiveInfo(fileName));
+                    infos.add(MapTileProviderBasic2.makeMBTilesArchiveInfo(fileName, false));
                 }
             }
         }

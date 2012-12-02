@@ -83,8 +83,12 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
         initTileSource();
     }
 
-    public static ArchiveInfo makeMBTilesArchiveInfo(String fileName) {
+    public static ArchiveInfo makeMBTilesArchiveInfo(String fileName, boolean checkIfArchiveExists) {
         String filePath = Environment.getExternalStorageDirectory() + MapTileProviderBasic2.osmdroidTilesLocation + fileName;
+        File file = new File(filePath);
+        if(checkIfArchiveExists && !file.exists()){
+        	return null;
+        }
         String archiveInfoFilePath = filePath + ".info";
         ArchiveInfo archiveInfo = null;
         try {

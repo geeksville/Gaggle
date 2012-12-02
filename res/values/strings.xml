@@ -316,6 +316,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="write_to_file">Write to file</string>
 	<string name="write_to_file_igc">IGC</string>
 	<string name="write_to_file_kml">KML</string>
+	<string name="no_archives_available">Put mbtile or sqlite archives in your sdcard/osmdroid directory on your device.</string>
 	
 	
 	
