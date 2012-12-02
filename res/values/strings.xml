@@ -318,6 +318,10 @@ please email kevinh@geeksville.com.</string>
 	<string name="write_to_file_kml">KML</string>
 	<string name="no_archives_available">Put mbtile or sqlite archives in your sdcard/osmdroid directory on your device.</string>
 	<string name="reading_file">Reading file</string>
+	<string name="waypoint_name">Waypoint Name</string>
+	<string name="waypoint_name_label">"Waypoint name: "</string>
+	<string name="create">Create</string>
+	<string name="create_waypoint">Create Waypoint?</string>
 	
 	
 	

@@ -61,7 +61,7 @@ import com.geeksville.gaggle.GaggleApplication;
 import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 import com.geeksville.gaggle.TopActivity;
-import com.geeksville.gaggle.WaypointDialog;
+import com.geeksville.gaggle.WaypointDialogFragment;
 import com.geeksville.info.Units;
 import com.geeksville.io.LineEndingStream;
 import com.geeksville.location.ExtendedWaypoint;
@@ -474,17 +474,23 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 			String name = DateFormat.format("yy/MM/dd kk:mm:ss", now)
 					.toString();
 
-			ExtendedWaypoint w = new ExtendedWaypoint(name,
+			final ExtendedWaypoint wayPoint = new ExtendedWaypoint(name,
 					myloc.getLatitude(), myloc.getLongitude(),
 					(int) myloc.getAltitude(), 0,
-					Waypoint.Type.Unknown.ordinal());
-			app.getWaypoints().add(w);
+					Waypoint.Type.Unknown);
+			new WaypointDialogFragment(getActivity(),wayPoint,new Runnable() {
+				
+				@Override
+				public void run() {
+					db.add(wayPoint);
+					Toast.makeText(getActivity(),
+							R.string.waypoint_created, Toast.LENGTH_SHORT).show();
+				}
+			}, true).show(getActivity().getSupportFragmentManager(),"createwaypoint");
 
 			myCursor.requery();
 
 			// FIXME - then select it in the cursor/GUI
-			Toast.makeText(getActivity(),
-					R.string.waypoint_created, Toast.LENGTH_SHORT).show();
 		}
 	}
 	private void handleShowOnMapWaypoint(MenuItem item){
@@ -552,8 +558,8 @@ public class ListWaypointsFragment extends AbstractDBListFragment implements Obs
 			}
 		};
 
-		WaypointDialog d = new WaypointDialog(getActivity(), w, onOkay, onGoto);
-		d.show();
+		WaypointDialogFragment d = new WaypointDialogFragment(getActivity(), w, onOkay, onGoto, false);
+		d.show(getActivity().getSupportFragmentManager(),"editwaypoint");
 	}
 
 	@Override

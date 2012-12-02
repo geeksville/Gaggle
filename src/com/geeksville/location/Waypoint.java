@@ -58,13 +58,13 @@ public class Waypoint {
 	 * @param altitude
 	 * @param diameter
 	 */
-	public Waypoint(String name, double latitude, double longitude, int altitude, int type) {
+	public Waypoint(String name, double latitude, double longitude, int altitude, Type type2) {
 		this.id = -1; // No id until we end up in a DB
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.altitude = altitude;
-		this.type = Type.values()[type];
+		this.type = type2;
 	}
 
 	/**
