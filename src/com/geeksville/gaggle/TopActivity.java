@@ -130,11 +130,18 @@ public class TopActivity extends FragmentActivity implements
 						getResources().getDrawable(android.R.drawable.ic_menu_myplaces)),
 						(tabInfo = new TabInfo(WAYPOINTS_TAB, ListWaypointsFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
-
+		Bundle flyMapArgs;
+		if(args!=null)
+			// drawing a copy is safer than using than modifying 'args' directly. 
+			flyMapArgs = new Bundle(args);
+		else
+			flyMapArgs = new Bundle();
+		// tell FlyMapFragment to show the current position:
+		flyMapArgs.putBoolean(FlyMapFragment.EXTRA_ISLIVE, true);
 		TopActivity.addTab(this, this.mTabHost, this.mTabHost
 				.newTabSpec(FLYMAP_TAB).setIndicator(null,
 						getResources().getDrawable(android.R.drawable.ic_menu_mapmode)),
-						(tabInfo = new TabInfo(FLYMAP_TAB, FlyMapFragment.class, args)));
+						(tabInfo = new TabInfo(FLYMAP_TAB, FlyMapFragment.class, flyMapArgs)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 				mTabHost.setOnTabChangedListener(this);
 	}

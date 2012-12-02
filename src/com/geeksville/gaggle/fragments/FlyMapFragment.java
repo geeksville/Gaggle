@@ -50,7 +50,7 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 	/**
 	 * Extra intend data, a boolean, true == show the user's position
 	 */
-	private static final String EXTRA_ISLIVE = "live";
+	public static final String EXTRA_ISLIVE = "live";
 
 	/**
 	 * Are we showing the current user position?
@@ -125,13 +125,14 @@ public class FlyMapFragment  extends AbstractGeeksvilleMapFragment
 	/** Called when the activity is first created. */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Intent intent = getActivity().getIntent();
+//		Intent intent = getActivity().getIntent();
+//
+//		Bundle extras = intent.getExtras();
 
-		Bundle extras = intent.getExtras();
-
-		if (extras != null) {
+		Bundle args = getArguments();
+		if (args != null) {
 			// Do we show the current user position?
-			isLive = extras.getBoolean(FlyMapFragment.EXTRA_ISLIVE, isLive);
+			isLive = args.getBoolean(FlyMapFragment.EXTRA_ISLIVE, isLive);
 		}
 
 		int layoutId = isLive ? R.layout.flymap_live_fragment : R.layout.flymap_delayed_fragment;
