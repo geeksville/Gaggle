@@ -27,7 +27,8 @@ This is a brief summary of the steps needed to localize Gaggle for a new languag
     <string name="no_waypoints_url">file:///android_asset/no_waypoints.html</string>    
     <string name="no_flights_url">file:///android_asset/no_flights.html</string>
     <string name="default_leonardo_url">http://www.paraglidingforum.com/modules/leonardo/flight_submit.php</string>
-        
+    <string name="crashToastText">Gaggle has crashed. a crashreport will be sent to the developers</string>
+    
     <string name="updating_from_a_prior_release">Updating from a prior release</string>
     <string name="starting_logging">Starting Logging</string>
     <!-- Initial release for localization below this line -->

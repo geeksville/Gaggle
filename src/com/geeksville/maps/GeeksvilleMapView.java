@@ -20,7 +20,8 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
-
+import org.osmdroid.DefaultResourceProxyImpl;
+import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.views.MapView;
 
 import android.content.Context;
@@ -31,20 +32,21 @@ public class GeeksvilleMapView extends MapView {
   private Runnable postLayout;
 
   public GeeksvilleMapView(Context context, AttributeSet attrs) {
-    super(context, attrs);
-
-    // this.getController().setZoom(this.getRenderer().ZOOM_MAXLEVEL); //
-    // Start
-    // off
-    // zoomed
-    // all
-    // the
-    // way
-    // in
+//    super(context, attrs);
+    super(context, 256, new DefaultResourceProxyImpl(context),
+        new MapTileProviderBasic2(context, context.getApplicationContext().getAssets()),null,attrs);
+//    setBillingTiles(this);
 
     // Start off somewhat zoomed in
-    this.getController().setZoom(4);
+    
   }
+
+//  public GeeksvilleMapView(final Context context2, final int tileSizePixels,
+//          final ResourceProxy resourceProxy, final MapTileProviderBase aTileProvider) {
+//      super(context2, tileSizePixels, resourceProxy, aTileProvider);
+//
+//      this.getController().setZoom(14);
+//  }
 
   /**
    * To work around OSM problems, we support calling a post layout callback
@@ -64,6 +66,11 @@ public class GeeksvilleMapView extends MapView {
     postLayout = callback;
   }
 
+  @Override
+    public void setTileSource(ITileSource aTileSource) {
+        // TODO Auto-generated method stub
+        super.setTileSource(aTileSource);
+    }
   /*	*//**
    * Work around for http://code.google.com/p/android/issues/detail?id=4599
    * 
