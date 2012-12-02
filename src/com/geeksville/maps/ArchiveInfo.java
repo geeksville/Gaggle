@@ -3,10 +3,12 @@ package com.geeksville.maps;
 public class ArchiveInfo {
     String fileName;
     int maxZoomLevel;
-    public ArchiveInfo(String fileName, int maxZoomLevel) {
+	private int minZoomLevel;
+    public ArchiveInfo(String fileName, int minZoom, int maxZoom) {
         super();
         this.fileName = fileName;
-        this.maxZoomLevel = maxZoomLevel;
+        this.minZoomLevel = minZoom;
+        this.maxZoomLevel = maxZoom;
     }
     public String getFileName() {
         return fileName;
@@ -20,6 +22,12 @@ public class ArchiveInfo {
     public void setMaxZoomLevel(int maxZoomLevel) {
         this.maxZoomLevel = maxZoomLevel;
     }
+	public int getMinZoomLevel() {
+		return minZoomLevel;
+	}
+	public void setMinZoomLevel(int minZoomLevel) {
+		this.minZoomLevel = minZoomLevel;
+	}
     
     
     

@@ -62,7 +62,8 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
     private String tileDir;
     private SimpleRegisterReceiver registerReceiver;
 	private Context context;
-    public static final String osmdroidTilesLocation = "/osmdroid/"; 
+    public static final String osmdroidTilesLocation = "/osmdroid/";
+	private static final String MIN_ZOOM_STRING = "minZoom"; 
 
     public MapTileProviderBasic2(Context myMap, AssetManager assets) {
         super(DUMMY, null);
@@ -98,7 +99,8 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
 			isr.close();
 			JSONObject json = new JSONObject(jsonString);
 			int maxZoom = json.getInt(MAX_ZOOM_STRING);
-			archiveInfo = new ArchiveInfo(fileName, maxZoom); 
+			int minZoom = json.getInt(MIN_ZOOM_STRING);
+			archiveInfo = new ArchiveInfo(fileName, minZoom, maxZoom); 
 			return archiveInfo;
 		} catch (JSONException e) {
 		} catch (IOException e) {
@@ -107,33 +109,33 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
             filePath,
             null,
             SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READONLY);
-        Cursor cursor = dataBase.rawQuery("SELECT MAX(zoom_level) FROM " + MBTilesFileArchive.TABLE_TILES, null);
-        cursor.moveToFirst();
-        int maxZoom = cursor.getInt(0);
-        cursor.close();
+        int maxZoom = getZoom(dataBase, "MAX");
+        int minZoom = getZoom(dataBase, "MIN");
         dataBase.close();
-        archiveInfo = new ArchiveInfo(fileName, maxZoom); 
+        archiveInfo = new ArchiveInfo(fileName, minZoom, maxZoom); 
 		try {
 			JSONObject json = new JSONObject();
 			json.put("fileName", archiveInfo.getFileName());
 			json.put(MAX_ZOOM_STRING, archiveInfo.getMaxZoomLevel());
+			json.put(MIN_ZOOM_STRING, archiveInfo.getMinZoomLevel());
 			FileOutputStream fos = new FileOutputStream(archiveInfoFilePath);
 			OutputStreamWriter write = new OutputStreamWriter(fos);
 			write.write(json.toString());
 			write.close();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
         return archiveInfo;
     }
+
+	private static int getZoom(SQLiteDatabase dataBase, String string) {
+		Cursor cursor = dataBase.rawQuery("SELECT "+string+"(zoom_level) FROM " + MBTilesFileArchive.TABLE_TILES, null);
+        cursor.moveToFirst();
+        int maxZoom = cursor.getInt(0);
+        cursor.close();
+		return maxZoom;
+	}
 
     public void initTileSource() {
         mTileProviderList.clear();
