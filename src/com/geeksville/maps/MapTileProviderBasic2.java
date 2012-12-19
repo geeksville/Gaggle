@@ -143,7 +143,7 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
             createArchiveTileProviderList();
         }
         else {
-            registerDownloadTileSource(registerReceiver);
+            registerDownloadTileSource(registerReceiver, getTileSource());
         }
     }
 
@@ -166,16 +166,20 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
 			MapTileEnlarger mapTileEnlargeMentProvider = entry.getValue();
 			mTileProviderList.add(mapTileEnlargeMentProvider);
 		}
+		ITileSource onlineBackground = archiveTileSource.getOnlineBackground(); 
+		if(onlineBackground!=null){
+			registerDownloadTileSource(registerReceiver, onlineBackground);
+		}
 	}
 
-    private void registerDownloadTileSource(final IRegisterReceiver pRegisterReceiver) {
+    private void registerDownloadTileSource(final IRegisterReceiver pRegisterReceiver, ITileSource tileSource) {
         final TileWriter tileWriter = new TileWriter();
 
         final MapTileFilesystemProvider fileSystemProvider = new MapTileFilesystemProvider(
-                pRegisterReceiver, getTileSource());
+                pRegisterReceiver, tileSource);
         mTileProviderList.add(fileSystemProvider);
 
-        final MapTileDownloader downloaderProvider = new MapTileDownloader(getTileSource(), tileWriter,
+        final MapTileDownloader downloaderProvider = new MapTileDownloader(tileSource, tileWriter,
             new NetworkAvailabliltyCheck(GaggleApplication.getContext()));
         mTileProviderList.add(downloaderProvider);
     }
@@ -193,6 +197,7 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
         // THIRD provider: saved blown up tiles:
         final MapTileFilesystemProvider fileSystemProvider =
             new MapTileFilesystemProvider(pRegisterReceiver, new TileSourceAdaptor(19, fileSystemSubdirName));
+
 //        mTileProviderList.add(fileSystemProvider);
 
         // FOURTH provider: blow up tiles, and then save:
