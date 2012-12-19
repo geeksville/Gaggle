@@ -26,7 +26,6 @@ import android.widget.TabHost.TabContentFactory;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.PreferenceUtil;
-import com.geeksville.billing.Donate;
 import com.geeksville.gaggle.fragments.FlyMapFragment;
 import com.geeksville.gaggle.fragments.ListFlightsFragment;
 import com.geeksville.gaggle.fragments.ListWaypointsFragment;
@@ -267,9 +266,6 @@ public class TopActivity extends FragmentActivity implements
 
     BetaSplashActivity.perhapsSplash(this);
 
-    Donate d = new Donate(this);
-    d.perhapsSplash();
-
     updateFromOld();
 
     // always start in first tab
@@ -424,11 +420,6 @@ public class TopActivity extends FragmentActivity implements
 
     MenuItem menuItem = menu.findItem(R.id.about_menu);
     menuItem.setIntent(new Intent(this, AboutActivity.class));
-
-    // No need to show this for now...
-    menu.findItem(R.id.donate_menu).setVisible(
-        !Donate.isDonated(this) && Donate.canPromptToUpdate(this));
-
     return true;
   }
 
@@ -443,11 +434,7 @@ public class TopActivity extends FragmentActivity implements
 	if (itemId == R.id.preferences_menu) {
 		startActivityForResult(new Intent(this, MyPreferences.class), SHOW_PREFS);
 		return true;
-	} else if (itemId == R.id.donate_menu) {
-		Donate d = new Donate(this);
-		d.splash();
-		return true;
-	}
+	} 
     return super.onOptionsItemSelected(item);
   }
 }
