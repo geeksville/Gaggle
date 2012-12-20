@@ -365,5 +365,11 @@ public class PrefetchMapActivity extends Activity {
 		public void mapTileRequestFailed(MapTileRequestState aTile) {
 			numFailed++;
 		}
+
+		public void mapTileRequestExpiredTile(MapTileRequestState aState,
+				Drawable aDrawable) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 }

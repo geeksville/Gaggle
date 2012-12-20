@@ -139,12 +139,14 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
 
     public void initTileSource() {
         mTileProviderList.clear();
+        clearTileCache();
         if(getTileSource() instanceof ArchiveTileSource){
             createArchiveTileProviderList();
         }
         else {
             registerDownloadTileSource(registerReceiver, getTileSource());
         }
+        
     }
 
 	private void createArchiveTileProviderList() {
@@ -236,5 +238,21 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
                 .getUsesDataConnection())));
         return provider;
     }
+
+	@Override
+	public int getMinimumZoomLevel() {
+		if(mTileProviderList.isEmpty()){
+			return 0;
+		}
+		return super.getMinimumZoomLevel();
+	}
+
+	@Override
+	public int getMaximumZoomLevel() {
+		if(mTileProviderList.isEmpty()){
+			return 22;
+		}
+		return super.getMaximumZoomLevel();
+	}
 
 }
