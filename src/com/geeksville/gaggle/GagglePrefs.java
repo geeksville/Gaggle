@@ -39,7 +39,7 @@ import com.geeksville.maps.GeeksvilleMapActivity;
  */
 public class GagglePrefs {
 
-    private static final String USE_ONLINE_SOURCE_AS_BACKROUND_FOR_ARCHIVES = "UseOnlineSourceAsBackroundForArchives";
+    private static final String USE_ONLINE_SOURCE_AS_BACKGROUND_FOR_ARCHIVES = "UseOnlineSourceAsBackgroundForArchives";
 	private static final String SELECTED_TILE_SOURCE_NAME = "selectedTileSourceName";
     private static final String SELECTED_ARCHIVES = "selected_archives";
 	public final static String mapZoomCenterPref_LAT = "MAP_ZOOM_CENTER_PREF_LAT";
@@ -227,12 +227,12 @@ public class GagglePrefs {
         return prefs.getString(SELECTED_TILE_SOURCE_NAME, AbstractGeeksvilleMapFragment.Archive.name());
     }
 
-	public boolean getUseOnlineSourceAsBackroundForArchives() {
-		return prefs.getBoolean(USE_ONLINE_SOURCE_AS_BACKROUND_FOR_ARCHIVES, false);
+	public boolean getUseOnlineSourceAsBackgroundForArchives() {
+		return prefs.getBoolean(USE_ONLINE_SOURCE_AS_BACKGROUND_FOR_ARCHIVES, false);
 	}
-	public void setUseOnlineSourceAsBackroundForArchives(boolean useOnlineSourceAsBackroundForArchives) {
+	public void setUseOnlineSourceAsBackgroundForArchives(boolean useOnlineSourceAsBackgroundForArchives) {
         Editor edit = prefs.edit();
-        edit.putBoolean(USE_ONLINE_SOURCE_AS_BACKROUND_FOR_ARCHIVES, useOnlineSourceAsBackroundForArchives);
+        edit.putBoolean(USE_ONLINE_SOURCE_AS_BACKGROUND_FOR_ARCHIVES, useOnlineSourceAsBackgroundForArchives);
         edit.commit();
 	}
 }

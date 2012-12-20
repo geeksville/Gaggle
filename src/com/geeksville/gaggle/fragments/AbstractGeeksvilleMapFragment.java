@@ -167,7 +167,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
             for (String archiveName : achiveNames) {
                 archiveTileSource.addArchiveInfo(MapTileProviderBasic2.makeMBTilesArchiveInfo(archiveName, true));
             }
-            if(GagglePrefs.getInstance().getUseOnlineSourceAsBackroundForArchives()) {
+            if(GagglePrefs.getInstance().getUseOnlineSourceAsBackgroundForArchives()) {
             	archiveTileSource.setOnlineBackground(defaultOnlineBackgroundTileSource);
             }
         }
@@ -321,12 +321,12 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
                         for (int i = 0; i < availableArchiveFiles.length; i++) {
                             checkedArchives[i] = selectedArchives.contains(availableArchiveFiles[i]);
                         }
-                        // make extra string for the backround online source: 
+                        // make extra string for the background online source: 
                         String[] stringsToBeDisplayed = new String[availableArchiveFiles.length+1];
                         System.arraycopy(availableArchiveFiles, 0, stringsToBeDisplayed, 0, availableArchiveFiles.length);
                         stringsToBeDisplayed[availableArchiveFiles.length] = getActivity().getString(
 								R.string.use_background_online_source);
-                        checkedArchives[availableArchiveFiles.length] = GagglePrefs.getInstance().getUseOnlineSourceAsBackroundForArchives();
+                        checkedArchives[availableArchiveFiles.length] = GagglePrefs.getInstance().getUseOnlineSourceAsBackgroundForArchives();
 //						if (availableArchiveFiles.length != 0 || ) {
 							builder.setMultiChoiceItems(stringsToBeDisplayed,
 									checkedArchives, archiveDialogListener);
@@ -381,7 +381,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 					selectedArchives.remove(archiveFiles[which]);
 				}
 			} else {
-				GagglePrefs.getInstance().setUseOnlineSourceAsBackroundForArchives(isChecked);
+				GagglePrefs.getInstance().setUseOnlineSourceAsBackgroundForArchives(isChecked);
 				MapTileProviderBasic2 tileProvider = ((MapTileProviderBasic2) mapView.getTileProvider());
 				ArchiveTileSource archiveTileSource = ((ArchiveTileSource)tileProvider.getTileSource());
 				if(isChecked){
