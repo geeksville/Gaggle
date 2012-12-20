@@ -162,6 +162,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
         MapTileProviderBasic2 tileProvider = (MapTileProviderBasic2) mapView.getTileProvider();
         if (tileSource instanceof ArchiveTileSource) {
             ArchiveTileSource archiveTileSource = (ArchiveTileSource) tileSource;
+            archiveTileSource.clearArchiveInfos();
             Set<String> achiveNames = GagglePrefs.getInstance().getSelectedArchiveFileNames();
             for (String archiveName : achiveNames) {
                 archiveTileSource.addArchiveInfo(MapTileProviderBasic2.makeMBTilesArchiveInfo(archiveName, true));
