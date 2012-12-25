@@ -21,10 +21,13 @@
 package com.geeksville.gaggle;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
+import org.apache.commons.io.FileUtils;
 
 import android.app.Activity;
 import android.app.Application;
@@ -32,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
@@ -101,6 +105,18 @@ public class GaggleApplication extends Application {
 			FlurryAgent.setCaptureUncaughtExceptions(false);
 			FlurryAgent.setReportLocation(true);
 		}
+		File file = getFileStreamPath("world.mbtiles");
+		if (!file.exists()) {
+			try {
+				InputStream assetInputStream = getAssets()
+						.open("world.mbtiles");
+				FileUtils.copyInputStreamToFile(assetInputStream, file);
+			} catch (IOException e) {
+				Log.e("worldMap",
+						"World map could not be coppied from assets to private file storage");
+			}
+		}
+
 	}
 
 

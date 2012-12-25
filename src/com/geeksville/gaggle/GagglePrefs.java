@@ -39,7 +39,8 @@ import com.geeksville.maps.GeeksvilleMapActivity;
  */
 public class GagglePrefs {
 
-    private static final String SELECTED_TILE_SOURCE_NAME = "selectedTileSourceName";
+    private static final String USE_ONLINE_SOURCE_AS_BACKGROUND_FOR_ARCHIVES = "UseOnlineSourceAsBackgroundForArchives";
+	private static final String SELECTED_TILE_SOURCE_NAME = "selectedTileSourceName";
     private static final String SELECTED_ARCHIVES = "selected_archives";
 	public final static String mapZoomCenterPref_LAT = "MAP_ZOOM_CENTER_PREF_LAT";
 	public final static String mapZoomCenterPref_LON = "MAP_ZOOM_CENTER_PREF_LON";
@@ -225,4 +226,13 @@ public class GagglePrefs {
     public String getSelectedTileSourceName() {
         return prefs.getString(SELECTED_TILE_SOURCE_NAME, AbstractGeeksvilleMapFragment.Archive.name());
     }
+
+	public boolean getUseOnlineSourceAsBackgroundForArchives() {
+		return prefs.getBoolean(USE_ONLINE_SOURCE_AS_BACKGROUND_FOR_ARCHIVES, false);
+	}
+	public void setUseOnlineSourceAsBackgroundForArchives(boolean useOnlineSourceAsBackgroundForArchives) {
+        Editor edit = prefs.edit();
+        edit.putBoolean(USE_ONLINE_SOURCE_AS_BACKGROUND_FOR_ARCHIVES, useOnlineSourceAsBackgroundForArchives);
+        edit.commit();
+	}
 }

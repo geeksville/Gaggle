@@ -120,7 +120,7 @@ public class MapTileEnlarger extends MapTileModuleProviderBase {
         final int baseBitMapX = (int) ((double) tile.getX() / extraMag2);
         final int baseBitMapY = (int) ((double) tile.getY() / extraMag2);
         final int baseZoom = tile.getZoomLevel() - extraMag;
-        final int sizeSubTile = (int) ((double) 256 / extraMag2);
+        final double sizeSubTile = (int) ((double) 256 / extraMag2);
         final int xPositionWithin = (int) (tile.getX() % extraMag2 * sizeSubTile);
         final int yPositionWithin = (int) (tile.getY() % extraMag2 * sizeSubTile);
         synchronized (matrix) {
@@ -147,7 +147,7 @@ public class MapTileEnlarger extends MapTileModuleProviderBase {
             // previousBaseBitmapDrawable = getBitMapDrawableForBaseTile(previousBaseTile);
             // }
             if (baseDrawable != null) {
-                return createBitMapDrawableByUpsampling(baseDrawable, matrix, sizeSubTile, xPositionWithin, yPositionWithin);
+                return createBitMapDrawableByUpsampling(baseDrawable, matrix, (sizeSubTile<1?1:(int)sizeSubTile), xPositionWithin, yPositionWithin);
             }
         }
          return null;
