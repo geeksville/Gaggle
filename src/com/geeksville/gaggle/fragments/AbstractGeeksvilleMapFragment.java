@@ -32,6 +32,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.LifeCycleHandler;
@@ -56,6 +57,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 	private MyLocationOverlay myLocationOverlay;
 
 	private LifeCyclePublisherImpl lifePublish = new LifeCyclePublisherImpl();
+	private ITileSource defaultOnlineBackgroundTileSource;
 
 	// There is also TopOSM features, but we don't bother to show that
 //	private static final XYTileSource TopOSMRelief =
@@ -141,6 +143,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 //					getString(R.string.topo_us_contour),
 //					getString(R.string.topo_us_relief)
 			};
+		  defaultOnlineBackgroundTileSource = supportedRendererMap.get(TileSourceFactory.CYCLEMAP.name());
 	  }
 	
 	/** Called when the activity is first created. */
@@ -159,11 +162,23 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
         MapTileProviderBasic2 tileProvider = (MapTileProviderBasic2) mapView.getTileProvider();
         if (tileSource instanceof ArchiveTileSource) {
             ArchiveTileSource archiveTileSource = (ArchiveTileSource) tileSource;
-            Set<String> achiveNames = GagglePrefs.getInstance().getSelectedArchiveFileNames();
-            for (String archiveName : achiveNames) {
+            archiveTileSource.clearArchiveInfos();
+            Set<String> archiveNames = GagglePrefs.getInstance().getSelectedArchiveFileNames();
+            Set<String> toBeRemoved = new HashSet<String>();
+            for (String archiveName : archiveNames) {
+                String filePath = Environment.getExternalStorageDirectory() + MapTileProviderBasic2.osmdroidTilesLocation + archiveName;
+                if(new File(filePath).exists()){
                 archiveTileSource.addArchiveInfo(MapTileProviderBasic2.makeMBTilesArchiveInfo(archiveName, true));
+                } else {
+                	toBeRemoved.add(archiveName);
+                }
+            }
+            archiveNames.removeAll(toBeRemoved);
+            if(GagglePrefs.getInstance().getUseOnlineSourceAsBackgroundForArchives()) {
+            	archiveTileSource.setOnlineBackground(defaultOnlineBackgroundTileSource);
             }
         }
+        
         tileProvider.setTileSource(tileSource);
 
         mapView.getController().setZoom(14);
@@ -293,8 +308,10 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     item.setChecked(true);
-                    mapView.getTileProvider().setTileSource(info);
-
+                    ITileSource oldTileSource = mapView.getTileProvider().getTileSource();
+                    if(oldTileSource != info){
+                    	mapView.getTileProvider().setTileSource(info);
+                    }
                     if (item.getTitle().equals(ARCHIVEMENUNAME)) {
                     	FragmentActivity activity = AbstractGeeksvilleMapFragment.this.getActivity();
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -303,19 +320,26 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
                             new File(Environment.getExternalStorageDirectory() + MapTileProviderBasic2.osmdroidTilesLocation);
                         final String[] availableArchiveFiles = archiveLocation.list(archivesFileFilter);
                         final Set<String> selectedArchives = GagglePrefs.getInstance().getSelectedArchiveFileNames();
+                        // the handler taht does the work when something is selected:
                         DialogInterface.OnMultiChoiceClickListener archiveDialogListener =
                             new ArchiveSelectionListener(selectedArchives, availableArchiveFiles);
-
-                        boolean[] checkedArchives = new boolean[availableArchiveFiles.length];
+                        // make extra option for the background online source:
+                        boolean[] checkedArchives = new boolean[availableArchiveFiles.length+1];
                         for (int i = 0; i < availableArchiveFiles.length; i++) {
                             checkedArchives[i] = selectedArchives.contains(availableArchiveFiles[i]);
                         }
-						if (availableArchiveFiles.length != 0) {
-							builder.setMultiChoiceItems(availableArchiveFiles,
+                        // make extra string for the background online source: 
+                        String[] stringsToBeDisplayed = new String[availableArchiveFiles.length+1];
+                        System.arraycopy(availableArchiveFiles, 0, stringsToBeDisplayed, 0, availableArchiveFiles.length);
+                        stringsToBeDisplayed[availableArchiveFiles.length] = getActivity().getString(
+								R.string.use_background_online_source);
+                        checkedArchives[availableArchiveFiles.length] = GagglePrefs.getInstance().getUseOnlineSourceAsBackgroundForArchives();
+//						if (availableArchiveFiles.length != 0 || ) {
+							builder.setMultiChoiceItems(stringsToBeDisplayed,
 									checkedArchives, archiveDialogListener);
-						} else {
-							builder.setMessage(activity.getString(R.string.no_archives_available));
-						}
+//						} else {
+//							builder.setMessage(activity.getString(R.string.no_archives_available));
+//						}
                         AlertDialog dialog = builder.create();
                         dialog.show();
                         // Intent intent = new Intent(GeeksvilleMapActivity.this, ArchiveFileListActivity.class);
@@ -352,15 +376,30 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
             this.archiveFiles = archiveFiles;
         }
 
-        @Override
-        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-            if (isChecked)
-                selectedArchives.add(archiveFiles[which]);
-            else
-                selectedArchives.remove(archiveFiles[which]);
-
-            onChangeSelectedArchives();
-        }
+		@Override
+		public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+			// if it is one of the real displayed archives (not the extra option
+			// to display an online tilesource for the rest):
+			if (which != archiveFiles.length) {
+				if (isChecked){
+					selectedArchives.add(archiveFiles[which]);
+				}
+				else{
+					selectedArchives.remove(archiveFiles[which]);
+				}
+			} else {
+				GagglePrefs.getInstance().setUseOnlineSourceAsBackgroundForArchives(isChecked);
+				MapTileProviderBasic2 tileProvider = ((MapTileProviderBasic2) mapView.getTileProvider());
+				ArchiveTileSource archiveTileSource = ((ArchiveTileSource)tileProvider.getTileSource());
+				if(isChecked){
+					archiveTileSource.setOnlineBackground(defaultOnlineBackgroundTileSource);
+					Toast.makeText(getActivity(), R.string.no_online_background_when_offline_warning, Toast.LENGTH_LONG).show();
+				} else {
+					archiveTileSource.removeOnlineBackground();
+				}
+			}
+			onChangeSelectedArchives();
+		}
 
         private void onChangeSelectedArchives() {
             GagglePrefs.getInstance().setSelectedArchiveFileNames(selectedArchives);
@@ -369,6 +408,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
             // tileSource.addArchiveInfo(archiveInfo);
             synchronizeArchives(selectedArchives, infos);
             ((MapTileProviderBasic2) mapView.getTileProvider()).initTileSource();
+            mapView.invalidate();
         }
 
         private void synchronizeArchives(Set<String> selectedArchives, List<ArchiveInfo> infos) {
@@ -381,7 +421,10 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
             }
             for (String fileName : selectedArchives) {
                 if (!isContainedIn(infos, fileName)) {
-                    infos.add(MapTileProviderBasic2.makeMBTilesArchiveInfo(fileName, false));
+                	String filePath = Environment.getExternalStorageDirectory() + MapTileProviderBasic2.osmdroidTilesLocation + fileName;
+                	if(new File(filePath).exists()){
+                		infos.add(MapTileProviderBasic2.makeMBTilesArchiveInfo(fileName, false));
+                	}
                 }
             }
         }
@@ -461,7 +504,6 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 	@Override
 	public void onPause() {
 		super.onPause();
-
 		if (myLocationOverlay != null) {
 			myLocationOverlay.disableMyLocation();
 			myLocationOverlay.disableFollowLocation();

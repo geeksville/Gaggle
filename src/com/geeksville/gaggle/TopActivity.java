@@ -223,13 +223,24 @@ public class TopActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "creating topactivity!");
 
-		// setThemeFromPrefs();
+		setThemeFromPrefs();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.maintabs);
 		initialiseTabHost(savedInstanceState);
-//		if (savedInstanceState != null) {
-//			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-//		}
+		int oldTab = mTabHost.getCurrentTab();
+		if(savedInstanceState == null){
+			// try to get it from the intent, because in case of a theme switch the saveInstanceStae might not have been retained throught the normal path:
+			savedInstanceState = getIntent().getBundleExtra("savedInstanceState");
+		}
+		if (savedInstanceState != null) {
+			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+			// and overrule the potential 0-value of the current tab, because o the re-init due to theme-switch (see also OnResume): 
+			mTabIndexForPause = mTabHost.getCurrentTab();
+		}
+		// if tab has not been changed, then initiliaze it anyway:
+		if(oldTab == mTabHost.getCurrentTab()){
+			onTabChanged(mTabHost.getCurrentTabTag());
+		}
 	}
 
 	/**
@@ -268,9 +279,9 @@ public class TopActivity extends FragmentActivity implements
 
     updateFromOld();
 
-    // always start in first tab
-    mTabHost.setCurrentTab(0);
-    onTabChanged(FLIGHT_CLTR_TAB);
+//    // always start in first tab
+//    mTabHost.setCurrentTab(0);
+//    onTabChanged(FLIGHT_CLTR_TAB);
   }
 
   private static final int MIN_GOOD_VERSION = 1;
@@ -339,16 +350,26 @@ public class TopActivity extends FragmentActivity implements
 
     if (requestCode == SHOW_PREFS) {
       boolean newLight = PreferenceUtil.getBoolean(this, "use_light_theme",
-          true);
+          false);
 
       if (newLight != isLightTheme) {
         // Restart our app with the new theme
         finish();
-        startActivity(new Intent(this, TopActivity.class));
+        intent = createIntentWithSavedStateInfo();
+        startActivity(intent);
       }
     }
     BetaSplashActivity.handleActivityResult(this, requestCode, resultCode);
   }
+
+private Intent createIntentWithSavedStateInfo() {
+	Intent intent;
+	intent = new Intent(this, TopActivity.class);
+	Bundle bundle = new Bundle();
+	onSaveInstanceState(bundle);
+	intent.putExtra("savedInstanceState",bundle);
+	return intent;
+}
 
   /**
    * Collect app metrics on Flurry

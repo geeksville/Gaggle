@@ -322,6 +322,8 @@ please email kevinh@geeksville.com.</string>
 	<string name="waypoint_name_label">"Waypoint name: "</string>
 	<string name="create">Create</string>
 	<string name="create_waypoint">Create Waypoint?</string>
+	<string name="use_background_online_source">use background online source</string>
+	<string name="no_online_background_when_offline_warning">Keep this option off when offline!</string>
 	
 	
 	

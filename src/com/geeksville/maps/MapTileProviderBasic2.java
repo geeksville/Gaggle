@@ -139,12 +139,14 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
 
     public void initTileSource() {
         mTileProviderList.clear();
+        clearTileCache();
         if(getTileSource() instanceof ArchiveTileSource){
             createArchiveTileProviderList();
         }
         else {
-            registerDownloadTileSource(registerReceiver);
+            registerDownloadTileSource(registerReceiver, getTileSource());
         }
+        
     }
 
 	private void createArchiveTileProviderList() {
@@ -154,7 +156,9 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
 		// first all archives need to bee checked to find a tile.
 		for (ArchiveInfo archiveInfo : archiveFileNames) {
 		    Entry<MapTileFilesystemProvider, MapTileEnlarger> enlargementProviders = registerSdTilesource(registerReceiver, Environment.getExternalStorageDirectory() + osmdroidTilesLocation, archiveInfo.getFileName(), archiveInfo.getMaxZoomLevel());
-		    enlargementProviderList.add(enlargementProviders);
+			if (enlargementProviders != null) {
+				enlargementProviderList.add(enlargementProviders);
+			}
 		}
 		// then the filesystems in which enlargements are stored are searched  
 		for (Entry<MapTileFilesystemProvider, MapTileEnlarger> entry : enlargementProviderList) {
@@ -166,16 +170,23 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
 			MapTileEnlarger mapTileEnlargeMentProvider = entry.getValue();
 			mTileProviderList.add(mapTileEnlargeMentProvider);
 		}
+		ITileSource onlineBackground = archiveTileSource.getOnlineBackground(); 
+		if(onlineBackground!=null){
+			registerDownloadTileSource(registerReceiver, onlineBackground);
+		}
+		Entry<MapTileFilesystemProvider, MapTileEnlarger> enlargementProviders = registerSdTilesource(registerReceiver, context.getFilesDir().getAbsolutePath() + "/", "world.mbtiles", 5);
+		mTileProviderList.add(enlargementProviders.getKey());
+		mTileProviderList.add(enlargementProviders.getValue());
 	}
 
-    private void registerDownloadTileSource(final IRegisterReceiver pRegisterReceiver) {
+    private void registerDownloadTileSource(final IRegisterReceiver pRegisterReceiver, ITileSource tileSource) {
         final TileWriter tileWriter = new TileWriter();
 
         final MapTileFilesystemProvider fileSystemProvider = new MapTileFilesystemProvider(
-                pRegisterReceiver, getTileSource());
+                pRegisterReceiver, tileSource);
         mTileProviderList.add(fileSystemProvider);
 
-        final MapTileDownloader downloaderProvider = new MapTileDownloader(getTileSource(), tileWriter,
+        final MapTileDownloader downloaderProvider = new MapTileDownloader(tileSource, tileWriter,
             new NetworkAvailabliltyCheck(GaggleApplication.getContext()));
         mTileProviderList.add(downloaderProvider);
     }
@@ -186,13 +197,16 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
         String secondLevelFilePath = tileDir + archiveFileName;
         File archiveFile = new File(secondLevelFilePath);
         MBTilesFileArchive fileArchive = null;
-        if (new File(secondLevelFilePath).exists()) {
+        if (archiveFile.exists()) {
             fileArchive = addArchiveFile(pRegisterReceiver, archiveFile, maxZoomLevel2, fileSystemSubdirName);
+        } else {
+        	return null;
         }
 
         // THIRD provider: saved blown up tiles:
         final MapTileFilesystemProvider fileSystemProvider =
             new MapTileFilesystemProvider(pRegisterReceiver, new TileSourceAdaptor(19, fileSystemSubdirName));
+
 //        mTileProviderList.add(fileSystemProvider);
 
         // FOURTH provider: blow up tiles, and then save:
@@ -231,5 +245,21 @@ public class MapTileProviderBasic2 extends MapTileProviderArray implements IMapT
                 .getUsesDataConnection())));
         return provider;
     }
+
+	@Override
+	public int getMinimumZoomLevel() {
+		if(mTileProviderList.isEmpty()){
+			return 0;
+		}
+		return super.getMinimumZoomLevel();
+	}
+
+	@Override
+	public int getMaximumZoomLevel() {
+		if(mTileProviderList.isEmpty()){
+			return 22;
+		}
+		return super.getMaximumZoomLevel();
+	}
 
 }
