@@ -11,11 +11,47 @@ The public key is expected to be in PEM format.
 
 On *nix with gcc and lib openssl installed, you can compile it like this:
 
-$ CFLAGS=-Wall LDFLAGS=-lssl make
+$ make
 
 Then running it is as simple as:
 
-$ ./verify flight_1.igc
+$ ./vali-xgg flight_1.igc
 
 Return status is 0 when signature is verified, !=0 if not.
+
+How to create keys (with openssl)
+---------------------------------
+
+openssl is used, but you could create keypairs with anything else...
+
+Create the keypair:
+
+$ openssl genrsa -out mykey.pem 1024
+
+Get the public part:
+$ openssl rsa -in mykey.pem -pubout
+writing RSA key
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdklbAnU6nves/VuGJCJqodAen
+w18Pp3Ol2kQ1Japy6YyA7NgSDwCi7v/EFko+eL7dEUQGMb46+If4G/4ugy1HHiwg
+h2FdxhiTwESrVBPpFSh8qJRKLA+6Mp6gJs0sZS0Fb4r0mlfT7hPeu1MzKfUdIFcv
+O4PCtlMBnf+cxpKmkwIDAQAB
+-----END PUBLIC KEY-----
+
+The part you need to copy/paste in the vali-xgg.c file is delimited by (included) BEGIN/END.
+
+To extract the private part to be used in Gaggle:
+
+$ openssl pkcs8 -topk8 -in mykey.pem -nocrypt -outform PEM
+-----BEGIN PRIVATE KEY-----
+IyAvZXRjL2ZzdGFiOiBzdGF0aWMgZmlsZSBzeXN0ZW0gaW5mb3JtYXRpb24uCiMKIyA8ZmlsZSBz
+...
+YXNzPgpwcm9jICAgI
+-----END PRIVATE KEY-----
+
+Simply copy/paste the part between the BEGIN/END (excluded) in the res/values/igc_private_key.xml file:
+
+  <string name="igc_private_key">IyAvZXRjL2ZzdGFiOiBzdGF0aWMgZmlsZSBzeXN0ZW0gaW5mb3JtYXRpb24uCiMKIyA8ZmlsZSBz
+  ...
+  YXNzPgpwcm9jICAgI</string>
 

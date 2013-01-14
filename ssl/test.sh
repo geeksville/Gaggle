@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if [ -x verify ]; then
-	./verify sample_tracks/flight_good_sig.igc
+if [ -x vali-xgg ]; then
+	./vali-xgg sample_tracks/flight_good_sig.igc
 	OK=$?
-        ./verify sample_tracks/flight_bad_sig.igc
+        ./vali-xgg sample_tracks/flight_bad_sig.igc
 	BAD=$?
 
 	if [  $OK == 0  -a  $BAD != 0  ]; then
