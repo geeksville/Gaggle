@@ -405,7 +405,7 @@ public class ListFlightsActivity extends DBListActivity {
     writer = new IGCWriter(s, prefs.getPilotName(), null, // FIXME - not quite
         // right, we should
         // get this from DB
-        prefs.getWingModel(), prefs.getPilotId());
+        prefs.getWingModel(), prefs.getPilotId(), this);
 
     LocationUtils.dbToWriter(db, writer, flightid);
 
@@ -463,7 +463,7 @@ public class ListFlightsActivity extends DBListActivity {
 
     if (filetype.equals("igc"))
       writer = new IGCWriter(s, prefs.getPilotName(), null,
-          prefs.getWingModel(), prefs.getPilotId());
+          prefs.getWingModel(), prefs.getPilotId(), this);
     else if (filetype.equals("csv"))
       writer = new CSVWriter(s, prefs.getPilotName(), null,
           prefs.getWingModel(), prefs.getPilotId());
