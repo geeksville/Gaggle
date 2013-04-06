@@ -50,7 +50,6 @@ import com.geeksville.util.GaggleUncaughtExceptionHandler;
 
 public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCyclePublisher {
 
-	private static final String ARCHIVEMENUNAME = "Archive";
 	// private LinearLayout linearLayout;
 	protected GeeksvilleMapView mapView;
 
@@ -137,7 +136,7 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 					getString(R.string.mapnik_map),
 					getString(R.string.toposm_map),
 					getString(R.string.opencyclemap),
-					ARCHIVEMENUNAME
+					getString(R.string.archive_map_data),
 //					getString(R.string.openhikingmap),
 //					getString(R.string.topo_europe),
 //					getString(R.string.topo_us_contour),
@@ -180,6 +179,8 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
         }
         
         tileProvider.setTileSource(tileSource);
+
+        mapView.setClickable(false);
 
         mapView.getController().setZoom(14);
 		mapView.setBuiltInZoomControls(true);
@@ -291,17 +292,19 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
 
         MenuItem toCheck = null;
         String selectedTileSourceName = GagglePrefs.getInstance().getSelectedTileSourceName();
+
         for (int i = 0; i < supportedRenderers.length; i++) {
             final ITileSource info = supportedRenderers[i];
             String name = supportedRendererNames[i];
 
             MenuItem item = children.add(1, i, Menu.NONE, name);
 
-            if (mapView.getTileProvider().getTileSource().name().equals(info.name()))
+            if (mapView.getTileProvider().getTileSource().name().equals(info.name())){
                 toCheck = item;
-            else if (mapView.getTileProvider().getTileSource() instanceof ArchiveTileSource) {
-                toCheck = item;
-            }
+            } 
+//            else if (mapView.getTileProvider().getTileSource() instanceof ArchiveTileSource) {
+//                toCheck = item;
+//            }
 
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -311,16 +314,17 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
                     ITileSource oldTileSource = mapView.getTileProvider().getTileSource();
                     if(oldTileSource != info){
                     	mapView.getTileProvider().setTileSource(info);
+                    	GagglePrefs.getInstance().setSelectedTileSourceName(info.name());
                     }
-                    if (item.getTitle().equals(ARCHIVEMENUNAME)) {
+                    if (item.getTitle().equals(getString(R.string.archive_map_data))) {
                     	FragmentActivity activity = AbstractGeeksvilleMapFragment.this.getActivity();
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle("Select Archives");
+                        builder.setTitle(getString(R.string.archive_select));
                         File archiveLocation =
                             new File(Environment.getExternalStorageDirectory() + MapTileProviderBasic2.osmdroidTilesLocation);
                         final String[] availableArchiveFiles = archiveLocation.list(archivesFileFilter);
                         final Set<String> selectedArchives = GagglePrefs.getInstance().getSelectedArchiveFileNames();
-                        // the handler taht does the work when something is selected:
+                        // the handler that does the work when something is selected:
                         DialogInterface.OnMultiChoiceClickListener archiveDialogListener =
                             new ArchiveSelectionListener(selectedArchives, availableArchiveFiles);
                         // make extra option for the background online source:
@@ -364,7 +368,6 @@ public class AbstractGeeksvilleMapFragment extends Fragment implements LifeCycle
         }
         children.setGroupCheckable(1, true, true);
         toCheck.setChecked(true);
-
     }
 
     private final class ArchiveSelectionListener implements DialogInterface.OnMultiChoiceClickListener {
