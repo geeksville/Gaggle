@@ -151,9 +151,9 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 		} else if (itemId == R.id.send_csv) {
 			emailFlight(itemToRowId(item), "csv");
 			return true;
-		} else if (itemId == R.id.view_summary) {
-			viewFlightSummary(itemToRowId(item));
-			return true;
+//		} else if (itemId == R.id.view_summary) {
+//			viewFlightSummary(itemToRowId(item));
+//			return true;
 		} else {
 			mSavedMenuIndexForSubMenu = info.position;
 		}
@@ -402,15 +402,15 @@ public class ListFlightsFragment extends AbstractDBListFragment {
 	 * 
 	 * @param flightId
 	 */
-	private void viewFlightSummary(final long flightId) {
-		FlightSummary summary = new FlightSummary();
-		SummaryWriter summaryWriter = new SummaryWriter(summary);
-		LocationUtils.dbToWriter(db, summaryWriter, flightId);
-		// FIXME this should not call activity but a fragment
-		Intent i = new Intent(getActivity(), SummaryListActivity.class);
-		summary.addDataToIntent(i);
-		startActivity(i);
-	}
+//	private void viewFlightSummary(final long flightId) {
+//		FlightSummary summary = new FlightSummary();
+//		SummaryWriter summaryWriter = new SummaryWriter(summary);
+//		LocationUtils.dbToWriter(db, summaryWriter, flightId);
+//		// FIXME this should not call activity but a fragment
+//		Intent i = new Intent(getActivity(), SummaryListActivity.class);
+//		summary.addDataToIntent(i);
+//		startActivity(i);
+//	}
 
 	/**
 	 * Write a flight to an in memory stream of IGC data
