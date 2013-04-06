@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Regular release uses com.geeksville.gaggle, testing builds use com.geeksville.gaggletest -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="164" android:versionName="1.64">
+	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="165" android:versionName="1.65">
 
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"
 		android:anyDensity="true" />  
 
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
+	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
 		
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:description="@string/app_description" android:name="com.geeksville.gaggle.GaggleApplication"
