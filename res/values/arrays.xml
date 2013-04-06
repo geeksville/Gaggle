@@ -218,5 +218,15 @@
 		<item >2</item>
 		<item >3</item>
 		<item >5</item>
+	</string-array>
+	<string-array name="geoid_correction_source">
+		<item >none</item>
+		<item >nmea</item>
+		<item >egm84</item>
+	</string-array>
+	<string-array name="geoid_correction_vals">
+		<item >none</item>
+		<item >nmea</item>
+		<item >egm84</item>
 	</string-array>													
 </resources>

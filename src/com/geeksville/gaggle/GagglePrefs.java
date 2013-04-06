@@ -154,6 +154,17 @@ public class GagglePrefs {
 		return prefs.getBoolean("workaround_sgs_leap_bug", false);
 	}
 
+	public boolean useNmeaGeoidInfo(){
+		return prefs.getString("altitude_correction", "none").equals("nmea");
+	}
+
+	public boolean useEGM84Geoid(){
+		return prefs.getString("altitude_correction", "none").equals("egm84");
+	}
+	public boolean debugAltitudeCorrection(){
+		return prefs.getBoolean("altitude_correction_debug", false);
+	}
+
 	public int getMapCenterZoom_Lon() {
 		return prefs.getInt(mapZoomCenterPref_LON, -1);
 	}

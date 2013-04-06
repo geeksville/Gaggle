@@ -325,6 +325,16 @@ please email kevinh@geeksville.com.</string>
 	<string name="use_background_online_source">use background online source</string>
 	<string name="no_online_background_when_offline_warning">Keep this option off when offline!</string>
 	
+	<string name="altitude_correction">Altitude correction</string>
+	<string name="altitude_correction_desc">Altitude correction method</string>
+	<string name="altitude_correction_debug">Altitude correction debug</string>
+	<string name="altitude_correction_debug_desc">Enable/Disable debug for altitude correction</string><string name="egm84_altitude_geoid_file">egm84-30.pgm</string>
+	<string name="egm84_altitude_geoid_file_download_desc">GPS Altitude correction data</string>
+	<string name="egm84_altitude_geoid_url">http://bordel.kataplop.net/gaggle/egm84-30.pgm</string>
+	<string name="egm84_altitude_geoid_file_download_title">Gaggle Altitude correction</string>
+	<string name="archive_map_data">Local Archive Data</string>
+	<string name="archive_select">Select map archive</string>
+	
 	
 	
 	

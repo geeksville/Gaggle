@@ -3,6 +3,13 @@
  */
 package com.geeksville.location;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,20 +18,28 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.location.GpsStatus.NmeaListener;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -51,6 +66,37 @@ public class GPSClient extends Service implements IGPSClient {
    * Debugging tag
    */
   private static final String TAG = "GPSClient";
+
+  
+  public SharedPreferences mSharedPreferences;
+  // Listener defined by anonymous inner class.
+  public OnSharedPreferenceChangeListener mListener = new OnSharedPreferenceChangeListener() {        
+
+      @Override
+      public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+  		if(key.equals("altitude_correction")){
+  			final String val = sharedPreferences.getString("altitude_correction", "none");
+  			
+  			if (val.equals("nmea")){
+  				Log.d(TAG, "Enabling NMEA");
+  	  			geoid_correction = null;
+  	  			manager.addNmeaListener(nmea_listener);
+  			} else if (val.equals("egm84")){
+  	  			try {
+  	  				Log.d(TAG, "Enabling EGM84");
+  	  				initGeoid();
+  	  			} catch (IOException e){
+  	  				Log.d(TAG, "Can't init egm84 geoid correction", e);
+  	  			}
+  	  			manager.removeNmeaListener(nmea_listener);
+  			} else {
+  				Log.d(TAG, "Disabling all geoid correction");
+  	  			geoid_correction = null;
+  	  			manager.removeNmeaListener(nmea_listener);
+  			}
+  		}
+      }
+  };
 
   private MyBinder binder = new MyBinder();
 
@@ -88,11 +134,13 @@ public class GPSClient extends Service implements IGPSClient {
    */
   private TestGPSDriver simData = null;
 
+  PrintStream alti_debug_file = null;
+  
   private int currentStatus = OUT_OF_SERVICE;
 
   // / Once we get a GPS altitude we will fixup the barometer
   private boolean hasSetBarometer = false;
-	private IBarometerClient baro = null;
+  private IBarometerClient baro = null;
   private AudioVario vario;
 
   /**
@@ -211,7 +259,6 @@ public class GPSClient extends Service implements IGPSClient {
 
       for (ServiceConnection c : clients)
         c.onServiceConnected(name, service);
-
     }
 
     @Override
@@ -252,9 +299,65 @@ public class GPSClient extends Service implements IGPSClient {
     public void stopForeground() {
       GPSClient.this.stopForeground();
     }
-
   }
 
+  private long egm84download_ref = -1;
+  private File egm84_local_file= null;
+  
+  private void initGeoid() throws IOException{
+	  // Use download manager to get egm84 data file
+
+	  File sdcard = Environment.getExternalStorageDirectory();
+	  String path = getString(R.string.file_folder);
+
+	  egm84_local_file = new File(sdcard, path);
+	  if (!egm84_local_file.exists())
+		  egm84_local_file.mkdir();
+	  // SDCARD/Gaggle
+	  
+	  egm84_local_file = new File(egm84_local_file, getString(R.string.egm84_altitude_geoid_file));
+	  // SDCARD/Gaggle/egm84.ppm
+	  if (egm84_local_file.exists()){
+		  try {
+			  geoid_correction = new GeoIdCorrection(egm84_local_file);
+		  } catch (FileNotFoundException e) {
+			  Log.d(TAG, "Error when creating GeoIdCorrection",e);
+			  geoid_correction = null;
+		  }
+	  } else {
+		  final String url = getString(R.string.egm84_altitude_geoid_url);
+		  DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+		  request.setDescription(getString(R.string.egm84_altitude_geoid_file_download_desc));
+		  request.setTitle(getString(R.string.egm84_altitude_geoid_file_download_title));
+
+		  IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+		  BroadcastReceiver receiver = new BroadcastReceiver(){
+			  @Override
+			  public void onReceive(Context context, Intent intent) {
+				  long reference = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+				  if (reference == egm84download_ref && reference != -1){
+					  try {
+						  geoid_correction = new GeoIdCorrection(egm84_local_file);
+					  } catch (FileNotFoundException e) {
+						  Log.d(TAG, "Error when creating GeoIdCorrection",e);
+						  geoid_correction = null;
+					  }
+				  }
+			  }
+		  };
+
+		  registerReceiver(receiver, filter);
+		  request.setDestinationInExternalPublicDir(getString(R.string.file_folder), getString(R.string.egm84_altitude_geoid_file));
+
+		  // get download service and enqueue file
+		  DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+		  egm84download_ref = manager.enqueue(request);
+	  }
+  }
+  
+
+  private GeoIdCorrection geoid_correction = null;
+  
   /*
    * (non-Javadoc)
    * 
@@ -264,7 +367,7 @@ public class GPSClient extends Service implements IGPSClient {
   public void onCreate() {
     super.onCreate();
     
-    GagglePrefs prefs = new GagglePrefs(this);
+    final GagglePrefs prefs = GagglePrefs.getInstance();
 	if (prefs.isFlurryEnabled())
       FlurryAgent.onStartSession(this, "XBPNNCR4T72PEBX17GKF");
 
@@ -272,6 +375,40 @@ public class GPSClient extends Service implements IGPSClient {
 
     instance = this;
     manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+    mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    mSharedPreferences.registerOnSharedPreferenceChangeListener(mListener);
+
+    if(prefs.debugAltitudeCorrection()){
+  	  File sdcard = Environment.getExternalStorageDirectory();
+  	  String path = getString(R.string.file_folder);
+
+  	  File tracklog = new File(sdcard, path);
+  	  if (!tracklog.exists())
+  		  tracklog.mkdir();
+  	  path += '/' + getString(R.string.tracklogs);
+  	  tracklog = new File(sdcard, path);
+  	  if (!tracklog.exists())
+  		  tracklog.mkdir();
+
+  	  File fullname = new File(tracklog, "altidebug.txt");
+  	  fullname.delete();
+
+  	  try {
+  	  	  fullname.createNewFile();
+  		  alti_debug_file = new PrintStream(new FileOutputStream(fullname));
+  	  } catch (Exception e) {
+  		  Log.d(TAG, "Error when creating altitude debug file",e);
+  	  }
+    }
+
+    if (prefs.useEGM84Geoid()){
+    	try {
+    		initGeoid();
+    	} catch (IOException e) {
+    		Log.d(TAG, "Can't init egm84 geoid correction", e);
+    	}
+    }
 
     // Start our looper up
     thread.start();
@@ -338,7 +475,7 @@ public class GPSClient extends Service implements IGPSClient {
    */
   @Override
   public void onDestroy() {
-
+	mSharedPreferences.unregisterOnSharedPreferenceChangeListener(mListener);
     if (vario != null)
       vario.onDestroy();
 
@@ -352,12 +489,18 @@ public class GPSClient extends Service implements IGPSClient {
         listeners.clear();
       }
     }
+    manager.removeUpdates(listener);
 
     thread.getLooper().quit();
     
-    GagglePrefs prefs = new GagglePrefs(this);
+    final GagglePrefs prefs = GagglePrefs.getInstance();
 	if (prefs.isFlurryEnabled())
       FlurryAgent.onEndSession(this);
+
+	 if (prefs.debugAltitudeCorrection() && alti_debug_file != null){
+   	  alti_debug_file.close();
+   	  alti_debug_file = null;
+     }
 
     instance = null;
     super.onDestroy();
@@ -500,6 +643,13 @@ public class GPSClient extends Service implements IGPSClient {
 
       manager.requestLocationUpdates(provider, minTimeMs, minDistMeters,
           listener, thread.getLooper());
+
+      final GagglePrefs prefs = GagglePrefs.getInstance();
+
+
+      if (prefs.useNmeaGeoidInfo()){
+		  manager.addNmeaListener(nmea_listener);
+      }
     }
 
     // Provide an initial location if we know where we are
@@ -526,6 +676,12 @@ public class GPSClient extends Service implements IGPSClient {
 
     if (newcount == 0) {
       manager.removeUpdates(listener);
+
+      final GagglePrefs prefs = GagglePrefs.getInstance();
+
+      if (prefs.useNmeaGeoidInfo()){
+    	  manager.removeNmeaListener(nmea_listener);
+      }
     }
   }
 
@@ -535,6 +691,39 @@ public class GPSClient extends Service implements IGPSClient {
     return manager.getLastKnownLocation(provider);
   }
 
+  private Double geoid_separation = null;
+  
+  private NmeaListener nmea_listener = new NmeaListener() {
+
+	    // Used to avoid holding the lock while running (slow) handlers
+//	    private ArrayList<LocationListener> lcopy = new ArrayList<LocationListener>();
+	    
+	    public void onNmeaReceived(long timestamp, String nmea) {
+	        final GagglePrefs prefs = GagglePrefs.getInstance();
+
+	    	if(prefs.debugAltitudeCorrection() && alti_debug_file != null){
+	    		alti_debug_file.println("NMEA Timestamp is :" +timestamp+"   nmea is :"+nmea);
+	    	}
+    		Log.d(TAG,"Nmea Received :");
+    		Log.d(TAG,"Timestamp is :" +timestamp+"   nmea is :"+nmea);
+	    	String[] syl = nmea.split(",");
+	    	try{
+	    		if (syl[0].equals("$GPGGA")){
+	    			geoid_separation = Double.parseDouble(syl[11]);
+	    			final String unit = syl[12];
+	    			if (unit.equals("F")){
+	    				geoid_separation *= 0.3048;
+	    			}
+	    	    	if(prefs.debugAltitudeCorrection() && alti_debug_file != null){
+	    	    		alti_debug_file.println("NMEA GEOID sep:" + geoid_separation);
+	    	    	}
+	    		}
+	    	} catch(Exception e){
+	    		Log.d(TAG, "Error parsing NMEA");
+	    		geoid_separation = null;
+	    	}
+	    }};
+  
   /**
    * We just rebroadcast our loc updates - but from inside our shared handler
    * thread
@@ -574,9 +763,35 @@ public class GPSClient extends Service implements IGPSClient {
     		location.setTime(location.getTime() - 3600*24*1000);
     		Log.d("GPSClient", "time after:" + location.getTime());
     	}
-
       // If we receive a position update, assume the GPS is working
       currentStatus = AVAILABLE;
+      final GagglePrefs prefs = GagglePrefs.getInstance();
+
+      double correction = 0;
+
+      if (prefs.useEGM84Geoid()){
+    	  correction = geoid_correction.getGeoidSep(location.getLongitude(), location.getLatitude());
+    	  if (prefs.debugAltitudeCorrection() && alti_debug_file != null){
+    		  alti_debug_file.println("EGM84 correction for " + location.getLongitude() +
+    				  ", " + location.getLatitude() + ":" + correction);
+    	  }
+      } else if (prefs.useNmeaGeoidInfo()){
+    	  correction = geoid_separation != null ? geoid_separation : 0;
+    	  if (prefs.debugAltitudeCorrection() && alti_debug_file != null){
+    		  alti_debug_file.println("NMEA correction for " + location.getLongitude() +
+    				  ", " + location.getLatitude() + ":" + correction);
+    	  }
+      }
+
+      if (prefs.debugAltitudeCorrection() && alti_debug_file != null){
+		  alti_debug_file.println("Original alti: " + location.getAltitude());
+	  }
+      if (correction != 0 && location.hasAltitude()){
+    	  location.setAltitude(location.getAltitude() - correction);
+      }
+      if (prefs.debugAltitudeCorrection() && alti_debug_file != null){
+		  alti_debug_file.println("Final alti: " + location.getAltitude());
+	  }
 
       if (baro != null) {
         if (!hasSetBarometer && location.hasAltitude()) {
@@ -630,5 +845,4 @@ public class GPSClient extends Service implements IGPSClient {
       }
     }
   };
-
 }
