@@ -79,7 +79,8 @@ abstract class SensorClient extends Observable implements SensorEventListener {
 		sensorMan.registerListener(
 				this,
 				sensor,
-				SensorManager.SENSOR_DELAY_NORMAL);
+				100000 /*100 ms*/);
+				//SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	/*

@@ -25,6 +25,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -44,7 +45,7 @@ import com.geeksville.gaggle.TopActivity;
  *         Effectively the 'glue' between generic Java PositionWriter and the
  *         android APIs
  */
-public class GPSClient extends Service implements IGPSClient {
+public class GPSClient extends Service implements IGPSClient, Runnable {
 
   /**
    * Debugging tag
@@ -54,6 +55,7 @@ public class GPSClient extends Service implements IGPSClient {
   private MyBinder binder = new MyBinder();
 
   private HandlerThread thread = new HandlerThread("GPSClient");
+  private Handler threadHandler = null;
 
   private LocationManager manager;
 
@@ -268,6 +270,7 @@ public class GPSClient extends Service implements IGPSClient {
 
     // Start our looper up
     thread.start();
+    threadHandler = new Handler(thread.getLooper());
 
     try {
       baro = BarometerClient.create(GPSClient.this);
@@ -445,6 +448,18 @@ public class GPSClient extends Service implements IGPSClient {
       throw new RuntimeException(e);
     }
   }
+  
+  @Override
+  public synchronized void run()
+  {
+      // subscribe to the OS
+      String provider = (simData != null) ? simData.getProvider()
+          : LocationManager.GPS_PROVIDER;
+  
+      manager.requestSingleUpdate(provider, listener, thread.getLooper());
+
+	  threadHandler.postDelayed(this, minTimePerUpdate);
+  }
 
   /**
    * Used to request location/Status updates (once we have someone asking for
@@ -484,13 +499,9 @@ public class GPSClient extends Service implements IGPSClient {
       needUpdate = true;
     }
 
-    if (oldcount == 0 || needUpdate) { // We just added the first element -
-      // subscribe to the OS
-      String provider = (simData != null) ? simData.getProvider()
-          : LocationManager.GPS_PROVIDER;
-
-      manager.requestLocationUpdates(provider, minTimeMs, minDistMeters,
-          listener, thread.getLooper());
+    if (oldcount == 0 || needUpdate) { // We just added the first element -      
+      //kick the polling thread
+      threadHandler.postAtTime(this, minTimePerUpdate);
     }
 
     // Provide an initial location if we know where we are

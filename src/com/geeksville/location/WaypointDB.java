@@ -106,7 +106,7 @@ public class WaypointDB extends Observable implements LocationListener, ServiceC
 		this.context = context;
 		
 		GagglePrefs prefs = new GagglePrefs(context);
-		minTimeMs = prefs.getLogTimeInterval();
+		minTimeMs = prefs.getLogTimeInterval() * 1000;
 		minDistMeters = prefs.getLogDistanceInterval();
 		
 		

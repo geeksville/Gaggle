@@ -117,7 +117,7 @@ public abstract class GPSField extends InfoField implements LocationListener, Se
 
 		GagglePrefs prefs = new GagglePrefs(context);
 		
-		minTimeMs = prefs.getScreenUpdateFreq();
+		minTimeMs = prefs.getScreenUpdateFreq() * 1000;
 		minDistMeters = prefs.getScreenUpdateDist();
 		gps = (IGPSClient) service;
 

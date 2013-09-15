@@ -147,7 +147,7 @@ public class AndroidBarometerClient extends SensorClient implements
 	 */
 	@Override
 	public float getVerticalSpeed() {
-		return regression.getSlope() * 1000;
+		return (float)(regression.getSlope() * 1000);
 	}
 
 	@Override
