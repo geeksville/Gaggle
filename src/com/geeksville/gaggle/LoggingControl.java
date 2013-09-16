@@ -302,9 +302,10 @@ public class LoggingControl extends ListActivity implements LifeCyclePublisher,
       startActivityForResult(intent, INFOSELECT_REQUEST);
       return true;
     case R.id.setAltFromGPS:
+    	GPSClient client = GPSClient.instance;
       // FIXME - http://blueflyvario.blogspot.com/2011_05_01_archive.html
-      Location loc = GPSClient.instance.getLastKnownLocation();
-      BarometerClient.create(this).setAltitude((float) loc.getAltitude());
+      Location loc = client.getLastKnownLocation();
+      client.updateReferenceLocation(loc);
       return true;
     }
 

@@ -29,6 +29,7 @@ import android.location.Location;
 import com.geeksville.gaggle.R;
 import com.geeksville.location.BarometerClient;
 import com.geeksville.location.IBarometerClient;
+import com.geeksville.location.IBarometerClient.Calibration;
 
 /// FIXME - show either baro or GPS based altitude?
 public class InfoAltitude extends GPSField implements Observer {
@@ -69,6 +70,7 @@ public class InfoAltitude extends GPSField implements Observer {
 	}
 
 	double altMeters = Double.NaN;
+	IBarometerClient.Calibration calibration = IBarometerClient.Calibration.UNCALIBRATED;
 
 	/**
 	 * 
@@ -80,6 +82,21 @@ public class InfoAltitude extends GPSField implements Observer {
 			return "---";
 
 		return Units.instance.metersToAltitude(altMeters);
+	}
+	
+	@Override
+	public String getAddendum() 
+	{
+		if(calibration == IBarometerClient.Calibration.GPS)
+		{
+			return context.getString(R.string.gps_calibrated);
+		}
+		else if(calibration == IBarometerClient.Calibration.GOOGLE)
+		{
+			return context.getString(R.string.google_calibrated);
+		}
+		
+		return "";
 	}
 
 	/**
@@ -134,9 +151,11 @@ public class InfoAltitude extends GPSField implements Observer {
 	public void update(Observable observable, Object data) {
 
 		float nalt = baro.getAltitude();
+		IBarometerClient.Calibration calibration = baro.getCalibration();
 
-		if (nalt != altMeters) {
+		if (nalt != altMeters || calibration != this.calibration) {
 			altMeters = nalt;
+			this.calibration = calibration;
 
 			onChanged();
 		}

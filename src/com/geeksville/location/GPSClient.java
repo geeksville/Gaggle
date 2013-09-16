@@ -41,6 +41,7 @@ import com.flurry.android.FlurryAgent;
 import com.geeksville.gaggle.AudioVario;
 import com.geeksville.gaggle.R;
 import com.geeksville.gaggle.TopActivity;
+import com.geeksville.location.IBarometerClient.Calibration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -536,7 +537,7 @@ public class GPSClient extends Service implements IGPSClient {
 
     return manager.getLastKnownLocation(provider);
   }
-  
+
   private class UpdateLocationAltitudeTask extends AsyncTask<Location, Integer, Pair<Boolean, Location>>
   {
 	  protected Pair<Boolean, Location> doInBackground(Location... loc) {
@@ -613,13 +614,22 @@ public class GPSClient extends Service implements IGPSClient {
 			  if(distance < LocationTolerance)
 			  {			  
 				  //Push in the final corrected altitude
-				  baro.setAltitude((float) correctedLocation.getAltitude());
+				  baro.setAltitude((float) correctedLocation.getAltitude(), Calibration.GOOGLE);
 				  Log.d(TAG, "Updated with correcte altitude from Google: " + correctedLocation.getAltitude());
 			  }
 		  }
 	  }
 
   };
+
+  public void updateReferenceLocation(Location location)
+  {
+	  baro.setAltitude((float) location.getAltitude(), Calibration.GPS);
+
+	  // Try to get an even more accurate altitude by asking the almighty internet
+	  new UpdateLocationAltitudeTask().execute(location);
+  }
+  
 
   /**
    * We just rebroadcast our loc updates - but from inside our shared handler
@@ -648,7 +658,7 @@ public class GPSClient extends Service implements IGPSClient {
 
       return doUpdate;
     }
-
+	
     @Override
     public synchronized void onLocationChanged(Location location) {
 
@@ -658,10 +668,7 @@ public class GPSClient extends Service implements IGPSClient {
       if (baro != null) {
         if (!hasSetBarometer && location.hasAltitude()) {
           hasSetBarometer = true;
-          baro.setAltitude((float) location.getAltitude());
-          
-          // Try to get an even more accurate altitude by asking the almighty internet
-          new UpdateLocationAltitudeTask().execute(location);
+		  updateReferenceLocation(location);
         }
 
         // Before forwarding the location to others, substitude the

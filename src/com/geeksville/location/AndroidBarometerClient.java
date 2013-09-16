@@ -48,8 +48,8 @@ public class AndroidBarometerClient extends SensorClient implements
 	private float reference = SensorManager.PRESSURE_STANDARD_ATMOSPHERE;
 
 	// / true if we've been set based on the GPS
-	private boolean isCalibrated = false;
-
+	private Calibration calibration = Calibration.UNCALIBRATED;
+	
 	private Context context;
 
 	//private static BarometerClient instance = null;
@@ -90,7 +90,7 @@ public class AndroidBarometerClient extends SensorClient implements
 	// / If we've been calibrated, override the GPS provided altitude with our
 	// baro based alt
 	public void improveLocation(Location l) {
-		if (isCalibrated)
+		if (calibration != Calibration.UNCALIBRATED)
 			l.setAltitude(altitude);
 	}
 
@@ -102,7 +102,7 @@ public class AndroidBarometerClient extends SensorClient implements
 	 * @see com.geeksville.location.IBarometerClient#setAltitude(float)
 	 */
 	@Override
-	public void setAltitude(float meters) {
+	public void setAltitude(float meters, Calibration calibration) {
 		// float p0 = 1013.25f; // Pressure at sea level (hPa)
 		// float p = p0 * (float) Math.pow((1 - meters / 44330), 5.255);
 		float p0 = pressure / (float) Math.pow((1 - meters / 44330), 5.255);
@@ -111,7 +111,7 @@ public class AndroidBarometerClient extends SensorClient implements
 		altitude = SensorManager.getAltitude(reference, pressure);
 
 		Log.w(TAG, "Setting baro reference to " + reference + " alt=" + meters);
-		isCalibrated = true;
+		this.calibration = calibration;
 		
 		regression.clearSamples();
 	}
@@ -139,6 +139,10 @@ public class AndroidBarometerClient extends SensorClient implements
   }
   public float getBatteryPercent() {
     return Float.NaN;
+  }
+  
+  public Calibration getCalibration() {
+	  return calibration;
   }
 
 	// / In m/s

@@ -5,6 +5,12 @@ import java.util.Observer;
 import android.location.Location;
 
 public interface IBarometerClient {
+	
+	public enum Calibration {
+		UNCALIBRATED,
+		GPS,
+		GOOGLE,
+	}
 
 	/** Cheezy trick to apply preferences changes immediately on view change */
 	public abstract void addObserver(Observer observer);
@@ -13,7 +19,7 @@ public interface IBarometerClient {
 
 	// / Given a GPS based altitude, reverse engineer what the correct reference
 	// pressure is
-	public abstract void setAltitude(float meters);
+	public abstract void setAltitude(float meters, Calibration calibration);
 
   // / Return altitude in meters
   public abstract float getAltitude();
@@ -32,6 +38,8 @@ public interface IBarometerClient {
 
 	// / In m/s
 	public abstract float getVerticalSpeed();
+	
+	public abstract Calibration getCalibration();
 
 	// / If we've been calibrated, override the GPS provided altitude with our
 	// aro based alt
