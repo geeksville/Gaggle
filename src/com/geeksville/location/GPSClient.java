@@ -3,7 +3,11 @@
  */
 package com.geeksville.location;
 
+import java.io.*;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,18 +27,24 @@ import android.content.SharedPreferences.Editor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.gaggle.AudioVario;
 import com.geeksville.gaggle.R;
 import com.geeksville.gaggle.TopActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Log locations to a file, db or other.
@@ -526,6 +536,90 @@ public class GPSClient extends Service implements IGPSClient {
 
     return manager.getLastKnownLocation(provider);
   }
+  
+  private class UpdateLocationAltitudeTask extends AsyncTask<Location, Integer, Pair<Boolean, Location>>
+  {
+	  protected Pair<Boolean, Location> doInBackground(Location... loc) {
+		  Location location = loc[0];
+		  String result = null;
+		  Boolean success = false;
+		  try {
+			  URL url = new URL(
+					  "http://maps.googleapis.com/maps/api/elevation/"
+					  + "json?locations=" + String.valueOf(location.getLatitude())
+					  + "," + String.valueOf(location.getLongitude())
+					  + "&sensor=true");
+
+			  HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+			  InputStream in = new BufferedInputStream(connection.getInputStream());
+			  BufferedReader reader = new BufferedReader(new InputStreamReader(in), 512);
+			  StringBuilder builder = new StringBuilder();
+
+			  String line = null;
+			  while((line = reader.readLine()) != null)
+			  {
+				  builder.append(line);
+			  }
+
+			  result = builder.toString();
+			  in.close();
+		  } catch (MalformedURLException e)
+		  {
+		  } catch (IOException e)
+		  {
+		  }
+
+		  if(result != null)
+		  {
+			  try {
+				  JSONObject obj = new JSONObject(result);
+				  String status = obj.getString("status");
+				  if(status.equals("OK"))
+				  {
+					  JSONArray results = obj.getJSONArray("results");
+					  if(results.length() > 0)
+					  {
+						  JSONObject values = results.getJSONObject(0);
+						  double altitude = values.getDouble("elevation");
+						  location.setAltitude(altitude);
+						  success = true;
+					  }
+				  }
+
+			  } catch (JSONException e) {
+			  }
+		  }
+
+
+		  return Pair.create(success, location);
+	  }
+
+	  protected void onPostExecute(Pair<Boolean, Location> result) {
+		  if(result.first)
+		  {		  
+			  Location lastLocation = new Location(getLastKnownLocation());
+			  Location correctedLocation = result.second;
+			  
+			  //10 meters plus some accuracy tolerance
+			  double LocationTolerance = 10.0f +
+					  Math.max(lastLocation.getAccuracy(), correctedLocation.getAccuracy());
+			  
+			  double distance = LocationUtils.LatLongToMeter(
+				  lastLocation.getLatitude(), lastLocation.getLongitude(),
+				  correctedLocation.getLatitude(), correctedLocation.getLongitude());
+			  
+			  //Just make sure we haven't magically teleported somewhere else
+			  if(distance < LocationTolerance)
+			  {			  
+				  //Push in the final corrected altitude
+				  baro.setAltitude((float) correctedLocation.getAltitude());
+				  Log.d(TAG, "Updated with correcte altitude from Google: " + correctedLocation.getAltitude());
+			  }
+		  }
+	  }
+
+  };
 
   /**
    * We just rebroadcast our loc updates - but from inside our shared handler
@@ -565,6 +659,9 @@ public class GPSClient extends Service implements IGPSClient {
         if (!hasSetBarometer && location.hasAltitude()) {
           hasSetBarometer = true;
           baro.setAltitude((float) location.getAltitude());
+          
+          // Try to get an even more accurate altitude by asking the almighty internet
+          new UpdateLocationAltitudeTask().execute(location);
         }
 
         // Before forwarding the location to others, substitude the
