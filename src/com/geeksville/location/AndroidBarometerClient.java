@@ -112,6 +112,8 @@ public class AndroidBarometerClient extends SensorClient implements
 
 		Log.w(TAG, "Setting baro reference to " + reference + " alt=" + meters);
 		isCalibrated = true;
+		
+		regression.clearSamples();
 	}
 
 	static boolean isAvailable() {

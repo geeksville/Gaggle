@@ -49,6 +49,10 @@ public class LinearRegression {
   public void setXspan(long xspan) {
     this.xspan = xspan;
   }
+  
+  public void clearSamples() {
+	  samples.clear();
+  }
 
   public void addSample(long x, float y) {
 	  //shouldn't happen, but don't let it pollute the sample pool if somehow this triggers
