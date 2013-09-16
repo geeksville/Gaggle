@@ -28,18 +28,16 @@ public class LinearRegression {
   static class Sample {
     public long x;
     public float y;
+    public float normx;
 
     public Sample(long x, float y) {
       this.x = x;
       this.y = y;
+      this.normx = 0; //will be recalculated
     }
   }
 
   private Queue<Sample> samples = new ArrayDeque<Sample>();
-
-  // / Invariants
-  long sumx;
-  double sumy;
 
   private long xspan = 2 * 1000; // typically milliseconds
 
@@ -51,13 +49,22 @@ public class LinearRegression {
   public void setXspan(long xspan) {
     this.xspan = xspan;
   }
+  
+  public void clearSamples() {
+	  samples.clear();
+  }
 
   public void addSample(long x, float y) {
+	  //shouldn't happen, but don't let it pollute the sample pool if somehow this triggers
+	  if(Float.isNaN(y))
+	  {
+		  assert(false);
+		  return;
+	  }
+	  
     synchronized (samples) {
       {
         Sample s = new Sample(x, y);
-        sumx += x;
-        sumy += y;
         samples.add(s);
       }
 
@@ -65,24 +72,47 @@ public class LinearRegression {
       long oldest = x - xspan;
       while (samples.peek().x < oldest) {
         Sample s = samples.remove();
-        sumx -= s.x;
-        sumy -= s.y;
       }
     }
   }
 
-  public float getSlope() {
+  public double getSlope() {
     synchronized (samples) {
-      double xbar = sumx / samples.size();
-      double ybar = sumy / samples.size();
-      double xxbar = 0.0, xybar = 0.0;
-      for (Sample s : samples) {
-        xxbar += (s.x - xbar) * (s.x - xbar);
-        xybar += (s.x - xbar) * (s.y - ybar);
-      }
-      double beta1 = xybar / xxbar;
-
-      return (float) beta1;
+    	///have some reasonable amount of samples
+    	if(samples.size() < 2)
+    		return 0;
+    	
+    	long basex = samples.peek().x;
+    	
+    	double sumx = 0;
+    	double sumy = 0;
+    	
+    	for (Sample s : samples)
+    	{
+        	//arithmetic on raw timestamp (in ms) is fairly dangerous, reduce
+    		//down to a normalized form (offset from the first item)
+    		s.normx = (float) (s.x - basex);
+    		sumx += s.normx;
+    		sumy += s.y;
+    	}
+    	
+    	double xbar = sumx / samples.size();
+    	double ybar = sumy / samples.size();
+    	double xxbar = 0.0, xybar = 0.0;
+    	for (Sample s : samples) {
+    		xxbar += (s.normx - xbar) * (s.normx - xbar);
+    		xybar += (s.normx - xbar) * (s.y - ybar);
+    	}
+    	
+    	if(xxbar > 0.0001)
+    	{
+	    	double beta1 = xybar / xxbar;
+	    	return beta1;
+    	}
+    	else
+    	{
+    		return 0;
+    	}
     }
   }
 }

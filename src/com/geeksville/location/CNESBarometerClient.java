@@ -106,7 +106,7 @@ public class CNESBarometerClient extends Observable implements
   }
 
   @Override
-  public void setAltitude(float meters) {
+  public void setAltitude(float meters, Calibration calibration) {
     // FIXME - apply correction from GPS based altitude
   }
 
@@ -136,6 +136,11 @@ public class CNESBarometerClient extends Observable implements
   public void improveLocation(Location l) {
     if (isCalibrated)
       l.setAltitude(altitude);
+  }
+  
+  public Calibration getCalibration()
+  {
+	  return Calibration.UNCALIBRATED;
   }
 
   private void handleMessage(String m) {

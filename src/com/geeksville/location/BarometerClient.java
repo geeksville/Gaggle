@@ -24,8 +24,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+
 /// FIXME - add a basic vario http://www.paraglidingforum.com/viewtopic.php?p=48465
 public class BarometerClient {
+
 
   @SuppressWarnings("unused")
   private static final String TAG = "BarometerClient";

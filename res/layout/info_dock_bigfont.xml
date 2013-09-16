@@ -3,11 +3,25 @@
 	android:orientation="horizontal" android:layout_width="fill_parent"
 	android:layout_height="wrap_content" android:layout_marginBottom="2dip">
 
-	<TextView android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="Label"
-		android:textAppearance="?android:attr/textAppearanceSmall" android:textSize="16dip" 
-		android:id="@+id/infodock_label"
-		android:layout_weight="20" android:layout_gravity="left|center_vertical"></TextView>
+    <LinearLayout android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:layout_gravity="left|center_vertical">
+        
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Label"
+			android:textAppearance="?android:attr/textAppearanceSmall" android:textSize="16dip" 
+			android:id="@+id/infodock_label"></TextView>
+		
+		<TextView android:text="addendum" android:id="@+id/infodock_addendum"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_gravity="left"  android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+		    android:paddingLeft="5dp"></TextView>
+	
+	</LinearLayout>
+	
 
 	<ImageView android:id="@+id/infodock_image"
 		android:src="@drawable/plane_red" android:scaleType="fitXY" android:layout_width="30dip" 

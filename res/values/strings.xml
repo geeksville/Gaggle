@@ -290,5 +290,7 @@ please email kevinh@geeksville.com.</string>
 	<string name="skylines_server_settings">SkyLines server settings</string>
 	<string name="skylines_key">SkyLines key</string>
 	<string name="skylines_problem">SkyLines problem</string>
+	<string name="gps_calibrated">GPS</string>
+	<string name="google_calibrated">Google</string>
 </resources>
   

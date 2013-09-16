@@ -121,6 +121,15 @@ public abstract class InfoField {
   public String getShortLabel() {
     return getLabel();
   }
+  
+  /**
+   * Label addendum.
+   * 
+   * @return
+   */
+  public String getAddendum() {
+	  return "";
+  }
 
   /**
    * Get the image to be shown by this info field

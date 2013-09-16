@@ -97,7 +97,7 @@ public class TestGPSDriver {
     // up
   }
 
-  private void sendNewUpdate() {
+  private Location readLocation() {
     // Bundle extras = new Bundle();
     // long updateTime = 0;
     // manager.setTestProviderStatus(provider,
@@ -110,17 +110,8 @@ public class TestGPSDriver {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
-    try {
-      if (loc != null) {
-        loc.setProvider(provider);
-        manager.setTestProviderLocation(provider, loc);
-      }
-    } catch (SecurityException ex) {
-      close();
-      Toast.makeText(context, "Simulated GPS data disabled by your device",
-          Toast.LENGTH_LONG).show();
-    }
+    
+    return loc;
   }
 
   private class GPSDriverThread extends Thread {
@@ -137,8 +128,13 @@ public class TestGPSDriver {
      */
     @Override
     public void run() {
-      try {
-        Thread.sleep(3 * 1000);
+    	long timeRecordBase = 0;
+    	long timeElapsed = 0;
+    	
+    	try
+    	{
+    		Thread.sleep(3 * 1000);
+        
         // Pretend to find sats
         /*
          * Bundle extras = new Bundle(); manager.setTestProviderStatus(provider,
@@ -149,15 +145,37 @@ public class TestGPSDriver {
          * GpsStatus.GPS_EVENT_SATELLITE_STATUS, extras, (new
          * Date()).getTime());
          */
+    		Location loc = readLocation();
+    		if(loc != null)
+    		{
+    			timeRecordBase = loc.getTime();
+    		}
+    		
+    		while(!isExiting)
+    		{
+	   			while(loc != null && loc.getTime() - timeRecordBase <= timeElapsed)
+	   			{
+	   			    try
+	   			    {
+	   			        loc.setProvider(provider);
+	   			        manager.setTestProviderLocation(provider, loc);
+	   			    } catch (SecurityException ex)
+	   			    {
+	   			      close();
+	   			      Toast.makeText(context, "Simulated GPS data disabled by your device",
+	   			          Toast.LENGTH_LONG).show();
+	   			    }
 
-        while (!isExiting) {
-          Thread.sleep(500 /* 3 * 1000 */);
-          sendNewUpdate();
-        }
-
-      } catch (InterruptedException ex) {
-        // Just exit
-      }
+	   				loc = readLocation();
+	   			}
+	   			
+	   			Thread.sleep(500);
+	   			timeElapsed += 500;
+    		}
+   		} catch (InterruptedException ex)
+   		{
+   			// Just exit
+   		}
 
       try {
         inData.close();

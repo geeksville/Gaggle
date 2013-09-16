@@ -64,7 +64,7 @@ public class InfoDock extends LinearLayout implements
 
   TextView shortLabel;
 
-  TextView label, text, units;
+  TextView label, addendum, text, units;
 
   ImageView image;
 
@@ -75,6 +75,8 @@ public class InfoDock extends LinearLayout implements
    * Used to check for 'real' changes of text values
    */
   private String oldText;
+  
+  private String oldAddendum;
 
   /**
    * Have we already inflated this component?
@@ -142,6 +144,7 @@ public class InfoDock extends LinearLayout implements
 
     label = (TextView) findViewById(R.id.infodock_label);
     shortLabel = (TextView) findViewById(R.id.infodock_shortlabel);
+    addendum = (TextView) findViewById(R.id.infodock_addendum);
     text = (TextView) findViewById(R.id.infodock_text);
     units = (TextView) findViewById(R.id.infodock_units);
     image = (ImageView) findViewById(R.id.infodock_image);
@@ -263,6 +266,9 @@ public class InfoDock extends LinearLayout implements
 
     if (shortLabel != null)
       shortLabel.setText(contents.getShortLabel());
+    
+    if(addendum != null)
+    	addendum.setText(contents.getAddendum());
 
     // We might not be displaying the units field
     if (units != null)
@@ -304,11 +310,13 @@ public class InfoDock extends LinearLayout implements
   public void onInfoChanged(InfoField source) {
     // Only update the GUI if we must
     String newText = contents.getText();
+    String newAddendum = contents.getAddendum();
 
     // If the user is using an image, we are not yet smart enough to optize
     // that case - just let the call happen
-    if (!newText.equals(oldText) || image != null) {
+    if (!newText.equals(oldText) || image != null || !newAddendum.equals(oldAddendum)) {
       oldText = newText;
+      oldAddendum = newAddendum;
 
       handler.post(infoChangedGuiWork);
     }
@@ -319,6 +327,10 @@ public class InfoDock extends LinearLayout implements
     text.setTextColor(color != -1 ? color : defaultTextColor);
 
     text.setText(oldText);
+    
+    //Addendum might change as well
+    if(addendum != null)
+    	addendum.setText(contents.getAddendum());
 
     if (image != null) {
       Drawable img = contents.getImage();
