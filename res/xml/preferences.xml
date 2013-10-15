@@ -218,7 +218,7 @@
 				android:key="live2_servername_pref" android:title="@string/submission_url"
 				android:summary="@string/see_www_livetrack24_com_for_more_information"
 				android:inputType="textUri"
-				android:defaultValue="http://www.livetrack24.com" />
+				android:defaultValue="http://t1.livetrack24.com" />
 
 			<!--
 				<ListPreference android:key="live_servername_pref"
