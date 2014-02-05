@@ -138,5 +138,7 @@ public class GagglePrefs {
 		return prefs.getString("pilot_name_pref", "").trim();
 	}
 
-
+    public boolean isDateOffsetWorkaroundEnabled(){
+        return prefs.getBoolean("workaround_1day_offset_bug", false);
+    }
 }

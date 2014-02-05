@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.gaggle.AudioVario;
+import com.geeksville.gaggle.GagglePrefs;
 import com.geeksville.gaggle.R;
 import com.geeksville.gaggle.TopActivity;
 import com.geeksville.location.IBarometerClient.Calibration;
@@ -113,12 +114,19 @@ public class GPSClient extends Service implements IGPSClient {
 
   private static Map<Context, Republisher> clients = new HashMap<Context, Republisher>();
 
+//  private boolean date_offset_fix;
+
   public GPSClient() {
     try {
       vario = new AudioVario();
     } catch (VerifyError ex) {
       Log.e(TAG, "Not supported on 1.5: " + ex);
     }
+  }
+  
+  public boolean isDateOffsetWorkaroundEnabled() {
+      GagglePrefs prefs = new GagglePrefs(this);
+      return prefs.isDateOffsetWorkaroundEnabled();
   }
 
   /**
@@ -661,6 +669,12 @@ public class GPSClient extends Service implements IGPSClient {
 	
     @Override
     public synchronized void onLocationChanged(Location location) {
+    	// http://code.google.com/p/android/issues/detail?id=23937
+    	// Some phones have a bug that cause
+    	// the date from GPS to be offset by 1 day
+    	if (isDateOffsetWorkaroundEnabled()){
+    		location.setTime(location.getTime() - 3600*24*1000);
+    	}
 
       // If we receive a position update, assume the GPS is working
       currentStatus = AVAILABLE;
