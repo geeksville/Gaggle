@@ -4,3 +4,4 @@
 bin/
 AndroidManifest.out.*
 gen/
+.settings/
