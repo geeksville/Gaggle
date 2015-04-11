@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--  -->
 <!-- Regular release uses com.geeksville.gaggle, testing builds use com.geeksville.gaggletest -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.geeksville.gaggle" android:installLocation="auto" android:versionCode="165" android:versionName="1.65">
@@ -157,7 +158,11 @@
 	
     <!-- Required permission to use in-app billing. -->
     <uses-permission android:name="com.android.vending.BILLING" />
-    	
+
+    
+    <!-- Required permission to get WiFu state change notification. -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    
 	<!--
 		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
