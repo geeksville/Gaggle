@@ -27,6 +27,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import java.util.ArrayList;
+import android.util.Pair;
+
 import com.geeksville.info.Units;
 
 /*
@@ -97,6 +100,8 @@ public class KMLWriter implements PositionWriter {
 	float minHeight = Float.MAX_VALUE, maxHeight = Float.MIN_VALUE;
 	long firstTimeMs, lastTimeMs;
 	boolean isFirst = true;
+	
+	ArrayList<Pair<Double,Double>> elements = new ArrayList<Pair<Double,Double>>();
 
 	public KMLWriter(OutputStream dest, String pilotName, String flightDesc, String gliderType,
 			String pilotId) throws IOException {
@@ -113,16 +118,34 @@ public class KMLWriter implements PositionWriter {
 	 */
 	@Override
 	public void emitEpilog() {
+		out.println(
+				"</coordinates>" +
+			"</LineString>" +
+		"</Placemark>" +
+		"<Placemark>" +
+			"<name>Flight shadow</name>" +
+			"<visibility>1</visibility>" +
+			"<styleUrl>#shadowStyle</styleUrl>" +
+			"<LineString>" +
+				"<coordinates>");
 
-		out.println("</coordinates>" +
+		for (Pair<Double,Double> p : elements) {
+			out.format(Locale.US, "%f,%f\n", p.first, p.second);
+		}
+
+		out.println(
+					"</coordinates>" +
 				"</LineString>" +
 				createDescription() + // gen our description after reading all
 				// our points
-				"</Placemark>" +
-				"</Document>" +
-				"</kml>");
+			"</Placemark>" +
+		"</Folder>" +
+	"</Document>" +
+"</kml>");
 
 		out.close();
+		
+			
 	}
 
 	/**
@@ -164,6 +187,8 @@ public class KMLWriter implements PositionWriter {
 
 		// Use US format to ensure floats have dots not commas ;-)
 		out.format(Locale.US, "%f,%f,%d\n", longitude, latitude, (int) altitude);
+		
+		elements.add(new Pair<Double,Double> (longitude, latitude));
 	}
 
 	private String getTimespan(long numMs) {
@@ -213,37 +238,37 @@ public class KMLWriter implements PositionWriter {
 
 	@Override
 	public void emitProlog() {
-		out
-				.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-						+
-						"<kml xmlns=\"http://www.opengis.net/kml/2.2\">"
-						+
-						"<Document>"
-						+
-						"<name>Gaggle KML</name>"
-						+
-						"<open>1</open>"
-						+
-						"<description>Gaggle KML file</description>"
-						+
-						"<Style id=\"yellowLineGreenPoly\">" +
-						"<LineStyle>" +
-						"<color>7f00ffff</color>" +
-						"<width>4</width>" +
-						"</LineStyle>" +
-						"<PolyStyle>" +
-						"<color>7f00ff00</color>" +
-						"</PolyStyle>" +
-						"</Style>" +
-						"<Placemark>" +
-						"<name>Flight</name>" +
-						"<visibility>1</visibility>" +
-						// createDescription() +
-						"<styleUrl>#yellowLineGreenPoly</styleUrl>" +
-						"<LineString>" +
-						"<extrude>1</extrude>" +
-						"<tessellate>1</tessellate>" +
-						"<altitudeMode>absolute</altitudeMode>" +
-						"<coordinates>");
+		out.println(
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+"<kml xmlns=\"http://www.opengis.net/kml/2.2\">" +
+	"<Document>" +
+		"<name>Gaggle KML</name>" +
+		"<open>1</open>" +
+		"<description>Gaggle KML file</description>" +
+		
+		"<Style id=\"trackStyle\">" +
+			"<LineStyle>" +
+				"<color>ff0000ff</color>" +
+				"<width>4</width>" +
+			"</LineStyle>" +
+		"</Style>" +
+		
+		"<Style id=\"shadowStyle\">" +
+			"<LineStyle>" +
+			    "<color>ff0000ff</color>" +
+				// "<color>7f000000</color>" +
+				"<width>2</width>" +
+			"</LineStyle>" +
+		"</Style>" +
+		
+		"<Folder>" +
+			"<Placemark>" +
+			"<name>Flight track</name>" +
+			"<visibility>1</visibility>" +
+			// "<description>Gaggle flight</description>" + 
+			"<styleUrl>#trackStyle</styleUrl>" +
+			"<LineString>" +
+	            "<altitudeMode>absolute</altitudeMode>" +
+				"<coordinates>");
 	}
 }

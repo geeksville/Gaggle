@@ -126,9 +126,9 @@ public class ListFlightsActivity extends DBListActivity {
     case R.id.send_csv:
       emailFlight(itemToRowId(item), "csv");
       return true;
-      // case R.id.view_kml:
-      // externalViewFlight(itemToRowId(item), "kml");
-      // return true;
+    case R.id.view_kml:
+      externalViewFlight(itemToRowId(item), "kml");
+      return true;
     case R.id.view_summary:
       viewFlightSummary(itemToRowId(item));
       return true;
@@ -647,19 +647,16 @@ public class ListFlightsActivity extends DBListActivity {
         if (fileLoc != null) {
           Uri fileuri = Uri.fromFile(fileLoc);
 
-          // Intent sendIntent = new
-          // Intent(Intent.ACTION_SEND_MULTIPLE);
-          Intent sendIntent = new Intent(Intent.ACTION_VIEW, fileuri);
-          // Mime type of the attachment (or) u can use
-          // sendIntent.setType("*/*")
+          Intent intent = new Intent(Intent.ACTION_VIEW);
           if (filetype.equals("igc"))
-            sendIntent.setType("application/x-igc");
+        	  intent.setDataAndType(fileuri, "application/x-igc");
+          else	  
+        	  intent.setDataAndType(fileuri, "application/vnd.google-earth.kml+xml");
+          
+          if (intent.resolveActivity(getPackageManager()) != null)
+        	  startActivity(intent);
           else
-            // FIXME, support kmz
-            sendIntent.setType("application/vnd.google-earth.kml+xml");
-
-          startActivity(Intent.createChooser(sendIntent,
-              getString(R.string.view_flight)));
+        	  Toast.makeText(context, getString(R.string.no_app_to_view_kml_file), Toast.LENGTH_LONG).show();
 
           // Keep stats on # of emails sent
           Map<String, String> map = new HashMap<String, String>();
