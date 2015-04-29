@@ -294,5 +294,6 @@ please email kevinh@geeksville.com.</string>
 	<string name="google_calibrated">Google</string>
 	<string name="view_kml_file">View KML file</string>
 	<string name="no_app_to_view_kml_file">No application to view KML file</string>
+	<string name="save_track">Save track to the list</string>
 </resources>
   

@@ -56,7 +56,7 @@ public class LocationDBWriter implements PositionWriter {
 	/**
 	 * The db key for this flt
 	 */
-	private long flightId;
+	private long flightId = -1;
 
 	/**
 	 * Constructor
@@ -103,4 +103,8 @@ public class LocationDBWriter implements PositionWriter {
 	public void emitProlog() {
 	}
 
+	public void AbortWriter () {
+		if (flightId != -1)
+			db.deleteFlight(flightId);
+	}
 }

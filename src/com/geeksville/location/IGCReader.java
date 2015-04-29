@@ -153,4 +153,21 @@ public class IGCReader {
 
 		return l;
 	}
+
+	public void toWriter (PositionWriter dest) {
+		Location p;
+		
+		dest.emitProlog();
+		
+		try {
+			while ((p = readLocation()) != null)
+				dest.emitPosition(p.getTime(), p.getLatitude(), p.getLongitude(), (float)p.getAltitude(), 0, 0.0f, null, 0.0f);
+		} catch (Exception ex) {
+			Log.w(TAG, "Malformed IGC file - ignoring error");
+		}
+		
+		dest.emitEpilog();		
+	}
+	
+	
 }

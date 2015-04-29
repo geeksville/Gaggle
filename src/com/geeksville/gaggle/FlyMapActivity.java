@@ -33,12 +33,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.AndroidUtil;
 import com.geeksville.info.Units;
 import com.geeksville.location.IGCReader;
+import com.geeksville.location.LocationDBWriter;
 import com.geeksville.location.LocationList;
+import com.geeksville.location.LocationUtils;
 import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.GeeksvilleMapActivity;
 import com.geeksville.maps.TracklogOverlay;
@@ -66,6 +70,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 
 	private AltitudeView altitudeView;
 
+	private Uri						viewedUri = null;
+	
+	
 	/**
 	 * Generate an intent that can be used to play back a tracklog
 	 * 
@@ -156,6 +163,49 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 			showCurrentPosition(true);
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.findItem(R.id.save_track).setVisible (viewedUri != null);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.save_track) {
+			SaveListToDB ();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void SaveListToDB ()
+	{
+		GagglePrefs prefs = new GagglePrefs(this);
+		
+		LocationDBWriter dbwrt = new LocationDBWriter(this, false, prefs.getPilotName(), 
+				"Imported from " + viewedUri.getLastPathSegment());
+		
+		try {
+			InputStream s = AndroidUtil.getFromURI(this, viewedUri);
+			IGCReader iread = new IGCReader("gps", s);
+			iread.toWriter(dbwrt);
+			iread.close();
+		} catch (IOException ex) {
+			dbwrt.AbortWriter();
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.unable_to_open_igc_file);
+			builder.setMessage(ex.toString());
+			builder.setPositiveButton(R.string.okay, null);
+
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+
+		//LocationUtils.LocationListToWriter(viewedLoclist, dbwrt);
+	}
+	
 	/**
 	 * See if the user wants us to open an IGC file
 	 */
@@ -173,7 +223,9 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 				IGCReader iread = new IGCReader("gps", s);
 				LocationList loclist = iread.toLocationList();
 				iread.close();
-
+				
+				viewedUri = uri;
+				
 				FlurryAgent.onEvent("IGC view success");
 
 				// Show the points
