@@ -294,6 +294,19 @@ please email kevinh@geeksville.com.</string>
 	<string name="google_calibrated">Google</string>
 	<string name="view_kml_file">View KML file</string>
 	<string name="no_app_to_view_kml_file">No application to view KML file</string>
-	<string name="save_track">Save track to the list</string>
+	
+	
+	
+	<string name="start_altitude_from_google">Set Start Alt from Google</string>
+	<string name="start_altitude_from_google_desc">Set start point altitude from Google</string>
+	
+	<string name="use_start_point_alt">Set Start Alt manually</string>
+	<string name="use_start_point_alt_desc">Set Start point altitude manually if Google failed</string>
+	
+	<!--  TODO: We have to set this value for each track independently  -->
+	<string name="start_altitude_manual">Start point manual altitude</string>
+	<string name="start_altitude_manual_desc">Use this altitude to correct track altitude</string>
+			
+	
 </resources>
   

@@ -138,5 +138,14 @@ public class GagglePrefs {
 		return prefs.getString("pilot_name_pref", "").trim();
 	}
 
+	public boolean useGoogleAltitudeCorrector() {
+		return prefs.getBoolean("google_altitude_corrector", false);
+	}
+
+	public boolean useManualAltitudeCorrector() {
+		return prefs.getBoolean("use_manual_altitude_corrector", false);
+	}
+	
+	
 
 }

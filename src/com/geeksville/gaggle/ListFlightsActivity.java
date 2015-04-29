@@ -51,7 +51,9 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.geeksville.android.DBListActivity;
+import com.geeksville.android.PreferenceUtil;
 import com.geeksville.info.FlightSummary;
+import com.geeksville.location.AltitudeCorrector;
 import com.geeksville.location.CSVWriter;
 import com.geeksville.location.GPXWriter;
 import com.geeksville.location.IGCWriter;
@@ -474,6 +476,12 @@ public class ListFlightsActivity extends DBListActivity {
       writer = new KMLWriter(s, prefs.getPilotName(), null,
           prefs.getWingModel(), prefs.getPilotId());
 
+    float startPointAltitude = PreferenceUtil.getFloat(this, "start_altitude_manual", 0.0f);
+    boolean setStartAltitudeFromGoogle = prefs.useGoogleAltitudeCorrector();
+    boolean setStartAltitudeManualy = prefs.useManualAltitudeCorrector();
+    if (setStartAltitudeFromGoogle || setStartAltitudeManualy)
+    	writer = new AltitudeCorrector(writer, setStartAltitudeFromGoogle, setStartAltitudeManualy, startPointAltitude);
+    
     LocationUtils.dbToWriter(db, writer, flightid);
 
     return fullname;
