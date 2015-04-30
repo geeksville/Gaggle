@@ -20,6 +20,7 @@
  ******************************************************************************/
 package com.geeksville.gaggle;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Observable;
@@ -47,6 +48,7 @@ import com.geeksville.maps.CenteredMyLocationOverlay;
 import com.geeksville.maps.GeeksvilleMapActivity;
 import com.geeksville.maps.TracklogOverlay;
 import com.geeksville.maps.WaypointOverlay;
+import com.geeksville.view.AsyncProgressDialog;
 
 public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 
@@ -173,39 +175,48 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.save_track) {
-			SaveListToDB ();
+			new SaveTrackTask(viewedUri).execute();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void SaveListToDB ()
-	{
-		GagglePrefs prefs = new GagglePrefs(this);
-		
-		LocationDBWriter dbwrt = new LocationDBWriter(this, false, prefs.getPilotName(), 
-				"Imported from " + viewedUri.getLastPathSegment());
-		
-		try {
-			InputStream s = AndroidUtil.getFromURI(this, viewedUri);
-			IGCReader iread = new IGCReader("gps", s);
-			iread.toWriter(dbwrt);
-			iread.close();
-		} catch (IOException ex) {
-			dbwrt.AbortWriter();
+  private class SaveTrackTask extends AsyncProgressDialog {
+	  private Uri fileToSave;
+	  private String pilotName;
+	    
+
+	  public SaveTrackTask(Uri par) {
+		  super(FlyMapActivity.this, getString(R.string.writing_file),
+	          getString(R.string.please_wait));
+		  fileToSave = par;
+		  
+		  GagglePrefs prefs = new GagglePrefs(FlyMapActivity.this);
+		  pilotName = prefs.getPilotName();
+	    }
+
+	    @Override
+	    protected void doInBackground() {
+
+			LocationDBWriter dbwrt = new LocationDBWriter(FlyMapActivity.this, false, pilotName, 
+					"Imported from " + fileToSave.getLastPathSegment());
 			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.unable_to_open_igc_file);
-			builder.setMessage(ex.toString());
-			builder.setPositiveButton(R.string.okay, null);
-
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
-
-		//LocationUtils.LocationListToWriter(viewedLoclist, dbwrt);
-	}
+			try {
+				InputStream s = AndroidUtil.getFromURI(FlyMapActivity.this, fileToSave);
+				IGCReader iread = new IGCReader("gps", s);
+				iread.toWriter(dbwrt);
+				iread.close();
+				showCompletionToast (getString (R.string.track_saved_to_list));
+			} catch (IOException ex) {
+				dbwrt.AbortWriter();
+				
+		        showCompletionDialog(getString(R.string.file_write_failed),
+			            ex.getLocalizedMessage());
+			}
+	    }
+	  }
 	
+
 	/**
 	 * See if the user wants us to open an IGC file
 	 */
