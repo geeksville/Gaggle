@@ -199,7 +199,7 @@ public class FlyMapActivity extends GeeksvilleMapActivity implements Observer {
 	    protected void doInBackground() {
 
 			LocationDBWriter dbwrt = new LocationDBWriter(FlyMapActivity.this, false, pilotName, 
-					"Imported from " + fileToSave.getLastPathSegment());
+					"Im: " + fileToSave.getLastPathSegment());
 			
 			try {
 				InputStream s = AndroidUtil.getFromURI(FlyMapActivity.this, fileToSave);

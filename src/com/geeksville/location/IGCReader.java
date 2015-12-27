@@ -41,7 +41,7 @@ public class IGCReader {
 
 	BufferedReader inData;
 
-	SimpleDateFormat formater = new SimpleDateFormat("HHmmss");
+	SimpleDateFormat formater = new SimpleDateFormat("ddMMyyHHmmss");
 
 	private static final String TAG = "IGCReader";
 
@@ -49,6 +49,11 @@ public class IGCReader {
 	 * populated in our location objects
 	 */
 	String provider;
+	String dateStr = "010115";
+	
+	int gspBegin = -1;
+	int gspEnd = -1;
+	int lastGsp = 0;
 
 	public IGCReader(String provider, InputStream stream) {
 		inData = new BufferedReader(new InputStreamReader(stream));
@@ -58,6 +63,9 @@ public class IGCReader {
 		inData.close();
 	}
 
+	public int getLastGsp () {
+		return lastGsp;
+	}
 	/**
 	 * read the next location from the file (or null for eof)
 	 * 
@@ -72,7 +80,19 @@ public class IGCReader {
 			String line = inData.readLine();
 			if (line == null)
 				return null; // eof
+			
+			if (line.startsWith("HFDTE")) {
+				dateStr = line.substring(5, 11);
+			}
 
+			if (line.startsWith("I")) {
+				int ind = line.indexOf("GSP");
+				if (ind != -1) {
+					gspBegin = Integer.parseInt(line.substring(ind - 4, ind - 2));
+					gspEnd = Integer.parseInt(line.substring(ind - 2, ind));
+				}
+			}
+			
 			if (line.startsWith("B")) {
 				// This is a position record
 				// B
@@ -88,7 +108,7 @@ public class IGCReader {
 				// int min = Integer.parseInt(line.substring(3, 5));
 				// int sec = Integer.parseInt(line.substring(5, 7));
 
-				String timestr = line.substring(1, 7);
+				String timestr = dateStr + line.substring(1, 7);
 
 				int latdeg = Integer.parseInt(line.substring(7, 9));
 				int latmin = Integer.parseInt(line.substring(9, 11));
@@ -110,6 +130,10 @@ public class IGCReader {
 
 				// Date d = new Date(); // Claim the flight is happening now
 				Date d = formater.parse(timestr);
+				
+				if (gspBegin != -1){
+					lastGsp = Integer.parseInt(line.substring(gspBegin, gspEnd));
+				}
 
 				// FIXME - we should also pay attention to the TZ and the date
 				// stored in the file header
@@ -161,7 +185,7 @@ public class IGCReader {
 		
 		try {
 			while ((p = readLocation()) != null)
-				dest.emitPosition(p.getTime(), p.getLatitude(), p.getLongitude(), (float)p.getAltitude(), 0, 0.0f, null, 0.0f);
+				dest.emitPosition(p.getTime(), p.getLatitude(), p.getLongitude(), (float)p.getAltitude(), 0, (float)getLastGsp(), null, 0.0f);
 		} catch (Exception ex) {
 			Log.w(TAG, "Malformed IGC file - ignoring error");
 		}
