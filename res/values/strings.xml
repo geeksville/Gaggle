@@ -231,6 +231,11 @@ please email kevinh@geeksville.com.</string>
 	<string name="end">End</string>
 	<string name="duration">Duration</string>
 	<string name="start_altitude">Start altitude</string>
+	<string name="end_altitude">End altitude</string>
+	<string name="max_altitude_above_launch">Max altitude Above launch</string>
+	<string name="max_altitude_above_landing">Max altitude Above landing</string>
+	<string name="diff_launch_landing">Diff Landing - Launch</string>
+			
 	<string name="max_altitude_after_launch">Max altitude after launch</string>
 	<string name="max_ground_speed">Max ground speed</string>
 	<string name="average_ground_speed">Average ground speed</string>

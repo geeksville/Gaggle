@@ -77,6 +77,7 @@ public class SummaryWriter implements PositionWriter {
   @Override
   public void emitEpilog() {
     summary.setEndTime(endTime);
+    summary.setEndAltitude (lastAltitude);
     summary.setMaxAltitudeAfterLaunch(maxAltitudeAfterLaunch);
     summary.setMaxGroundSpeed(maxGroundSpeed);
     summary.setAverageGroundSpeed(totalGroundSpeed / (float) positionCount);

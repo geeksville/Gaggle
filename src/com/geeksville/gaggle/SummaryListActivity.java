@@ -36,19 +36,29 @@ public class SummaryListActivity extends ListActivity {
 		String endDate = summary.getEndDate().toLocaleString();
 		String duration = getFriendlyTimeDifference(summary.getStartDate(), summary.getEndDate());
 		String startAltitude = units.metersToAltitude(summary.getStartAltitude()) + altUnits;
+		String endAltitude = units.metersToAltitude(summary.getEndAltitude()) + altUnits;
 		String maxAltitudeAfterLaunch = units.metersToAltitude(summary.getMaxAltitudeAfterLaunch()) + altUnits;
 		String maxGroundSpeed = units.kilometerPerHourToSpeed(summary.getMaxGroundSpeed()) + speedUnits;
 		String averageGroundSpeed = units.kilometerPerHourToSpeed(summary.getAverageGroundSpeed()) + speedUnits;
 		String totalGroundDistance = units.metersToDistance(summary.getTotalGroundDistance()) + distUnits;
 		String totalVerticalDistance = units.metersToAltitude(summary.getTotalVerticalDistance()) + altUnits;
 		String maxDistanceFromLaunch = units.metersToDistance(summary.getMaxDistanceFromLaunch()) + distUnits;
+
+		String maxAltitudeAboveLaunch = units.metersToAltitude(summary.getMaxAltitudeAfterLaunch() - summary.getStartAltitude()) + altUnits;
+		String maxAltitudeAboveLanding = units.metersToAltitude(summary.getMaxAltitudeAfterLaunch() - summary.getEndAltitude()) + altUnits;
+		String diffLaunchLanding = units.metersToAltitude(summary.getStartAltitude() - summary.getEndAltitude()) + altUnits;
+	  		
 		
 		String[] labels = new String[] { 
 				getString(R.string.start), 
 				getString(R.string.end), 
 				getString(R.string.duration), 
-				getString(R.string.start_altitude), 
+				getString(R.string.start_altitude),
+				getString(R.string.end_altitude), 
 				getString(R.string.max_altitude_after_launch),
+				getString(R.string.max_altitude_above_launch),
+				getString(R.string.max_altitude_above_landing),
+				getString(R.string.diff_launch_landing),
 				getString(R.string.max_ground_speed),
 				getString(R.string.average_ground_speed),
 				getString(R.string.total_ground_distance_traveled),
@@ -61,7 +71,11 @@ public class SummaryListActivity extends ListActivity {
 				endDate, 
 				duration, 
 				startAltitude, 
+				endAltitude,
 				maxAltitudeAfterLaunch,
+				maxAltitudeAboveLaunch,
+				maxAltitudeAboveLanding,
+				diffLaunchLanding,
 				maxGroundSpeed,
 				averageGroundSpeed,
 				totalGroundDistance,
