@@ -132,7 +132,7 @@ public class IGCReader {
 				Date d = formater.parse(timestr);
 				
 				if (gspBegin != -1){
-					lastGsp = Integer.parseInt(line.substring(gspBegin, gspEnd));
+					lastGsp = Integer.parseInt(line.substring(gspBegin-1, gspEnd));
 				}
 
 				// FIXME - we should also pay attention to the TZ and the date
