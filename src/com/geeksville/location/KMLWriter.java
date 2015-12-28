@@ -91,6 +91,7 @@ import com.geeksville.info.Units;
 public class KMLWriter implements PositionWriter {
 	PrintStream out;
 	boolean didProlog = false;
+	boolean drawShadow = true;
 
 	String pilotName;
 	String flightDesc;
@@ -104,13 +105,14 @@ public class KMLWriter implements PositionWriter {
 	ArrayList<Pair<Double,Double>> elements = new ArrayList<Pair<Double,Double>>();
 
 	public KMLWriter(OutputStream dest, String pilotName, String flightDesc, String gliderType,
-			String pilotId) throws IOException {
+			String pilotId, boolean drawShadow) throws IOException {
 		out = new PrintStream(dest);
 
 		this.gliderType = gliderType;
 		this.pilotId = pilotId;
 		this.pilotName = pilotName;
 		this.flightDesc = flightDesc;
+		this.drawShadow = drawShadow;
 	}
 
 	/**
@@ -124,7 +126,7 @@ public class KMLWriter implements PositionWriter {
 		"</Placemark>" +
 		"<Placemark>" +
 			"<name>Flight shadow</name>" +
-			"<visibility>1</visibility>" +
+			(drawShadow ? "<visibility>1</visibility>" : "<visibility>0</visibility>") +
 			"<styleUrl>#shadowStyle</styleUrl>" +
 			"<LineString>" +
 				"<coordinates>");

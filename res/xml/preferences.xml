@@ -199,7 +199,10 @@
 				android:summary="@string/start_altitude_manual_desc"
 				android:defaultValue="0.0" android:inputType="numberDecimal" />
 			
-						
+			<CheckBoxPreference android:key="draw_shadow_pref"
+				android:title="@string/draw_shadow_pref" android:defaultValue="true"
+				android:summary="@string/draw_shadow_pref_desc" />
+									
 			<ListPreference android:key="screen_update_freq_pref"
 				android:title="@string/interval_screen" android:summary="@string/time_between_each_screen_update"
 				android:defaultValue="3" android:entries="@array/log_interval_names"

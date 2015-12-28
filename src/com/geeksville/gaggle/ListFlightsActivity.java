@@ -474,7 +474,7 @@ public class ListFlightsActivity extends DBListActivity {
           prefs.getWingModel(), prefs.getPilotId());
     else
       writer = new KMLWriter(s, prefs.getPilotName(), null,
-          prefs.getWingModel(), prefs.getPilotId());
+          prefs.getWingModel(), prefs.getPilotId(), prefs.getDrawShadow());
 
     float startPointAltitude = PreferenceUtil.getFloat(this, "start_altitude_manual", 0.0f);
     boolean setStartAltitudeFromGoogle = prefs.useGoogleAltitudeCorrector();

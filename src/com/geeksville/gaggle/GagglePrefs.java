@@ -146,6 +146,9 @@ public class GagglePrefs {
 		return prefs.getBoolean("use_manual_altitude_corrector", false);
 	}
 	
+	public boolean getDrawShadow() {
+		return prefs.getBoolean("draw_shadow_pref", true);
+	}
 	
 
 }
