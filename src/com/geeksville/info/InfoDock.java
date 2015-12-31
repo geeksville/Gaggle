@@ -239,7 +239,9 @@ public class InfoDock extends LinearLayout implements
           setEnabled(false);
         }
 
-        infoFields.put(fieldName, f);
+        // Do not use cache! CBecause InfoField can be used in different Activities. Ex. MapView and ListContol. So 
+        // InfoDiled from cache notifies incorrect InfoDoc.
+        // infoFields.put(fieldName, f);
       } else
         f = infoFields.get(fieldName);
 
@@ -319,6 +321,8 @@ public class InfoDock extends LinearLayout implements
       oldAddendum = newAddendum;
 
       handler.post(infoChangedGuiWork);
+      
+      //drawInfoContents();  // kubrin tmp
     }
   }
 
