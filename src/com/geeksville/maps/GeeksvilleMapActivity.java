@@ -140,6 +140,7 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		mapView.setBuiltInZoomControls(true);
 		// Set default map view
 		mapView.setRenderer(OpenMapQuest);
+		mapView.getController().setZoom(10);
 
 		// Default to sat view
 		// mapView.setSatellite(true);
@@ -271,8 +272,10 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 		OpenStreetMapViewController control = mapView.getController();
 
 		GeoPoint loc;
-		if (myLocationOverlay != null && (loc = myLocationOverlay.getMyLocation()) != null)
+		if (myLocationOverlay != null && (loc = myLocationOverlay.getMyLocation()) != null){
+			//control.setZoom(10);
 			control.animateTo(loc);
+		}
 	}
 
 	@Override
