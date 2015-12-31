@@ -168,6 +168,8 @@ public class InfoDock extends LinearLayout implements
   public void onPause() {
     if (contents != null)
       contents.onHidden();
+    
+      contents.setOnChanged(null);
   }
 
   /*
@@ -181,6 +183,8 @@ public class InfoDock extends LinearLayout implements
       contents.onShown();
 
       updateLabels();
+      
+      contents.setOnChanged(this);
     }
   }
 
@@ -239,9 +243,7 @@ public class InfoDock extends LinearLayout implements
           setEnabled(false);
         }
 
-        // Do not use cache! CBecause InfoField can be used in different Activities. Ex. MapView and ListContol. So 
-        // InfoDiled from cache notifies incorrect InfoDoc.
-        // infoFields.put(fieldName, f);
+         infoFields.put(fieldName, f);
       } else
         f = infoFields.get(fieldName);
 
