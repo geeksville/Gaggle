@@ -100,10 +100,14 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
               pj.toMapPixelsProjected(pt.x, pt.y, pt); //convert to map projection
               mPoints.add(pt);
               if (i>0) {
-                float rise = (tracklog.getAltitudeMM(i) - tracklog.getAltitudeMM(i-1)) / (tracklog.getTimeMsec(i) - tracklog.getTimeMsec(i-1)); // mm/ms = m/s
-                rise       = Math.min(Math.max(rise,minMMeterSec),maxMMeterSec); // bound to limits
-                float level  = (rise - minMMeterSec) / (maxMMeterSec - minMMeterSec) * 255.f;
-                mColors.add(trackPaints[(int)level]);
+            	int deltaTm =   tracklog.getTimeMsec(i) - tracklog.getTimeMsec(i-1);
+            	if (deltaTm != 0) {
+	                float rise = (tracklog.getAltitudeMM(i) - tracklog.getAltitudeMM(i-1)) / deltaTm; // mm/ms = m/s
+	                rise       = Math.min(Math.max(rise,minMMeterSec),maxMMeterSec); // bound to limits
+	                float level  = (rise - minMMeterSec) / (maxMMeterSec - minMMeterSec) * 255.f;
+	                mColors.add(trackPaints[(int)level]);
+	           	} else
+            		mColors.add(trackPaints[127]);
               } else
                 mColors.add(trackPaints[127]); 
             }
