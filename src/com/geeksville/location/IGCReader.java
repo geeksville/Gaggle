@@ -120,7 +120,9 @@ public class IGCReader {
 				double longminfract = Integer.parseInt(line.substring(20, 23));
 				char longdir = line.charAt(23);
 
-				int alt = Integer.parseInt(line.substring(25, 25 + 5));
+				char alt3d = line.charAt(24);
+				int alt = (alt3d == 'A' ? Integer.parseInt(line.substring(30, 30 + 5)) : 
+					Integer.parseInt(line.substring(25, 25 + 5)));
 
 				double lat = (latdeg + (latmin + latminfract / 1000) / 60.0)
 							* (latdir == 'N' ? 1 : -1);
