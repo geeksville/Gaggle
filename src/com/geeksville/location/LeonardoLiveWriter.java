@@ -211,16 +211,27 @@ public class LeonardoLiveWriter implements PositionWriter {
 		// devices it is not easy for all users to enter the correct case.
 		// The result of the page is an integer, 0 if userdata are incorrect, or
 		// else the userID of the user
+		
+		// Kubrin:
+		// To use SkyLines live track we can set https://skylines.aero as a server 
+		// and live track key as a user name. Password is ignored.
+		// Dont't use http. It's redirected to https but this java class doesn't support redirection as I see.
 		String urlstr = String.format("%s?op=login&user=%s&pass=%s", clientURL, userName, password);
 
 		URL url = new URL(normalizeURL(urlstr));
 
 		InputStream responseStream = url.openStream();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
-		String response = reader.readLine();
+		
+		StringBuilder builder = new StringBuilder();
+		String line = null;
+		while((line = reader.readLine()) != null)
+			builder.append(line);
+		String response = builder.toString();;
 
 		try {
-			int userID = Integer.parseInt(response);
+			// Skylines returns too long integer so use long instead of int. 
+			int userID = (int)Long.parseLong(response);;
 
 			if (userID == 0)
 				throw new Exception("Invalid username or password");

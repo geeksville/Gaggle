@@ -21,7 +21,9 @@ Copyright_License {
 
 package com.geeksville.location;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramSocket;
@@ -94,6 +96,8 @@ class CRC16CCITT {
 public class SkyLinesTrackingWriter implements PositionWriter {
 	private static final int MAGIC = 0x5df4b67b;
 	private static final short TYPE_FIX = 0x3;
+	private static final short TYPE_PING = 0x1;
+	private static final short TYPE_ACK = 0x2;
 
 	private static final int FLAG_LOCATION = 0x1;
 	private static final int FLAG_TRACK = 0x2;
@@ -121,7 +125,7 @@ public class SkyLinesTrackingWriter implements PositionWriter {
 	 * @throws Exception
 	 */
 	public SkyLinesTrackingWriter(long _key, int _intervalS)
-		throws SocketException, UnknownHostException {
+		throws Exception {
 
 		key = _key;
 		intervalMS = _intervalS * 1000;
@@ -129,8 +133,10 @@ public class SkyLinesTrackingWriter implements PositionWriter {
 		socket = new DatagramSocket();
 
 		/* TODO: hard-coded IP address */
-		InetAddress serverIP = InetAddress.getByName("78.47.50.46");
+		InetAddress serverIP = InetAddress.getByName("skylines.aero");
 		serverAddress = new InetSocketAddress(serverIP, 5597);
+		
+		sendPing();
 	}
 
 	private void writeHeader(DataOutputStream dos, short type)
@@ -201,6 +207,52 @@ public class SkyLinesTrackingWriter implements PositionWriter {
 		socket.send(datagram);
 	}
 
+	private void writePing(DataOutputStream dos)	throws IOException {
+		writeHeader(dos, TYPE_PING);
+		dos.writeShort(2378);
+		dos.writeShort(0);
+		dos.writeInt(0);
+	}
+	
+	private void sendPing()	throws Exception {
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(24);
+		DataOutputStream dos = new DataOutputStream(baos);
+		writePing(dos);
+	
+		byte[] data = baos.toByteArray();
+		assert(data.length == 24);
+	
+		calculateCRC(data);
+	
+		if (datagram == null)
+			datagram = new DatagramPacket(data, data.length,
+						      serverAddress);
+		else
+			/* reuse old object to reduce GC pressure */
+			datagram.setData(data);
+	
+		socket.send(datagram);
+		
+		byte[] ret = new byte[24];
+		DatagramPacket retDatagram = new DatagramPacket(ret, ret.length, serverAddress);
+		socket.receive(retDatagram);
+		
+		ByteArrayInputStream binp = new ByteArrayInputStream(ret);
+		DataInputStream dis = new DataInputStream(binp);	
+		
+		int mkey = dis.readInt();
+		dis.readShort(); // CRC
+		int type = dis.readShort();
+		dis.readLong();  // key
+		int myval = dis.readShort();
+		dis.readShort();
+		int flags = dis.readInt();
+		
+		if (mkey != MAGIC || type != TYPE_ACK || flags != 0)
+			throw new Exception("Unexpected server response");
+	}
+	
 	@Override
 	public void emitProlog() {
 	}
