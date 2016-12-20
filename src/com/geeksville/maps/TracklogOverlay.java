@@ -65,7 +65,7 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 	    Paint trackPaint = new Paint();
 	    trackPaint.setColor(Color.rgb(255-Math.abs(127-i)*2, i, 255-i));  // blue -> red -> green
       trackPaint.setStyle(Style.STROKE);
-      trackPaint.setStrokeWidth(2);
+      trackPaint.setStrokeWidth(6);
       trackPaints[i]=trackPaint;
 	  }
 	}

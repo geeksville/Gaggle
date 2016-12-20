@@ -139,8 +139,8 @@ public class GeeksvilleMapActivity extends Activity implements LifeCyclePublishe
 
 		mapView.setBuiltInZoomControls(true);
 		// Set default map view
-		mapView.setRenderer(OpenMapQuest);
-		mapView.getController().setZoom(10);
+		mapView.setRenderer(OpenCycleMap);
+		mapView.getController().setZoom(20);
 
 		// Default to sat view
 		// mapView.setSatellite(true);
