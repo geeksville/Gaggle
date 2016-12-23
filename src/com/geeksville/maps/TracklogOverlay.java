@@ -30,6 +30,8 @@ import com.geeksville.location.LocationList;
  */
 public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 
+	private static final String TAG = "TracklogOverlay";
+	
 	LocationList tracklog;
 
   public final int DETAIL_THRESHOLD = 1000; //the last n points that are drawn with full color detail 
@@ -43,7 +45,8 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 	/**
 	 * The colors we use for drawing our tracklog
 	 */
-	Paint[] trackPaints = new Paint[256];
+	final int NUM_COLORS = 256;  // 9
+	Paint[] trackPaints = new Paint[NUM_COLORS];
   private ArrayList<Point> mPoints;
 	private ArrayList<Paint> mColors;
 
@@ -61,6 +64,63 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
 	}
 
 	private void precalcTrackPaints() {
+		
+		/*
+		Paint trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(0, 0, 255));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[0]=trackPaint;
+
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(0, 127, 255));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[1]=trackPaint;
+		
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(0, 255, 255));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[2]=trackPaint;
+        
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(0, 255, 127));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[3]=trackPaint;
+        
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(0, 255, 0));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[4]=trackPaint;
+        
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(127, 255, 0));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[5]=trackPaint;
+        
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(255, 255, 0));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[6]=trackPaint;
+        
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(255, 127, 0));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[7]=trackPaint;
+        
+		trackPaint = new Paint();
+		trackPaint.setColor(Color.rgb(255, 0, 0));
+		trackPaint.setStyle(Style.STROKE);
+		trackPaint.setStrokeWidth(6);
+        trackPaints[8]=trackPaint;
+		*/
+        
 	  for (int i=0;i<256;i++) {
 	    Paint trackPaint = new Paint();
 	    trackPaint.setColor(Color.rgb(255-Math.abs(127-i)*2, i, 255-i));  // blue -> red -> green
@@ -104,12 +164,15 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
             	if (deltaTm != 0) {
 	                float rise = (tracklog.getAltitudeMM(i) - tracklog.getAltitudeMM(i-1)) / deltaTm; // mm/ms = m/s
 	                rise       = Math.min(Math.max(rise,minMMeterSec),maxMMeterSec); // bound to limits
-	                float level  = (rise - minMMeterSec) / (maxMMeterSec - minMMeterSec) * 255.f;
+	                float level  = (rise - minMMeterSec) / (maxMMeterSec - minMMeterSec) * (float)(NUM_COLORS - 1);
+	                
+	                //Log.i(TAG, "Delta TM: " + deltaTm + " Rise: "  + rise + " Level: " + level );
+	                
 	                mColors.add(trackPaints[(int)level]);
 	           	} else
-            		mColors.add(trackPaints[127]);
+            		mColors.add(trackPaints[NUM_COLORS / 2]);
               } else
-                mColors.add(trackPaints[127]); 
+                mColors.add(trackPaints[NUM_COLORS / 2]); 
             }
           }
                             
@@ -160,15 +223,18 @@ public class TracklogOverlay extends OpenStreetMapViewPathOverlay {
                   buffer[bufferCount + 2] = screenPoint1.x;
                   buffer[bufferCount + 3] = screenPoint1.y;
                   bufferCount += 4;
-                  
+
+//                  canvas.drawLines(buffer, this.mColors.get(i));  // paint with accurate colors
+//                  bufferCount = 0;
+
                   if (i > size - DETAIL_THRESHOLD) {                // if we are in the detailed range 
                     canvas.drawLines(buffer, this.mColors.get(i));  // paint with accurate colors
                     bufferCount = 0;
                   } else 
                   if (bufferCount == POINT_BUFFER_SIZE) {           // else just paint in red
-                    canvas.drawLines(buffer, this.trackPaints[127]);
+                    canvas.drawLines(buffer, this.trackPaints[NUM_COLORS / 2]);
                     bufferCount = 0;
-                  }                               
+                  }    
                   
                   //update starting point to next position 
                   projectedPoint0 = projectedPoint1;                      
