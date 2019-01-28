@@ -1,0 +1,76 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .gitignore
+* .gitmodules
+* .idea\
+* .idea\Gaggle.iml
+* .idea\codeStyles\
+* .idea\codeStyles\Project.xml
+* .idea\misc.xml
+* .idea\modules.xml
+* .idea\vcs.xml
+* .idea\workspace.xml
+* README
+* art\
+* art\airplane-48x48.png
+* art\altimeter-icon-28x48.png
+* art\altimeter-icon.png
+* art\arrow.svg
+* art\in-flight.svg
+* art\paper-airplane-180x120.png
+* art\paper-airplane-512x512.png
+* art\paper-airplane.svg
+* art\waypoint-crosshair.svg
+* docs\
+* docs\leonardo-live-http-api.html
+* docs\tech_spec_gnss.pdf
+* docs\to-do.txt
+* released\
+* released\Gaggle-0.91.apk
+* released\Gaggle-0.93beta.apk
+* released\Gaggle-branch.apk
+* webpage\
+* webpage\funkycolors.png
+* webpage\gaggle-market-qrcode.png
+* webpage\index.html
+* webpage\instscreen-small.png
+* webpage\instscreen.png
+* webpage\mapscreen.png
+* webpage\wptscreen.png
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets\
+* libs\FlurryAgent.jar => app\libs\FlurryAgent.jar
+* libs\osmdroid-android-1.08.jar => app\libs\osmdroid-android-1.08.jar
+* libs\slf4j-android-1.5.8.jar => app\libs\slf4j-android-1.5.8.jar
+* res\ => app\src\main\res\
+* shared\ => app\src\main\java\
+* src\ => app\src\main\java\
+* src\com\android\vending\billing\IMarketBillingService.aidl => app\src\main\aidl\com\android\vending\billing\IMarketBillingService.aidl
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
