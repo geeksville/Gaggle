@@ -1,0 +1,25 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        applicationId "com.geeksville.gaggle"
+        minSdkVersion 9
+        targetSdkVersion 9
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    implementation files('libs/FlurryAgent.jar')
+    implementation files('libs/osmdroid-android-1.08.jar')
+    implementation files('libs/slf4j-android-1.5.8.jar')
+}
